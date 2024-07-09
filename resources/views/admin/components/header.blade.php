@@ -287,12 +287,12 @@
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li><a class="dropdown-item d-flex align-items-center" href="#">Logout</a></li>
+              <li><a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal"
+                data-bs-target="#logoutModal">Logout</a></li>
             </ul>
           </div>        <!-- / Profile Menu-->
 
       </div>
-      <!-- / Notifications & Profile-->
     </div>
   </div>
 </nav>
