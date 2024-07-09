@@ -35,7 +35,7 @@
                 <li class="menu-title" data-key="t-menu">Dashboard</li>
 
                 <li>
-                    <a href="javascript: void(0); ">
+                    <a href="{{url ('/home')}}">
                         <i class="bx bx-home-alt icon nav-icon"></i>
                         <span class="menu-item" data-key="t-dashboard">Dashboard</span>
                     </a>
@@ -44,7 +44,7 @@
                 <li class="menu-title" data-key="t-applications">Product</li>
 
                 <li>
-                    <a href="javascript: void(0);">
+                    <a href="#">
                         <i class="bx bx-anchor icon nav-icon"></i>
                         <span class="menu-item" data-key="t-email">Fast Boat</span>
                     </a>
@@ -53,14 +53,14 @@
                 <li class="menu-title" data-key="t-layouts">Booking Data</li>
 
                 <li>
-                    <a href="layouts-horizontal.html">
+                    <a href="#">
                         <i class="bx bx-receipt icon nav-icon"></i>
                         <span class="menu-item" data-key="t-horizontal">Booking Data</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="layouts-horizontal.html">
+                    <a href="#">
                         <i class="bx bx-trash icon nav-icon"></i>
                         <span class="menu-item" data-key="t-horizontal">Booking Trash</span>
                     </a>
@@ -69,21 +69,21 @@
                 <li class="menu-title" data-key="t-components">Mitra</li>
 
                 <li>
-                    <a href="javascript: void(0);">
+                    <a href="#">
                         <i class="bx bx-building icon nav-icon"></i>
                         <span class="menu-item" data-key="t-ui-elements">Company</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);">
+                    <a href="#">
                         <i class="bx bx-up-arrow icon nav-icon"></i>
                         <span class="menu-item" data-key="t-forms">Fast Boat</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="javascript: void(0);">
+                    <a href="#">
                         <i class="bx bx-world icon nav-icon"></i>
                         <span class="menu-item" data-key="t-tables">Island</span>
                     </a>
