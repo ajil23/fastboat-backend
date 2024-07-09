@@ -6,101 +6,84 @@
         <div class="container-fluid">
           
             <div class="row">
-                <div class="col-md-6 col-xl-3">
+                <div class="col-md-6 col-xl-2">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h6 class="font-size-15">Sales</h6>
-                                    <h4 class="mt-3 pt-1 mb-0 font-size-22">$12,253 <span class="text-success fw-medium font-size-14 align-middle"> <i class="mdi mdi-arrow-up"></i>2.64% </span> </h4>
-                                </div>
-                                <div class="">
-                                    <div class="avatar">
-                                        <div class="avatar-title rounded bg-primary-subtle ">
-                                            <i class="bx bx-store-alt font-size-24 mb-0 text-primary"></i>
-                                        </div>
-                                    </div>
+                                    <h6 class="font-size-15">Trip Yesterday</h6>
+                                    <h4 class="mt-3 pt-1 mb-0 font-size-20"><span class="bx bx-anchor text-primary fw-medium font-size-20 align-middle"></span> 111 </h4>
                                 </div>
                             </div>
-                        </div>
-                        <div>
-                            <div id="mini-1" data-colors='["#e6ecf9"]' class="apex-charts"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-xl-3">
+                <div class="col-md-6 col-xl-2">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h6 class="mb-0 font-size-15">Purchase</h6>
-                                    <h4 class="mt-3 mb-0 font-size-22">$63,756 <span class="text-danger fw-medium font-size-14 align-middle"> <i class="mdi mdi-arrow-down"></i> 4.84% </span> </h4>
-                                    
-                                </div>
-
-                                <div class="">
-                                    <div class="avatar">
-                                        <div class="avatar-title rounded bg-primary-subtle ">
-                                            <i class="bx bx-money font-size-24 mb-0 text-primary"></i>
-                                        </div>
-                                    </div>
+                                    <h6 class="font-size-15">Trip Today</h6>
+                                    <h4 class="mt-3 pt-1 mb-0 font-size-20"><span class="bx bx-anchor text-primary fw-medium font-size-20 align-middle"></span> 111 </h4>
                                 </div>
                             </div>
-                        </div>
-                        <div>
-                            <div id="mini-2" data-colors='["#e6ecf9"]' class="apex-charts"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-xl-3">
+                <div class="col-md-6 col-xl-2">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h6 class="mb-0 font-size-15">Return</h6>
-                                    <h4 class="mt-3 mb-0 font-size-22">$14,568 <span class="text-success fw-medium font-size-14 align-middle"> <i class="mdi mdi-arrow-up"></i> 6.54% </span> </h4>
-                                    </div>
-
-                                <div class="">
-                                    <div class="avatar">
-                                        <div class="avatar-title rounded bg-primary-subtle ">
-                                            <i class="bx bx-revision font-size-24 mb-0 text-primary"></i>
-                                        </div>
-                                    </div>
+                                    <h6 class="font-size-15">Trip Tomorrow</h6>
+                                    <h4 class="mt-3 pt-1 mb-0 font-size-20"><span class="bx bx-anchor text-primary fw-medium font-size-20 align-middle"></span> 111 </h4>
                                 </div>
                             </div>
-                        </div>
-                        <div>
-                            <div id="mini-3" data-colors='["#e6ecf9"]' class="apex-charts"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6 col-xl-3">
+                <div class="col-md-6 col-xl-2">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h6 class="mb-0 font-size-15">Marketing</h6>
-                                    <h4 class="mt-3 mb-0 font-size-22">$47,658 <span class="text-danger fw-medium font-size-14 align-middle"> <i class="mdi mdi-arrow-down"></i> 8.15% </span> </h4>
-                                </div>
-
-                                <div class="">
-                                    <div class="avatar">
-                                        <div class="avatar-title rounded bg-primary-subtle ">
-                                            <i class="bx bx-chart font-size-24 mb-0 text-primary"></i>
-                                        </div>
-                                    </div>
+                                    <h6 class="font-size-15">Trip Departured</h6>
+                                    <h4 class="mt-3 pt-1 mb-0 font-size-20"><span class="bx bx-anchor text-primary fw-medium font-size-20 align-middle"></span> 111 </h4>
                                 </div>
                             </div>
                         </div>
-                        <div>
-                            <div id="mini-4" data-colors='["#e6ecf9"]' class="apex-charts"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="font-size-15">Trip Schedule</h6>
+                                    <h4 class="mt-3 pt-1 mb-0 font-size-20"><span class="bx bx-anchor text-primary fw-medium font-size-20 align-middle"></span> 111 </h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="col-md-6 col-xl-2">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="font-size-15">Trip This Month</h6>
+                                    <h4 class="mt-3 pt-1 mb-0 font-size-20"><span class="bx bx-anchor text-primary fw-medium font-size-20 align-middle"></span> 111 </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <!-- END ROW -->
 

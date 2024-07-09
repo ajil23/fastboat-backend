@@ -88,6 +88,13 @@
                         <span class="menu-item" data-key="t-tables">Island</span>
                     </a>
                 </li>
+                
+                <li>
+                    <a href="#">
+                        <i class="bx bx-map-alt icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-tables">Port</span>
+                    </a>
+                </li>
 
             </ul>
         </div>
