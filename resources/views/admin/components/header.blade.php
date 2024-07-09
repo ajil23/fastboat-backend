@@ -1,298 +1,202 @@
-<nav class="navbar navbar-expand-lg navbar-light border-bottom py-0 fixed-top bg-white">
-  <div class="container-fluid">
-    <a class="navbar-brand d-flex justify-content-start align-items-center border-end"
-      href="./index.html">
-      <div class="d-flex align-items-center">
-          <svg class="f-w-5 me-2 text-primary d-flex align-self-center lh-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 203.58 182"><path d="M101.66,41.34C94.54,58.53,88.89,72.13,84,83.78A21.2,21.2,0,0,1,69.76,96.41,94.86,94.86,0,0,0,26.61,122.3L81.12,0h41.6l55.07,123.15c-12-12.59-26.38-21.88-44.25-26.81a21.22,21.22,0,0,1-14.35-12.69c-4.71-11.35-10.3-24.86-17.53-42.31Z" fill="currentColor" fill-rule="evenodd" fill-opacity="0.5"/><path d="M0,182H29.76a21.3,21.3,0,0,0,18.56-10.33,63.27,63.27,0,0,1,106.94,0A21.3,21.3,0,0,0,173.82,182h29.76c-22.66-50.84-49.5-80.34-101.79-80.34S22.66,131.16,0,182Z" fill="currentColor" fill-rule="evenodd"/></svg>
-          <span class="fw-black text-uppercase tracking-wide fs-6 lh-1">Gilitransfers</span>
-      </div>    </a>
-    <div class="d-flex justify-content-between align-items-center flex-grow-1 navbar-actions">
+<header id="page-topbar" class="isvertical-topbar">
+  <div class="navbar-header">
+      <div class="d-flex">
+          <!-- LOGO -->
+          <div class="navbar-brand-box">
+              <a href="index.html" class="logo logo-dark">
+                  <span class="logo-sm">
+                      <img src="{{asset('assets/images/logo-dark-sm.png')}}" alt="" height="26">
+                  </span>
+                  <span class="logo-lg">
+                      <img src="{{asset('assets/images/logo-dark-sm.png')}}" alt="" height="26">
+                  </span>
+              </a>
 
-      <!-- Search Bar and Menu Toggle-->
-      <div class="d-flex align-items-center">
+              <a href="index.html" class="logo logo-light">
+                  <span class="logo-lg">
+                      <img src="{{asset('assets/images/logo-light.png')}}" alt="" height="30">
+                  </span>
+                  <span class="logo-sm">
+                      <img src="{{asset('assets/images/logo-light-sm.png')}}" alt="" height="26">
+                  </span>
+              </a>
+          </div>
+
+          <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn">
+              <i class="bx bx-menu align-middle"></i>
+          </button>
+
+          <!-- start page title -->
+          <div class="page-title-box align-self-center d-none d-md-block">
+              <h4 class="page-title mb-0">Sales</h4>
+          </div>
+          <!-- end page title -->
+
       </div>
-      <!-- / Search Bar and Menu Toggle-->
 
-      <!-- Right Side Widgets-->
-      <div class="d-flex align-items-center">
+      <div class="d-flex">
 
-        <!-- Notifications-->
-        <div class="d-none d-sm-flex dropdown mx-1">
-          <button class="btn-action text-muted" type="button" id="notificationsDropdown" data-bs-toggle="dropdown"
-            aria-expanded="false">
-            <span class="f-w-4">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" class="w-100">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-              </svg>
-            </span>
-            <span
-            class="position-absolute top-0 start-50 p-1 bg-success border border-3 border-white rounded-circle mt-n1">
-            <span class="visually-hidden">New alerts</span>
-          </span>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end dropdown-lg" aria-labelledby="notificationsDropdown">
-            <div class="dropdown-header d-flex justify-content-between align-items-center">
-              <p class="fw-bolder m-0 text-body">Notifications</p>
-              <span class="badge bg-success-faded text-success rounded-pill">4 new</span>
-            </div>
-            <div class="simplebar-wrapper">
-              <div data-pixr-simplebar>
-                <ul class="list-unstyled m-0 pb-4">
-                    <li class="d-flex py-2 align-items-start">
-                      <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">O</button>
-                      <div class="d-flex align-items-start justify-content-between flex-grow-1">
-                        <div>
-                          <p class="lh-1 mb-2 fw-semibold text-body">Order #123-5567</p>
-                          <p class="text-muted lh-1 mb-2 small">Placed by John Doe at 11:23 AM</p>
-                        </div>
-                        <small class="text-muted text-uppercase tracking-wide fw-bold fs-xs">2min</small>
-                      </div>
-                    </li>
-                    <li class="d-flex py-2 align-items-start">
-                      <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">M</button>
-                      <div class="d-flex align-items-start justify-content-between flex-grow-1">
-                        <div>
-                          <p class="lh-1 mb-2 fw-semibold text-body">Mike Johnston</p>
-                          <p class="text-muted lh-1 mb-2 small">Hi Jack, can we setup a meeting...</p>
-                        </div>
-                        <small class="text-muted text-uppercase tracking-wide fw-bold fs-xs">1 hr</small>
-                      </div>
-                    </li>
-                    <li class="d-flex py-2 align-items-start">
-                      <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">D</button>
-                      <div class="d-flex align-items-start justify-content-between flex-grow-1">
-                        <div>
-                          <p class="lh-1 mb-2 fw-semibold text-body">Daily Backup</p>
-                          <p class="text-muted lh-1 mb-2 small">Backup completed at 11:59 PM</p>
-                        </div>
-                        <small class="text-muted text-uppercase tracking-wide fw-bold fs-xs">3hr</small>
-                      </div>
-                    </li>
-                    <li class="d-flex py-2 align-items-start">
-                      <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">E</button>
-                      <div class="d-flex align-items-start justify-content-between flex-grow-1">
-                        <div>
-                          <p class="lh-1 mb-2 fw-semibold text-body">Event: Staff Review</p>
-                          <p class="text-muted lh-1 mb-2 small">Monthly staff review starts in...</p>
-                        </div>
-                        <small class="text-muted text-uppercase tracking-wide fw-bold fs-xs">4hr</small>
-                      </div>
-                    </li>
-                    <li class="d-flex py-2 align-items-start">
-                      <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">O</button>
-                      <div class="d-flex align-items-start justify-content-between flex-grow-1">
-                        <div>
-                          <p class="lh-1 mb-2 fw-semibold text-body">Order #123-3322</p>
-                          <p class="text-muted lh-1 mb-2 small">Placed by Sally Smith at 10:07 AM</p>
-                        </div>
-                        <small class="text-muted text-uppercase tracking-wide fw-bold fs-xs">1d</small>
-                      </div>
-                    </li>
-                </ul>
+          <div class="dropdown d-inline-block language-switch ms-2">
+              <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img class="header-lang-img" src="{{asset('assets/images/flags/us.jpg')}}" alt="Header Language" height="18">
+              </button>
+              <div class="dropdown-menu dropdown-menu-end">
+      
+                  <!-- item-->
+                  <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="eng">
+                      <img src="{{asset('assets/images/flags/us.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
+                  </a>
+
+                  <!-- item-->
+                  <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                      <img src="{{asset('assets/images/flags/spain.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                  </a>
+
+                  <!-- item-->
+                  <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                      <img src="{{asset('assets/images/flags/germany.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                  </a>
+
+                  <!-- item-->
+                  <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                      <img src="{{asset('assets/images/flags/italy.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                  </a>
+
+                  <!-- item-->
+                  <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                      <img src="{{asset('assets/images/flags/russia.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                  </a>
               </div>
-            </div>
-            <div><a class="dropdown-item text-primary fw-bolder text-center border-top pt-3" href="#">See more &rarr;</a></div>
           </div>
-        </div>        <!-- / Notifications-->
 
-        <!-- Activity-->
-        <button class="btn-action mx-1" data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasActivity" aria-controls="offcanvasActivity">
-            <span class="f-w-4 text-muted">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-            </span>
-        </button>        <!-- / Activity-->
-
-        <!-- Messages-->
-        <button class="btn-action mx-1" type="button" data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasMessage" aria-controls="offcanvasMessage">
-            <span class="f-w-4 text-muted">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            </span>
-        </button>        <!-- / Messages-->
-
-        <!-- Apps-->
-        <div class="d-none d-sm-flex dropdown mx-1">
-          <button class="btn-action mx-1" type="button" id="appsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="f-w-4 text-muted">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" class="feather feather-grid">
-                <rect x="3" y="3" width="7" height="7"></rect>
-                <rect x="14" y="3" width="7" height="7"></rect>
-                <rect x="14" y="14" width="7" height="7"></rect>
-                <rect x="3" y="14" width="7" height="7"></rect>
-              </svg>
-            </span>
-          </button>
-          <div class="dropdown-menu dropdown-menu-end dropdown-lg" aria-labelledby="appsDropdown">
-            <div class="dropdown-header d-flex justify-content-between align-items-center">
-              <p class="fw-bolder m-0 text-body">My Applications</p>
-            </div>
-            <div class="simplebar-wrapper">
-              <div data-pixr-simplebar>
-                <div class="row g-2 pb-3">
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-1.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Figma</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-2.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Sketch</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-3.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Adobe XD</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-4.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Netlify</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-5.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Dropbox</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-6.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Gitlab</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-7.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Click Up</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-8.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Atlassian</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-9.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Bitbucket</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-10.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Photoshop</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-11.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Illustrator</span>
-                      </a>
-                    </div>
-                    <div class="col-4 h-100">
-                      <a href="#" class="d-flex justify-content-center align-items-center flex-column bg-light-hover rounded-2 px-2 py-3 transition-all">
-                        <span class="d-block f-h-8">
-                          <picture>
-                            <img class="h-100" src="./assets/images/logos/logo-12.svg" alt="">
-                          </picture>
-                        </span>
-                        <span class="small fw-bolder text-body mb-0 mt-3">Adobe CC</span>
-                      </a>
-                    </div>
-                </div>
+          <div class="dropdown d-inline-block">
+              <button type="button" class="btn header-item noti-icon"
+                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-search icon-sm align-middle"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                  <form class="p-2">
+                      <div class="search-box">
+                          <div class="position-relative">
+                              <input type="text" class="form-control rounded bg-light border-0" placeholder="Search...">
+                              <i class="bx bx-search search-icon"></i>
+                          </div>
+                      </div>
+                  </form>
               </div>
-            </div>
-            <div><a class="dropdown-item text-primary fw-bolder text-center border-top pt-3" href="#">See more &rarr;</a></div>
           </div>
-        </div>        <!-- / Apps-->
 
-        <!-- Profile Menu-->
-        <div class="dropdown ms-1">
-            <button class="btn btn-link p-0 position-relative" type="button" id="profileDropdown"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <picture>
-                <img class="f-w-10 rounded-circle" src="./assets/images/profile-small.jpeg"
-                  alt="HTML Bootstrap Admin Template by Pixel Rocket">
-              </picture>
-              <span
-                class="position-absolute bottom-0 start-75 p-1 bg-success border border-3 border-white rounded-circle">
-                <span class="visually-hidden">New alerts</span>
-              </span>
-            </button>
-            <ul class="dropdown-menu dropdown-md dropdown-menu-end" aria-labelledby="profileDropdown">
-              </li>
-              <li class="d-flex py-2 align-items-start">
-                <button class="btn-icon bg-primary-faded text-primary fw-bolder me-3">A</button>
-                <div class="d-flex align-items-start justify-content-between flex-grow-1">
-                  <div>
-                    <p class="lh-1 mb-2 fw-semibold text-body">{{Auth::user()->name}}</p>
-                    <p class="text-muted lh-1 mb-2 small">{{Auth::user()->email}}</p>
+          <div class="dropdown d-inline-block">
+              <button type="button" class="btn header-item noti-icon" id="page-header-notifications-dropdown-v"
+                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="bx bx-bell icon-sm align-middle"></i>
+                  <span class="noti-dot bg-danger rounded-pill">4</span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-xl dropdown-menu-end p-0"
+                  aria-labelledby="page-header-notifications-dropdown-v">
+                  <div class="p-3">
+                      <div class="row align-items-center">
+                          <div class="col">
+                              <h5 class="m-0 font-size-15"> Notifications </h5>
+                          </div>
+                          <div class="col-auto">
+                              <a href="#!" class="small fw-semibold text-decoration-underline"> Mark all as read</a>
+                          </div>
+                      </div>
                   </div>
-                </div>
-              </li>     
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal"
-                data-bs-target="#logoutModal">Logout</a></li>
-            </ul>
-          </div>        <!-- / Profile Menu-->
+                  <div data-simplebar style="max-height: 250px;">
+                      <a href="#!" class="text-reset notification-item">
+                          <div class="d-flex">
+                              <div class="flex-shrink-0 me-3">
+                                  <img src="assets/images/users/avatar-3.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                              </div>
+                              <div class="flex-grow-1">
+                                  <p class="text-muted font-size-13 mb-0 float-end">1 hour ago</p>
+                                  <h6 class="mb-1">James Lemire</h6>
+                                  <div>
+                                      <p class="mb-0">It will seem like simplified English.</p>
+                                  </div>
+                              </div>
+                  
+                          </div>
+                      </a>
+                      <a href="#!" class="text-reset notification-item">
+                          <div class="d-flex">
+                              <div class="flex-shrink-0 avatar-sm me-3">
+                                  <span class="avatar-title bg-primary rounded-circle font-size-18">
+                                      <i class="bx bx-cart"></i>
+                                  </span>
+                              </div>
+                              <div class="flex-grow-1">
+                                  <p class="text-muted font-size-13 mb-0 float-end">3 min ago</p>
+                                  <h6 class="mb-1">Your order is placed</h6>
+                                  <div>
+                                      <p class="mb-0">If several languages coalesce the grammar</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
+                      <a href="#!" class="text-reset notification-item">
+                          <div class="d-flex">
+                              <div class="flex-shrink-0 avatar-sm me-3">
+                                  <span class="avatar-title bg-success rounded-circle font-size-18">
+                                      <i class="bx bx-badge-check"></i>
+                                  </span>
+                              </div>
+                              <div class="flex-grow-1">
+                                  <p class="text-muted font-size-13 mb-0 float-end">8 min ago</p>
+                                  <h6 class="mb-1">Your item is shipped</h6>
+                                  <div>
+                                      <p class="mb-0">If several languages coalesce the grammar</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
 
+                      <a href="#!" class="text-reset notification-item">
+                          <div class="d-flex">
+                              <div class="flex-shrink-0 me-3">
+                                  <img src="assets/images/users/avatar-6.jpg" class="rounded-circle avatar-sm" alt="user-pic">
+                              </div>
+                              <div class="flex-grow-1">
+                                  <p class="text-muted font-size-13 mb-0 float-end">1 hour ago</p>
+                                  <h6 class="mb-1">Salena Layfield</h6>
+                                  <div>
+                                      <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </a>
+                  </div>
+                  <div class="p-2 border-top d-grid">
+                      <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
+                          <i class="uil-arrow-circle-right me-1"></i> <span>View More..</span>
+                      </a>
+                  </div>
+              </div>
+          </div>
+
+          <div class="dropdown d-inline-block">
+              <button type="button" class="btn header-item user text-start d-flex align-items-center" id="page-header-user-dropdown-v"
+                  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-3.jpg"
+                  alt="Header Avatar">
+                  <span class="d-none d-xl-inline-block ms-2 fw-medium font-size-15">Martin Gurley</span>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end pt-0">
+                  <div class="p-3 border-bottom">
+                      <h6 class="mb-0">Martin Gurley</h6>
+                      <p class="mb-0 font-size-11 text-muted">martin.gurley@email.com</p>
+                  </div>
+                  <a class="dropdown-item" href="contacts-profile.html"><i class="mdi mdi-account-circle text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Profile</span></a>
+                  <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Messages</span></a>
+                  <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Help</span></a>
+                  <a class="dropdown-item d-flex align-items-center" href="#"><i class="mdi mdi-cog-outline text-muted font-size-16 align-middle me-2"></i> <span class="align-middle me-3">Settings</span><span class="badge bg-success-subtle text-success  ms-auto">New</span></a>
+                  <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Lock screen</span></a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Logout</span></a>
+              </div>
+          </div>
       </div>
-    </div>
   </div>
-</nav>
+</header>

@@ -1,152 +1,759 @@
-<aside class="aside bg-white">
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+
+    <!-- LOGO -->
+    <div class="navbar-brand-box">
+        <a href="index.html" class="logo logo-dark">
+            <span class="logo-sm">
+                <img src="assets/images/logo-dark-sm.png" alt="" height="26">
+            </span>
+            <span class="logo-lg">
+                <img src="assets/images/logo-dark.png" alt="" height="28">
+            </span>
+        </a>
+
+        <a href="index.html" class="logo logo-light">
+            <span class="logo-lg">
+                <img src="assets/images/logo-light.png" alt="" height="30">
+            </span>
+            <span class="logo-sm">
+                <img src="assets/images/logo-light-sm.png" alt="" height="26">
+            </span>
+        </a>
+    </div>
+
+    <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect vertical-menu-btn">
+        <i class="bx bx-menu align-middle"></i>
+    </button>
+
+    <div data-simplebar class="sidebar-menu-scroll">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title" data-key="t-menu">Dashboard</li>
+
+               <li>
+                    <a href="javascript: void(0);">
+                        <i class="bx bx-home-alt icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-dashboard">Dashboard</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="index.html" data-key="t-ecommerce">Ecommerce</a></li>
+                        <li><a href="dashboard-sales.html" data-key="t-sales">Sales</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" data-key="t-applications">Applications</li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-envelope icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-email">Email</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="email-inbox.html" data-key="t-inbox">Inbox</a></li>
+                        <li><a href="email-read.html" data-key="t-read-email">Read Email</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="apps-calendar.html">
+                        <i class="bx bx-calendar-event icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-calendar">Calendar</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="apps-todo.html">
+                        <i class="bx bx-check-square icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-todo">Todo</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="apps-file-manager.html">
+                        <i class="bx bx-file-find icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-filemanager">File Manager</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="apps-chat.html">
+                        <i class="bx bx-chat icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-chat">Chat</span>
+                        <span class="badge rounded-pill bg-danger" data-key="t-hot">Hot</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-store icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-ecommerce">Ecommerce</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="ecommerce-products.html" data-key="t-products">Products</a></li>
+                        <li><a href="ecommerce-product-detail.html" data-key="t-product-detail">Product Detail</a></li>
+                        <li><a href="ecommerce-orders.html" data-key="t-orders">Orders</a></li>
+                        <li><a href="ecommerce-customers.html" data-key="t-customers">Customers</a></li>
+                        <li><a href="ecommerce-cart.html" data-key="t-cart">Cart</a></li>
+                        <li><a href="ecommerce-checkout.html" data-key="t-checkout">Checkout</a></li>
+                        <li><a href="ecommerce-shops.html" data-key="t-shops">Shops</a></li>
+                        <li><a href="ecommerce-add-product.html" data-key="t-add-product">Add Product</a></li>
+                    </ul>
+                </li>
+
+   
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-receipt icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-invoices">Invoices</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="invoices-list.html" data-key="t-invoice-list">Invoice List</a></li>
+                        <li><a href="invoices-detail.html" data-key="t-invoice-detail">Invoice Detail</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-user-circle icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-contacts">Contacts</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="contacts-grid.html" data-key="t-user-grid">User Grid</a></li>
+                        <li><a href="contacts-list.html" data-key="t-user-list">User List</a></li>
+                        <li><a href="contacts-profile.html" data-key="t-user-profile">Profile</a></li>
+                    </ul>
+                </li>
+
+                <li class="menu-title" data-key="t-layouts">Layouts</li>
     
-  <div class="simplebar-wrapper">
-      <div data-pixr-simplebar>
-          <div class="pb-6">
-              <!-- Mobile Logo-->
-              <div class="d-flex d-xl-none justify-content-between align-items-center border-bottom aside-header">
-                  <a class="navbar-brand lh-1 border-0 m-0 d-flex align-items-center" href="./index.html">
-                      <div class="d-flex align-items-center">
-                          <svg class="f-w-5 me-2 text-primary d-flex align-self-center lh-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 203.58 182"><path d="M101.66,41.34C94.54,58.53,88.89,72.13,84,83.78A21.2,21.2,0,0,1,69.76,96.41,94.86,94.86,0,0,0,26.61,122.3L81.12,0h41.6l55.07,123.15c-12-12.59-26.38-21.88-44.25-26.81a21.22,21.22,0,0,1-14.35-12.69c-4.71-11.35-10.3-24.86-17.53-42.31Z" fill="currentColor" fill-rule="evenodd" fill-opacity="0.5"/><path d="M0,182H29.76a21.3,21.3,0,0,0,18.56-10.33,63.27,63.27,0,0,1,106.94,0A21.3,21.3,0,0,0,173.82,182h29.76c-22.66-50.84-49.5-80.34-101.79-80.34S22.66,131.16,0,182Z" fill="currentColor" fill-rule="evenodd"/></svg>
-                          <span class="fw-black text-uppercase tracking-wide fs-6 lh-1">Apollo</span>
-                      </div>                    </a>
-                  <i
-                      class="ri-close-circle-line ri-lg close-menu text-muted transition-all text-primary-hover me-4 cursor-pointer"></i>
-              </div>
-              <!-- / Mobile Logo-->
+                <li>
+                    <a href="layouts-horizontal.html">
+                        <i class="bx bx-layout icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-horizontal">Horizontal</span>
+                    </a>
+                </li>
 
-              <ul class="list-unstyled mb-6">
+                <li class="menu-title" data-key="t-components">Components</li>
 
-                  <!-- Dashboard Menu Section-->
-                  <li class="menu-section mt-2">Menu</li>
-                  <li class="menu-item">
-                    <a class="d-flex align-items-center active" href="./index.html">
-                          <span class="menu-icon">
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" class="w-100">
-                                  <rect fill-opacity=".5" fill="currentColor" x="3" y="3" width="7" height="7"></rect>
-                                  <rect fill="currentColor" x="14" y="3" width="7" height="7"></rect>
-                                  <rect fill-opacity=".5" fill="currentColor" x="14" y="14" width="7" height="7">
-                                  </rect>
-                                  <rect fill="currentColor" x="3" y="14" width="7" height="7"></rect>
-                              </svg>
-                          </span>Dashboard</a></li>
-                  <!-- / Dashboard Menu Section-->
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-cube icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-ui-elements">UI Elements</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="ui-alerts.html" data-key="t-alerts">Alerts</a></li>
+                        <li><a href="ui-buttons.html" data-key="t-buttons">Buttons</a></li>
+                        <li><a href="ui-cards.html" data-key="t-cards">Cards</a></li>
+                        <li><a href="ui-carousel.html" data-key="t-carousel">Carousel</a></li>
+                        <li><a href="ui-dropdowns.html" data-key="t-dropdowns">Dropdowns</a></li>
+                        <li><a href="ui-grid.html" data-key="t-grid">Grid</a></li>
+                        <li><a href="ui-images.html" data-key="t-images">Images</a></li>
+                        <li><a href="ui-lightbox.html" data-key="t-lightbox">Lightbox</a></li>
+                        <li><a href="ui-modals.html" data-key="t-modals">Modals</a></li>
+                        <li><a href="ui-offcanvas.html" data-key="t-offcanvas">Offcanvas</a></li>
+                        <li><a href="ui-rangeslider.html" data-key="t-range-slider">Range Slider</a></li>
+                        <li><a href="ui-progressbars.html" data-key="t-progress-bars">Progress Bars</a></li>
+                        <li><a href="ui-sweet-alert.html" data-key="t-sweet-alert">Sweet-Alert</a></li>
+                        <li><a href="ui-tabs-accordions.html" data-key="t-tabs-accordions">Tabs & Accordions</a></li>
+                        <li><a href="ui-typography.html" data-key="t-typography">Typography</a></li>
+                        <li><a href="ui-video.html" data-key="t-video">Video</a></li>
+                        <li><a href="ui-general.html" data-key="t-general">General</a></li>
+                        <li><a href="ui-colors.html" data-key="t-colors">Colors</a></li>
+                        <li><a href="ui-rating.html" data-key="t-rating">Rating</a></li>
+                        <li><a href="ui-notifications.html" data-key="t-notifications">Notifications</a></li>
+                    </ul>
+                </li>
 
-                  <!-- Dashboard Menu Section-->
-                  <li class="menu-section mt-4">Data</li>
-                  <li class="menu-item"><a class="d-flex align-items-center" href="./charts.html">
-                          <span class="menu-icon">
-                              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                              viewBox="0 0 489.902 489.902" style="enable-background:new 0 0 489.902 489.902;">
-                                 <path fill="currentColor" opacity="0.5" d="M349.2,178.251l113.6-45.9c-37.7-72.7-110.1-124-195.6-131.8v122.5C301.8,129.651,330.9,149.851,349.2,178.251z"/>
-                                 <path fill="currentColor" opacity="0.75" d="M121.3,244.751c0-60.7,43.6-110.8,101.1-121.3V0.551C98,11.851,0,116.851,0,244.751c0,54.8,17.9,105.4,48.2,146.2
-                                     l91.4-81.7C128.3,290.251,121.3,268.051,121.3,244.751z"/>
-                                 <path fill="currentColor" d="M479.5,173.551l-113.6,45.9c1.6,8.2,2.7,16.3,2.7,24.9c0,68.1-55.2,123.7-123.7,123.7c-28.4,0-54.8-9.7-75.4-26.1
-                                     l-91.4,81.7c43.9,40.8,102.3,65.7,166.8,65.7c135.3,0,245-109.7,245-245C490,219.851,486.1,196.151,479.5,173.551z"/>
-                         
-                         </svg>
-                          </span>
-                          <span class="menu-link">
-                              Charts
-                          </span></a></li>
-                  <!-- / Dashboard Menu Section-->
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-layout icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-forms">Forms</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="form-elements.html" data-key="t-form-elements">Form Elements</a></li>
+                        <li><a href="form-layouts.html" data-key="t-form-layouts">Form Layouts</a></li>
+                        <li><a href="form-validation.html" data-key="t-form-validation">Form Validation</a></li>
+                        <li><a href="form-advanced.html" data-key="t-form-advanced">Form Advanced</a></li>
+                        <li><a href="form-editors.html" data-key="t-form-editors">Form Editors</a></li>
+                        <li><a href="form-uploads.html" data-key="t-form-upload">Form File Upload</a></li>
+                        <li><a href="form-wizard.html" data-key="t-form-wizard">Form Wizard</a></li>
+                        <li><a href="form-mask.html" data-key="t-form-mask">Form Mask</a></li>
+                    </ul>
+                </li>
 
-                  <!-- Pages Menu Section-->
-                  <li class="menu-section mt-4">Pages</li>
-                  <li class="menu-item"><a class="d-flex align-items-center collapsed" href="#"
-                          data-bs-toggle="collapse" data-bs-target="#collapseMenuItemPages" aria-expanded="false"
-                          aria-controls="collapseMenuItemPages">
-                          <span class="menu-icon">
-                              <svg enable-background="new 0 0 520 520" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg"><g><path fill="currentColor" d="m481.734 100.063h-158.331l-43.111-70.397c-2.727-4.452-7.571-7.166-12.792-7.166h-119.235c-21.099 0-38.265 17.166-38.265 38.266v65.51 229.184c0 21.1 17.166 38.266 38.265 38.266h261.735 71.734c21.1 0 38.266-17.166 38.266-38.266v-217.13c0-21.101-17.166-38.267-38.266-38.267z"/><path fill="currentColor" opacity=".5" d="m80 355.459v-229.184h-41.734c-21.1 0-38.266 17.166-38.266 38.266v294.693c0 21.1 17.166 38.266 38.266 38.266h333.469c21.1 0 38.266-17.166 38.266-38.266v-35.51h-261.736c-37.641.001-68.265-30.623-68.265-68.265z"/></g></svg>
-                          </span>
-                          <span
-                              class="menu-link">Pages</span></a>
-                      <div class="collapse" id="collapseMenuItemPages">
-                          <ul class="submenu">
-                              <li><a href="./charts.html">Charts</a></li>
-                              <li><a href="./user-listing.html">User Listing</a></li>
-                              <li><a href="./login.html">Login</a></li>
-                              <li><a href="./register.html">Register</a></li>
-                              <li><a href="./forgot-password.html">Forgot Password</a></li>
-                              <li><a href="./404.html">404 Page</a></li>
-                              <li><a href="./blank.html">Blank Page</a></li>
-                          </ul>
-                      </div>
-                  </li>
-                  <!-- / Pages Menu Section-->
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-table icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-tables">Tables</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="tables-basic.html" data-key="t-basic-tables">Basic Tables</a></li>
+                        <li><a href="tables-advanced.html" data-key="t-advanced-tables">Advance Tables</a></li>
+                    </ul>
+                </li>
 
-                  <!-- Pages Menu Section-->
-                  <li class="menu-section mt-4">User Management</li>
-                  <li class="menu-item"><a class="d-flex align-items-center collapsed" href="#"
-                          data-bs-toggle="collapse" data-bs-target="#collapseMenuItemUsers" aria-expanded="false"
-                          aria-controls="collapseMenuItemUsers">
-                          <span class="menu-icon">
-                              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                              viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
-                                 <path fill="currentColor" opacity=".5" d="M155.327,57.142c-51.531,0-93.454,44.45-93.454,99.086c0,54.636,41.923,99.086,93.454,99.086s93.455-44.45,93.455-99.086
-                                     C248.782,101.592,206.859,57.142,155.327,57.142z"/>
-                         
-                                 <path fill="currentColor" d="M367.798,71.321c-0.211,0-0.425,0.001-0.636,0.002c-21.626,0.179-41.826,9.31-56.878,25.713
-                                     c-14.788,16.113-22.829,37.37-22.644,59.854c0.186,22.484,8.577,43.605,23.628,59.473c15.17,15.991,35.265,24.773,56.651,24.773
-                                     c0.215,0,0.43-0.001,0.646-0.002c21.626-0.179,41.826-9.311,56.878-25.713c14.788-16.113,22.829-37.37,22.644-59.855
-                                     C447.702,108.972,411.747,71.321,367.798,71.321z"/>
-                         
-                                 <path fill="currentColor" d="M371.74,257.358h-7.76c-36.14,0-69.12,13.74-94.02,36.26c6.23,4.78,12.16,9.99,17.78,15.61
-                                     c16.58,16.58,29.6,35.9,38.7,57.42c8.2,19.38,12.88,39.8,13.97,60.83H512v-29.87C512,320.278,449.08,257.358,371.74,257.358z"/>
-                         
-                                 <path fill="currentColor" opacity=".5" d="M310.35,427.478c-2.83-45.59-25.94-85.69-60.43-111.39c-25.09-18.7-56.21-29.77-89.92-29.77h-9.34
-                                     C67.45,286.319,0,353.768,0,436.978v17.88h310.65v-17.88C310.65,433.788,310.55,430.618,310.35,427.478z"/>
-                         
-                         </svg>
-                          </span>
-                          <span
-                              class="menu-link">Users</span></a>
-                      <div class="collapse" id="collapseMenuItemUsers">
-                          <ul class="submenu">
-                              <li><a href="./user-listing.html">User Listing</a></li>
-                          </ul>
-                      </div>
-                  </li>
-                  <!-- / Pages Menu Section-->
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-pie-chart-alt-2 icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-charts">Charts</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="charts-apex.html" data-key="t-apex-charts">Apex Charts</a></li>
+                        <li><a href="charts-chartjs.html" data-key="t-chartjs-charts">Chartjs Charts</a></li>
+                        <li><a href="charts-tui.html" data-key="t-ui-charts">Toast UI Charts</a></li>
+                    </ul>
+                </li>
 
-                  <!-- UI Kit Menu Section-->
-                  <li class="menu-section mt-4">UI Kit</li>
-                  <li class="menu-item"><a class="d-flex align-items-center collapsed" href="#"
-                          data-bs-toggle="collapse" data-bs-target="#collapseMenuItemUI" aria-expanded="false"
-                          aria-controls="collapseMenuItemUI">
-                          <span class="menu-icon">
-                              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                  <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z" />
-                                  <path opacity="0.5" d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z" />
-                                <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z" />
-                                </svg>
-                          </span>
-                          <span class="menu-link">Components</span></a>
-                      <div class="collapse" id="collapseMenuItemUI">
-                          <ul class="submenu">
-                              <li><a href="./accordion.html">Accordion</a></li>
-                              <li><a href="./alert.html">Alert</a></li>
-                              <li><a href="./badge.html">Badge</a></li>
-                              <li><a href="./button.html">Button</a></li>
-                              <li><a href="./card.html">Card</a></li>
-                              <li><a href="./collapse.html">Collapse</a></li>
-                              <li><a href="./dropdown.html">Dropdown</a></li>
-                              <li><a href="./forms.html">Forms</a></li>
-                              <li><a href="./modal.html">Modal</a></li>
-                              <li><a href="./offcanvas.html">Offcanvas</a></li>
-                              <li><a href="./pagination.html">Pagination</a></li>
-                              <li><a href="./popover.html">Popovers</a></li>
-                              <li><a href="./progress.html">Progress</a></li>
-                              <li><a href="./tooltip.html">Tooltips</a></li>
-                              <li><a href="./tables.html">Tables</a></li>
-                          </ul>
-                      </div>
-                  </li>
-                  <!-- / UI Kit Menu Section-->
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-cuboid icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-icons">Icons</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="icons-evaicons.html" data-key="t-evaicons">Eva Icons</a></li>
+                        <li><a href="icons-boxicons.html" data-key="t-boxicons">Boxicons</a></li>
+                        <li><a href="icons-materialdesign.html" data-key="t-material-design">Material Design</a></li>
+                        <li><a href="icons-fontawesome.html" data-key="t-font-awesome">Font Awesome 5</a></li>
+                    </ul>
+                </li>
 
-              </ul>
-          </div>
-      </div>
-  </div>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-map-alt icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-maps">Maps</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="maps-google.html" data-key="t-google">Google</a></li>
+                        <li><a href="maps-vector.html" data-key="t-vector">Vector</a></li>
+                        <li><a href="maps-leaflet.html" data-key="t-leaflet">Leaflet</a></li>
+                    </ul>
+                </li>
 
-</aside> 
+                <li class="menu-title" data-key="t-pages">Pages</li>
+
+                <li>
+                    <a href="javascript: void(0);">
+                        <i class="bx bx-user-pin icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-authentication">Authentication</span>
+                        <span class="badge rounded-pill bg-info">8</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="auth-login.html" data-key="t-login">Login</a></li>
+                        <li><a href="auth-register.html" data-key="t-register">Register</a></li>
+                        <li><a href="auth-recoverpw.html" data-key="t-recover-password">Recover Password</a></li>
+                        <li><a href="auth-lock-screen.html" data-key="t-lock-screen">Lock Screen</a></li>
+                        <li><a href="auth-logout.html" data-key="t-logout">Logout</a></li>
+                        <li><a href="auth-confirm-mail.html" data-key="t-confirm-mail">Confirm Mail</a></li>
+                        <li><a href="auth-email-verification.html" data-key="t-email-verification">Email Verification</a></li>
+                        <li><a href="auth-two-step-verification.html" data-key="t-two-step-verification">Two Step Verification</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-file icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-utility">Utility</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="pages-starter.html" data-key="t-starter-page">Starter Page</a></li>
+                        <li><a href="pages-maintenance.html" data-key="t-maintenance">Maintenance</a></li>
+                        <li><a href="pages-comingsoon.html" data-key="t-coming-soon">Coming Soon</a></li>
+                        <li><a href="pages-timeline.html" data-key="t-timeline">Timeline</a></li>
+                        <li><a href="pages-faqs.html" data-key="t-faqs">FAQs</a></li>
+                        <li><a href="pages-pricing.html" data-key="t-pricing">Pricing</a></li>
+                        <li><a href="pages-404.html" data-key="t-error-404">Error 404</a></li>
+                        <li><a href="pages-500.html" data-key="t-error-500">Error 500</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-share-alt icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-multi-level">Multi Level</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li class="disabled"><a href="#" data-key="t-disabled-item">Disabled Item</a></li>
+                        <li><a href="javascript: void(0);" data-key="t-level-1.1">Level 1.1</a></li>
+                        <li><a href="javascript: void(0);" class="has-arrow" data-key="t-level-1.2">Level 1.2</a>
+                            <ul class="sub-menu" aria-expanded="true">
+                                <li><a href="javascript: void(0);" data-key="t-level-2.1">Level 2.1</a></li>
+                                <li><a href="javascript: void(0);" data-key="t-level-2.2">Level 2.2</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>
+<!-- Left Sidebar End -->
+<header class="ishorizontal-topbar">
+    <div class="navbar-header">
+        <div class="d-flex">
+            <!-- LOGO -->
+            <div class="navbar-brand-box">
+                <a href="index.html" class="logo logo-dark">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-dark-sm.png" alt="" height="26">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-dark.png" alt="" height="28">
+                    </span>
+                </a>
+
+                <a href="index.html" class="logo logo-light">
+                    <span class="logo-sm">
+                        <img src="assets/images/logo-light-sm.png" alt="" height="26">
+                    </span>
+                    <span class="logo-lg">
+                        <img src="assets/images/logo-light.png" alt="" height="30">
+                    </span>
+                </a>
+            </div>
+
+            <button type="button" class="btn btn-sm px-3 font-size-24 d-lg-none header-item" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                <i class="bx bx-menu align-middle"></i>
+            </button>
+
+            <!-- start page title -->
+            <div class="page-title-box align-self-center d-none d-md-block">
+                <h4 class="page-title mb-0">Sales</h4>
+            </div>
+            <!-- end page title -->
+
+        </div>
+
+        <div class="d-flex">
+
+            <div class="dropdown d-inline-block language-switch ms-2 ms-xl-3">
+                <button type="button" class="btn header-item" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="header-lang-img" src="{{asset('assets/images/flags/us.jpg')}}" alt="Header Language" height="18">
+                </button>
+                <div class="dropdown-menu dropdown-menu-end">
+        
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="eng">
+                        <img src="{{asset('assets/images/flags/us.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">English</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="sp">
+                        <img src="{{asset('assets/images/flags/spain.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Spanish</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="gr">
+                        <img src="{{asset('assets/images/flags/germany.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">German</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="it">
+                        <img src="{{asset('assets/images/flags/italy.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Italian</span>
+                    </a>
+
+                    <!-- item-->
+                    <a href="javascript:void(0);" class="dropdown-item notify-item language" data-lang="ru">
+                        <img src="{{asset('assets/images/flags/russia.jpg')}}" alt="user-image" class="me-1" height="12"> <span class="align-middle">Russian</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item noti-icon"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-search icon-sm align-middle"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0">
+                    <form class="p-2">
+                        <div class="search-box">
+                            <div class="position-relative">
+                                <input type="text" class="form-control rounded bg-light border-0" placeholder="Search...">
+                                <i class="bx bx-search search-icon"></i>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item noti-icon" id="page-header-notifications-dropdown"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-bell icon-sm align-middle"></i>
+                    <span class="noti-dot bg-danger rounded-pill">4</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                    aria-labelledby="page-header-notifications-dropdown">
+                    <div class="p-3">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h5 class="m-0 font-size-15"> Notifications </h5>
+                            </div>
+                            <div class="col-auto">
+                                <a href="#!" class="small fw-semibold text-decoration-underline"> Mark all as read</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-simplebar style="max-height: 250px;">
+                        <a href="#!" class="text-reset notification-item">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <img src="{{asset('assets/images/users/avatar-3.jpg')}}" class="rounded-circle avatar-sm" alt="user-pic">
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">James Lemire</h6>
+                                    <div class="font-size-13 text-muted">
+                                        <p class="mb-1">It will seem like simplified English.</p>
+                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#!" class="text-reset notification-item">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 avatar-sm me-3">
+                                    <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                        <i class="bx bx-cart"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Your order is placed</h6>
+                                    <div class="font-size-13 text-muted">
+                                        <p class="mb-1">If several languages coalesce the grammar</p>
+                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="#!" class="text-reset notification-item">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 avatar-sm me-3">
+                                    <span class="avatar-title bg-success rounded-circle font-size-16">
+                                        <i class="bx bx-badge-check"></i>
+                                    </span>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Your item is shipped</h6>
+                                    <div class="font-size-13 text-muted">
+                                        <p class="mb-1">If several languages coalesce the grammar</p>
+                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>3 min ago</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a href="#!" class="text-reset notification-item">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0 me-3">
+                                    <img src="{{asset('assets/images/users/avatar-6.jpg')}}" class="rounded-circle avatar-sm" alt="user-pic">
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-1">Salena Layfield</h6>
+                                    <div class="font-size-13 text-muted">
+                                        <p class="mb-1">As a skeptical Cambridge friend of mine occidental.</p>
+                                        <p class="mb-0"><i class="mdi mdi-clock-outline"></i> <span>1 hour ago</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="p-2 border-top d-grid">
+                        <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
+                            <i class="uil-arrow-circle-right me-1"></i> <span>View More..</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown d-inline-block">
+                <button type="button" class="btn header-item user text-start d-flex align-items-center" id="page-header-user-dropdown"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img class="rounded-circle header-profile-user" src="assets/images/users/avatar-3.jpg"
+                    alt="Header Avatar">
+                    <span class="d-none d-xl-inline-block ms-2 fw-medium font-size-15">Martin Gurley</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end pt-0">
+                    <div class="p-3 border-bottom">
+                        <h6 class="mb-0">Martin Gurley</h6>
+                        <p class="mb-0 font-size-11 text-muted">martin.gurley@email.com</p>
+                    </div>
+                    <a class="dropdown-item" href="contacts-profile.html"><i class="mdi mdi-account-circle text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Profile</span></a>
+                    <a class="dropdown-item" href="apps-chat.html"><i class="mdi mdi-message-text-outline text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Messages</span></a>
+                    <a class="dropdown-item" href="pages-faqs.html"><i class="mdi mdi-lifebuoy text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Help</span></a>
+                    <a class="dropdown-item d-flex align-items-center" href="#"><i class="mdi mdi-cog-outline text-muted font-size-16 align-middle me-2"></i> <span class="align-middle me-3">Settings</span><span class="badge bg-success-subtle text-success  ms-auto">New</span></a>
+                    <a class="dropdown-item" href="auth-lock-screen.html"><i class="mdi mdi-lock text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Lock screen</span></a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="auth-logout.html"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-2"></i> <span class="align-middle">Logout</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="topnav">
+        <div class="container-fluid">
+            <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+                <div class="collapse navbar-collapse" id="topnav-menu-content">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-dashboard" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-home-alt icon nav-icon"></i>
+                                <span data-key="t-dashboards">Dashboards</span> <div class="arrow-down"></div>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="topnav-dashboard">
+                                <a href="index.html"  class="dropdown-item" data-key="t-ecommerce">Ecommerce</a>
+                                <a href="dashboard-sales.html"  class="dropdown-item" data-key="t-sales">Sales</a>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-uielement" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bx bx-cube icon nav-icon"></i>
+                               <span data-key="t-elements">Elements</span> <div class="arrow-down"></div>
+                            </a>
+
+                            <div class="dropdown-menu mega-dropdown-menu px-2 dropdown-mega-menu-xl" aria-labelledby="topnav-uielement">
+                                <div class="ps-2 p-lg-0">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div>
+                                                <div class="menu-title">Elements</div>
+                                                <div class="row g-0">
+                                                    <div class="col-lg-4">
+                                                        <div>
+                                                            <a href="ui-alerts.html" class="dropdown-item" data-key="t-alerts">Alerts</a>
+                                                            <a href="ui-buttons.html" class="dropdown-item" data-key="t-buttons">Buttons</a>
+                                                            <a href="ui-cards.html" class="dropdown-item" data-key="t-cards">Cards</a>
+                                                            <a href="ui-carousel.html" class="dropdown-item" data-key="t-carousel">Carousel</a>
+                                                            <a href="ui-dropdowns.html" class="dropdown-item" data-key="t-dropdowns">Dropdowns</a>
+                                                            <a href="ui-grid.html" class="dropdown-item" data-key="t-grid">Grid</a>
+                                                            <a href="ui-images.html" class="dropdown-item" data-key="t-images">Images</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div>
+                                                            <a href="ui-lightbox.html" class="dropdown-item" data-key="t-lightbox">Lightbox</a>
+                                                            <a href="ui-modals.html" class="dropdown-item" data-key="t-modals">Modals</a>
+                                                            <a href="ui-offcanvas.html" class="dropdown-item" data-key="t-offcanvas">Offcanvas</a>
+                                                            <a href="ui-rangeslider.html" class="dropdown-item" data-key="t-range-slider">Range Slider</a>
+                                                            <a href="ui-progressbars.html" class="dropdown-item" data-key="t-progress-bars">Progress Bars</a>
+                                                            <a href="ui-sweet-alert.html" class="dropdown-item" data-key="t-sweet-alert">Sweet-Alert</a>
+                                                            <a href="ui-tabs-accordions.html" class="dropdown-item" data-key="t-tabs-accordions">Tabs & Accordions</a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                        <div>
+                                                            <a href="ui-typography.html" class="dropdown-item" data-key="t-typography">Typography</a>
+                                                            <a href="ui-video.html" class="dropdown-item" data-key="t-video">Video</a>
+                                                            <a href="ui-general.html" class="dropdown-item" data-key="t-general">General</a>
+                                                            <a href="ui-colors.html" class="dropdown-item" data-key="t-colors">Colors</a>
+                                                            <a href="ui-rating.html" class="dropdown-item" data-key="t-rating">Rating</a>
+                                                            <a href="ui-notifications.html" class="dropdown-item" data-key="t-notifications">Notifications</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-pages" role="button">
+                                <i class="bx bx-store icon nav-icon"></i>
+                                <span data-key="t-apps">Apps</span> <div class="arrow-down"></div>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="topnav-pages">
+
+                                <a href="apps-calendar.html" class="dropdown-item" data-key="t-calendar">Calendar</a>
+
+                                <a href="apps-todo.html" class="dropdown-item" data-key="t-todo">Todo</a>
+
+                                <a href="apps-file-manager.html" class="dropdown-item" data-key="t-filemanager">File Manager</a>
+
+                                <a href="apps-chat.html" class="dropdown-item" data-key="t-chat">Chat</a>
+
+
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-ecommerce"
+                                        role="button">
+                                        <span data-key="t-ecommerce">Ecommerce</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-ecommerce">
+                                        <a href="ecommerce-products.html" class="dropdown-item" data-key="t-products">Products</a>
+                                        <a href="ecommerce-product-detail.html" class="dropdown-item" data-key="t-product-detail">Product Detail</a>
+                                        <a href="ecommerce-orders.html" class="dropdown-item" data-key="t-orders">Orders</a>
+                                        <a href="ecommerce-customers.html" class="dropdown-item" data-key="t-customers">Customers</a>
+                                        <a href="ecommerce-cart.html" class="dropdown-item" data-key="t-cart">Cart</a>
+                                        <a href="ecommerce-checkout.html" class="dropdown-item" data-key="t-checkout">Checkout</a>
+                                        <a href="ecommerce-shops.html" class="dropdown-item" data-key="t-shops">Shops</a>
+                                        <a href="ecommerce-add-product.html" class="dropdown-item" data-key="t-add-product">Add Product</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-email"
+                                        role="button">
+                                        <span data-key="t-email">Email</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-email">
+                                        <a href="email-inbox.html" class="dropdown-item" data-key="t-inbox">Inbox</a>
+                                        <a href="email-read.html" class="dropdown-item" data-key="t-read-email">Read Email</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-invoices"
+                                        role="button">
+                                       <span data-key="t-invoices">Invoices</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-invoices">
+                                        <a href="invoices-list.html" class="dropdown-item" data-key="t-invoice-list">Invoice List</a>
+                                        <a href="invoices-detail.html" class="dropdown-item" data-key="t-invoice-detail">Invoice Detail</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-contact"
+                                        role="button">
+                                       <span data-key="t-contacts">Contacts</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-contact">
+                                        <a href="contacts-grid.html" class="dropdown-item" data-key="t-user-grid">User Grid</a>
+                                        <a href="contacts-list.html" class="dropdown-item" data-key="t-user-list">User List</a>
+                                        <a href="contacts-profile.html" class="dropdown-item" data-key="t-user-profile">Profile</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-components" role="button">
+                                <i class="bx bx-layer icon nav-icon"></i>
+                                <span data-key="t-components">Components</span> <div class="arrow-down"></div>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="topnav-components">
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-form"
+                                        role="button">
+                                        <span data-key="t-forms">Forms</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-form">
+                                        <a href="form-elements.html" class="dropdown-item" data-key="t-form-elements">Form Elements</a>
+                                        <a href="form-layouts.html" class="dropdown-item" data-key="t-form-layouts">Form Layouts</a>
+                                        <a href="form-validation.html" class="dropdown-item" data-key="t-form-validation">Form Validation</a>
+                                        <a href="form-advanced.html" class="dropdown-item" data-key="t-form-advanced">Form Advanced</a>
+                                        <a href="form-editors.html" class="dropdown-item" data-key="t-form-editors">Form Editors</a>
+                                        <a href="form-uploads.html" class="dropdown-item" data-key="t-form-upload">Form File Upload</a>
+                                        <a href="form-wizard.html" class="dropdown-item" data-key="t-form-wizard">Form Wizard</a>
+                                        <a href="form-mask.html" class="dropdown-item" data-key="t-form-mask">Form Mask</a>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-table"
+                                        role="button">
+                                        <span data-key="t-tables">Tables</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-table">
+                                        <a href="tables-basic.html" class="dropdown-item" data-key="t-basic-tables">Basic Tables</a>
+                                        <a href="tables-advanced.html" class="dropdown-item" data-key="t-advanced-tables">Advance Tables</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-charts"
+                                        role="button">
+                                        <span data-key="t-charts">Charts</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-charts">
+                                        <a href="charts-apex.html" class="dropdown-item" data-key="t-apex-charts">Apex Charts</a>
+                                        <a href="charts-chartjs.html" class="dropdown-item" data-key="t-chartjs-charts">Chartjs Charts</a>
+                                        <a href="charts-tui.html" class="dropdown-item" data-key="t-ui-charts">Toast UI Charts</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-icons"
+                                        role="button">
+                                        <span data-key="t-icons">Icons</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-icons">
+                                        <a href="icons-evaicons.html" class="dropdown-item" data-key="t-evaicons">Eva Icons</a>
+                                        <a href="icons-boxicons.html" class="dropdown-item" data-key="t-boxicons">Boxicons</a>
+                                        <a href="icons-materialdesign.html" class="dropdown-item" data-key="t-material-design">Material Design</a>
+                                        <a href="icons-fontawesome.html" class="dropdown-item" data-key="t-font-awesome">Font Awesome 5</a>
+                                    </div>
+                                </div>
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-map"
+                                        role="button">
+                                        <span data-key="t-maps">Maps</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-map">
+                                        <a href="maps-google.html" class="dropdown-item" data-key="t-google">Google</a>
+                                        <a href="maps-vector.html" class="dropdown-item" data-key="t-vector">Vector</a>
+                                        <a href="maps-leaflet.html" class="dropdown-item" data-key="t-leaflet">Leaflet</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-more" role="button">
+                                <i class="bx bx-file icon nav-icon"></i>
+                                <span data-key="t-pages">Pages</span> <div class="arrow-down"></div>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="topnav-more">
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-authentication"
+                                        role="button">
+                                        <span data-key="t-authentication">Authentication</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-authentication">
+                                        <a href="auth-login.html" class="dropdown-item" data-key="t-login">Login</a>
+                                        <a href="auth-register.html" class="dropdown-item" data-key="t-register">Register</a>
+                                        <a href="auth-recoverpw.html" class="dropdown-item" data-key="t-recover-password">Recover Password</a>
+                                        <a href="auth-lock-screen.html" class="dropdown-item" data-key="t-lock-screen">Lock Screen</a>
+                                        <a href="auth-logout.html" class="dropdown-item" data-key="t-logout">Logout</a>
+                                        <a href="auth-confirm-mail.html" class="dropdown-item" data-key="t-confirm-mail">Confirm Mail</a>
+                                        <a href="auth-email-verification.html" class="dropdown-item" data-key="t-email-verification">Email Verification</a>
+                                        <a href="auth-two-step-verification.html" class="dropdown-item" data-key="t-two-step-verification">Two Step Verification</a>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <a class="dropdown-item dropdown-toggle arrow-none" href="#" id="topnav-utility"
+                                        role="button">
+                                        <span data-key="t-utility">Utility</span> <div class="arrow-down"></div>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="topnav-utility">
+                                        <a href="pages-starter.html" class="dropdown-item" data-key="t-starter-page">Starter Page</a>
+                                        <a href="pages-maintenance.html" class="dropdown-item" data-key="t-maintenance">Maintenance</a>
+                                        <a href="pages-comingsoon.html" class="dropdown-item" data-key="t-coming-soon">Coming Soon</a>
+                                        <a href="pages-timeline.html" class="dropdown-item" data-key="t-timeline">Timeline</a>
+                                        <a href="pages-faqs.html" class="dropdown-item" data-key="t-faqs">FAQs</a>
+                                        <a href="pages-pricing.html" class="dropdown-item" data-key="t-pricing">Pricing</a>
+                                        <a href="pages-404.html" class="dropdown-item" data-key="t-error-404">Error 404</a>
+                                        <a href="pages-500.html" class="dropdown-item" data-key="t-error-500">Error 500</a>
+                                    </div>
+                                </div>
+
+                                <a href="layouts-horizontal.html" class="dropdown-item" data-key="t-horizontal">Horizontal</a>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+</header>
