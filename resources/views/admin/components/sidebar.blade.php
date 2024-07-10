@@ -75,7 +75,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{route ('mitra.island')}}">
                         <i class="bx bx-world icon nav-icon"></i>
                         <span class="menu-item" data-key="t-tables">Island</span>
                     </a>
