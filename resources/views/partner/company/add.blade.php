@@ -15,13 +15,13 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
-                                                    <div class="avatar-title rounded-circle bg-primary-subtle  text-primary">
-                                                        <h5 class="text-primary font-size-17 mb-0">01</h5>
+                                                    <div class="avatar-title rounded-circle bg-dark-subtle  text-dark">
+                                                        <h5 class="text-dark font-size-17 mb-0">01</h5>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Product Info</h5>
+                                                <h5 class="font-size-16 mb-1">Company Info</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -101,13 +101,13 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
-                                                    <div class="avatar-title rounded-circle bg-primary-subtle  text-primary">
-                                                        <h5 class="text-primary font-size-17 mb-0">02</h5>
+                                                    <div class="avatar-title rounded-circle bg-dark-subtle  text-dark">
+                                                        <h5 class="text-dark font-size-17 mb-0">02</h5>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Product Image</h5>
+                                                <h5 class="font-size-16 mb-1">Company Image</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -119,15 +119,10 @@
     
                                 <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                            <div class="fallback">
-                                                <input name="file" type="file" multiple="multiple">
-                                            </div>
-                                            <div class="dz-message needsclick">
-                                                <div class="mb-3">
-                                                    <i class="display-4 text-muted mdi mdi-cloud-upload"></i>
-                                                </div>
-                                                <h4 class="mb-0">Drop files here or click to upload.</h4>
-                                            </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="cnp_logo">Logo</label>
+                                            <input id="cnp_logo" name="cnp_logo" type="file" accept="image/*" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -139,8 +134,8 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
-                                                    <div class="avatar-title rounded-circle bg-primary-subtle  text-primary">
-                                                        <h5 class="text-primary font-size-17 mb-0">03</h5>
+                                                    <div class="avatar-title rounded-circle bg-dark-subtle  text-dark">
+                                                        <h5 class="text-dark font-size-17 mb-0">03</h5>
                                                     </div>
                                                 </div>
                                             </div>

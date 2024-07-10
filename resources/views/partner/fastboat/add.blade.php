@@ -15,13 +15,13 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
-                                                    <div class="avatar-title rounded-circle bg-primary-subtle  text-primary">
-                                                        <h5 class="text-primary font-size-17 mb-0">01</h5>
+                                                    <div class="avatar-title rounded-circle bg-dark-subtle  text-dark">
+                                                        <h5 class="text-dark font-size-17 mb-0">01</h5>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Product Info</h5>
+                                                <h5 class="font-size-16 mb-1">Fast Boat Info</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -101,13 +101,13 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
-                                                    <div class="avatar-title rounded-circle bg-primary-subtle  text-primary">
-                                                        <h5 class="text-primary font-size-17 mb-0">02</h5>
+                                                    <div class="avatar-title rounded-circle bg-dark-subtle  text-dark">
+                                                        <h5 class="text-dark font-size-17 mb-0">02</h5>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Product Image</h5>
+                                                <h5 class="font-size-16 mb-1">Fast Boat Image</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -124,20 +124,20 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="image1">Image 1</label>
-                                                    <input id="image1" name="image1" type="file" class="form-control">
+                                                    <input id="image1" name="image1" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="image2">Image 2</label>
-                                                    <input id="image2" name="image2" type="file" class="form-control">
+                                                    <input id="image2" name="image2" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="image3">Image 3</label>
-                                                    <input id="image3" name="image3" type="file" class="form-control">
+                                                    <input id="image3" name="image3" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -146,20 +146,20 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="image4">Image 4</label>
-                                                    <input id="image4" name="image4" type="file" class="form-control">
+                                                    <input id="image4" name="image4" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="image5">Image 5</label>
-                                                    <input id="image5" name="image5" type="file" class="form-control">
+                                                    <input id="image5" name="image5" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="image6">Image 6</label>
-                                                    <input id="image6" name="image6" type="file" class="form-control">
+                                                    <input id="image6" name="image6" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -174,8 +174,8 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
-                                                    <div class="avatar-title rounded-circle bg-primary-subtle  text-primary">
-                                                        <h5 class="text-primary font-size-17 mb-0">03</h5>
+                                                    <div class="avatar-title rounded-circle bg-dark-subtle  text-dark">
+                                                        <h5 class="text-dark font-size-17 mb-0">03</h5>
                                                     </div>
                                                 </div>
                                             </div>
