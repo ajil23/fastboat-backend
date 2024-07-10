@@ -58,7 +58,7 @@
                     </a>
                 </li>
 
-                <li class="menu-title" data-key="t-components">Mitra</li>
+                <li class="menu-title" data-key="t-components">Partner</li>
 
                 <li>
                     <a href="{{route ('company.view')}}">
@@ -73,6 +73,8 @@
                         <span class="menu-item" data-key="t-forms">Fast Boat</span>
                     </a>
                 </li>
+
+                <li class="menu-title" data-key="t-components">Destiny</li>
 
                 <li>
                     <a href="{{route ('island.view')}}">
