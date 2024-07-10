@@ -10,6 +10,11 @@
                         <div class="card-body">
                             <div class="d-flex flex-wrap align-items-center mb-2">
                                 <h5 class="card-title">Island Table</h5>
+                                <div class="ms-auto">
+                                    <div class="btn-toolbar float-end" role="toolbar">
+                                        <button class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Island</button>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="table-responsive">
