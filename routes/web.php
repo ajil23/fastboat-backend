@@ -33,7 +33,7 @@ Route::middleware([
 
     Route::prefix('mitra')->group(function () {
         // mitra company routes
-        Route::get('/island', [MitraCompanyController::class, 'index'])->name('company.view');
+        Route::get('/company', [MitraCompanyController::class, 'index'])->name('company.view');
         Route::get('/company/add', [MitraCompanyController::class, 'add'])->name('company.add');
         Route::get('/company/store', [MitraCompanyController::class, 'store'])->name('company.store');
         Route::get('/company/edit/{id}', [MitraCompanyController::class, 'edit'])->name('company.edit');
@@ -41,7 +41,7 @@ Route::middleware([
         Route::get('/company/delete/{id}', [MitraCompanyController::class, 'delete'])->name('company.delete');
 
         // mitra fast boat routes
-        Route::get('/island', [MitraFasboatController::class, 'index'])->name('fastboat.view');
+        Route::get('/fasboat', [MitraFasboatController::class, 'index'])->name('fastboat.view');
         Route::get('/fastboat/add', [MitraFasboatController::class, 'add'])->name('fastboat.add');
         Route::get('/fastboat/store', [MitraFasboatController::class, 'store'])->name('fastboat.store');
         Route::get('/fastboat/edit/{id}', [MitraFasboatController::class, 'edit'])->name('fastboat.edit');
@@ -57,7 +57,7 @@ Route::middleware([
         Route::get('/island/delete/{id}', [MitraIslandController::class, 'delete'])->name('island.delete');
 
         // mitra port routes
-        Route::get('/port', [MitraPortController::class, 'index'])->name('mitra.port');
+        Route::get('/port', [MitraPortController::class, 'index'])->name('port.view');
         Route::get('/port/add', [MitraPortController::class, 'add'])->name('port.add');
         Route::get('/port/store', [MitraPortController::class, 'store'])->name('port.store');
         Route::get('/port/edit/{id}', [MitraPortController::class, 'edit'])->name('port.edit');

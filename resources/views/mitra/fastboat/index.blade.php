@@ -3,23 +3,35 @@
 
 <div class="main-content">
     <div class="page-content">
-        Fastboat Panel
+        <div class="container-fluid">
+            <h3>Fast boat</h3>
+              <div class="card-body">
+                  <div class="table-responsive">
+                      <table class="table mb-0">
+  
+                          <thead class="table-light">
+                              <tr>
+                                  <th>#</th>
+                                  <th>First Name</th>
+                                  <th>Last Name</th>
+                                  <th>Username</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr>
+                                  <th scope="row">1</th>
+                                  <td>Mark</td>
+                                  <td>Otto</td>
+                                  <td>@mdo</td>
+                              </tr>
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
 
-    <footer class="footer">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-6">
-                    <script>document.write(new Date().getFullYear())</script> © webadmin.
-                </div>
-                <div class="col-sm-6">
-                    <div class="text-sm-end d-none d-sm-block">
-                        Crafted with <i class="mdi mdi-heart text-danger"></i> by <a href="https://themesdesign.com/" target="_blank" class="text-reset">Themesdesign</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
+    @include('admin.components.footer')
 </div>

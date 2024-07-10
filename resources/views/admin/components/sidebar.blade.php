@@ -68,7 +68,7 @@
                 </li>
 
                 <li>
-                    <a href="{{route ('fasboat.view')}}">
+                    <a href="{{route ('fastboat.view')}}">
                         <i class="bx bx-up-arrow icon nav-icon"></i>
                         <span class="menu-item" data-key="t-forms">Fast Boat</span>
                     </a>
