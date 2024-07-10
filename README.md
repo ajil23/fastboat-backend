@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About This Project
+## Versioning
 
 This project has several requirements that must be adjusted first before it can run well. 
 
