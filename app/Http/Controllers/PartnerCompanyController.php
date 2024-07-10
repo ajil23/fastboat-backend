@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class MitraCompanyController extends Controller
+class PartnerCompanyController extends Controller
 {
     public function index(){
-        return view('mitra.company.index');
+        return view('partner.company.index');
     }
 }

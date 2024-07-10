@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\DestinyIslandController;
+use App\Http\Controllers\DestinyPortController;
 use App\Http\Controllers\MitraCompanyController;
 use App\Http\Controllers\MitraFasboatController;
-use App\Http\Controllers\MitraIslandController;
-use App\Http\Controllers\MitraPortController;
+use App\Http\Controllers\PartnerCompanyController;
+use App\Http\Controllers\PartnerFastboatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -31,37 +33,38 @@ Route::middleware([
 ])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    Route::prefix('mitra')->group(function () {
-        // mitra company routes
-        Route::get('/company', [MitraCompanyController::class, 'index'])->name('company.view');
-        Route::get('/company/add', [MitraCompanyController::class, 'add'])->name('company.add');
-        Route::get('/company/store', [MitraCompanyController::class, 'store'])->name('company.store');
-        Route::get('/company/edit/{id}', [MitraCompanyController::class, 'edit'])->name('company.edit');
-        Route::get('/company/update/{id}', [MitraCompanyController::class, 'update'])->name('company.update');
-        Route::get('/company/delete/{id}', [MitraCompanyController::class, 'delete'])->name('company.delete');
+    Route::prefix('partner')->group(function () {
+        // partner company routes
+        Route::get('/company', [PartnerCompanyController::class, 'index'])->name('company.view');
+        Route::get('/company/add', [PartnerCompanyController::class, 'add'])->name('company.add');
+        Route::get('/company/store', [PartnerCompanyController::class, 'store'])->name('company.store');
+        Route::get('/company/edit/{id}', [PartnerCompanyController::class, 'edit'])->name('company.edit');
+        Route::get('/company/update/{id}', [PartnerCompanyController::class, 'update'])->name('company.update');
+        Route::get('/company/delete/{id}', [PartnerCompanyController::class, 'delete'])->name('company.delete');
 
-        // mitra fast boat routes
-        Route::get('/fasboat', [MitraFasboatController::class, 'index'])->name('fastboat.view');
-        Route::get('/fastboat/add', [MitraFasboatController::class, 'add'])->name('fastboat.add');
-        Route::get('/fastboat/store', [MitraFasboatController::class, 'store'])->name('fastboat.store');
-        Route::get('/fastboat/edit/{id}', [MitraFasboatController::class, 'edit'])->name('fastboat.edit');
-        Route::get('/fastboat/update/{id}', [MitraFasboatController::class, 'update'])->name('fastboat.update');
-        Route::get('/fastboat/delete/{id}', [MitraFasboatController::class, 'delete'])->name('fastboat.delete');
+        // partner fast boat routes
+        Route::get('/fastboat', [PartnerFastboatController::class, 'index'])->name('fastboat.view');
+        Route::get('/fastboat/add', [PartnerFastboatController::class, 'add'])->name('fastboat.add');
+        Route::get('/fastboat/store', [PartnerFastboatController::class, 'store'])->name('fastboat.store');
+        Route::get('/fastboat/edit/{id}', [PartnerFastboatController::class, 'edit'])->name('fastboat.edit');
+        Route::get('/fastboat/update/{id}', [PartnerFastboatController::class, 'update'])->name('fastboat.update');
+        Route::get('/fastboat/delete/{id}', [PartnerFastboatController::class, 'delete'])->name('fastboat.delete');
+    });
+    Route::prefix('destiny')->group(function () {
+        // destiny island routes
+        Route::get('/island', [DestinyIslandController::class, 'index'])->name('island.view');
+        Route::get('/island/add', [DestinyIslandController::class, 'add'])->name('island.add');
+        Route::get('/island/store', [DestinyIslandController::class, 'store'])->name('island.store');
+        Route::get('/island/edit/{id}', [DestinyIslandController::class, 'edit'])->name('island.edit');
+        Route::get('/island/update/{id}', [DestinyIslandController::class, 'update'])->name('island.update');
+        Route::get('/island/delete/{id}', [DestinyIslandController::class, 'delete'])->name('island.delete');
 
-        // mitra island routes
-        Route::get('/island', [MitraIslandController::class, 'index'])->name('island.view');
-        Route::get('/island/add', [MitraIslandController::class, 'add'])->name('island.add');
-        Route::get('/island/store', [MitraIslandController::class, 'store'])->name('island.store');
-        Route::get('/island/edit/{id}', [MitraIslandController::class, 'edit'])->name('island.edit');
-        Route::get('/island/update/{id}', [MitraIslandController::class, 'update'])->name('island.update');
-        Route::get('/island/delete/{id}', [MitraIslandController::class, 'delete'])->name('island.delete');
-
-        // mitra port routes
-        Route::get('/port', [MitraPortController::class, 'index'])->name('port.view');
-        Route::get('/port/add', [MitraPortController::class, 'add'])->name('port.add');
-        Route::get('/port/store', [MitraPortController::class, 'store'])->name('port.store');
-        Route::get('/port/edit/{id}', [MitraPortController::class, 'edit'])->name('port.edit');
-        Route::get('/port/update/{id}', [MitraPortController::class, 'update'])->name('port.update');
-        Route::get('/port/delete/{id}', [MitraPortController::class, 'delete'])->name('port.delete');
+        // destiny port routes
+        Route::get('/port', [DestinyPortController::class, 'index'])->name('port.view');
+        Route::get('/port/add', [DestinyPortController::class, 'add'])->name('port.add');
+        Route::get('/port/store', [DestinyPortController::class, 'store'])->name('port.store');
+        Route::get('/port/edit/{id}', [DestinyPortController::class, 'edit'])->name('port.edit');
+        Route::get('/port/update/{id}', [DestinyPortController::class, 'update'])->name('port.update');
+        Route::get('/port/delete/{id}', [DestinyPortController::class, 'delete'])->name('port.delete');
     });
 });
