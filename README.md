@@ -12,6 +12,10 @@
 composer install
 ```
 
+```
+npm install
+```
+
 ## Versioning
 
 This project has several requirements that must be adjusted first before it can run well. 
