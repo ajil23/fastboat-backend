@@ -61,28 +61,28 @@
                 <li class="menu-title" data-key="t-components">Mitra</li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{route ('company.view')}}">
                         <i class="bx bx-building icon nav-icon"></i>
                         <span class="menu-item" data-key="t-ui-elements">Company</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{route ('fasboat.view')}}">
                         <i class="bx bx-up-arrow icon nav-icon"></i>
                         <span class="menu-item" data-key="t-forms">Fast Boat</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{route ('mitra.island')}}">
+                    <a href="{{route ('island.view')}}">
                         <i class="bx bx-world icon nav-icon"></i>
                         <span class="menu-item" data-key="t-tables">Island</span>
                     </a>
                 </li>
                 
                 <li>
-                    <a href="#">
+                    <a href="{{route ('port.view')}}">
                         <i class="bx bx-map-alt icon nav-icon"></i>
                         <span class="menu-item" data-key="t-tables">Port</span>
                     </a>
