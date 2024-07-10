@@ -7,9 +7,9 @@
             <div class="col-lg-12">
                 <div id="addproduct-accordion" class="custom-accordion">
                     <div class="card">
+                    <form>
                         <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                             <div class="p-4">
-
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0 me-3">
                                         <div class="avatar">
@@ -33,7 +33,6 @@
 
                         <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                             <div class="p-4 border-top">
-                                <form>
                                     <div class="mb-3">
                                         <label class="form-label" for="productname">Product Name</label>
                                         <input id="productname" name="productname" placeholder="Enter Product Name" type="text" class="form-control">
@@ -90,7 +89,7 @@
                                         <label class="form-label" for="productdesc">Product Description</label>
                                         <textarea class="form-control" id="productdesc" placeholder="Enter Description" rows="4"></textarea>
                                     </div>
-                                </form>
+                                
                             </div>
                         </div>
                     </div>
@@ -119,7 +118,7 @@
 
                         <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                             <div class="p-4 border-top">
-                                <form action="#" class="dropzone">
+                                <div action="#" class="dropzone">
                                     <div class="fallback">
                                         <input name="file" type="file" multiple="multiple">
                                     </div>
@@ -129,8 +128,8 @@
                                         </div>
                                         <h4 class="mb-0">Drop files here or click to upload.</h4>
                                     </div>
-                                </form>
-                            </div>
+                                </div>
+                                </div>
                         </div>
                     </div>
 
@@ -161,7 +160,6 @@
 
                         <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                             <div class="p-4 border-top">
-                                <form>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <div class="mb-3">
@@ -183,10 +181,16 @@
                                         <label class="form-label" for="metadescription">Meta Description</label>
                                         <textarea class="form-control" id="metadescription" placeholder="Enter Description" rows="4"></textarea>
                                     </div>
-                                </form>
                             </div>
                         </div>
                     </div>
+                    <div class="row mb-4">
+                    <div class="col text-end">
+                        <a href="#" class="btn btn-outline-dark"> <i class="bx bx-x me-1"></i> Cancel </a>
+                        <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#success-btn"> <i class=" bx bx-file me-1"></i> Save </a>
+                    </div> <!-- end col -->
+                </div> <!-- end row-->
+                    </form>
                 </div>
             </div>
         </div>
