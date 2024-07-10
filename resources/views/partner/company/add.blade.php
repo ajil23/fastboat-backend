@@ -119,50 +119,15 @@
     
                                 <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="image1">Image 1</label>
-                                                    <input id="image1" name="image1" type="file" class="form-control">
-                                                </div>
+                                            <div class="fallback">
+                                                <input name="file" type="file" multiple="multiple">
                                             </div>
-                                            <div class="col-lg-4">
-
+                                            <div class="dz-message needsclick">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image2">Image 2</label>
-                                                    <input id="image2" name="image2" type="file" class="form-control">
+                                                    <i class="display-4 text-muted mdi mdi-cloud-upload"></i>
                                                 </div>
+                                                <h4 class="mb-0">Drop files here or click to upload.</h4>
                                             </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="image3">Image 3</label>
-                                                    <input id="image3" name="image3" type="file" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-4">
-
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="image4">Image 4</label>
-                                                    <input id="image4" name="image4" type="file" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="image5">Image 5</label>
-                                                    <input id="image5" name="image5" type="file" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="image6">Image 6</label>
-                                                    <input id="image6" name="image6" type="file" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
