@@ -3,7 +3,7 @@
 
 <div class="main-content">
     <div class="page-content">
-        Company Panel
+        Fastboat Panel
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
