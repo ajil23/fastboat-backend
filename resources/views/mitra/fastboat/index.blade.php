@@ -9,7 +9,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-wrap align-items-center mb-2">
-                                <h5 class="card-title">Company Table</h5>
+                                <h5 class="card-title">Fast boat Table</h5>
                             </div>
 
                             <div class="table-responsive">
