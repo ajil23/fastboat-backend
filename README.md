@@ -13,6 +13,7 @@ This project has several requirements that must be adjusted first before it can 
 
 - PHP version 8.1.10.
 - Apache version 2.4.54.
+- Node JS version 18.8.0
 
 
 
