@@ -185,7 +185,7 @@
                 {{-- Button --}}
                 <div class="row mb-4">
                     <div class="col text-end">
-                        <a href="#" class="btn btn-outline-dark"> <i class="bx bx-x me-1"></i> Cancel </a>
+                        <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
                         <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#success-btn"> <i class=" bx bx-file me-1"></i> Save </a>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
