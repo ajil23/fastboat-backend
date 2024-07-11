@@ -36,36 +36,36 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                             <div class="mb-3">
-                                                <label class="form-label" for="productname">Product Name</label>
-                                                <input id="productname" name="productname" placeholder="Enter Product Name" type="text" class="form-control">
+                                                <label class="form-label" for="cpn_name">Company Name</label>
+                                                <input id="cpn_name" name="cpn_name" placeholder="Enter Company Name" type="text" class="form-control">
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-4">
     
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="manufacturername">Manufacturer Name</label>
-                                                        <input id="manufacturername" name="manufacturername" placeholder="Enter Manufacturer Name" type="text" class="form-control">
+                                                        <label class="form-label" for="cpn_email">Company Email</label>
+                                                        <input id="cpn_email" name="cpn_email" placeholder="Enter Company Email" type="email" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
     
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="manufacturerbrand">Manufacturer Brand</label>
-                                                        <input id="manufacturerbrand" name="manufacturerbrand" placeholder="Enter Manufacturer Brand" type="text" class="form-control">
+                                                        <label class="form-label" for="cpn_phone">Company Phone</label>
+                                                        <input id="cpn_phone" name="cpn_phone" type="number" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="price">Price</label>
-                                                        <input id="price" name="price" placeholder="Enter Price" type="text" class="form-control">
+                                                        <label class="form-label" for="cpn_whatsapp">Company Whatsapp</label>
+                                                        <input id="cpn_whatsapp" name="cpn_whatsapp" type="number" class="form-control">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="choices-single-default" class="form-label">Category</label>
-                                                        <select class="form-control" data-trigger name="choices-single-category" id="choices-single-category">
+                                                        <label for="cpn_email_status" class="form-label">Company Email Status</label>
+                                                        <select class="form-control" data-trigger name="cpn_email_status" id="cpn_email_status">
                                                             <option value="">Select</option>
                                                             <option value="EL">Electronic</option>
                                                             <option value="FA">Fashion</option>
@@ -75,8 +75,8 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
-                                                        <label for="choices-single-specifications" class="form-label">Specifications</label>
-                                                        <select class="form-control" data-trigger name="choices-single-category" id="choices-single-specifications">
+                                                        <label for="cpn_status" class="form-label">Company Status</label>
+                                                        <select class="form-control" data-trigger name="cpn_status" id="cpn_status">
                                                             <option value="HI" selected>High Quality</option>
                                                             <option value="LE" selected>Leather</option>
                                                             <option value="NO">Notifications</option>
@@ -86,10 +86,33 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row">
+                                                <div class="col-lg-4">
     
-                                            <div class="mb-0">
-                                                <label class="form-label" for="productdesc">Product Description</label>
-                                                <textarea class="form-control" id="productdesc" placeholder="Enter Description" rows="4"></textarea>
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="cpn_address">Company Address</label>
+                                                        <input id="cpn_address" name="cpn_address" placeholder="Enter Company Email" type="email" class="form-control">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+    
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="cpn_website">Company Website</label>
+                                                        <input id="cpn_website" name="cpn_website" type="text" class="form-control" placeholder="Enter Company Website (optional)">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="mb-3">
+                                                        <label for="cpn_type" class="form-label">Company Type</label>
+                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type">
+                                                            <option value="HI" selected>High Quality</option>
+                                                            <option value="LE" selected>Leather</option>
+                                                            <option value="NO">Notifications</option>
+                                                            <option value="SI">Sizes</option>
+                                                            <option value="DI">Different Color</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                             </div>
                                     </div>
                                 </div>
@@ -123,58 +146,6 @@
                                             <label class="form-label" for="cnp_logo">Logo</label>
                                             <input id="cnp_logo" name="cnp_logo" type="file" accept="image/*" class="form-control">
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-    
-                            <div class="card">
-                                <a href="#addproduct-metadata-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-metadata-collapse">
-                                    <div class="p-4">
-    
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0 me-3">
-                                                <div class="avatar">
-                                                    <div class="avatar-title rounded-circle bg-dark-subtle  text-dark">
-                                                        <h5 class="text-dark font-size-17 mb-0">03</h5>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Meta Data</h5>
-                                                <p class="text-muted text-truncate mb-0">Fill all information below</p>
-                                            </div>
-                                            <div class="flex-shrink-0">
-                                                <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
-                                            </div>
-    
-                                        </div>
-    
-                                    </div>
-                                </a>
-    
-                                <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
-                                    <div class="p-4 border-top">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="metatitle">Meta Title</label>
-                                                        <input id="metatitle" name="metatitle" placeholder="Enter Title" type="text" class="form-control">
-                                                    </div>
-    
-                                                </div>
-    
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="metakeywords">Meta Keywords</label>
-                                                        <input id="metakeywords" name="metakeywords" placeholder="Enter Keywords" type="text" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>
-    
-                                            <div class="mb-0">
-                                                <label class="form-label" for="metadescription">Meta Description</label>
-                                                <textarea class="form-control" id="metadescription" placeholder="Enter Description" rows="4"></textarea>
-                                            </div>
                                     </div>
                                 </div>
                             </div>
