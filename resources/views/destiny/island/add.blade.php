@@ -1,4 +1,4 @@
-@extends('admin.admin_master') 
+@extends('admin.admin_master')
 @section('admin')
 
 <div class="main-content">
@@ -11,7 +11,7 @@
                             <div class="card">
                                 <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
-    
+
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -27,65 +27,39 @@
                                             <div class="flex-shrink-0">
                                                 <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
                                             </div>
-    
+
                                         </div>
-    
+
                                     </div>
                                 </a>
-    
+
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                            
-                                    <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="choices-single-default" class="form-label">Nama ENG</label>
-                                                        <input class="form-control" data-trigger name="choices-single-category" id="choices-single-category">
-                                                        </input>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="choices-single-specifications" class="form-label">Nama IDN</label>
-                                                        <input class="form-control" data-trigger name="choices-single-category" id="choices-single-specifications">
-                                                        </input>
-                                                    </div>
+                                        
+                                    <div class="mb-3">
+                                                <label class="form-label" for="isd_name">Name</label>
+                                                <input id="isd_name" name="isd_name" placeholder="Enter Keyword" type="text" class="form-control">
+                                            </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_code">Code</label>
+                                                    <input id="isd_code" name="isd_code" placeholder="Enter Island Code" type="text" class="form-control" required>
+                                                    </input>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="choices-single-default" class="form-label">Category</label>
-                                                        <select class="form-control" data-trigger name="choices-single-category" id="choices-single-category">
-                                                            <option value="">Select</option>
-                                                            <option value="EL">Electronic</option>
-                                                            <option value="FA">Fashion</option>
-                                                            <option value="FI">Fitness</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="choices-single-specifications" class="form-label">Specifications</label>
-                                                        <select class="form-control" data-trigger name="choices-single-category" id="choices-single-specifications">
-                                                            <option value="HI" selected>High Quality</option>
-                                                            <option value="LE" selected>Leather</option>
-                                                            <option value="NO">Notifications</option>
-                                                            <option value="SI">Sizes</option>
-                                                            <option value="DI">Different Color</option>
-                                                        </select>
-                                                    </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_map">Maps</label>
+                                                    <input id="isd_map" name="isd_map" placeholder="Longitude:Latitude" type="text" class="form-control" required>
+                                                    </input>
                                                 </div>
                                             </div>
-    
-                                            <div class="mb-0">
-                                                <label class="form-label" for="productdesc">Product Description</label>
-                                                <textarea class="form-control" id="productdesc" placeholder="Enter Description" rows="4"></textarea>
-                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="card">
                                 <a href="#addproduct-img-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-img-collapse">
                                     <div class="p-4">
@@ -107,28 +81,28 @@
                                         </div>
                                     </div>
                                 </a>
-    
+
                                 <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image1">Image 1</label>
-                                                    <input id="image1" name="image1" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image1">Image 1</label>
+                                                    <input id="isd_image1" name="isd_image1" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image2">Image 2</label>
-                                                    <input id="image2" name="image2" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image2">Image 2</label>
+                                                    <input id="isd_image2" name="isd_image2" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image3">Image 3</label>
-                                                    <input id="image3" name="image3" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image3">Image 3</label>
+                                                    <input id="isd_image3" name="isd_image3" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,32 +110,32 @@
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image4">Image 4</label>
-                                                    <input id="image4" name="image4" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image4">Image 4</label>
+                                                    <input id="isd_image4" name="isd_image4" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image5">Image 5</label>
-                                                    <input id="image5" name="image5" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image5">Image 5</label>
+                                                    <input id="isd_image5" name="isd_image5" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image6">Image 6</label>
-                                                    <input id="image6" name="image6" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="idn_image6">Image 6</label>
+                                                    <input id="idn_image6" name="idn_image6" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="card">
                                 <a href="#addproduct-metadata-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-metadata-collapse">
                                     <div class="p-4">
-    
+
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -177,35 +151,51 @@
                                             <div class="flex-shrink-0">
                                                 <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
                                             </div>
-    
+
                                         </div>
-    
+
                                     </div>
                                 </a>
-    
+
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="metatitle">Meta Title</label>
-                                                        <input id="metatitle" name="metatitle" placeholder="Enter Title" type="text" class="form-control">
-                                                    </div>
-    
+                                            <div class="mb-3">
+                                                <label class="form-label" for="isd_keyword">Keywords</label>
+                                                <input id="isd_keyword" name="isd_keyword" placeholder="Enter Keyword" type="text" class="form-control">
+                                            </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_description_en">Description (en)</label>
+                                                    <textarea class="form-control" id="isd_description_en" name="isd_description_en" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
-    
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="metakeywords">Meta Keywords</label>
-                                                        <input id="metakeywords" name="metakeywords" placeholder="Enter Keywords" type="text" class="form-control">
-                                                    </div>
+
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_description_idn">Description (idn)</label>
+                                                    <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
                                             </div>
-    
-                                            <div class="mb-0">
-                                                <label class="form-label" for="metadescription">Meta Description</label>
-                                                <textarea class="form-control" id="metadescription" placeholder="Enter Description" rows="4"></textarea>
+                                        </div> 
+                                        
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_content_en">Content (en)</label>
+                                                    <textarea class="form-control" id="isd_content_en" name="isd_content_en" placeholder="Enter Content" rows="4"></textarea>
+                                                </div>
+
                                             </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_content_idn">Content (idn)</label>
+                                                    <textarea class="form-control" id="isd_content_idn" name="isd_content_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -216,7 +206,7 @@
                 {{-- Button --}}
                 <div class="row mb-4">
                     <div class="col text-end">
-                        <a href="#" class="btn btn-outline-dark"> <i class="bx bx-x me-1"></i> Cancel </a>
+                        <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
                         <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#success-btn"> <i class=" bx bx-file me-1"></i> Save </a>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
