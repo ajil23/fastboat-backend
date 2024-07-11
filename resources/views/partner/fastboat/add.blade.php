@@ -36,60 +36,26 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                             <div class="mb-3">
-                                                <label class="form-label" for="productname">Product Name</label>
-                                                <input id="productname" name="productname" placeholder="Enter Product Name" type="text" class="form-control">
+                                                <label class="form-label" for="fb_name">Fast Boat Name</label>
+                                                <input id="fb_name" name="fb_name" placeholder="Enter Fast Boat Name" type="text" class="form-control">
                                             </div>
-                                            <div class="row">
-                                                <div class="col-lg-4">
-    
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="manufacturername">Manufacturer Name</label>
-                                                        <input id="manufacturername" name="manufacturername" placeholder="Enter Manufacturer Name" type="text" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-    
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="manufacturerbrand">Manufacturer Brand</label>
-                                                        <input id="manufacturerbrand" name="manufacturerbrand" placeholder="Enter Manufacturer Brand" type="text" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="price">Price</label>
-                                                        <input id="price" name="price" placeholder="Enter Price" type="text" class="form-control">
-                                                    </div>
-                                                </div>
+                                            <div class="mb-3">
+                                                <label for="fb_company" class="form-label">Company</label>
+                                                    <select class="form-control" data-trigger name="fb_company" id="fb_company">
+                                                        <option value="">Select</option>
+                                                        <option value="EL">Electronic</option>
+                                                        <option value="FA">Fashion</option>
+                                                        <option value="FI">Fitness</option>
+                                                    </select>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="choices-single-default" class="form-label">Category</label>
-                                                        <select class="form-control" data-trigger name="choices-single-category" id="choices-single-category">
-                                                            <option value="">Select</option>
-                                                            <option value="EL">Electronic</option>
-                                                            <option value="FA">Fashion</option>
-                                                            <option value="FI">Fitness</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="mb-3">
-                                                        <label for="choices-single-specifications" class="form-label">Specifications</label>
-                                                        <select class="form-control" data-trigger name="choices-single-category" id="choices-single-specifications">
-                                                            <option value="HI" selected>High Quality</option>
-                                                            <option value="LE" selected>Leather</option>
-                                                            <option value="NO">Notifications</option>
-                                                            <option value="SI">Sizes</option>
-                                                            <option value="DI">Different Color</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-    
-                                            <div class="mb-0">
-                                                <label class="form-label" for="productdesc">Product Description</label>
-                                                <textarea class="form-control" id="productdesc" placeholder="Enter Description" rows="4"></textarea>
+                                            <div class="mb-3">
+                                                <label for="fb_status" class="form-label">Status</label>
+                                                    <select class="form-control" data-trigger name="fb_status" id="fb_status">
+                                                        <option value="">Select</option>
+                                                        <option value="EL">Electronic</option>
+                                                        <option value="FA">Fashion</option>
+                                                        <option value="FI">Fitness</option>
+                                                    </select>
                                             </div>
                                     </div>
                                 </div>
@@ -194,27 +160,42 @@
     
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="metatitle">Meta Title</label>
-                                                        <input id="metatitle" name="metatitle" placeholder="Enter Title" type="text" class="form-control">
-                                                    </div>
-    
+                                        <div class="mb-3">
+                                            <label class="form-label" for="fb_keywords">Keywords</label>
+                                            <input id="fb_keywords" name="fb_keywords" placeholder="Enter Fast Boat Keywords" type="text" class="form-control">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_description_en">Description (en)</label>
+                                                    <textarea class="form-control" id="fb_description_en" name="fb_description_en" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
-    
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="metakeywords">Meta Keywords</label>
-                                                        <input id="metakeywords" name="metakeywords" placeholder="Enter Keywords" type="text" class="form-control">
-                                                    </div>
+
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_description_idn">Description (idn)</label>
+                                                    <textarea class="form-control" id="fb_description_idn" name="fb_description_idn" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
                                             </div>
-    
-                                            <div class="mb-0">
-                                                <label class="form-label" for="metadescription">Meta Description</label>
-                                                <textarea class="form-control" id="metadescription" placeholder="Enter Description" rows="4"></textarea>
+                                        </div> 
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_content_en">Content (en)</label>
+                                                    <textarea class="form-control" id="fb_content_en" name="fb_content_en" placeholder="Enter Content" rows="4"></textarea>
+                                                </div>
+
                                             </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_content_idn">Description (idn)</label>
+                                                    <textarea class="form-control" id="fb_content_idn" name="fb_content_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
