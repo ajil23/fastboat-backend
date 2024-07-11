@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('partnerfastboat', function (Blueprint $table) {
+            $table->id('fb_id');
+            $table->unsignedBigInteger('fb_company'); 
+            $table->foreign('fb_company')->references('cpn_id')->on('partnercompany')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('fb_name', 50);
+            $table->string('fb_image1', 255);
+            $table->string('fb_image2', 255);
+            $table->string('fb_image3', 255);
+            $table->string('fb_image4', 255)->nullable();
+            $table->string('fb_image5', 255)->nullable();
+            $table->string('fb_image6', 255)->nullable();
+            $table->string('fb_slug_en', 50);
+            $table->string('fb_slug_idn', 50);
+            $table->text('fb_keywords');
+            $table->text('fb_description_en');
+            $table->text('fb_description_idn');
+            $table->text('fb_content_en');
+            $table->text('fb_content_idn');
+            $table->enum('fb_status', ['enable', 'disable'])->default('enable');
+            $table->timestamp('fb_created_at');
+            $table->datetime('fb_updated_at');
+            $table->string('fb_updated_by');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('partnerfastboat');
+    }
+};
