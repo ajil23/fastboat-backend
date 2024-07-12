@@ -11,7 +11,8 @@ class PartnerCompanyController extends Controller
 {
     // this function is for view all data from company table
     public function index(){
-        return view('partner.company.index');
+        $company = PartnerCompany::all();
+        return view('partner.company.index', compact('company'));
     }
 
     // this function is for view form to add company data
@@ -22,19 +23,20 @@ class PartnerCompanyController extends Controller
     // this function will request data from input in company add form
     public function store(Request $request){
         // Handle the request data validation
-        // $request->validate([
-        //     'cpn_name' => 'required',
-        //     'cpn_email' => 'required',
-        //     'cpn_email_status' => 'required',
-        //     'cpn_phone' => 'required|numeric',
-        //     'cpn_whatsapp' => 'required|numeric',
-        //     'cpn_logo' => 'required',
-        //     'cpn_address' => 'required',
-        //     'cpn_website' => 'required',
-        //     'cpn_status' => 'required',
-        //     'cpn_type' => 'required',
-        // ]);
+        $request->validate([
+            'cpn_name' => 'required',
+            'cpn_email' => 'required',
+            'cpn_email_status' => 'required',
+            'cpn_phone' => 'required|numeric',
+            'cpn_whatsapp' => 'required|numeric',
+            'cpn_logo' => 'required|image|mimes:jpeg,jpg,png|max:5120',
+            'cpn_address' => 'required',
+            'cpn_website' => 'required',
+            'cpn_status' => 'required',
+            'cpn_type' => 'required',
+        ]);
         
+        // Handle insert data to database
         $companyData = new PartnerCompany();
         $companyData -> cpn_name = $request->cpn_name;
         $companyData -> cpn_email = $request->cpn_email;

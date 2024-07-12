@@ -21,39 +21,42 @@
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
                                     <thead>
                                         <tr>
+                                            <th>No</th>
                                             <th style="width: 90px;">
-                                               Product
+                                               Logo
                                             </th>
-                                            <th  style="width: 210px;">Product Name</th>
-                                            <th>Customer Name</th>
-                                            <th>Order ID</th>
-                                            <th>Color</th>
-                                            <th>Date</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Email Status</th>
+                                            <th>Phone</th>
+                                            <th>Whatsapp</th>
+                                            <th>Address</th>
+                                            <th>Website</th>
                                             <th>Status</th>
+                                            <th>Type</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($company as $item)
                                         <tr>
+                                            <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div class="avatar">
                                                     <div class="product-img avatar-title img-thumbnail bg-primary-subtle  border-0">
-                                                        <img src="assets/images/product/img-1.png" class="img-fluid" alt="">
+                                                        <img src="{{ asset('storage/'.$item->cpn_logo) }}" class="img-fluid" alt="">
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="fw-semibold">Office Chair Crime</td>
-                                            <td>
-                                                Neal Matthews
-                                            </td>
-                                            <td>
-                                            #526552
-                                            </td>
-                                            <td>
-                                                Gray
-                                            </td>
-                                            <td>12/01/2022</td>
-                                            <td><span class="badge bg-primary-subtle text-primary  font-size-12">Pending</span></td>
+                                            <td class="fw-semibold">{{$item->cpn_name}}</td>
+                                            <td>{{$item->cpn_email}}</td>
+                                            <td><span class="badge bg-primary-subtle text-primary  font-size-12">{{$item->cpn_email_status}}</span></td>
+                                            <td>{{$item->cpn_phone}}</td>
+                                            <td>{{$item->cpn_whatsapp}}</td>
+                                            <td>{{$item->cpn_address}}</td>
+                                            <td>{{$item->cpn_website}}</td>
+                                            <td><span class="badge bg-success-subtle text-success  font-size-12">{{$item->cpn_status}}</span></td>
+                                            <td>{{$item->cpn_type}}</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
@@ -67,7 +70,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
