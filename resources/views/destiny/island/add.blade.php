@@ -4,14 +4,14 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="" method="post">
+        <form action="{{route('island.store')}}" method="post" enctype="multipart/form-data">
+        @csrf
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="addproduct-accordion" class="custom-accordion">
                             <div class="card">
                                 <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
-
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -164,6 +164,22 @@
                                                 <input id="isd_keyword" name="isd_keyword" placeholder="Enter Keyword" type="text" class="form-control">
                                             </div>
                                         <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_slug_en">Slug (en)</label>
+                                                    <input id="isd_slug_en" name="isd_slug_en" placeholder="Enter Island Slug" type="text" class="form-control" required>
+                                                    </input>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_slug_idn">Slug (idn)</label>
+                                                    <input id="isd_slug_idn" name="isd_slug_idn" placeholder="Enter Island Slug" type="text" class="form-control" required>
+                                                    </input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_description_en">Description (en)</label>
@@ -207,7 +223,7 @@
                 <div class="row mb-4">
                     <div class="col text-end">
                         <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                        <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#success-btn"> <i class=" bx bx-file me-1"></i> Save </a>
+                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
             </form>
