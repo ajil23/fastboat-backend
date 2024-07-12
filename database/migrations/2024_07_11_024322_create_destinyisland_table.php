@@ -29,9 +29,8 @@ return new class extends Migration
             $table->text('isd_description_idn');
             $table->text('isd_content_en');
             $table->text('isd_content_idn');
-            $table->timestamp('isd_created_at');
-            $table->datetime('isd_updated_at');
             $table->string('isd_updated_by');
+            $table->timestamps();
         });
     }
 
