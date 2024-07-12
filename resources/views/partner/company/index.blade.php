@@ -63,9 +63,9 @@
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#">View</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#viewDetailModal" data-cpn_type = "{{$item->cpn_logo}}" data-cpn_name = "{{$item->cpn_name}}" data-cpn_email = "{{$item->cpn_email}}" data-cpn_phone = "{{$item->cpn_phone}}" data-cpn_whatsapp = "{{$item->cpn_whatsapp}}" data-cpn_address = "{{$item->cpn_address}}" data-cpn_website = "{{$item->cpn_website}}" data-cpn_type = "{{$item->cpn_type}}">View</a>
                                                         <a class="dropdown-item" href="#">Edit</a>
-                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                        <a class="dropdown-item" href="{{route('company.delete', $item->cpn_id)}}" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -73,6 +73,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <div style="margin-top: 1%">
+                                {{$company->links('pagination::bootstrap-5')}}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,5 +86,57 @@
     </div>
     <!-- End Page-content -->
 
+    <!-- Scrollable modal -->
+    <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
+    aria-labelledby="viewDetailModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDetailModalTitle">Company Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <div class="avatar-lg">
+                        <div class="product-img avatar-title img-thumbnail bg-primary-subtle  border-0">
+                            <img src="{{ asset('storage/'.$item->cpn_logo) }}" class="img-fluid" alt="">
+                        </div>
+                    </div>
+                </center>
+                <div class="mb-3">
+                    <label class="form-label" for="cpn_name">Company Name</label>
+                    <input type="text" class="form-control" value="{{$item->cpn_name}}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="cpn_name">Company Email</label>
+                    <input type="text" class="form-control" value="{{$item->cpn_email}}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="cpn_name">Company Phone</label>
+                    <input type="text" class="form-control" value="{{$item->cpn_phone}}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="cpn_name">Company Whatsapp</label>
+                    <input type="text" class="form-control" value="{{$item->cpn_whatsapp}}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="cpn_name">Company Address</label>
+                    <input type="text" class="form-control" value="{{$item->cpn_address}}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="cpn_name">Company Website</label>
+                    <input type="text" class="form-control" value="{{$item->cpn_website}}" disabled>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="cpn_name">Company Type</label>
+                    <input type="text" class="form-control" value="{{$item->cpn_type}}" disabled>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     @include('admin.components.footer')
 </div>

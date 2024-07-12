@@ -11,7 +11,7 @@ class PartnerCompanyController extends Controller
 {
     // this function is for view all data from company table
     public function index(){
-        $company = PartnerCompany::all();
+        $company = PartnerCompany::paginate(10);
         return view('partner.company.index', compact('company'));
     }
 
@@ -69,6 +69,9 @@ class PartnerCompanyController extends Controller
 
     // this function will get the $id of selected data and do delete operation
     public function delete($id){
-
+        $companyDelete = PartnerCompany::find($id);
+        $companyDelete->delete();
+        toast('Your data as been deleted!','success');
+        return redirect()->route('company.view');
     }
 }
