@@ -101,6 +101,9 @@
                 $('#prt_content_idn').summernote();
             });
         </script>
+
+        {{-- sweetalert --}}
+        @include('sweetalert::alert')
     </body>
 
 
