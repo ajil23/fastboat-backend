@@ -37,7 +37,7 @@ Route::middleware([
         // partner company routes
         Route::get('/company', [PartnerCompanyController::class, 'index'])->name('company.view');
         Route::get('/company/add', [PartnerCompanyController::class, 'add'])->name('company.add');
-        Route::get('/company/store', [PartnerCompanyController::class, 'store'])->name('company.store');
+        Route::post('/company/store', [PartnerCompanyController::class, 'store'])->name('company.store');
         Route::get('/company/edit/{id}', [PartnerCompanyController::class, 'edit'])->name('company.edit');
         Route::get('/company/update/{id}', [PartnerCompanyController::class, 'update'])->name('company.update');
         Route::get('/company/delete/{id}', [PartnerCompanyController::class, 'delete'])->name('company.delete');
