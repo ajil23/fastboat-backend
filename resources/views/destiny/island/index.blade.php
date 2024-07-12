@@ -44,7 +44,10 @@
                                             </td>
                                             <td>{{$item->isd_name}}</td>
                                             <td>{{$item->isd_code}}</td>
-                                            <td>{{$item->isd_map}}</td>
+                                            <td>
+                                                    <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}" target="_blank" >
+                                                        <b>Lihat</b>
+                                                    </td>
                                             <td>{{$item->isd_slug_en}}</td>
                                             <td>{{$item->isd_slug_idn}}</span></td>
                                             <td>
