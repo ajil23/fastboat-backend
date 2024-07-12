@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PartnerCompany;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PartnerCompanyController extends Controller
 {
@@ -18,7 +21,39 @@ class PartnerCompanyController extends Controller
 
     // this function will request data from input in company add form
     public function store(Request $request){
+        // Handle the request data validation
+        // $request->validate([
+        //     'cpn_name' => 'required',
+        //     'cpn_email' => 'required',
+        //     'cpn_email_status' => 'required',
+        //     'cpn_phone' => 'required|numeric',
+        //     'cpn_whatsapp' => 'required|numeric',
+        //     'cpn_logo' => 'required',
+        //     'cpn_address' => 'required',
+        //     'cpn_website' => 'required',
+        //     'cpn_status' => 'required',
+        //     'cpn_type' => 'required',
+        // ]);
+        
+        $companyData = new PartnerCompany();
+        $companyData -> cpn_name = $request->cpn_name;
+        $companyData -> cpn_email = $request->cpn_email;
+        $companyData -> cpn_email_status = $request->cpn_email_status;
+        $companyData -> cpn_phone = $request->cpn_phone;
+        $companyData -> cpn_whatsapp = $request->cpn_whatsapp;
+        $companyData -> cpn_address = $request->cpn_address;
+        $companyData -> cpn_website = $request->cpn_website;
+        $companyData -> cpn_status = $request->cpn_status;
+        $companyData -> cpn_type = $request->cpn_type;
+        $companyData -> cpn_updated_by = Auth()->id();
+        if ($request->hasFile('cpn_logo')) {
+            $companyLogo = $request->file('cpn_logo')->store('cpn_logo');
+            $companyData->cpn_logo = $companyLogo;
+        }
+        $companyData->save();
+        return redirect()->route('company.view');
 
+        
     }
 
     // this function will get the $id of the selected data and then view the company edit form

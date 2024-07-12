@@ -10,9 +10,6 @@ class PartnerCompany extends Model
     use HasFactory;
     protected $table = "partnercompany";
     protected $primaryKey = 'cpn_id';
-    protected $fillable = ['cpn_name', 'cpn_email', 'cpn_email_status', 'cpn_phone', 'cpn_whatsapp', 'cpn_address', 'cpn_logo', 'cpn_website', 'cpn_status', 'cpn_type'];
+    protected $fillable = ['cpn_name', 'cpn_email', 'cpn_email_status', 'cpn_phone', 'cpn_whatsapp', 'cpn_address', 'cpn_website', 'cpn_status', 'cpn_type', 'cpn_logo'];
 
-    public function kategori(){
-        return $this->belongsTo(Category::class,'kategori_id','id');
-    }
 }
