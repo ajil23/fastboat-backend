@@ -53,9 +53,8 @@ class PartnerCompanyController extends Controller
             $companyData->cpn_logo = $companyLogo;
         }
         $companyData->save();
+        toast('Your data as been submited!','success');
         return redirect()->route('company.view');
-
-        
     }
 
     // this function will get the $id of the selected data and then view the company edit form
