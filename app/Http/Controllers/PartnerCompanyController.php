@@ -72,4 +72,9 @@ class PartnerCompanyController extends Controller
     public function delete($id){
 
     }
+
+    public function show($id){
+        $companyData = PartnerCompany::find($id);
+        return response()->json($companyData);
+    }
 }

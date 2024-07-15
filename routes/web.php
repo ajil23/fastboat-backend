@@ -41,6 +41,7 @@ Route::middleware([
         Route::get('/company/edit/{id}', [PartnerCompanyController::class, 'edit'])->name('company.edit');
         Route::get('/company/update/{id}', [PartnerCompanyController::class, 'update'])->name('company.update');
         Route::get('/company/delete/{id}', [PartnerCompanyController::class, 'delete'])->name('company.delete');
+        Route::get('/company/{id}', [PartnerCompanyController::class, 'show'])->name('company.show');
 
         // partner fast boat routes
         Route::get('/fastboat', [PartnerFastboatController::class, 'index'])->name('fastboat.view');
