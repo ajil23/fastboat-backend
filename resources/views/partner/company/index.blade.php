@@ -77,7 +77,7 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('company.show', $item->cpn_id)}}">View</a>
-                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                        <a class="dropdown-item" href="{{route('company.edit', $item->cpn_id)}}">Edit</a>
                                                         <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{{route('company.delete', $item->cpn_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
@@ -112,6 +112,7 @@
                 <p><strong>Phone : </strong><span id="company-phone"></span></p>
                 <p><strong>Whatsapp : </strong><span id="company-whatsapp"></span></p>
                 <p><strong>Address : </strong><span id="company-address"></span></p>
+                <p><strong>Website : </strong><span id="company-website"></span></p>
                 <p><strong>Status : </strong><span id="company-status"></span></p>
                 <p><strong>Type : </strong><span id="company-type"></span></p>
             </div>
@@ -138,6 +139,7 @@
                     $('#company-phone').text(data.cpn_phone);
                     $('#company-whatsapp').text(data.cpn_whatsapp);
                     $('#company-address').text(data.cpn_address);
+                    $('#company-website').text(data.cpn_website);
                     $('#company-status').text(data.cpn_status);
                     $('#company-type').text(data.cpn_type);
             })
