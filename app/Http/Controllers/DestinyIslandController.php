@@ -127,8 +127,8 @@ class DestinyIslandController extends Controller
     }
     
     public function delete($id){
-        $dataguru = DestinyIsland::find($id);
-        $dataguru->delete();
+        $islandData = DestinyIsland::find($id);
+        $islandData->delete();
         toast('Your data as been deleted!','success');
         return redirect()->route('island.view');
     }
