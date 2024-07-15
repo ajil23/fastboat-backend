@@ -48,10 +48,27 @@
                                             </td>
                                             <td class="fw-semibold">{{$item->cpn_name}}</td>
                                             <td>{{$item->cpn_email}}</td>
-                                            <td><span class="badge bg-primary-subtle text-primary  font-size-12">{{$item->cpn_email_status}}</span></td>
+                                            <td>
+                                                @if ($item->cpn_email_status)
+                                                    @if ($item->cpn_email_status == 'enable')
+                                                    <span class="badge bg-success-subtle text-success  font-size-12">Enable</span>
+                                                    @else
+                                                    <span class="badge bg-danger-subtle text-danger  font-size-12">Disable</span>
+                                                    @endif
+                                                @endif
+                                                
+                                            </td>
                                             <td>{{$item->cpn_whatsapp}}</td>
                                             <td>{{$item->cpn_address}}</td>
-                                            <td><span class="badge bg-success-subtle text-success  font-size-12">{{$item->cpn_status}}</span></td>
+                                            <td>
+                                                @if ($item->cpn_status)
+                                                    @if($item->cpn_status === 'enable')
+                                                        <span class="badge bg-success-subtle text-success  font-size-12">Enable</span>
+                                                    @else
+                                                        <span class="badge bg-danger-subtle text-danger  font-size-12">Disable</span>
+                                                    @endif
+                                                @endif
+                                            </td>
                                             <td>{{$item->cpn_type}}</td>
                                             <td>
                                                 <div class="dropdown">
@@ -61,7 +78,7 @@
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('company.show', $item->cpn_id)}}">View</a>
                                                         <a class="dropdown-item" href="#">Edit</a>
-                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                        <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{{route('company.delete', $item->cpn_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -91,6 +108,7 @@
             <div class="modal-body">
                 <p><strong>Name : </strong><span id="company-name"></span></p>
                 <p><strong>Email : </strong><span id="company-email"></span></p>
+                <p><strong>Email Status : </strong><span id="company-email-status"></span></p>
                 <p><strong>Phone : </strong><span id="company-phone"></span></p>
                 <p><strong>Whatsapp : </strong><span id="company-whatsapp"></span></p>
                 <p><strong>Address : </strong><span id="company-address"></span></p>
@@ -107,6 +125,7 @@
 </div>
 
 @section('script')
+{{-- javascript to get data from database & view in modal --}}
 <script type="text/javascript">
     $(document).ready(function(){
         $('body').on('click', '#showDetail', function(){
@@ -115,6 +134,7 @@
                 $('#viewDetailModal').modal('show');
                     $('#company-name').text(data.cpn_name);
                     $('#company-email').text(data.cpn_email);
+                    $('#company-email-status').text(data.cpn_email_status);
                     $('#company-phone').text(data.cpn_phone);
                     $('#company-whatsapp').text(data.cpn_whatsapp);
                     $('#company-address').text(data.cpn_address);

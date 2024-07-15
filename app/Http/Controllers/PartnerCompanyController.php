@@ -69,9 +69,13 @@ class PartnerCompanyController extends Controller
 
     // this function will get the $id of selected data and do delete operation
     public function delete($id){
-
+        $companyDelete = PartnerCompany::find($id);
+        $companyDelete->delete();
+        toast('Your data as been deleted!','success');
+        return redirect()->route('company.view');
     }
 
+    // this function will get $id of selected data and view it in modal
     public function show($id){
         $companyData = PartnerCompany::find($id);
         return response()->json($companyData);
