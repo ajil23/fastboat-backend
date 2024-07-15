@@ -55,7 +55,7 @@ Route::middleware([
         // destiny island routes
         Route::get('/island', [DestinyIslandController::class, 'index'])->name('island.view');
         Route::get('/island/add', [DestinyIslandController::class, 'add'])->name('island.add');
-        Route::get('/island/store', [DestinyIslandController::class, 'store'])->name('island.store');
+        Route::post('/island/store', [DestinyIslandController::class, 'store'])->name('island.store');
         Route::get('/island/edit/{id}', [DestinyIslandController::class, 'edit'])->name('island.edit');
         Route::get('/island/update/{id}', [DestinyIslandController::class, 'update'])->name('island.update');
         Route::get('/island/delete/{id}', [DestinyIslandController::class, 'delete'])->name('island.delete');

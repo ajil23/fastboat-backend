@@ -98,12 +98,19 @@
             $(document).ready(function() {
                 $('#fb_content_en').summernote();
                 $('#fb_content_idn').summernote();
+                $('#isd_content_en').summernote();
+                $('#isd_content_idn').summernote();
+                $('#prt_content_en').summernote();
+                $('#prt_content_idn').summernote();
             });
         </script>
 
         {{-- detail modal --}}
         @yield('script')
         
+        {{-- sweetalert --}}
+        @include('sweetalert::alert')
+
     </body>
 
 

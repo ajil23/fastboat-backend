@@ -7,12 +7,23 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About This Project
+## Installing
+```
+composer install
+```
+
+```
+npm install
+```
+
+## Versioning
 
 This project has several requirements that must be adjusted first before it can run well. 
 
+- Laravel version 10.
 - PHP version 8.1.10.
 - Apache version 2.4.54.
+- Node JS version 18.8.0
 
 
 
