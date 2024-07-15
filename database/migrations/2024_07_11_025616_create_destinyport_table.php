@@ -33,9 +33,8 @@ return new class extends Migration
             $table->text('prt_description_idn');
             $table->text('prt_content_en');
             $table->text('prt_content_idn');
-            $table->timestamp('prt_created_at');
-            $table->datetime('prt_updated_at');
             $table->string('prt_updated_by');
+            $table->timestamps();
         });
     }
 
