@@ -24,6 +24,9 @@
         <!-- include summernote css -->
         <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+
     </head>
 
     
@@ -102,8 +105,12 @@
             });
         </script>
 
+        {{-- detail modal --}}
+        @yield('script')
+        
         {{-- sweetalert --}}
         @include('sweetalert::alert')
+
     </body>
 
 

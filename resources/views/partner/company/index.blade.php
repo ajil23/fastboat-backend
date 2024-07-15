@@ -28,10 +28,8 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Email Status</th>
-                                            <th>Phone</th>
                                             <th>Whatsapp</th>
                                             <th>Address</th>
-                                            <th>Website</th>
                                             <th>Status</th>
                                             <th>Type</th>
                                             <th>Action</th>
@@ -51,10 +49,8 @@
                                             <td class="fw-semibold">{{$item->cpn_name}}</td>
                                             <td>{{$item->cpn_email}}</td>
                                             <td><span class="badge bg-primary-subtle text-primary  font-size-12">{{$item->cpn_email_status}}</span></td>
-                                            <td>{{$item->cpn_phone}}</td>
                                             <td>{{$item->cpn_whatsapp}}</td>
                                             <td>{{$item->cpn_address}}</td>
-                                            <td>{{$item->cpn_website}}</td>
                                             <td><span class="badge bg-success-subtle text-success  font-size-12">{{$item->cpn_status}}</span></td>
                                             <td>{{$item->cpn_type}}</td>
                                             <td>
@@ -63,7 +59,7 @@
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#">View</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('company.show', $item->cpn_id)}}">View</a>
                                                         <a class="dropdown-item" href="#">Edit</a>
                                                         <a class="dropdown-item" href="#">Delete</a>
                                                     </div>
@@ -83,5 +79,49 @@
     </div>
     <!-- End Page-content -->
 
+    <!-- Scrollable modal -->
+    <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
+    aria-labelledby="viewDetailModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDetailModalTitle">Company Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Name : </strong><span id="company-name"></span></p>
+                <p><strong>Email : </strong><span id="company-email"></span></p>
+                <p><strong>Phone : </strong><span id="company-phone"></span></p>
+                <p><strong>Whatsapp : </strong><span id="company-whatsapp"></span></p>
+                <p><strong>Address : </strong><span id="company-address"></span></p>
+                <p><strong>Status : </strong><span id="company-status"></span></p>
+                <p><strong>Type : </strong><span id="company-type"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     @include('admin.components.footer')
 </div>
+
+@section('script')
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('body').on('click', '#showDetail', function(){
+            var detailURL = $(this).data('url');
+            $.get(detailURL, function(data){
+                $('#viewDetailModal').modal('show');
+                    $('#company-name').text(data.cpn_name);
+                    $('#company-email').text(data.cpn_email);
+                    $('#company-phone').text(data.cpn_phone);
+                    $('#company-whatsapp').text(data.cpn_whatsapp);
+                    $('#company-address').text(data.cpn_address);
+                    $('#company-status').text(data.cpn_status);
+                    $('#company-type').text(data.cpn_type);
+            })
+        })
+    });
+</script>
+@endsection
