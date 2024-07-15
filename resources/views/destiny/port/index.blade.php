@@ -1,4 +1,4 @@
-@extends('admin.admin_master') 
+@extends('admin.admin_master')
 @section('admin')
 
 <div class="main-content">
@@ -12,7 +12,7 @@
                                 <h5 class="card-title">Port Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                    <a href="{{route('port.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Company</a>
+                                        <a href="{{route('port.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Port</a>
                                     </div>
                                 </div>
                             </div>
@@ -21,39 +21,37 @@
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
                                     <thead>
                                         <tr>
-                                            <th style="width: 90px;">
-                                               Prodcut
-                                            </th>
-                                            <th  style="width: 210px;">Product Name</th>
-                                            <th>Customer Name</th>
-                                            <th>Order ID</th>
-                                            <th>Color</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
+                                            <th>No</th>
+                                            <th style="width: 90px;">Image</th>
+                                            <th>Name</th>
+                                            <th>Code</th>
+                                            <th>Map</th>
+                                            <th>Address</th>
+                                            <th>Slug ENG</th>
+                                            <th>Slug IDN</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($port as $item)
                                         <tr>
+                                            <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div class="avatar">
                                                     <div class="product-img avatar-title img-thumbnail bg-primary-subtle  border-0">
-                                                        <img src="assets/images/product/img-1.png" class="img-fluid" alt="">
+                                                        <img src="{{ asset('storage/'.$item->prt_image1) }}" class="img-fluid" alt="">
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="fw-semibold">Office Chair Crime</td>
+                                            <td>{{$item->prt_name}}</td>
+                                            <td>{{$item->prt_code}}</td>
                                             <td>
-                                                Neal Matthews
+                                                <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}" target="_blank" >
+                                                    <b>Lihat</b>
                                             </td>
-                                            <td>
-                                            #526552
-                                            </td>
-                                            <td>
-                                                Gray
-                                            </td>
-                                            <td>12/01/2022</td>
-                                            <td><span class="badge bg-primary-subtle text-primary  font-size-12">Pending</span></td>
+                                            <td>{{$item->prt_addres}}</td>
+                                            <td>{{$item->prt_slug_en}}</td>
+                                            <td>{{$item->prt_slug_idn}}</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
@@ -67,7 +65,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -75,7 +73,7 @@
                     </div>
                 </div>
             </div>
-          </div>
+        </div>
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
