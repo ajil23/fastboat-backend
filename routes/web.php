@@ -66,7 +66,8 @@ Route::middleware([
         Route::get('/port/add', [DestinyPortController::class, 'add'])->name('port.add');
         Route::post('/port/store', [DestinyPortController::class, 'store'])->name('port.store');
         Route::get('/port/edit/{id}', [DestinyPortController::class, 'edit'])->name('port.edit');
-        Route::get('/port/update/{id}', [DestinyPortController::class, 'update'])->name('port.update');
+        Route::post('/port/update/{id}', [DestinyPortController::class, 'update'])->name('port.update');
         Route::get('/port/delete/{id}', [DestinyPortController::class, 'delete'])->name('port.delete');
+        Route::get('/port/{id}', [DestinyPortController::class, 'show'])->name('port.show');
     });
 });
