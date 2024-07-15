@@ -85,6 +85,7 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
+                                    {{$company->links('pagination::bootstrap-5')}}
                                 </table>
                             </div>
                         </div>

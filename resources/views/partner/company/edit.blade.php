@@ -67,9 +67,9 @@
                                                     <div class="mb-3">
                                                         <label for="cpn_email_status" class="form-label">Company Email Status</label>
                                                         <select class="form-control" data-trigger name="cpn_email_status" id="cpn_email_status">
-                                                            <option value="{{$companyEdit->cpn_email_status}}">{{$companyEdit->cpn_email_status}}</option>
+                                                            <option selected="{{$companyEdit->cpn_email_status}}">{{$companyEdit->cpn_email_status}}</option>
                                                             <option value="enable">Enable</option>
-                                                            <option selected value="disable">Disable</option>
+                                                            <option value="disable">Disable</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -77,9 +77,9 @@
                                                     <div class="mb-3">
                                                         <label for="cpn_status" class="form-label">Company Status</label>
                                                         <select class="form-control" data-trigger name="cpn_status" id="cpn_status" required>
-                                                            <option value="{{$companyEdit->cpn_status}}">{{$companyEdit->cpn_status}}</option>
+                                                            <option selected="{{$companyEdit->cpn_status}}">{{$companyEdit->cpn_status}}</option>
                                                             <option value="enable">Enable</option>
-                                                            <option selected ="disable">Disable</option>
+                                                            <option value ="disable">Disable</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -103,7 +103,7 @@
                                                     <div class="mb-3">
                                                         <label for="cpn_type" class="form-label">Company Type</label>
                                                         <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                            <option value="{{$companyEdit->cpn_type}}">{{$companyEdit->cpn_type}}</option>
+                                                            <option selected="{{$companyEdit->cpn_type}}">{{$companyEdit->cpn_type}}</option>
                                                             <option value="fast_boat">Fast Boat</option>
                                                             <option value="car_transfer">Car Transfer</option>
                                                             <option value="yacht">Yacht</option>

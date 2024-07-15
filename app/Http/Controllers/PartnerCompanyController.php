@@ -11,7 +11,7 @@ class PartnerCompanyController extends Controller
 {
     // this function is for view all data from company table
     public function index(){
-        $company = PartnerCompany::all();
+        $company = PartnerCompany::paginate(10);
         return view('partner.company.index', compact('company'));
     }
 
@@ -99,4 +99,5 @@ class PartnerCompanyController extends Controller
         $companyData = PartnerCompany::find($id);
         return response()->json($companyData);
     }
+    
 }
