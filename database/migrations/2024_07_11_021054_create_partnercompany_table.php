@@ -15,14 +15,14 @@ return new class extends Migration
             $table->id('cpn_id');
             $table->string('cpn_name');
             $table->string('cpn_email');
-            $table->string('cpn_email_status');
+            $table->string('cpn_email_status')->default('disabled');
             $table->string('cpn_phone');
             $table->string('cpn_whatsapp');
             $table->string('cpn_address');
             $table->string('cpn_logo');
             $table->string('cpn_website');
-            $table->string('cpn_status');
-            $table->string('cpn_type');
+            $table->enum('cpn_status', ['enable', 'disable']);
+            $table->enum('cpn_type', ['fast_boat', 'car_transfer', 'yacht', 'tour']);
             $table->string('cpn_updated_by');
             $table->timestamps();
         });
