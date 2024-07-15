@@ -31,7 +31,6 @@ class PartnerCompanyController extends Controller
             'cpn_whatsapp' => 'required|numeric',
             'cpn_logo' => 'required|image|mimes:jpeg,jpg,png|max:5120',
             'cpn_address' => 'required',
-            'cpn_website' => 'required',
             'cpn_status' => 'required',
             'cpn_type' => 'required',
         ]);
@@ -59,12 +58,32 @@ class PartnerCompanyController extends Controller
 
     // this function will get the $id of the selected data and then view the company edit form
     public function edit($id){
-
+        $companyEdit = PartnerCompany::find($id);
+        return view('partner.company.edit', compact('companyEdit'));
     }
 
     // this function will get the $id of the selected data and request data from input in company edit from
     public function update(Request $request, $id){
 
+         // Handle update data to database
+         $companyData = PartnerCompany::find($id);
+         $companyData -> cpn_name = $request->cpn_name;
+         $companyData -> cpn_email = $request->cpn_email;
+         $companyData -> cpn_email_status = $request->cpn_email_status;
+         $companyData -> cpn_phone = $request->cpn_phone;
+         $companyData -> cpn_whatsapp = $request->cpn_whatsapp;
+         $companyData -> cpn_address = $request->cpn_address;
+         $companyData -> cpn_website = $request->cpn_website;
+         $companyData -> cpn_status = $request->cpn_status;
+         $companyData -> cpn_type = $request->cpn_type;
+         $companyData -> cpn_updated_by = Auth()->id();
+         if ($request->hasFile('cpn_logo')) {
+             $companyLogo = $request->file('cpn_logo')->store('cpn_logo');
+             $companyData->cpn_logo = $companyLogo;
+         }
+         $companyData->save();
+         toast('Your data as been edited!','success');
+         return redirect()->route('company.view');
     }
 
     // this function will get the $id of selected data and do delete operation

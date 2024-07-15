@@ -4,7 +4,7 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{route('company.store')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('company.update', $companyEdit->cpn_id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-12">
@@ -38,27 +38,27 @@
                                     <div class="p-4 border-top">
                                             <div class="mb-3">
                                                 <label class="form-label" for="cpn_name">Company Name</label>
-                                                <input id="cpn_name" name="cpn_name" placeholder="Enter Company Name" type="text" class="form-control" required>
+                                                <input id="cpn_name" name="cpn_name" placeholder="Enter Company Name" type="text" class="form-control" value="{{$companyEdit->cpn_name}}">
                                             </div>
                                             <div class="row">
                                                 <div class="col-lg-4">
     
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_email">Company Email</label>
-                                                        <input id="cpn_email" name="cpn_email" placeholder="Enter Company Email" type="email" class="form-control" required>
+                                                        <input id="cpn_email" name="cpn_email" placeholder="Enter Company Email" type="email" class="form-control" value="{{$companyEdit->cpn_email}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
     
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_phone">Company Phone</label>
-                                                        <input id="cpn_phone" name="cpn_phone" type="number" class="form-control" required>
+                                                        <input id="cpn_phone" name="cpn_phone" type="number" class="form-control" value="{{$companyEdit->cpn_phone}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_whatsapp">Company Whatsapp</label>
-                                                        <input id="cpn_whatsapp" name="cpn_whatsapp" type="number" class="form-control" required>
+                                                        <input id="cpn_whatsapp" name="cpn_whatsapp" type="number" class="form-control" value="{{$companyEdit->cpn_whatsapp}}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -66,8 +66,8 @@
                                                 <div class="col-md-6">
                                                     <div class="mb-3">
                                                         <label for="cpn_email_status" class="form-label">Company Email Status</label>
-                                                        <select class="form-control" data-trigger name="cpn_email_status" id="cpn_email_status" required>
-                                                            <option value="">Select</option>
+                                                        <select class="form-control" data-trigger name="cpn_email_status" id="cpn_email_status">
+                                                            <option value="{{$companyEdit->cpn_email_status}}">{{$companyEdit->cpn_email_status}}</option>
                                                             <option value="enable">Enable</option>
                                                             <option selected value="disable">Disable</option>
                                                         </select>
@@ -77,7 +77,7 @@
                                                     <div class="mb-3">
                                                         <label for="cpn_status" class="form-label">Company Status</label>
                                                         <select class="form-control" data-trigger name="cpn_status" id="cpn_status" required>
-                                                            <option value="">Select</option>
+                                                            <option value="{{$companyEdit->cpn_status}}">{{$companyEdit->cpn_status}}</option>
                                                             <option value="enable">Enable</option>
                                                             <option selected ="disable">Disable</option>
                                                         </select>
@@ -89,21 +89,21 @@
     
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_address">Company Address</label>
-                                                        <input id="cpn_address" name="cpn_address" placeholder="Enter Company Address" type="text" class="form-control" required>
+                                                        <input id="cpn_address" name="cpn_address" placeholder="Enter Company Address" type="text" class="form-control" value="{{$companyEdit->cpn_address}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
     
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_website">Company Website</label>
-                                                        <input id="cpn_website" name="cpn_website" type="text" class="form-control" placeholder="Enter Company Website (optional)" value="-">
+                                                        <input id="cpn_website" name="cpn_website" type="text" class="form-control" placeholder="Enter Company Website (optional)" value="{{$companyEdit->cpn_website}}">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label for="cpn_type" class="form-label">Company Type</label>
                                                         <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                            <option value="">Select</option>
+                                                            <option value="{{$companyEdit->cpn_type}}">{{$companyEdit->cpn_type}}</option>
                                                             <option value="fast_boat">Fast Boat</option>
                                                             <option value="car_transfer">Car Transfer</option>
                                                             <option value="yacht">Yacht</option>
@@ -142,7 +142,7 @@
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
                                             <label class="form-label" for="cpn_logo">Logo</label>
-                                            <input id="cpn_logo" name="cpn_logo" type="file" accept="image/*" class="form-control" required>
+                                            <input id="cpn_logo" name="cpn_logo" type="file" accept="image/*" class="form-control">
                                         </div>
                                     </div>
                                 </div>
