@@ -50,7 +50,7 @@
                                                 <span class="badge bg-primary-subtle text-primary  font-size-12">{{$item->fb_status}}</span>
                                             </td>
                                             <td>
-                                                <div class="dropdown">
+                                                <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
@@ -82,7 +82,7 @@
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewDetailModalTitle">Company Information</h5>
+                <h5 class="modal-title" id="viewDetailModalTitle">Fast Boat Information</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
