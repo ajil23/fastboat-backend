@@ -155,7 +155,7 @@
                 <div class="row mb-4">
                     <div class="col text-end">
                         <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
+                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Update</button>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
             </form>
