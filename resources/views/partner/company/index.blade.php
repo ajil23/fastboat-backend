@@ -51,21 +51,21 @@
                                             <td>
                                                 @if ($item->cpn_email_status)
                                                     @if ($item->cpn_email_status == 'enable')
-                                                    <span class="badge bg-success-subtle text-success  font-size-12">Enable</span>
+                                                    <span class="badge bg-success">Enable</span>
                                                     @else
-                                                    <span class="badge bg-danger-subtle text-danger  font-size-12">Disable</span>
+                                                    <span class="badge bg-danger">Disable</span>
                                                     @endif
                                                 @endif
                                                 
                                             </td>
-                                            <td>{{$item->cpn_whatsapp}}</td>
+                                            <td><a href="https://wa.me/{{$item->cpn_whatsapp}}" class="badge bg-success-subtle text-success  font-size-12">Chat<i class="mdi mdi-arrow-right"></i></a></td>
                                             <td>{{$item->cpn_address}}</td>
                                             <td>
                                                 @if ($item->cpn_status)
                                                     @if($item->cpn_status === 'enable')
-                                                        <span class="badge bg-success-subtle text-success  font-size-12">Enable</span>
+                                                        <span class="badge bg-success">Enable</span>
                                                     @else
-                                                        <span class="badge bg-danger-subtle text-danger  font-size-12">Disable</span>
+                                                        <span class="badge bg-danger">Disable</span>
                                                     @endif
                                                 @endif
                                             </td>
@@ -97,7 +97,7 @@
     </div>
     <!-- End Page-content -->
 
-    <!-- Scrollable modal -->
+    <!-- Scrollable modal for view detail-->
     <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
     aria-labelledby="viewDetailModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">

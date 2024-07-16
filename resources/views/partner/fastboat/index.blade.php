@@ -9,7 +9,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-wrap align-items-center mb-2">
-                                <h5 class="card-title">Fast boat Table</h5>
+                                <h5 class="card-title">Fast Boat Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
                                         <a href="{{route('fastboat.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Fast Boat</a>
@@ -47,7 +47,13 @@
                                                 {{$item->partnercompany->cpn_name}}
                                             </td>
                                             <td>
-                                                <span class="badge bg-primary-subtle text-primary  font-size-12">{{$item->fb_status}}</span>
+                                                @if ($item->fb_status)
+                                                    @if($item->fb_status === 'enable')
+                                                        <span class="badge bg-success">Enable</span>
+                                                    @else
+                                                        <span class="badge bg-danger">Disable</span>
+                                                    @endif
+                                                @endif
                                             </td>
                                             <td>
                                                 <div class="dropstart">
@@ -76,7 +82,7 @@
     </div>
     <!-- End Page-content -->
 
-    <!-- Scrollable modal -->
+    <!-- Scrollable modal for view detail -->
     <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
     aria-labelledby="viewDetailModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
