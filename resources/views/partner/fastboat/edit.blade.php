@@ -43,7 +43,7 @@
                                             <div class="mb-3">
                                                 <label for="fb_company" class="form-label">Company</label>
                                                     <select class="form-control" data-trigger name="fb_company" id="fb_company">
-                                                        <option selected="{{$fastboatEdit->fb_company}}">{{$fastboatEdit->company}}</option>
+                                                        <option value="{{$fastboatEdit->fb_company}}" selected>{{$fastboatEdit->partnercompany->cpn_name}}</option>
                                                         @foreach ($company as $item)
                                                             <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
                                                         @endforeach
