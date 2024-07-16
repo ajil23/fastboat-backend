@@ -200,15 +200,19 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="fb_content_en" name="fb_content_en" placeholder="Enter Content" rows="4"></textarea>
+                                                    <div id="content-en">
+                                                        
+                                                    </div>
                                                 </div>
 
                                             </div>
 
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_content_idn">Description (idn)</label>
-                                                    <textarea class="form-control" id="fb_content_idn" name="fb_content_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                    <label class="form-label" for="fb_content_idn">Content (idn)</label>
+                                                    <div id="content-idn">
+                                                        
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div> 
@@ -236,3 +240,51 @@
 
     @include('admin.components.footer')
 </div>
+
+@section('script')
+<script type="importmap">
+            {
+                "imports": {
+                    "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
+                    "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
+                }
+            }
+        </script>
+
+        <script type="module">
+            import {
+                ClassicEditor,
+                Essentials,
+                Bold,
+                Italic,
+                Font,
+                Paragraph
+            } from 'ckeditor5';
+
+            ClassicEditor
+                .create( document.querySelector( '#content-en' ), {
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    }
+                } )
+                .then( /* ... */ )
+                .catch( /* ... */ );
+
+            ClassicEditor
+                .create( document.querySelector( '#content-idn' ), {
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    }
+                } )
+                .then( /* ... */ )
+                .catch( /* ... */ );
+        </script>
+@endsection
