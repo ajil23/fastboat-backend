@@ -64,6 +64,7 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
+                                    {{$fastboat->links('pagination::bootstrap-5')}}
                                 </table>
                             </div>
                         </div>
