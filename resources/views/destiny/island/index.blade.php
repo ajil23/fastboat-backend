@@ -46,7 +46,7 @@
                                             <td>{{$item->isd_code}}</td>
                                             <td>
                                                     <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}" target="_blank" >
-                                                        <b>Lihat</b>
+                                                        <b>See</b>
                                                     </td>
                                             <td>{{$item->isd_slug_en}}</td>
                                             <td>{{$item->isd_slug_idn}}</span></td>
@@ -56,9 +56,9 @@
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#">View</a>
-                                                        <a class="dropdown-item" href="#">Edit</a>
-                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('island.show', $item->isd_id)}}">View</a>
+                                                        <a class="dropdown-item" href="{{route('island.edit', $item->isd_id)}}">Edit</a>
+                                                        <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{{route('island.delete', $item->isd_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -76,6 +76,60 @@
     </div>
     <!-- End Page-content -->
 
+    
+    <!-- Scrollable modal -->
+    <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
+    aria-labelledby="viewDetailModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDetailModalTitle">Island Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Name : </strong><span id="island-name"></span></p>
+                <p><strong>Code : </strong><span id="island-code"></span></p>
+                <p><strong>Map : </strong><span id="island-map"></span></p>
+                <p><strong>Keywords : </strong><span id="island-keyword"></span></p>
+                <p><strong>Slug EN : </strong><span id="island-slugen"></span></p>
+                <p><strong>Slug IND : </strong><span id="island-slugind"></span></p>
+                <p><strong>Description EN : </strong><span id="island-descriptionen"></span></p>
+                <p><strong>Description IND : </strong><span id="island-descriptionidn"></span></p>
+                <p><strong>Content EN : </strong><span id="island-contenten"></span></p>
+                <p><strong>Content IND : </strong><span id="island-contentidn"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     @include('admin.components.footer')
 </div>
+@endsection
+
+
+@section('script')
+{{-- javascript to get data from database & view in modal --}}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('body').on('click', '#showDetail', function(){
+            var detailURL = $(this).data('url');
+            $.get(detailURL, function(data){
+                $('#viewDetailModal').modal('show');
+                    $('#island-name').text(data.isd_name);
+                    $('#island-code').text(data.isd_code);
+                    $('#island-map').text(data.isd_map);
+                    $('#island-keyword').text(data.isd_keyword);
+                    $('#island-slugen').text(data.isd_slug_en);
+                    $('#island-slugind').text(data.isd_slug_idn);
+                    $('#island-descriptionen').text(data.isd_description_en);
+                    $('#island-descriptionidn').text(data.isd_description_idn);
+                    $('#island-contenten').text(data.isd_content_en);
+                    $('#island-contentidn').text(data.isd_content_idn);
+            })
+        })
+    });
+</script>
 @endsection

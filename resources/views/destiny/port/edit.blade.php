@@ -4,7 +4,7 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{route('port.store')}}" method="post" enctype="multipart/form-data">
+            <form action="{{route('port.update', $portEdit->prt_id)}}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-12">
@@ -40,14 +40,14 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_name_en">Name (en)</label>
-                                                    <input id="prt_name_en" name="prt_name_en" placeholder="Enter Port Name in English" type="text" class="form-control" required>
+                                                    <input id="prt_name_en" name="prt_name_en" placeholder="Enter Port Name in English" type="text" class="form-control" value="{{$portEdit->prt_name_en}}" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_name_idn">Name (idn)</label>
-                                                    <input id="prt_name_idn" name="prt_name_idn" placeholder="Enter Port Name in Bahasa" type="text" class="form-control" required>
+                                                    <input id="prt_name_idn" name="prt_name_idn" placeholder="Enter Port Name in Bahasa" type="text" class="form-control" value="{{$portEdit->prt_name_idn}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -56,14 +56,14 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_code">Code</label>
-                                                    <input id="prt_code" name="prt_code" placeholder="Enter Port Code" type="text" class="form-control" required>
+                                                    <input id="prt_code" name="prt_code" placeholder="Enter Port Code" type="text" class="form-control" value="{{$portEdit->prt_code}}" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_map">Maps</label>
-                                                    <input id="prt_map" name="prt_map" placeholder="longitude.latitude" type="text" class="form-control" required>
+                                                    <input id="prt_map" name="prt_map" placeholder="longitude.latitude" type="text" class="form-control" value="{{$portEdit->prt_map}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -73,9 +73,9 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_island">Island</label>
                                                     <select class="form-control" name="prt_island" aria-label="Default select example" required>
-                                                        <option selected>Choose Island</option>
+                                                        <option value="{{$portEdit->prt_island}}" selected>{{$portEdit->destinyisland->isd_name}}</option>
                                                         @foreach ($data as $destinyisland)
-                                                        <option value="{{ $destinyisland->isd_id }}">
+                                                        <option value="{{ $destinyisland->isd_id }}" >
                                                             {{ $destinyisland->isd_name}}
                                                         </option>
                                                         @endforeach
@@ -85,7 +85,7 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_address">Address</label>
-                                                    <input id="prt_address" name="prt_address" placeholder="Enter Port Address" type="text" class="form-control" required>
+                                                    <input id="prt_address" name="prt_address" placeholder="Enter Port Address" type="text" class="form-control" value="{{$portEdit->prt_address}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -123,20 +123,20 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_image1">Image 1</label>
-                                                    <input id="prt_image1" name="prt_image1" type="file" accept="image/*" class="form-control" required>
+                                                    <input id="prt_image1" name="prt_image1" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image1}}" >
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_image2">Image 2</label>
-                                                    <input id="prt_image2" name="prt_image2" type="file" accept="image/*" class="form-control" required>
+                                                    <input id="prt_image2" name="prt_image2" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image2}}" >
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_image3">Image 3</label>
-                                                    <input id="prt_image3" name="prt_image3" type="file" accept="image/*" class="form-control" required>
+                                                    <input id="prt_image3" name="prt_image3" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image3}}" >
                                                 </div>
                                             </div>
                                         </div>
@@ -145,20 +145,20 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_image4">Image 4</label>
-                                                    <input id="prt_image4" name="prt_image4" type="file" accept="image/*" class="form-control">
+                                                    <input id="prt_image4" name="prt_image4" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image4}}" >
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_image5">Image 5</label>
-                                                    <input id="prt_image5" name="prt_image5" type="file" accept="image/*" class="form-control">
+                                                    <input id="prt_image5" name="prt_image5" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image5}}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_image6">Image 6</label>
-                                                    <input id="prt_image6" name="prt_image6" type="file" accept="image/*" class="form-control">
+                                                    <input id="prt_image6" name="prt_image6" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image6}}">
                                                 </div>
                                             </div>
                                         </div>
@@ -195,20 +195,20 @@
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
                                             <label class="form-label" for="prt_keyword">Keywords</label>
-                                            <input id="prt_keyword" name="prt_keyword" placeholder="Enter Keyword" type="text" class="form-control">
+                                            <input id="prt_keyword" name="prt_keyword" placeholder="Enter Keyword" type="text" class="form-control" value="{{$portEdit->prt_keyword}}">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_slug_en">Slug (en)</label>
-                                                    <input id="prt_slug_en" name="prt_slug_en" placeholder="Enter Port Slug" type="text" class="form-control" required>
+                                                    <input id="prt_slug_en" name="prt_slug_en" placeholder="Enter Port Slug" type="text" class="form-control" value="{{$portEdit->prt_slug_en}}" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_slug_idn">Slug (idn)</label>
-                                                    <input id="prt_slug_idn" name="prt_slug_idn" placeholder="Enter Port Slug" type="text" class="form-control" required>
+                                                    <input id="prt_slug_idn" name="prt_slug_idn" placeholder="Enter Port Slug" type="text" class="form-control" value="{{$portEdit->prt_slug_idn}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -217,7 +217,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_description_en">Description (en)</label>
-                                                    <textarea class="form-control" id="prt_description_en" name="prt_description_en" placeholder="Enter Description" rows="4"></textarea>
+                                                    <textarea class="form-control" id="prt_description_en" name="prt_description_en" placeholder="Enter Description" rows="4" value="{{$portEdit->prt_description_e}}"></textarea>
                                                 </div>
 
                                             </div>
@@ -225,7 +225,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_description_idn">Description (idn)</label>
-                                                    <textarea class="form-control" id="prt_description_idn" name="prt_description_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                    <textarea class="form-control" id="prt_description_idn" name="prt_description_idn" placeholder="Enter Description" rows="4" value="{{$portEdit->prt_description_idn}}"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -234,7 +234,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="prt_content_en" name="prt_content_en" placeholder="Enter Content" rows="4"></textarea>
+                                                    <textarea class="form-control" id="prt_content_en" name="prt_content_en" placeholder="Enter Content" rows="4" value="{{$portEdit->prt_content_en}}"></textarea>
                                                 </div>
 
                                             </div>
@@ -242,7 +242,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_content_idn">Content (idn)</label>
-                                                    <textarea class="form-control" id="prt_content_idn" name="prt_content_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                    <textarea class="form-control" id="prt_content_idn" name="prt_content_idn" placeholder="Enter Description" rows="4" value="{{$portEdit->prt_content_idn}}"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,4 +270,3 @@
 
     @include('admin.components.footer')
 </div>
-@endsection
