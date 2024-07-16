@@ -56,7 +56,7 @@
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
                                                         <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('fastboat.show', $item->fb_id)}}">View</a>
-                                                        <a class="dropdown-item" href="#">Edit</a>
+                                                        <a class="dropdown-item" href="{{route('fastboat.edit', $item->fb_id)}}">Edit</a>
                                                         <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{{route('fastboat.delete', $item->fb_id)}}">Delete</a>
                                                     </div>
                                                 </div>
@@ -98,6 +98,7 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
 
 @section('script')
 {{-- javascript to get data from database & view in modal --}}
