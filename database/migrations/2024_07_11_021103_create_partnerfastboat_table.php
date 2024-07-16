@@ -30,9 +30,8 @@ return new class extends Migration
             $table->text('fb_content_en');
             $table->text('fb_content_idn');
             $table->enum('fb_status', ['enable', 'disable'])->default('enable');
-            $table->timestamp('fb_created_at');
-            $table->datetime('fb_updated_at');
             $table->string('fb_updated_by');
+            $table->timestamps();
         });
     }
 

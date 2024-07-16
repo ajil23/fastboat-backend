@@ -4,7 +4,8 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="" method="post">
+            <form action="{{route('fastboat.store')}}" method="POST" enctype="multipart/form-data">
+                @csrf
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="addproduct-accordion" class="custom-accordion">
@@ -42,19 +43,18 @@
                                             <div class="mb-3">
                                                 <label for="fb_company" class="form-label">Company</label>
                                                     <select class="form-control" data-trigger name="fb_company" id="fb_company">
-                                                        <option value="">Select</option>
-                                                        <option value="EL">Electronic</option>
-                                                        <option value="FA">Fashion</option>
-                                                        <option value="FI">Fitness</option>
+                                                        <option value="">Select Fast Boat Company</option>
+                                                        @foreach ($company as $item)
+                                                            <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
+                                                        @endforeach
                                                     </select>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="fb_status" class="form-label">Status</label>
                                                     <select class="form-control" data-trigger name="fb_status" id="fb_status">
                                                         <option value="">Select</option>
-                                                        <option value="EL">Electronic</option>
-                                                        <option value="FA">Fashion</option>
-                                                        <option value="FI">Fitness</option>
+                                                        <option value="enable">Enable</option>
+                                                        <option value="disable">Disable</option>
                                                     </select>
                                             </div>
                                     </div>
@@ -89,21 +89,21 @@
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image1">Image 1</label>
-                                                    <input id="image1" name="image1" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="fb_image1">Image 1</label>
+                                                    <input id="fb_image1" name="fb_image1" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image2">Image 2</label>
-                                                    <input id="image2" name="image2" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="fb_image2">Image 2</label>
+                                                    <input id="fb_image2" name="fb_image2" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image3">Image 3</label>
-                                                    <input id="image3" name="image3" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="fb_image3">Image 3</label>
+                                                    <input id="fb_image3" name="fb_image3" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -111,21 +111,21 @@
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image4">Image 4</label>
-                                                    <input id="image4" name="image4" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="fb_image4">Image 4</label>
+                                                    <input id="fb_image4" name="fb_image4" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image5">Image 5</label>
-                                                    <input id="image5" name="image5" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="fb_image5">Image 5</label>
+                                                    <input id="fb_image5" name="fb_image5" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="image6">Image 6</label>
-                                                    <input id="image6" name="image6" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="fb_image6">Image 6</label>
+                                                    <input id="fb_image6" name="fb_image6" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -164,6 +164,22 @@
                                             <label class="form-label" for="fb_keywords">Keywords</label>
                                             <input id="fb_keywords" name="fb_keywords" placeholder="Enter Fast Boat Keywords" type="text" class="form-control">
                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_slug_en">Slug (en)</label>
+                                                    <input type="text" class="form-control" id="fb_slug_en" name="fb_slug_en" placeholder="Enter Slug" rows="4"></input>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_slug_idn">Slug (idn)</label>
+                                                    <input  type="text"  class="form-control" id="fb_slug_idn" name="fb_slug_idn" placeholder="Enter Slug" rows="4"></input>
+                                                </div>
+                                            </div>
+                                        </div> 
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
@@ -207,7 +223,7 @@
                 <div class="row mb-4">
                     <div class="col text-end">
                         <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                        <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#success-btn"> <i class=" bx bx-file me-1"></i> Save </a>
+                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save </button>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
             </form>

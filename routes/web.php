@@ -46,10 +46,12 @@ Route::middleware([
         // partner fast boat routes
         Route::get('/fastboat', [PartnerFastboatController::class, 'index'])->name('fastboat.view');
         Route::get('/fastboat/add', [PartnerFastboatController::class, 'add'])->name('fastboat.add');
-        Route::get('/fastboat/store', [PartnerFastboatController::class, 'store'])->name('fastboat.store');
+        Route::post('/fastboat/store', [PartnerFastboatController::class, 'store'])->name('fastboat.store');
         Route::get('/fastboat/edit/{id}', [PartnerFastboatController::class, 'edit'])->name('fastboat.edit');
         Route::get('/fastboat/update/{id}', [PartnerFastboatController::class, 'update'])->name('fastboat.update');
         Route::get('/fastboat/delete/{id}', [PartnerFastboatController::class, 'delete'])->name('fastboat.delete');
+        Route::get('/fastboat/{id}', [PartnerFastboatController::class, 'show'])->name('fastboat.show');
+
     });
     Route::prefix('destiny')->group(function () {
         // destiny island routes
