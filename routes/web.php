@@ -59,15 +59,17 @@ Route::middleware([
         Route::get('/island/add', [DestinyIslandController::class, 'add'])->name('island.add');
         Route::post('/island/store', [DestinyIslandController::class, 'store'])->name('island.store');
         Route::get('/island/edit/{id}', [DestinyIslandController::class, 'edit'])->name('island.edit');
-        Route::get('/island/update/{id}', [DestinyIslandController::class, 'update'])->name('island.update');
+        Route::post('/island/update/{id}', [DestinyIslandController::class, 'update'])->name('island.update');
         Route::get('/island/delete/{id}', [DestinyIslandController::class, 'delete'])->name('island.delete');
+        Route::get('/island/{id}', [DestinyIslandController::class, 'show'])->name('island.show');
 
         // destiny port routes
         Route::get('/port', [DestinyPortController::class, 'index'])->name('port.view');
         Route::get('/port/add', [DestinyPortController::class, 'add'])->name('port.add');
-        Route::get('/port/store', [DestinyPortController::class, 'store'])->name('port.store');
+        Route::post('/port/store', [DestinyPortController::class, 'store'])->name('port.store');
         Route::get('/port/edit/{id}', [DestinyPortController::class, 'edit'])->name('port.edit');
-        Route::get('/port/update/{id}', [DestinyPortController::class, 'update'])->name('port.update');
+        Route::post('/port/update/{id}', [DestinyPortController::class, 'update'])->name('port.update');
         Route::get('/port/delete/{id}', [DestinyPortController::class, 'delete'])->name('port.delete');
+        Route::get('/port/{id}', [DestinyPortController::class, 'show'])->name('port.show');
     });
 });

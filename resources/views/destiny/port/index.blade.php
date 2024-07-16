@@ -1,4 +1,4 @@
-@extends('admin.admin_master') 
+@extends('admin.admin_master')
 @section('admin')
 
 <div class="main-content">
@@ -12,7 +12,7 @@
                                 <h5 class="card-title">Port Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                    <a href="{{route('port.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Company</a>
+                                        <a href="{{route('port.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Port</a>
                                     </div>
                                 </div>
                             </div>
@@ -21,53 +21,53 @@
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
                                     <thead>
                                         <tr>
-                                            <th style="width: 90px;">
-                                               Prodcut
-                                            </th>
-                                            <th  style="width: 210px;">Product Name</th>
-                                            <th>Customer Name</th>
-                                            <th>Order ID</th>
-                                            <th>Color</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
+                                            <th>No</th>
+                                            <th style="width: 90px;">Image</th>
+                                            <th>Name ENG</th>
+                                            <th>Name IDN</th>
+                                            <th>Code</th>
+                                            <th>Map</th>
+                                            <th>Address</th>
+                                            <th>Slug ENG</th>
+                                            <th>Slug IDN</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($port as $item)
                                         <tr>
+                                            <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div class="avatar">
                                                     <div class="product-img avatar-title img-thumbnail bg-primary-subtle  border-0">
-                                                        <img src="assets/images/product/img-1.png" class="img-fluid" alt="">
+                                                        <img src="{{ asset('storage/'.$item->prt_image1) }}" class="img-fluid" alt="">
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="fw-semibold">Office Chair Crime</td>
+                                            <td>{{$item->prt_name_en}}</td>
+                                            <td>{{$item->prt_name_idn}}</td>
+                                            <td>{{$item->prt_code}}</td>
                                             <td>
-                                                Neal Matthews
+                                                <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->prt_map}}" target="_blank" >
+                                                    <b>See</b>
                                             </td>
-                                            <td>
-                                            #526552
-                                            </td>
-                                            <td>
-                                                Gray
-                                            </td>
-                                            <td>12/01/2022</td>
-                                            <td><span class="badge bg-primary-subtle text-primary  font-size-12">Pending</span></td>
+                                            <td>{{$item->prt_address}}</td>
+                                            <td>{{$item->prt_slug_en}}</td>
+                                            <td>{{$item->prt_slug_idn}}</td>
                                             <td>
                                                 <div class="dropdown">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#">View</a>
-                                                        <a class="dropdown-item" href="#">Edit</a>
-                                                        <a class="dropdown-item" href="#">Delete</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('port.show', $item->prt_id)}}">View</a>
+                                                        <a class="dropdown-item" href="{{route('port.edit', $item->prt_id)}}">Edit</a>
+                                                        <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{{route('port.delete', $item->prt_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
                                         </tr>
-                                        
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -75,11 +75,67 @@
                     </div>
                 </div>
             </div>
-          </div>
+        </div>
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
 
+        <!-- Scrollable modal -->
+        <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
+    aria-labelledby="viewDetailModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDetailModalTitle">Port Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Name ENG : </strong><span id="port-nameen"></span></p>
+                <p><strong>Name IDN : </strong><span id="port-nameidn"></span></p>
+                <p><strong>Code : </strong><span id="port-code"></span></p>
+                <p><strong>Map : </strong><span id="port-map"></span></p>
+                <p><strong>Address : </strong><span id="port-address"></span></p>
+                <p><strong>Keywords : </strong><span id="port-keyword"></span></p>
+                <p><strong>Slug EN : </strong><span id="port-slugen"></span></p>
+                <p><strong>Slug IND : </strong><span id="port-slugind"></span></p>
+                <p><strong>Description EN : </strong><span id="port-descriptionen"></span></p>
+                <p><strong>Description IND : </strong><span id="port-descriptionidn"></span></p>
+                <p><strong>Content EN : </strong><span id="port-contenten"></span></p>
+                <p><strong>Content IND : </strong><span id="port-contentidn"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
     @include('admin.components.footer')
 </div>
+@endsection
+
+@section('script')
+{{-- javascript to get data from database & view in modal --}}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('body').on('click', '#showDetail', function(){
+            var detailURL = $(this).data('url');
+            $.get(detailURL, function(data){
+                $('#viewDetailModal').modal('show');
+                    $('#port-nameen').text(data.prt_name_en);
+                    $('#port-nameidn').text(data.prt_name_idn);
+                    $('#port-code').text(data.prt_code);
+                    $('#port-map').text(data.prt_map);
+                    $('#port-address').text(data.prt_address);
+                    $('#port-keyword').text(data.prt_keyword);
+                    $('#port-slugen').text(data.prt_slug_en);
+                    $('#port-slugind').text(data.prt_slug_idn);
+                    $('#port-descriptionen').text(data.prt_description_en);
+                    $('#port-descriptionidn').text(data.prt_description_idn);
+                    $('#port-contenten').text(data.prt_content_en);
+                    $('#port-contentidn').text(data.prt_content_idn);
+            })
+        })
+    });
+</script>
 @endsection

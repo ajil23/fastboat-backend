@@ -4,15 +4,14 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{route('port.store')}}" method="post" enctype="multipart/form-data">
-                @csrf
+        <form action="{{route('island.update', $islandEdit->isd_id)}}" method="post" enctype="multipart/form-data">
+        @csrf
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="addproduct-accordion" class="custom-accordion">
                             <div class="card">
                                 <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
-
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -22,7 +21,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Port Info</h5>
+                                                <h5 class="font-size-16 mb-1">Island Info</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -36,56 +35,23 @@
 
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
+                                        
+                                    <div class="mb-3">
+                                                <label class="form-label" for="isd_name">Name</label>
+                                                <input id="isd_name" name="isd_name" placeholder="Enter Island Name" type="text" class="form-control" value="{{$islandEdit->isd_name}}" required>
+                                            </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_name_en">Name (en)</label>
-                                                    <input id="prt_name_en" name="prt_name_en" placeholder="Enter Port Name in English" type="text" class="form-control" required>
+                                                    <label class="form-label" for="isd_code">Code</label>
+                                                    <input id="isd_code" name="isd_code" placeholder="Enter Island Code" type="text" class="form-control" value="{{$islandEdit->isd_code}}" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_name_idn">Name (idn)</label>
-                                                    <input id="prt_name_idn" name="prt_name_idn" placeholder="Enter Port Name in Bahasa" type="text" class="form-control" required>
-                                                    </input>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="prt_code">Code</label>
-                                                    <input id="prt_code" name="prt_code" placeholder="Enter Port Code" type="text" class="form-control" required>
-                                                    </input>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="prt_map">Maps</label>
-                                                    <input id="prt_map" name="prt_map" placeholder="longitude.latitude" type="text" class="form-control" required>
-                                                    </input>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="prt_island">Island</label>
-                                                    <select class="form-control" name="prt_island" aria-label="Default select example" required>
-                                                        <option selected>Choose Island</option>
-                                                        @foreach ($data as $destinyisland)
-                                                        <option value="{{ $destinyisland->isd_id }}">
-                                                            {{ $destinyisland->isd_name}}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="prt_address">Address</label>
-                                                    <input id="prt_address" name="prt_address" placeholder="Enter Port Address" type="text" class="form-control" required>
+                                                    <label class="form-label" for="isd_map">Maps</label>
+                                                    <input id="isd_map" name="isd_map" placeholder="Longitude:Latitude" type="text" class="form-control" value="{{$islandEdit->isd_map}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -122,21 +88,21 @@
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_image1">Image 1</label>
-                                                    <input id="prt_image1" name="prt_image1" type="file" accept="image/*" class="form-control" required>
+                                                    <label class="form-label" for="isd_image1">Image 1</label>
+                                                    <input id="isd_image1" name="isd_image1" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image1}}" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_image2">Image 2</label>
-                                                    <input id="prt_image2" name="prt_image2" type="file" accept="image/*" class="form-control" required>
+                                                    <label class="form-label" for="isd_image2">Image 2</label>
+                                                    <input id="isd_image2" name="isd_image2" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image2}}" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_image3">Image 3</label>
-                                                    <input id="prt_image3" name="prt_image3" type="file" accept="image/*" class="form-control" required>
+                                                    <label class="form-label" for="isd_image3">Image 3</label>
+                                                    <input id="isd_image3" name="isd_image3" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image3}}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,21 +110,21 @@
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_image4">Image 4</label>
-                                                    <input id="prt_image4" name="prt_image4" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image4">Image 4</label>
+                                                    <input id="isd_image4" name="isd_image4" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image4}}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_image5">Image 5</label>
-                                                    <input id="prt_image5" name="prt_image5" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image5">Image 5</label>
+                                                    <input id="isd_image5" name="isd_image5" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image5}}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_image6">Image 6</label>
-                                                    <input id="prt_image6" name="prt_image6" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="idn_image6">Image 6</label>
+                                                    <input id="idn_image6" name="idn_image6" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image6}}">
                                                 </div>
                                             </div>
                                         </div>
@@ -193,22 +159,22 @@
 
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="prt_keyword">Keywords</label>
-                                            <input id="prt_keyword" name="prt_keyword" placeholder="Enter Keyword" type="text" class="form-control">
-                                        </div>
+                                            <div class="mb-3">
+                                                <label class="form-label" for="isd_keyword">Keywords</label>
+                                                <input id="isd_keyword" name="isd_keyword" placeholder="Enter Keyword" type="text" class="form-control" value="{{$islandEdit->isd_keyword}}">
+                                            </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_slug_en">Slug (en)</label>
-                                                    <input id="prt_slug_en" name="prt_slug_en" placeholder="Enter Port Slug" type="text" class="form-control" required>
+                                                    <label class="form-label" for="isd_slug_en">Slug (en)</label>
+                                                    <input id="isd_slug_en" name="isd_slug_en" placeholder="Enter Island Slug" type="text" class="form-control" value="{{$islandEdit->isd_slug_en}}" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_slug_idn">Slug (idn)</label>
-                                                    <input id="prt_slug_idn" name="prt_slug_idn" placeholder="Enter Port Slug" type="text" class="form-control" required>
+                                                    <label class="form-label" for="isd_slug_idn">Slug (idn)</label>
+                                                    <input id="isd_slug_idn" name="isd_slug_idn" placeholder="Enter Island Slug" type="text" class="form-control" value="{{$islandEdit->isd_slug_idn}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -216,36 +182,36 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_description_en">Description (en)</label>
-                                                    <textarea class="form-control" id="prt_description_en" name="prt_description_en" placeholder="Enter Description" rows="4"></textarea>
+                                                    <label class="form-label" for="isd_description_en">Description (en)</label>
+                                                    <textarea class="form-control" id="isd_description_en" name="isd_description_en" placeholder="Enter Description" rows="4" value="{{$islandEdit->isd_description_en}}"></textarea>
                                                 </div>
 
                                             </div>
 
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_description_idn">Description (idn)</label>
-                                                    <textarea class="form-control" id="prt_description_idn" name="prt_description_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                    <label class="form-label" for="isd_description_idn">Description (idn)</label>
+                                                    <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4" value="{{$islandEdit->isd_description_idn}}"></textarea>
                                                 </div>
                                             </div>
-                                        </div>
-
+                                        </div> 
+                                        
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="prt_content_en" name="prt_content_en" placeholder="Enter Content" rows="4"></textarea>
+                                                    <label class="form-label" for="isd_content_en">Content (en)</label>
+                                                    <textarea class="form-control" id="isd_content_en" name="isd_content_en" placeholder="Enter Content" rows="4" value="{{$islandEdit->isd_content_en}}"></textarea>
                                                 </div>
 
                                             </div>
 
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_content_idn">Content (idn)</label>
-                                                    <textarea class="form-control" id="prt_content_idn" name="prt_content_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                    <label class="form-label" for="isd_content_idn">Content (idn)</label>
+                                                    <textarea class="form-control" id="isd_content_idn" name="isd_content_idn" placeholder="Enter Description" rows="4" value="{{$islandEdit->isd_content_idn}}"></textarea>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -257,7 +223,7 @@
                 <div class="row mb-4">
                     <div class="col text-end">
                         <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>                    
+                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
             </form>
@@ -270,4 +236,3 @@
 
     @include('admin.components.footer')
 </div>
-@endsection
