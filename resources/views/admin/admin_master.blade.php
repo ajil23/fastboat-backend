@@ -78,8 +78,8 @@
         <script src="{{asset('assets/libs/simplebar/simplebar.min.js')}}"></script>
         <script src="{{asset('assets/libs/eva-icons/eva.min.js')}}"></script>
 
-         <!-- apexcharts -->
-         <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
+        <!-- apexcharts -->
+        <script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}}"></script>
         
         <script src="{{asset('assets/js/pages/dashboard-sales.init.js')}}"></script>
 

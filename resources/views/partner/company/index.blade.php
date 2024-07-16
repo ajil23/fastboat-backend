@@ -71,7 +71,7 @@
                                             </td>
                                             <td>{{$item->cpn_type}}</td>
                                             <td>
-                                                <div class="dropdown">
+                                                <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>

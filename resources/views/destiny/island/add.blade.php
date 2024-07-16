@@ -236,3 +236,4 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
