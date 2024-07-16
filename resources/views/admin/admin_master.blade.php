@@ -19,10 +19,10 @@
         <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
-        <!-- include summernote css -->
-        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
         {{-- ckeditor --}}
         <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
+        {{-- jquery --}}
+        <script src="{{asset('assets/js/jquery.min.js')}}"></script>
 
     </head>
 
@@ -89,27 +89,12 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-        <!-- include summernote js -->
-        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-        <script>
-            $(document).ready(function() {
-                $('#fb_content_en').summernote();
-                $('#fb_content_idn').summernote();
-                $('#isd_content_en').summernote();
-                $('#isd_content_idn').summernote();
-                $('#prt_content_en').summernote();
-                $('#prt_content_idn').summernote();
-            });
-        </script>
-
         {{-- detail modal --}}
         @yield('script')
         
         {{-- sweetalert --}}
         @include('sweetalert::alert')
 
-        {{-- jquery --}}
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
 
     </body>
 

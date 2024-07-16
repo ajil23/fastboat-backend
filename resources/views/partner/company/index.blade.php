@@ -125,6 +125,7 @@
     </div><!-- /.modal -->
     @include('admin.components.footer')
 </div>
+@endsection
 
 @section('script')
 {{-- javascript to get data from database & view in modal --}}

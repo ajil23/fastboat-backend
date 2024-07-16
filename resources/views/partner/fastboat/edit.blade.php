@@ -4,7 +4,7 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{route('fastboat.store')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('fastboat.update', $fastboatEdit->fb_id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-12">
@@ -38,12 +38,12 @@
                                     <div class="p-4 border-top">
                                             <div class="mb-3">
                                                 <label class="form-label" for="fb_name">Fast Boat Name</label>
-                                                <input id="fb_name" name="fb_name" placeholder="Enter Fast Boat Name" type="text" class="form-control">
+                                                <input id="fb_name" name="fb_name" placeholder="Enter Fast Boat Name" type="text" class="form-control" value="{{$fastboatEdit->fb_name}}">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="fb_company" class="form-label">Company</label>
                                                     <select class="form-control" data-trigger name="fb_company" id="fb_company">
-                                                        <option value="">Select Fast Boat Company</option>
+                                                        <option selected="{{$fastboatEdit->fb_company}}">{{$fastboatEdit->company}}</option>
                                                         @foreach ($company as $item)
                                                             <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
                                                         @endforeach
@@ -52,7 +52,7 @@
                                             <div class="mb-3">
                                                 <label for="fb_status" class="form-label">Status</label>
                                                     <select class="form-control" data-trigger name="fb_status" id="fb_status">
-                                                        <option value="">Select</option>
+                                                        <option selected="{{$fastboatEdit->fb_status}}">{{$fastboatEdit->fb_status}}</option>
                                                         <option value="enable">Enable</option>
                                                         <option value="disable">Disable</option>
                                                     </select>
@@ -90,20 +90,20 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_image1">Image 1</label>
-                                                    <input id="fb_image1" name="fb_image1" type="file" accept="image/*" class="form-control" required>
+                                                    <input id="fb_image1" name="fb_image1" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_image2">Image 2</label>
-                                                    <input id="fb_image2" name="fb_image2" type="file" accept="image/*" class="form-control" required>
+                                                    <input id="fb_image2" name="fb_image2" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_image3">Image 3</label>
-                                                    <input id="fb_image3" name="fb_image3" type="file" accept="image/*" class="form-control" required>
+                                                    <input id="fb_image3" name="fb_image3" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
@@ -162,13 +162,13 @@
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
                                             <label class="form-label" for="fb_keywords">Keywords</label>
-                                            <input id="fb_keywords" name="fb_keywords" placeholder="Enter Fast Boat Keywords" type="text" class="form-control">
+                                            <input id="fb_keywords" name="fb_keywords" placeholder="Enter Fast Boat Keywords" type="text" class="form-control" value="{{$fastboatEdit->fb_keywords}}">
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_slug_en">Slug (en)</label>
-                                                    <input type="text" class="form-control" id="fb_slug_en" name="fb_slug_en" placeholder="Enter Slug" rows="4"></input>
+                                                    <input type="text" class="form-control" id="fb_slug_en" name="fb_slug_en" placeholder="Enter Slug" rows="4" value="{{$fastboatEdit->fb_slug_en}}"></input>
                                                 </div>
 
                                             </div>
@@ -176,7 +176,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_slug_idn">Slug (idn)</label>
-                                                    <input  type="text"  class="form-control" id="fb_slug_idn" name="fb_slug_idn" placeholder="Enter Slug" rows="4"></input>
+                                                    <input  type="text"  class="form-control" id="fb_slug_idn" name="fb_slug_idn" placeholder="Enter Slug" rows="4" value="{{$fastboatEdit->fb_slug_idn}}"></input>
                                                 </div>
                                             </div>
                                         </div> 
@@ -184,7 +184,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_description_en">Description (en)</label>
-                                                    <textarea class="form-control" id="fb_description_en" name="fb_description_en" placeholder="Enter Description" rows="4"></textarea>
+                                                    <textarea class="form-control" id="fb_description_en" name="fb_description_en" placeholder="Enter Description" rows="4">{{$fastboatEdit->fb_description_en}}</textarea>
                                                 </div>
 
                                             </div>
@@ -192,7 +192,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_description_idn">Description (idn)</label>
-                                                    <textarea class="form-control" id="fb_description_idn" name="fb_description_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                    <textarea class="form-control" id="fb_description_idn" name="fb_description_idn" placeholder="Enter Description" rows="4">{{$fastboatEdit->fb_description_idn}}</textarea>
                                                 </div>
                                             </div>
                                         </div> 
@@ -200,7 +200,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_content_en">Content (en)</label>
-                                                    <textarea name="fb_content_en" id="content-en"></textarea>
+                                                    <textarea name="fb_content_en" id="content-en">{{$fastboatEdit->fb_content_en}}</textarea>
                                                 </div>
 
                                             </div>
@@ -208,7 +208,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_content_idn">Content (idn)</label>
-                                                    <textarea name="fb_content_idn" id="content-idn"></textarea>
+                                                    <textarea name="fb_content_idn" id="content-idn">{{$fastboatEdit->fb_content_idn}}</textarea>
                                                 </div>
                                             </div>
                                         </div> 
