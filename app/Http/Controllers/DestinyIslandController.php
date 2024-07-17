@@ -18,8 +18,10 @@ class DestinyIslandController extends Controller
         return view('destiny.island.add');
     }
 
-    // this function is for 
+    // this function will request data from input in island add form
     public function store (Request $request) {
+        
+        // Handle the request data validation
         $request->validate([
             'isd_name' => 'required|max:100',
             'isd_code' => 'required|max:100',
@@ -38,6 +40,7 @@ class DestinyIslandController extends Controller
             'isd_content_idn' => 'required',
         ]);
 
+        // Handle insert data to database
         $islandData = new DestinyIsland();
         $islandData->isd_name = $request->isd_name;
         $islandData->isd_code = $request->isd_code;
@@ -79,12 +82,16 @@ class DestinyIslandController extends Controller
         return redirect()->route('island.view');
     }
 
+    // this function will get the $id of the selected data and then view the island edit form
     public function edit ($id) {
         $islandEdit = DestinyIsland::find($id);
         return view ('destiny.island.edit', compact('islandEdit'));
     }
 
+    // this function will get the $id of the selected data and request data from input in island edit from
     public function update (Request $request, $id) {
+
+         // Handle update data to database
         $islandData = DestinyIsland::find($id);
         $islandData->isd_name = $request->isd_name;
         $islandData->isd_code = $request->isd_code;
@@ -126,6 +133,7 @@ class DestinyIslandController extends Controller
          return redirect()->route('island.view');
     }
     
+    // this function will get the $id of selected data and do delete operation
     public function delete($id){
         $islandData = DestinyIsland::find($id);
         $islandData->delete();
@@ -133,7 +141,7 @@ class DestinyIslandController extends Controller
         return redirect()->route('island.view');
     }
 
-
+    // this function will get $id of selected data and view it in modal
     public function show($id){
         $islandData = DestinyIsland::find($id);
         return response()->json($islandData);
