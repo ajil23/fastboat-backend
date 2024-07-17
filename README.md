@@ -7,6 +7,13 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## About
+We have developed a system that combines Laravel as the back end & React JS on the front end, this system was built as a place to purchase fast boat tickets. We built this system as our responsibility while running the internship program at PT. Traviora Global Wisata and we are very proud to have completed this system with good results.
+The team that built this system includes:
+1. Azril Praya Prasetyo (Back end developer & API)
+2. Erna Ainul Khasanah (Back end developer)
+3. Nur Lailatul Hidayah (Front end)
+
 ## Installing
 
 ```
