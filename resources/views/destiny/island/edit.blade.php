@@ -89,20 +89,20 @@
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_image1">Image 1</label>
-                                                    <input id="isd_image1" name="isd_image1" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image1}}" required>
+                                                    <input id="isd_image1" name="isd_image1" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image1}}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_image2">Image 2</label>
-                                                    <input id="isd_image2" name="isd_image2" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image2}}" required>
+                                                    <input id="isd_image2" name="isd_image2" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image2}}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_image3">Image 3</label>
-                                                    <input id="isd_image3" name="isd_image3" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image3}}" required>
+                                                    <input id="isd_image3" name="isd_image3" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image3}}">
                                                 </div>
                                             </div>
                                         </div>

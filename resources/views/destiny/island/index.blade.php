@@ -45,13 +45,13 @@
                                             <td>{{$item->isd_name}}</td>
                                             <td>{{$item->isd_code}}</td>
                                             <td>
-                                                    <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}" target="_blank" >
-                                                        <b>See</b>
+                                                    <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}"  class="badge bg-success-subtle text-success  font-size-12" target="blank" >
+                                                    See<i class="mdi mdi-arrow-right"></i></a>
                                                     </td>
                                             <td>{{$item->isd_slug_en}}</td>
                                             <td>{{$item->isd_slug_idn}}</span></td>
                                             <td>
-                                                <div class="dropdown">
+                                                <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
