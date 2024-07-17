@@ -63,7 +63,7 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_map">Maps</label>
-                                                    <input id="prt_map" name="prt_map" placeholder="longitude.latitude" type="text" class="form-control" value="{{$portEdit->prt_map}}" required>
+                                                    <input id="prt_map" name="prt_map" placeholder="Longitude,Latitude" type="text" class="form-control" value="{{$portEdit->prt_map}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -106,7 +106,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Island Image</h5>
+                                                <h5 class="font-size-16 mb-1">Port Image</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -217,7 +217,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_description_en">Description (en)</label>
-                                                    <textarea class="form-control" id="prt_description_en" name="prt_description_en" placeholder="Enter Description" rows="4" value="{{$portEdit->prt_description_e}}"></textarea>
+                                                    <textarea class="form-control" id="prt_description_en" name="prt_description_en" placeholder="Enter Description" rows="4">{{$portEdit->prt_description_en}}</textarea>
                                                 </div>
 
                                             </div>
@@ -225,7 +225,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_description_idn">Description (idn)</label>
-                                                    <textarea class="form-control" id="prt_description_idn" name="prt_description_idn" placeholder="Enter Description" rows="4" value="{{$portEdit->prt_description_idn}}"></textarea>
+                                                    <textarea class="form-control" id="prt_description_idn" name="prt_description_idn" placeholder="Enter Description" rows="4">{{$portEdit->prt_description_idn}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -234,7 +234,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="prt_content_en" name="prt_content_en" placeholder="Enter Content" rows="4" value="{{$portEdit->prt_content_en}}"></textarea>
+                                                    <textarea class="form-control" id="prt-content-en" name="prt_content_en" placeholder="Enter Content" rows="4">{{$portEdit->prt_content_en}}</textarea>
                                                 </div>
 
                                             </div>
@@ -242,7 +242,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_content_idn">Content (idn)</label>
-                                                    <textarea class="form-control" id="prt_content_idn" name="prt_content_idn" placeholder="Enter Description" rows="4" value="{{$portEdit->prt_content_idn}}"></textarea>
+                                                    <textarea class="form-control" id="prt-content-idn" name="prt_content_idn" placeholder="Enter Description" rows="4" >{{$portEdit->prt_content_idn}}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -270,3 +270,51 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
+@section('script')
+<script type="importmap">
+            {
+                "imports": {
+                    "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
+                    "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
+                }
+            }
+        </script>
+
+        <script type="module">
+            import {
+                ClassicEditor,
+                Essentials,
+                Bold,
+                Italic,
+                Font,
+                Paragraph
+            } from 'ckeditor5';
+
+            ClassicEditor
+                .create( document.querySelector( '#prt-content-en' ), {
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    }
+                } )
+                .then( /* ... */ )
+                .catch( /* ... */ );
+
+            ClassicEditor
+                .create( document.querySelector( '#prt-content-idn' ), {
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    }
+                } )
+                .then( /* ... */ )
+                .catch( /* ... */ );
+        </script>
+@endsection
