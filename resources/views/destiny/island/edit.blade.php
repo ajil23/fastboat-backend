@@ -51,7 +51,7 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_map">Maps</label>
-                                                    <input id="isd_map" name="isd_map" placeholder="Longitude:Latitude" type="text" class="form-control" value="{{$islandEdit->isd_map}}" required>
+                                                    <input id="isd_map" name="isd_map" placeholder="Longitude,Latitude" type="text" class="form-control" value="{{$islandEdit->isd_map}}" required>
                                                     </input>
                                                 </div>
                                             </div>
@@ -183,7 +183,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_description_en">Description (en)</label>
-                                                    <textarea class="form-control" id="isd_description_en" name="isd_description_en" placeholder="Enter Description" rows="4" value="{{$islandEdit->isd_description_en}}"></textarea>
+                                                    <textarea class="form-control" id="isd_description_en" name="isd_description_en" placeholder="Enter Description" rows="4">{{$islandEdit->isd_description_en}}</textarea>
                                                 </div>
 
                                             </div>
@@ -191,7 +191,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_description_idn">Description (idn)</label>
-                                                    <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4" value="{{$islandEdit->isd_description_idn}}"></textarea>
+                                                    <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4">{{$islandEdit->isd_description_idn}}</textarea>
                                                 </div>
                                             </div>
                                         </div> 
@@ -200,7 +200,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="isd_content_en" name="isd_content_en" placeholder="Enter Content" rows="4" value="{{$islandEdit->isd_content_en}}"></textarea>
+                                                    <textarea class="form-control" id="isd-content-en" name="isd_content_en" placeholder="Enter Content" rows="4">{{$islandEdit->isd_content_en}}</textarea>
                                                 </div>
 
                                             </div>
@@ -208,7 +208,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_content_idn">Content (idn)</label>
-                                                    <textarea class="form-control" id="isd_content_idn" name="isd_content_idn" placeholder="Enter Description" rows="4" value="{{$islandEdit->isd_content_idn}}"></textarea>
+                                                    <textarea class="form-control" id="isd-content-idn" name="isd_content_idn" placeholder="Enter Description" rows="4">{{$islandEdit->isd_content_idn}}</textarea>
                                                 </div>
                                             </div>
                                         </div> 
@@ -236,3 +236,52 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
+
+@section('script')
+<script type="importmap">
+            {
+                "imports": {
+                    "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
+                    "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
+                }
+            }
+        </script>
+
+        <script type="module">
+            import {
+                ClassicEditor,
+                Essentials,
+                Bold,
+                Italic,
+                Font,
+                Paragraph
+            } from 'ckeditor5';
+
+            ClassicEditor
+                .create( document.querySelector( '#isd-content-en' ), {
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    }
+                } )
+                .then( /* ... */ )
+                .catch( /* ... */ );
+
+            ClassicEditor
+                .create( document.querySelector( '#isd-content-idn' ), {
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    toolbar: {
+                        items: [
+                            'undo', 'redo', '|', 'bold', 'italic', '|',
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                        ]
+                    }
+                } )
+                .then( /* ... */ )
+                .catch( /* ... */ );
+        </script>
+@endsection
