@@ -45,14 +45,14 @@
                 <li class="menu-title" data-key="t-layouts">Booking Data</li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{route('data.view')}}">
                         <i class="bx bx-receipt icon nav-icon"></i>
                         <span class="menu-item" data-key="t-horizontal">Booking Data</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{route('trash.view')}}">
                         <i class="bx bx-trash icon nav-icon"></i>
                         <span class="menu-item" data-key="t-horizontal">Booking Trash</span>
                     </a>

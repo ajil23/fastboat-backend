@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookingDataController;
+use App\Http\Controllers\BookingTrashController;
 use App\Http\Controllers\DestinyIslandController;
 use App\Http\Controllers\DestinyPortController;
 use App\Http\Controllers\MitraCompanyController;
@@ -32,6 +34,27 @@ Route::middleware([
     'auth:sanctum',
 ])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    Route::prefix('booking')->group(function () {
+        // booking data routes
+        Route::get('/company', [BookingDataController::class, 'index'])->name('data.view');
+        Route::get('/data/add', [BookingDataController::class, 'add'])->name('data.add');
+        Route::post('/data/store', [BookingDataController::class, 'store'])->name('data.store');
+        Route::get('/data/edit/{id}', [BookingDataController::class, 'edit'])->name('data.edit');
+        Route::post('/data/update/{id}', [BookingDataController::class, 'update'])->name('data.update');
+        Route::get('/data/delete/{id}', [BookingDataController::class, 'delete'])->name('data.delete');
+        Route::get('/data/{id}', [BookingDataController::class, 'show'])->name('data.show');
+
+        // partner fast boat routes
+        Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
+        Route::get('/trash/add', [BookingTrashController::class, 'add'])->name('trash.add');
+        Route::post('/trash/store', [BookingTrashController::class, 'store'])->name('trash.store');
+        Route::get('/trash/edit/{id}', [BookingTrashController::class, 'edit'])->name('trash.edit');
+        Route::post('/trash/update/{id}', [BookingTrashController::class, 'update'])->name('trash.update');
+        Route::get('/trash/delete/{id}', [BookingTrashController::class, 'delete'])->name('trash.delete');
+        Route::get('/trash/{id}', [BookingTrashController::class, 'show'])->name('trash.show');
+
+    });
 
     Route::prefix('partner')->group(function () {
         // partner company routes
