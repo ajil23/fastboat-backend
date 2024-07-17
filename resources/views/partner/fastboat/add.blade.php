@@ -200,7 +200,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_content_en">Content (en)</label>
-                                                    <textarea name="fb_content_en" id="content-en" required></textarea>
+                                                    <textarea name="fb_content_en" id="content-en"></textarea>
                                                 </div>
 
                                             </div>
@@ -208,7 +208,7 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_content_idn">Content (idn)</label>
-                                                    <textarea name="fb_content_idn" id="content-idn" required></textarea>
+                                                    <textarea name="fb_content_idn" id="content-idn"></textarea>
                                                 </div>
                                             </div>
                                         </div> 
