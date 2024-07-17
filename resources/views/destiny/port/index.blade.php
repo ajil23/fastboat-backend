@@ -48,14 +48,14 @@
                                             <td>{{$item->prt_name_idn}}</td>
                                             <td>{{$item->prt_code}}</td>
                                             <td>
-                                                <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->prt_map}}" target="_blank" >
-                                                    <b>See</b>
+                                            <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}"  class="badge bg-success-subtle text-success  font-size-12" target="blank">
+                                            See<i class="mdi mdi-arrow-right"></i></a>
                                             </td>
                                             <td>{{$item->prt_address}}</td>
                                             <td>{{$item->prt_slug_en}}</td>
                                             <td>{{$item->prt_slug_idn}}</td>
                                             <td>
-                                                <div class="dropdown">
+                                                <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
