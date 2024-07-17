@@ -12,7 +12,7 @@ We have developed a system that combines Laravel as the back end & React JS on t
 The team that built this system includes:
 1. <a href="https://github.com/ajil23">Azril Praya Prasetyo</a> (Back end developer & API)
 2. <a href="https://github.com/ernakha">Erna Ainul Khasanah</a> (Back end developer)
-3. <a href="https://github.com/NurLailatulHidayah">Nur Lailatul Hidayah</a> (Front end)
+3. <a href="https://github.com/NurLailatulHidayah">Nur Lailatul Hidayah</a> (Front end developer)
 
 ## Installing
 
