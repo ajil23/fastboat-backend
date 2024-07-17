@@ -95,8 +95,6 @@
                 <p><strong>Slug IND : </strong><span id="island-slugind"></span></p>
                 <p><strong>Description EN : </strong><span id="island-descriptionen"></span></p>
                 <p><strong>Description IND : </strong><span id="island-descriptionidn"></span></p>
-                <p><strong>Content EN : </strong><span id="island-contenten"></span></p>
-                <p><strong>Content IND : </strong><span id="island-contentidn"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
@@ -126,8 +124,6 @@
                     $('#island-slugind').text(data.isd_slug_idn);
                     $('#island-descriptionen').text(data.isd_description_en);
                     $('#island-descriptionidn').text(data.isd_description_idn);
-                    $('#island-contenten').text(data.isd_content_en);
-                    $('#island-contentidn').text(data.isd_content_idn);
             })
         })
     });

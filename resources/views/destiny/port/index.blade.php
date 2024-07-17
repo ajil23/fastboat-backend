@@ -100,8 +100,6 @@
                 <p><strong>Slug IND : </strong><span id="port-slugind"></span></p>
                 <p><strong>Description EN : </strong><span id="port-descriptionen"></span></p>
                 <p><strong>Description IND : </strong><span id="port-descriptionidn"></span></p>
-                <p><strong>Content EN : </strong><span id="port-contenten"></span></p>
-                <p><strong>Content IND : </strong><span id="port-contentidn"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
@@ -132,8 +130,6 @@
                     $('#port-slugind').text(data.prt_slug_idn);
                     $('#port-descriptionen').text(data.prt_description_en);
                     $('#port-descriptionidn').text(data.prt_description_idn);
-                    $('#port-contenten').text(data.prt_content_en);
-                    $('#port-contentidn').text(data.prt_content_idn);
             })
         })
     });
