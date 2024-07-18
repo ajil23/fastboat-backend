@@ -90,6 +90,23 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="prt_content_en">Content (en)</label>
+                                                    <textarea class="form-control" id="prt-content-en" name="prt_content_en" placeholder="Enter Content" rows="4"></textarea>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="prt_content_idn">Content (idn)</label>
+                                                    <textarea class="form-control" id="prt-content-idn" name="prt_content_idn" placeholder="Enter Description" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -226,23 +243,6 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_description_idn">Description (idn)</label>
                                                     <textarea class="form-control" id="prt_description_idn" name="prt_description_idn" placeholder="Enter Description" rows="4"></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="prt_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="prt-content-en" name="prt_content_en" placeholder="Enter Content" rows="4"></textarea>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="prt_content_idn">Content (idn)</label>
-                                                    <textarea class="form-control" id="prt-content-idn" name="prt_content_idn" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
                                             </div>
                                         </div>

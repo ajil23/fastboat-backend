@@ -56,6 +56,23 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_content_en">Content (en)</label>
+                                                    <textarea class="form-control" id="isd-content-en" name="isd_content_en" placeholder="Enter Content" rows="4"></textarea>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_content_idn">Content (idn)</label>
+                                                    <textarea class="form-control" id="isd-content-idn" name="isd_content_idn" placeholder="Enter Content" rows="4"></textarea>
+                                                </div>
+                                            </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -195,23 +212,6 @@
                                                 </div>
                                             </div>
                                         </div> 
-                                        
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="isd_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="isd-content-en" name="isd_content_en" placeholder="Enter Content" rows="4"></textarea>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="isd_content_idn">Content (idn)</label>
-                                                    <textarea class="form-control" id="isd-content-idn" name="isd_content_idn" placeholder="Enter Description" rows="4"></textarea>
-                                                </div>
-                                            </div>
-                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -255,17 +255,54 @@
                 Bold,
                 Italic,
                 Font,
-                Paragraph
+                Paragraph,
+                Table, 
+                TableToolbar, TableColumnResize, TableCaption,
+                Strikethrough, Subscript, Superscript, Underline, Code,
+                Alignment,  Indent, IndentBlock, BlockQuote, Heading,
+                Image,
+                ImageCaption,
+                ImageResize,
+                ImageStyle,
+                ImageToolbar, ImageUpload,
+                LinkImage, SpecialCharacters, SpecialCharactersEssentials,
+                SourceEditing, List, HorizontalLine
             } from 'ckeditor5';
 
             ClassicEditor
                 .create( document.querySelector( '#isd-content-en' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar, TableColumnResize, TableCaption, Strikethrough, Underline,
+                                Alignment,  Indent, IndentBlock, BlockQuote, Heading, SourceEditing, List,
+                                Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload, SpecialCharacters, SpecialCharactersEssentials,
+                                HorizontalLine
+                      ],
                     toolbar: {
                         items: [
-                            'undo', 'redo', '|', 'bold', 'italic', '|',
-                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                            'undo', 'redo', 'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
+                            'fontFamily', 'fontColor', 'fontBackgroundColor', 
+                            'insertTable', 'alignment', 'outdent', 'indent', 'insertImage', 'blockQuote', 'specialCharacters',
+                            'bulletedList', 'numberedList', 'horizontalLine',
+                            'sourceEditing',
                         ]
+                    },
+                    table: {
+                        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+                    },
+                    image: {
+                        toolbar: [ 
+                            'imageStyle:block',
+                            'imageStyle:side',
+                            '|',
+                            'toggleImageCaption',
+                            'imageTextAlternative',
+                            '|',
+                            'linkImage' 
+                        ],
+                        insert: {
+                            // If this setting is omitted, the editor defaults to 'block'.
+                            // See explanation below.
+                            type: 'auto'
+                        }
                     }
                 } )
                 .then( /* ... */ )
@@ -273,12 +310,16 @@
 
             ClassicEditor
                 .create( document.querySelector( '#isd-content-idn' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
+                    plugins: [ Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar ],
                     toolbar: {
                         items: [
                             'undo', 'redo', '|', 'bold', 'italic', '|',
-                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor',
+                            'insertTable'
                         ]
+                    },
+                    table: {
+                        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
                     }
                 } )
                 .then( /* ... */ )

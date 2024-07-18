@@ -56,6 +56,23 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_content_en">Content (en)</label>
+                                                    <textarea class="form-control" id="isd-content-en" name="isd_content_en" placeholder="Enter Content" rows="4">{{$islandEdit->isd_content_en}}</textarea>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="isd_content_idn">Content (idn)</label>
+                                                    <textarea class="form-control" id="isd-content-idn" name="isd_content_idn" placeholder="Enter Description" rows="4">{{$islandEdit->isd_content_idn}}</textarea>
+                                                </div>
+                                            </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -192,23 +209,6 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_description_idn">Description (idn)</label>
                                                     <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4">{{$islandEdit->isd_description_idn}}</textarea>
-                                                </div>
-                                            </div>
-                                        </div> 
-                                        
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="isd_content_en">Content (en)</label>
-                                                    <textarea class="form-control" id="isd-content-en" name="isd_content_en" placeholder="Enter Content" rows="4">{{$islandEdit->isd_content_en}}</textarea>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="isd_content_idn">Content (idn)</label>
-                                                    <textarea class="form-control" id="isd-content-idn" name="isd_content_idn" placeholder="Enter Description" rows="4">{{$islandEdit->isd_content_idn}}</textarea>
                                                 </div>
                                             </div>
                                         </div> 
