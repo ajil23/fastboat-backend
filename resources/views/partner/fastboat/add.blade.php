@@ -36,27 +36,51 @@
     
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="fb_name">Fast Boat Name</label>
-                                                <input id="fb_name" name="fb_name" placeholder="Enter Fast Boat Name" type="text" class="form-control" required>
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_name">Fast Boat Name</label>
+                                                    <input id="fb_name" name="fb_name" placeholder="Enter Fast Boat Name" type="text" class="form-control" required>
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="fb_company" class="form-label">Company</label>
-                                                    <select class="form-control" data-trigger name="fb_company" id="fb_company" required>
-                                                        <option value="">Select Fast Boat Company</option>
-                                                        @foreach ($company as $item)
-                                                            <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
-                                                        @endforeach
-                                                    </select>
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label for="fb_company" class="form-label">Company</label>
+                                                        <select class="form-control" data-trigger name="fb_company" id="fb_company" required>
+                                                            <option value="">Select Fast Boat Company</option>
+                                                            @foreach ($company as $item)
+                                                                <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
-                                                <label for="fb_status" class="form-label">Status</label>
-                                                    <select class="form-control" data-trigger name="fb_status" id="fb_status" required>
-                                                        <option value="">Select</option>
-                                                        <option value="enable">Enable</option>
-                                                        <option value="disable">Disable</option>
-                                                    </select>
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label for="fb_status" class="form-label">Status</label>
+                                                        <select class="form-control" data-trigger name="fb_status" id="fb_status" required>
+                                                            <option value="">Select</option>
+                                                            <option value="enable">Enable</option>
+                                                            <option value="disable">Disable</option>
+                                                        </select>
+                                                </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_content_en">Content (en)</label>
+                                                    <textarea name="fb_content_en" id="content-en"></textarea>
+                                                </div>
+
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_content_idn">Content (idn)</label>
+                                                    <textarea name="fb_content_idn" id="content-idn"></textarea>
+                                                </div>
+                                            </div>
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -193,22 +217,6 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_description_idn">Description (idn)</label>
                                                     <textarea class="form-control" id="fb_description_idn" name="fb_description_idn" placeholder="Enter Description" required></textarea>
-                                                </div>
-                                            </div>
-                                        </div> 
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_content_en">Content (en)</label>
-                                                    <textarea name="fb_content_en" id="content-en"></textarea>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_content_idn">Content (idn)</label>
-                                                    <textarea name="fb_content_idn" id="content-idn"></textarea>
                                                 </div>
                                             </div>
                                         </div> 
