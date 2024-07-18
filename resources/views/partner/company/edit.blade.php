@@ -106,7 +106,7 @@
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="cpn_address"> Address</label>
-                                                <textarea class="form-control" name="cpn_address" id="cpn_address" cols="30" rows="10" value="{{$companyEdit->cpn_address}}"></textarea>
+                                                <textarea class="form-control" name="cpn_address" id="cpn_address" cols="30" rows="10">{{$companyEdit->cpn_address}}</textarea>
                                             </div>
                                     </div>
                                 </div>
@@ -137,8 +137,12 @@
                                 <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
+                                            <center>
+                                                <img class="rounded me-2" src="" id="previewImage" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                            </center>
+                                            <br>
                                             <label class="form-label" for="cpn_logo">Logo</label>
-                                            <input id="cpn_logo" name="cpn_logo" type="file" accept="image/*" class="form-control" value="{{$companyEdit->cpn_logo}}">
+                                            <input id="cpn_logo" name="cpn_logo" type="file" accept="image/*" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -164,4 +168,25 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
+
+@section('script')
+<script>
+    const fileInput = document.querySelector('input[name="cpn_logo"]');
+    const previewImage = document.getElementById('previewImage');
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 @endsection
