@@ -33,48 +33,42 @@
                     </a>
                 </li>
 
-                <li class="menu-title" data-key="t-applications">Product</li>
-
-                <li>
-                    <a href="#">
-                        <i class="bx bx-anchor icon nav-icon"></i>
-                        <span class="menu-item" data-key="t-email">Fast Boat</span>
-                    </a>
-                </li>
-
                 <li class="menu-title" data-key="t-layouts">Booking Data</li>
 
                 <li>
-                    <a href="{{route('data.view')}}">
+                    <a href="javascript: void(0);" class="has-arrow">
                         <i class="bx bx-receipt icon nav-icon"></i>
-                        <span class="menu-item" data-key="t-horizontal">Booking Data</span>
+                        <span class="menu-item" data-key="t-invoices">Booking Data</span>
                     </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="#" data-key="t-invoice-list">Fast Boat</a></li>
+                    </ul>
                 </li>
 
                 <li>
-                    <a href="{{route('trash.view')}}">
-                        <i class="bx bx-trash icon nav-icon"></i>
-                        <span class="menu-item" data-key="t-horizontal">Booking Trash</span>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-receipt icon nav-icon"></i>
+                        <span class="menu-item">Booking Trash</span>
                     </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="#">Fast Boat</a></li>
+                    </ul>
                 </li>
 
-                <li class="menu-title" data-key="t-components">Partner</li>
+                <li class="menu-title">Schedule & Data</li>
 
                 <li>
-                    <a href="{{route ('company.view')}}">
-                        <i class="bx bx-building icon nav-icon"></i>
-                        <span class="menu-item" data-key="t-ui-elements">Company</span>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="bx bx-anchor icon nav-icon"></i>
+                        <span class="menu-item">Fast Boat</span>
                     </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route ('fastboat.view')}}">Fast Boat</a></li>
+                        <li><a href="{{route ('company.view')}}">Company</a></li>
+                    </ul>
                 </li>
 
-                <li>
-                    <a href="{{route ('fastboat.view')}}">
-                        <i class="bx bx-up-arrow icon nav-icon"></i>
-                        <span class="menu-item" data-key="t-forms">Fast Boat</span>
-                    </a>
-                </li>
-
-                <li class="menu-title" data-key="t-components">Destiny</li>
+                <li class="menu-title" data-key="t-components">Master Data</li>
 
                 <li>
                     <a href="{{route ('island.view')}}">
