@@ -35,29 +35,8 @@ Route::middleware([
 ])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-    Route::prefix('booking')->group(function () {
-        // booking data routes
-        Route::get('/company', [BookingDataController::class, 'index'])->name('data.view');
-        Route::get('/data/add', [BookingDataController::class, 'add'])->name('data.add');
-        Route::post('/data/store', [BookingDataController::class, 'store'])->name('data.store');
-        Route::get('/data/edit/{id}', [BookingDataController::class, 'edit'])->name('data.edit');
-        Route::post('/data/update/{id}', [BookingDataController::class, 'update'])->name('data.update');
-        Route::get('/data/delete/{id}', [BookingDataController::class, 'delete'])->name('data.delete');
-        Route::get('/data/{id}', [BookingDataController::class, 'show'])->name('data.show');
-
-        // partner fast boat routes
-        Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
-        Route::get('/trash/add', [BookingTrashController::class, 'add'])->name('trash.add');
-        Route::post('/trash/store', [BookingTrashController::class, 'store'])->name('trash.store');
-        Route::get('/trash/edit/{id}', [BookingTrashController::class, 'edit'])->name('trash.edit');
-        Route::post('/trash/update/{id}', [BookingTrashController::class, 'update'])->name('trash.update');
-        Route::get('/trash/delete/{id}', [BookingTrashController::class, 'delete'])->name('trash.delete');
-        Route::get('/trash/{id}', [BookingTrashController::class, 'show'])->name('trash.show');
-
-    });
-
-    Route::prefix('partner')->group(function () {
-        // partner company routes
+    Route::prefix('data')->group(function () {
+        // company routes
         Route::get('/company', [PartnerCompanyController::class, 'index'])->name('company.view');
         Route::get('/company/add', [PartnerCompanyController::class, 'add'])->name('company.add');
         Route::post('/company/store', [PartnerCompanyController::class, 'store'])->name('company.store');
@@ -66,7 +45,7 @@ Route::middleware([
         Route::get('/company/delete/{id}', [PartnerCompanyController::class, 'delete'])->name('company.delete');
         Route::get('/company/{id}', [PartnerCompanyController::class, 'show'])->name('company.show');
 
-        // partner fast boat routes
+        // fast boat routes
         Route::get('/fastboat', [PartnerFastboatController::class, 'index'])->name('fastboat.view');
         Route::get('/fastboat/add', [PartnerFastboatController::class, 'add'])->name('fastboat.add');
         Route::post('/fastboat/store', [PartnerFastboatController::class, 'store'])->name('fastboat.store');
@@ -76,8 +55,8 @@ Route::middleware([
         Route::get('/fastboat/{id}', [PartnerFastboatController::class, 'show'])->name('fastboat.show');
 
     });
-    Route::prefix('destiny')->group(function () {
-        // destiny island routes
+    Route::prefix('master')->group(function () {
+        // master island routes
         Route::get('/island', [DestinyIslandController::class, 'index'])->name('island.view');
         Route::get('/island/add', [DestinyIslandController::class, 'add'])->name('island.add');
         Route::post('/island/store', [DestinyIslandController::class, 'store'])->name('island.store');
@@ -86,7 +65,7 @@ Route::middleware([
         Route::get('/island/delete/{id}', [DestinyIslandController::class, 'delete'])->name('island.delete');
         Route::get('/island/{id}', [DestinyIslandController::class, 'show'])->name('island.show');
 
-        // destiny port routes
+        // master port routes
         Route::get('/port', [DestinyPortController::class, 'index'])->name('port.view');
         Route::get('/port/add', [DestinyPortController::class, 'add'])->name('port.add');
         Route::post('/port/store', [DestinyPortController::class, 'store'])->name('port.store');
