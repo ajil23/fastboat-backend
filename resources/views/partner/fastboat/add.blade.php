@@ -111,8 +111,11 @@
                                     <div class="p-4 border-top">
                                         <div class="row">
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage1" data-holder-rendered="true" style="height: 100px;">
+                                                    </center>
+                                                    <br>
                                                     <label class="form-label" for="fb_image1">Image 1</label>
                                                     <input id="fb_image1" name="fb_image1" type="file" accept="image/*" class="form-control" required>
                                                 </div>
@@ -120,12 +123,20 @@
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage2" data-holder-rendered="true" style="height: 100px;">
+                                                    </center>
+                                                    <br>
                                                     <label class="form-label" for="fb_image2">Image 2</label>
                                                     <input id="fb_image2" name="fb_image2" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage3" data-holder-rendered="true" style="height: 100px;">
+                                                    </center>
+                                                    <br>
                                                     <label class="form-label" for="fb_image3">Image 3</label>
                                                     <input id="fb_image3" name="fb_image3" type="file" accept="image/*" class="form-control" required>
                                                 </div>
@@ -135,19 +146,30 @@
                                             <div class="col-lg-4">
 
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage4" data-holder-rendered="true" style="height: 100px;">
+                                                    </center>
+                                                    <br>
                                                     <label class="form-label" for="fb_image4">Image 4</label>
-                                                    <input id="fb_image4" name="fb_image4" type="file" accept="image/*" class="form-control">
+                                                    <input id="fb_image4" name="fb_image4" type="file" accept="image/*" class="form-control">                                                  
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage5" data-holder-rendered="true" style="height: 100px;">
+                                                    </center>
+                                                    <br>
                                                     <label class="form-label" for="fb_image5">Image 5</label>
-                                                    <input id="fb_image5" name="fb_image5" type="file" accept="image/*" class="form-control">
+                                                    <input id="fb_image5" name="fb_image5" type="file" accept="image/*" class="form-control">                                                  
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage6" data-holder-rendered="true" style="height: 100px;">
+                                                    </center>
+                                                    <br>
                                                     <label class="form-label" for="fb_image6">Image 6</label>
                                                     <input id="fb_image6" name="fb_image6" type="file" accept="image/*" class="form-control">
                                                 </div>
@@ -290,5 +312,110 @@ import {
             } )
             .then( /* ... */ )
             .catch( /* ... */ );
+</script>
+
+{{-- image preview --}}
+<script>
+    const fileInput1 = document.querySelector('input[name="fb_image1"]');
+    const previewImage1 = document.getElementById('previewImage1');
+
+    fileInput1.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage1.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    const fileInput2 = document.querySelector('input[name="fb_image2"]');
+    const previewImage2 = document.getElementById('previewImage2');
+
+    fileInput2.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage2.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    const fileInput3 = document.querySelector('input[name="fb_image3"]');
+    const previewImage3 = document.getElementById('previewImage3');
+
+    fileInput3.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage3.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    const fileInput4 = document.querySelector('input[name="fb_image4"]');
+    const previewImage4 = document.getElementById('previewImage4');
+
+    fileInput4.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage4.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    const fileInput5 = document.querySelector('input[name="fb_image5"]');
+    const previewImage5 = document.getElementById('previewImage5');
+
+    fileInput5.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage5.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    const fileInput6 = document.querySelector('input[name="fb_image6"]');
+    const previewImage6 = document.getElementById('previewImage6');
+
+    fileInput6.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage6.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
 </script>
 @endsection

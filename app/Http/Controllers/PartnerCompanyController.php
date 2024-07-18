@@ -59,7 +59,8 @@ class PartnerCompanyController extends Controller
     // this function will get the $id of the selected data and then view the company edit form
     public function edit($id){
         $companyEdit = PartnerCompany::find($id);
-        return view('partner.company.edit', compact('companyEdit'));
+        $logoInfo = $companyEdit->cpn_logo;
+        return view('partner.company.edit', compact('companyEdit', 'logoInfo'));
     }
 
     // this function will get the $id of the selected data and request data from input in company edit from
@@ -78,6 +79,7 @@ class PartnerCompanyController extends Controller
          $companyData -> cpn_type = $request->cpn_type;
          $companyData -> cpn_updated_by = Auth()->id();
          if ($request->hasFile('cpn_logo')) {
+            Storage::delete($companyData->cpn_logo);
              $companyLogo = $request->file('cpn_logo')->store('cpn_logo');
              $companyData->cpn_logo = $companyLogo;
          }
