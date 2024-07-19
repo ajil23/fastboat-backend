@@ -78,8 +78,8 @@
                                                         <label for="cpn_email_status" class="form-label"> Email Status</label>
                                                         <select class="form-control" data-trigger name="cpn_email_status" id="cpn_email_status">
                                                             <option selected="{{$companyEdit->cpn_email_status}}">{{$companyEdit->cpn_email_status}}</option>
-                                                            <option value="enable">Enable</option>
-                                                            <option value="disable">Disable</option>
+                                                            <option value="1">Enable</option>
+                                                            <option value="0">Disable</option>
                                                         </select>
                                                     </div>
                                                 </div>
@@ -87,8 +87,8 @@
                                                     <label for="cpn_status" class="form-label">Company Status</label>
                                                         <select class="form-control" data-trigger name="cpn_status" id="cpn_status" required>
                                                             <option selected="{{$companyEdit->cpn_status}}">{{$companyEdit->cpn_status}}</option>
-                                                            <option value="enable">Enable</option>
-                                                            <option value ="disable">Disable</option>
+                                                            <option value="1">Enable</option>
+                                                            <option value ="0">Disable</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-4">

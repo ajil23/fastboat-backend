@@ -26,12 +26,10 @@ class PartnerCompanyController extends Controller
         $request->validate([
             'cpn_name' => 'required',
             'cpn_email' => 'required',
-            'cpn_email_status' => 'required',
             'cpn_phone' => 'required|numeric',
             'cpn_whatsapp' => 'required|numeric',
             'cpn_logo' => 'required|image|mimes:jpeg,jpg,png|max:5120',
             'cpn_address' => 'required',
-            'cpn_status' => 'required',
             'cpn_type' => 'required',
         ]);
         
@@ -39,12 +37,10 @@ class PartnerCompanyController extends Controller
         $companyData = new PartnerCompany();
         $companyData -> cpn_name = $request->cpn_name;
         $companyData -> cpn_email = $request->cpn_email;
-        $companyData -> cpn_email_status = $request->cpn_email_status;
         $companyData -> cpn_phone = $request->cpn_phone;
         $companyData -> cpn_whatsapp = $request->cpn_whatsapp;
         $companyData -> cpn_address = $request->cpn_address;
         $companyData -> cpn_website = $request->cpn_website;
-        $companyData -> cpn_status = $request->cpn_status;
         $companyData -> cpn_type = $request->cpn_type;
         $companyData -> cpn_updated_by = Auth()->id();
         if ($request->hasFile('cpn_logo')) {
@@ -70,12 +66,10 @@ class PartnerCompanyController extends Controller
          $companyData = PartnerCompany::find($id);
          $companyData -> cpn_name = $request->cpn_name;
          $companyData -> cpn_email = $request->cpn_email;
-         $companyData -> cpn_email_status = $request->cpn_email_status;
          $companyData -> cpn_phone = $request->cpn_phone;
          $companyData -> cpn_whatsapp = $request->cpn_whatsapp;
          $companyData -> cpn_address = $request->cpn_address;
          $companyData -> cpn_website = $request->cpn_website;
-         $companyData -> cpn_status = $request->cpn_status;
          $companyData -> cpn_type = $request->cpn_type;
          $companyData -> cpn_updated_by = Auth()->id();
          if ($request->hasFile('cpn_logo')) {
@@ -100,6 +94,34 @@ class PartnerCompanyController extends Controller
     public function show($id){
         $companyData = PartnerCompany::find($id);
         return response()->json($companyData);
+    }
+
+    public function emailStatus($id){
+        $companyData = PartnerCompany::find($id);
+
+        if($companyData){
+            if($companyData -> cpn_email_status){
+                $companyData -> cpn_email_status = 0;
+            } else{
+                $companyData -> cpn_email_status = 1;
+            }
+            $companyData->save();
+        }
+        return back();
+    }
+
+    public function companyStatus($id){
+        $companyData = PartnerCompany::find($id);
+
+        if($companyData){
+            if($companyData -> cpn_status){
+                $companyData -> cpn_status = 0;
+            } else{
+                $companyData -> cpn_status = 1;
+            }
+            $companyData->save();
+        }
+        return back();
     }
     
 }

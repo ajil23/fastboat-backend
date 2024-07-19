@@ -36,7 +36,6 @@ class PartnerFastboatController extends Controller
             'fb_description_idn' => 'required',
             'fb_content_en' => 'required',
             'fb_content_idn' => 'required',
-            'fb_status' => 'required',
         ]);
 
         // Handle insert data to database
@@ -50,7 +49,6 @@ class PartnerFastboatController extends Controller
         $fastboatData -> fb_description_idn = $request->fb_description_idn;
         $fastboatData -> fb_content_en = $request->fb_content_en;
         $fastboatData -> fb_content_idn = $request->fb_content_idn;
-        $fastboatData -> fb_status = $request->fb_status;
         $fastboatData -> fb_updated_by = Auth()->id();
 
         // handle image store
@@ -104,7 +102,6 @@ class PartnerFastboatController extends Controller
         $fastboatData -> fb_description_idn = $request->fb_description_idn;
         $fastboatData -> fb_content_en = $request->fb_content_en;
         $fastboatData -> fb_content_idn = $request->fb_content_idn;
-        $fastboatData -> fb_status = $request->fb_status;
         $fastboatData -> fb_updated_by = Auth()->id();
 
         // handle image store
@@ -149,5 +146,19 @@ class PartnerFastboatController extends Controller
     public function show($id){
         $fastboatData = PartnerFastboat::find($id);
         return response()->json($fastboatData);
+    }
+
+    public function status($id){
+        $fastboatData = PartnerFastboat::find($id);
+
+        if($fastboatData){
+            if($fastboatData -> fb_status){
+                $fastboatData -> fb_status = 0;
+            } else{
+                $fastboatData -> fb_status = 1;
+            }
+            $fastboatData->save();
+        }
+        return back();
     }
 }

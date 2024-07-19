@@ -37,13 +37,13 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_name">Fast Boat Name</label>
                                                     <input id="fb_name" name="fb_name" placeholder="Enter Fast Boat Name" type="text" class="form-control" value="{{$fastboatEdit->fb_name}}">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="fb_company" class="form-label">Company</label>
                                                         <select class="form-control" data-trigger name="fb_company" id="fb_company">
@@ -51,16 +51,6 @@
                                                             @foreach ($company as $item)
                                                                 <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
                                                             @endforeach
-                                                        </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label for="fb_status" class="form-label">Status</label>
-                                                        <select class="form-control" data-trigger name="fb_status" id="fb_status">
-                                                            <option selected="{{$fastboatEdit->fb_status}}">{{$fastboatEdit->fb_status}}</option>
-                                                            <option value="enable">Enable</option>
-                                                            <option value="disable">Disable</option>
                                                         </select>
                                                 </div>
                                             </div>
