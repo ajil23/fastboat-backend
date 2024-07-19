@@ -47,7 +47,7 @@
                                                 {{$item->partnercompany->cpn_name}}
                                             </td>
                                             <td>
-                                                <a href="{{route('fastboat.status', $item->fb_id)}}" class="badge rounded-pill bg-{{$item->fb_status ? 'success' : 'danger'}}">
+                                                <a href="{{route('fastboat.status', $item->fb_id)}}" class="badge rounded-pill bg-{{$item->fb_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fb_status ? 'check-decagram' : 'alert-decagram'}}"></i>
                                                     {{$item->fb_status ? 'Enable' : 'Disable'}}
                                                 </a>
                                             </td>

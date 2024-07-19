@@ -55,7 +55,7 @@
                                                     <span class="badge bg-danger">Disable</span>
                                                     @endif
                                                 @endif --}}
-                                                <a href="{{route('company.emailStatus', $item->cpn_id)}}" class="badge rounded-pill bg-{{$item->cpn_email_status ? 'success' : 'danger'}}">
+                                                <a href="{{route('company.emailStatus', $item->cpn_id)}}" class="badge rounded-pill bg-{{$item->cpn_email_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->cpn_email_status ? 'check-decagram' : 'alert-decagram'}}"></i>
                                                     {{$item->cpn_email_status ? 'Enable' : 'Disable'}}
                                                 </a>
                                             </td>
@@ -68,7 +68,7 @@
                                                 {{$item->cpn_address}}
                                             </td>
                                             <td>
-                                                <a href="{{route('company.status', $item->cpn_id)}}" class="badge rounded-pill bg-{{$item->cpn_status ? 'success' : 'danger'}}">
+                                                <a href="{{route('company.status', $item->cpn_id)}}" class="badge rounded-pill bg-{{$item->cpn_status ? 'success' : 'danger'}}" ><i class="mdi mdi-{{$item->cpn_status ? 'check-decagram' : 'alert-decagram'}}"></i>
                                                     {{$item->cpn_status ? 'Enable' : 'Disable'}}
                                                 </a>
                                             </td>
