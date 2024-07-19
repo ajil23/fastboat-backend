@@ -37,16 +37,28 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                             <div class="row">
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_name"> Name</label>
                                                         <input id="cpn_name" name="cpn_name" placeholder="Enter Company Name" type="text" class="form-control" required>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_website"> Website</label>
                                                         <input id="cpn_website" name="cpn_website" type="text" class="form-control" placeholder="Enter Company Website (optional)">
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4">
+                                                    <div class="mb-3">
+                                                        <label for="cpn_type" class="form-label"> Type</label>
+                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
+                                                            <option value="">Select</option>
+                                                            <option value="fast_boat">Fast Boat</option>
+                                                            <option value="car_transfer">Car Transfer</option>
+                                                            <option value="yacht">Yacht</option>
+                                                            <option value="tour">Tour</option>
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -71,16 +83,6 @@
                                                         <input id="cpn_whatsapp" name="cpn_whatsapp" type="text" class="form-control" placeholder="Enter Company Whatsapp Number (62)" required>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="cpn_type" class="form-label"> Type</label>
-                                                <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                    <option value="">Select</option>
-                                                    <option value="fast_boat">Fast Boat</option>
-                                                    <option value="car_transfer">Car Transfer</option>
-                                                    <option value="yacht">Yacht</option>
-                                                    <option value="tour">Tour</option>
-                                                </select>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="cpn_address"> Address</label>

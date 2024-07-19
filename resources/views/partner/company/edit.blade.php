@@ -37,19 +37,30 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="cpn_name">Name</label>
                                                     <input id="cpn_name" name="cpn_name" placeholder="Enter Company Name" type="text" class="form-control" value="{{$companyEdit->cpn_name}}">
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="cpn_website"> Website</label>
                                                     <input id="cpn_website" name="cpn_website" type="text" class="form-control" placeholder="Enter Company Website (optional)" value="{{$companyEdit->cpn_website}}">
                                                 </div>
                                             </div>
-                                        </div>
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label for="cpn_type" class="form-label"> Type</label>
+                                                    <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
+                                                        <option selected="{{$companyEdit->cpn_type}}">{{$companyEdit->cpn_type}}</option>
+                                                        <option value="fast_boat">Fast Boat</option>
+                                                        <option value="car_transfer">Car Transfer</option>
+                                                        <option value="yacht">Yacht</option>
+                                                        <option value="tour">Tour</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-lg-4">
     
@@ -72,37 +83,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <div class="mb-3">
-                                                        <label for="cpn_email_status" class="form-label"> Email Status</label>
-                                                        <select class="form-control" data-trigger name="cpn_email_status" id="cpn_email_status">
-                                                            <option selected="{{$companyEdit->cpn_email_status}}">{{$companyEdit->cpn_email_status}}</option>
-                                                            <option value="1">Enable</option>
-                                                            <option value="0">Disable</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <label for="cpn_status" class="form-label">Company Status</label>
-                                                        <select class="form-control" data-trigger name="cpn_status" id="cpn_status" required>
-                                                            <option selected="{{$companyEdit->cpn_status}}">{{$companyEdit->cpn_status}}</option>
-                                                            <option value="1">Enable</option>
-                                                            <option value ="0">Disable</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="mb-3">
-                                                        <label for="cpn_type" class="form-label"> Type</label>
-                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                            <option selected="{{$companyEdit->cpn_type}}">{{$companyEdit->cpn_type}}</option>
-                                                            <option value="fast_boat">Fast Boat</option>
-                                                            <option value="car_transfer">Car Transfer</option>
-                                                            <option value="yacht">Yacht</option>
-                                                            <option value="tour">Tour</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="cpn_address"> Address</label>
