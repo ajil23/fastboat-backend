@@ -27,7 +27,6 @@
                                             </th>
                                             <th>Name</th>
                                             <th>Email</th>
-                                            <th>Email Status</th>
                                             <th>Whatsapp</th>
                                             <th>Address</th>
                                             <th>Status</th>
@@ -47,8 +46,8 @@
                                                 </div>
                                             </td>
                                             <td class="fw-semibold">{{$item->cpn_name}}</td>
-                                            <td>{{$item->cpn_email}}</td>
                                             <td>
+                                                {{$item->cpn_email}}
                                                 @if ($item->cpn_email_status)
                                                     @if ($item->cpn_email_status == 'enable')
                                                     <span class="badge bg-success">Enable</span>
@@ -56,10 +55,15 @@
                                                     <span class="badge bg-danger">Disable</span>
                                                     @endif
                                                 @endif
-                                                
                                             </td>
-                                            <td><a href="https://wa.me/{{$item->cpn_whatsapp}}" class="badge bg-success-subtle text-success  font-size-12">Chat<i class="mdi mdi-arrow-right"></i></a></td>
-                                            <td>{{$item->cpn_address}}</td>
+                                            <td>
+                                                <a href="https://wa.me/{{$item->cpn_whatsapp}}" class="badge bg-success-subtle text-success font-size-12">
+                                                    <i class="mdi mdi-whatsapp"></i>Chat
+                                                </a>
+                                            </td>
+                                            <td>
+                                                {{$item->cpn_address}}
+                                            </td>
                                             <td>
                                                 @if ($item->cpn_status)
                                                     @if($item->cpn_status === 'enable')
@@ -69,7 +73,19 @@
                                                     @endif
                                                 @endif
                                             </td>
-                                            <td>{{$item->cpn_type}}</td>
+                                            <td>
+                                                @if ($item->cpn_type)
+                                                    @if($item->cpn_type === 'fast_boat')
+                                                        <span class="badge bg-primary-subtle text-primary font-size-12"><i class="mdi mdi-sail-boat"></i>Fast Boat</span>
+                                                    @elseif($item->cpn_type === 'car_transfer')
+                                                        <span class="badge bg-primary-subtle text-primary font-size-12"><i class="mdi mdi-car"></i>Car Transfer</span>
+                                                    @elseif($item->cpn_type === 'yacht')
+                                                        <span class="badge bg-primary-subtle text-primary font-size-12"><i class="mdi mdi-ship-wheel"></i>Yacht</span>
+                                                    @elseif($item->cpn_type === 'tour')
+                                                        <span class="badge bg-primary-subtle text-primary font-size-12"><i class="mdi mdi-hiking"></i>Tour</span>
+                                                    @endif
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">

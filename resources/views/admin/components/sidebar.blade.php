@@ -47,7 +47,7 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
-                        <i class="bx bx-receipt icon nav-icon"></i>
+                        <i class="bx bx-trash  icon nav-icon"></i>
                         <span class="menu-item">Booking Trash</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
