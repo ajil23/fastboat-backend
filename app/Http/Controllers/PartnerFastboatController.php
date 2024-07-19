@@ -148,6 +148,7 @@ class PartnerFastboatController extends Controller
         return response()->json($fastboatData);
     }
 
+    // this function will get $id of selected data and change the status
     public function status($id){
         $fastboatData = PartnerFastboat::find($id);
 
