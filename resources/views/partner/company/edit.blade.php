@@ -118,7 +118,7 @@
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
                                             <center>
-                                                <img class="rounded me-2" src="" id="previewImage" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                                <img class="rounded me-2" src="{{ asset('storage/'.$companyEdit->cpn_logo) }}" id="previewImage" data-holder-rendered="true" style="height: 100px; width:100px;">
                                             </center>
                                             <br>
                                             <label class="form-label" for="cpn_logo">Logo</label>

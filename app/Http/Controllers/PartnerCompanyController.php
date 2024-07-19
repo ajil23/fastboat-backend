@@ -96,6 +96,7 @@ class PartnerCompanyController extends Controller
         return response()->json($companyData);
     }
 
+    // this function will get $id of selected data and change the email status
     public function emailStatus($id){
         $companyData = PartnerCompany::find($id);
 
@@ -110,6 +111,7 @@ class PartnerCompanyController extends Controller
         return back();
     }
 
+    // this function will get $id of selected data and change the status
     public function companyStatus($id){
         $companyData = PartnerCompany::find($id);
 
