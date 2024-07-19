@@ -29,7 +29,7 @@ return new class extends Migration
             $table->text('fb_description_idn');
             $table->text('fb_content_en');
             $table->text('fb_content_idn');
-            $table->enum('fb_status', ['enable', 'disable'])->default('enable');
+            $table->integer('fb_status')->default(1);
             $table->string('fb_updated_by');
             $table->timestamps();
         });

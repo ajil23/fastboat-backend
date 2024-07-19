@@ -47,13 +47,9 @@
                                                 {{$item->partnercompany->cpn_name}}
                                             </td>
                                             <td>
-                                                @if ($item->fb_status)
-                                                    @if($item->fb_status === 'enable')
-                                                        <span class="badge bg-success">Enable</span>
-                                                    @else
-                                                        <span class="badge bg-danger">Disable</span>
-                                                    @endif
-                                                @endif
+                                                <a href="{{route('fastboat.status', $item->fb_id)}}" class="badge rounded-pill bg-{{$item->fb_status ? 'success' : 'danger'}}">
+                                                    {{$item->fb_status ? 'Enable' : 'Disable'}}
+                                                </a>
                                             </td>
                                             <td>
                                                 <div class="dropstart">

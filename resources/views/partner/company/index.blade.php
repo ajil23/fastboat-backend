@@ -48,13 +48,16 @@
                                             <td class="fw-semibold">{{$item->cpn_name}}</td>
                                             <td>
                                                 {{$item->cpn_email}}
-                                                @if ($item->cpn_email_status)
+                                                {{-- @if ($item->cpn_email_status)
                                                     @if ($item->cpn_email_status == 'enable')
                                                     <span class="badge bg-success">Enable</span>
                                                     @else
                                                     <span class="badge bg-danger">Disable</span>
                                                     @endif
-                                                @endif
+                                                @endif --}}
+                                                <a href="{{route('company.emailStatus', $item->cpn_id)}}" class="badge rounded-pill bg-{{$item->cpn_email_status ? 'success' : 'danger'}}">
+                                                    {{$item->cpn_email_status ? 'Enable' : 'Disable'}}
+                                                </a>
                                             </td>
                                             <td>
                                                 <a href="https://wa.me/{{$item->cpn_whatsapp}}" class="badge bg-success-subtle text-success font-size-12">
@@ -65,13 +68,9 @@
                                                 {{$item->cpn_address}}
                                             </td>
                                             <td>
-                                                @if ($item->cpn_status)
-                                                    @if($item->cpn_status === 'enable')
-                                                        <span class="badge bg-success">Enable</span>
-                                                    @else
-                                                        <span class="badge bg-danger">Disable</span>
-                                                    @endif
-                                                @endif
+                                                <a href="{{route('company.status', $item->cpn_id)}}" class="badge rounded-pill bg-{{$item->cpn_status ? 'success' : 'danger'}}">
+                                                    {{$item->cpn_status ? 'Enable' : 'Disable'}}
+                                                </a>
                                             </td>
                                             <td>
                                                 @if ($item->cpn_type)
@@ -125,12 +124,10 @@
             <div class="modal-body">
                 <p><strong>Name : </strong><span id="company-name"></span></p>
                 <p><strong>Email : </strong><span id="company-email"></span></p>
-                <p><strong>Email Status : </strong><span id="company-email-status"></span></p>
                 <p><strong>Phone : </strong><span id="company-phone"></span></p>
                 <p><strong>Whatsapp : </strong><span id="company-whatsapp"></span></p>
                 <p><strong>Address : </strong><span id="company-address"></span></p>
                 <p><strong>Website : </strong><span id="company-website"></span></p>
-                <p><strong>Status : </strong><span id="company-status"></span></p>
                 <p><strong>Type : </strong><span id="company-type"></span></p>
             </div>
             <div class="modal-footer">
@@ -153,12 +150,10 @@
                 $('#viewDetailModal').modal('show');
                     $('#company-name').text(data.cpn_name);
                     $('#company-email').text(data.cpn_email);
-                    $('#company-email-status').text(data.cpn_email_status);
                     $('#company-phone').text(data.cpn_phone);
                     $('#company-whatsapp').text(data.cpn_whatsapp);
                     $('#company-address').text(data.cpn_address);
                     $('#company-website').text(data.cpn_website);
-                    $('#company-status').text(data.cpn_status);
                     $('#company-type').text(data.cpn_type);
             })
         })

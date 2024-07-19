@@ -72,37 +72,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-lg-4">
-                                                    <div class="mb-3">
-                                                        <label for="cpn_email_status" class="form-label"> Email Status</label>
-                                                        <select class="form-control" data-trigger name="cpn_email_status" id="cpn_email_status" required>
-                                                            <option value="">Select</option>
-                                                            <option value="enable">Enable</option>
-                                                            <option selected value="disable">Disable</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <label for="cpn_status" class="form-label">Company Status</label>
-                                                    <select class="form-control" data-trigger name="cpn_status" id="cpn_status" required>
-                                                        <option value="">Select</option>
-                                                        <option value="enable">Enable</option>
-                                                        <option selected ="disable">Disable</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="mb-3">
-                                                        <label for="cpn_type" class="form-label"> Type</label>
-                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                            <option value="">Select</option>
-                                                            <option value="fast_boat">Fast Boat</option>
-                                                            <option value="car_transfer">Car Transfer</option>
-                                                            <option value="yacht">Yacht</option>
-                                                            <option value="tour">Tour</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                            <div class="mb-3">
+                                                <label for="cpn_type" class="form-label"> Type</label>
+                                                <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
+                                                    <option value="">Select</option>
+                                                    <option value="fast_boat">Fast Boat</option>
+                                                    <option value="car_transfer">Car Transfer</option>
+                                                    <option value="yacht">Yacht</option>
+                                                    <option value="tour">Tour</option>
+                                                </select>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label" for="cpn_address"> Address</label>
