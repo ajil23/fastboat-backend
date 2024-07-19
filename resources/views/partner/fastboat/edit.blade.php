@@ -1,4 +1,4 @@
-@extends('admin.admin_master') 
+@extends('admin.admin_master')
 @section('admin')
 
 <div class="main-content">
@@ -12,7 +12,7 @@
                             <div class="card">
                                 <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
-    
+
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -28,12 +28,12 @@
                                             <div class="flex-shrink-0">
                                                 <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
                                             </div>
-    
+
                                         </div>
-    
+
                                     </div>
                                 </a>
-    
+
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
@@ -46,12 +46,12 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="fb_company" class="form-label">Company</label>
-                                                        <select class="form-control" data-trigger name="fb_company" id="fb_company">
-                                                            <option value="{{$fastboatEdit->fb_company}}" selected>{{$fastboatEdit->partnercompany->cpn_name}}</option>
-                                                            @foreach ($company as $item)
-                                                                <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <select class="form-control" data-trigger name="fb_company" id="fb_company">
+                                                        <option value="{{$fastboatEdit->fb_company}}" selected>{{$fastboatEdit->partnercompany->cpn_name}}</option>
+                                                        @foreach ($company as $item)
+                                                        <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -70,11 +70,11 @@
                                                     <textarea name="fb_content_idn" id="content-idn">{{$fastboatEdit->fb_content_idn}}</textarea>
                                                 </div>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="card">
                                 <a href="#addproduct-img-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-img-collapse">
                                     <div class="p-4">
@@ -96,7 +96,7 @@
                                         </div>
                                     </div>
                                 </a>
-    
+
                                 <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
@@ -166,11 +166,11 @@
                                     </div>
                                 </div>
                             </div>
-    
+
                             <div class="card">
                                 <a href="#addproduct-metadata-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-metadata-collapse">
                                     <div class="p-4">
-    
+
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -189,7 +189,7 @@
                                         </div>
                                     </div>
                                 </a>
-    
+
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
@@ -206,10 +206,10 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_slug_idn">Slug (idn)</label>
-                                                    <input  type="text"  class="form-control" id="fb_slug_idn" name="fb_slug_idn" placeholder="Enter Slug" rows="4" value="{{$fastboatEdit->fb_slug_idn}}"></input>
+                                                    <input type="text" class="form-control" id="fb_slug_idn" name="fb_slug_idn" placeholder="Enter Slug" rows="4" value="{{$fastboatEdit->fb_slug_idn}}"></input>
                                                 </div>
                                             </div>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
@@ -224,7 +224,7 @@
                                                     <textarea class="form-control" id="fb_description_idn" name="fb_description_idn" placeholder="Enter Description" rows="4">{{$fastboatEdit->fb_description_idn}}</textarea>
                                                 </div>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -253,134 +253,42 @@
 
 {{-- ckeditor 5 implementation--}}
 @section('script')
-<script type="importmap">
-    {
-        "imports": {
-        "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
-        "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
-        }
-    }
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#content-idn').summernote({
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+            ]
+        });
+    });
 </script>
-<script type="module">
-import {
-                ClassicEditor,
-                Essentials,
-                Bold,
-                Italic,
-                Font,
-                Paragraph,
-                Table, 
-                TableToolbar, TableColumnResize, TableCaption,
-                Strikethrough, Subscript, Superscript, Underline, Code,
-                Alignment,  Indent, IndentBlock, BlockQuote, Heading,
-                Image,
-                ImageCaption,
-                ImageResize,
-                ImageStyle, CKFinder, CKFinderUploadAdapter,
-                ImageToolbar, ImageUpload,
-                LinkImage, SpecialCharacters, SpecialCharactersEssentials,
-                SourceEditing, List, HorizontalLine, AutoLink, Link
-} from 'ckeditor5';
-    ClassicEditor
-        .create( document.querySelector( '#content-en' ), {
-            plugins: [ Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar, TableColumnResize, TableCaption, Strikethrough, Underline,
-                                Alignment,  Indent, IndentBlock, BlockQuote, Heading, SourceEditing, List, AutoLink, Link,
-                                Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload, SpecialCharacters, SpecialCharactersEssentials,
-                                HorizontalLine, CKFinder, CKFinderUploadAdapter
-                      ],
-                    toolbar: {
-                        items: [
-                            'undo', 'redo', 'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
-                            'fontFamily', 'fontColor', 'fontBackgroundColor', 
-                            'insertTable', 'alignment', 'outdent', 'indent', 'uploadImage', 'blockQuote', 'specialCharacters',
-                            'bulletedList', 'numberedList', 'horizontalLine', 'link',
-                            'sourceEditing',
-                        ]
-                    },
-                    table: {
-                        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
-                    },
-                    image: {
-                        toolbar: [ 
-                            'imageStyle:block',
-                            'imageStyle:side',
-                            '|',
-                            'toggleImageCaption',
-                            'imageTextAlternative',
-                            'ckboxImageEdit',
-                            '|',
-                            'linkImage' 
-                        ],
-                        insert: {
-                            // If this setting is omitted, the editor defaults to 'block'.
-                            // See explanation below.
-                            type: 'auto'
-                        }
-                    },
-                    ckfinder: {
-                        // Upload the images to the server using the CKFinder QuickUpload command.
-                        uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                         // Define the CKFinder configuration (if necessary).
-                        options: {
-                            resourceType: 'Images'
-                        }
-                    }
-                } )
-                .then( /* ... */  )
-                .catch( error => {
-                    console.error( error );
-                } );
+<script>
+    $(document).ready(function() {
+        $('#content-en').summernote({
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+            ]
+        });
+    });
+</script>
 
-    ClassicEditor
-        .create( document.querySelector( '#content-idn' ), {
-            plugins: [ Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar, TableColumnResize, TableCaption, Strikethrough, Underline,
-                                Alignment,  Indent, IndentBlock, BlockQuote, Heading, SourceEditing, List, AutoLink, Link,
-                                Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload, SpecialCharacters, SpecialCharactersEssentials,
-                                HorizontalLine, CKFinder, CKFinderUploadAdapter
-                      ],
-                    toolbar: {
-                        items: [
-                            'undo', 'redo', 'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
-                            'fontFamily', 'fontColor', 'fontBackgroundColor', 
-                            'insertTable', 'alignment', 'outdent', 'indent', 'uploadImage', 'blockQuote', 'specialCharacters',
-                            'bulletedList', 'numberedList', 'horizontalLine', 'link',
-                            'sourceEditing',
-                        ]
-                    },
-                    table: {
-                        contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
-                    },
-                    image: {
-                        toolbar: [ 
-                            'imageStyle:block',
-                            'imageStyle:side',
-                            '|',
-                            'toggleImageCaption',
-                            'imageTextAlternative',
-                            'ckboxImageEdit',
-                            '|',
-                            'linkImage' 
-                        ],
-                        insert: {
-                            // If this setting is omitted, the editor defaults to 'block'.
-                            // See explanation below.
-                            type: 'auto'
-                        }
-                    },
-                    ckfinder: {
-                        // Upload the images to the server using the CKFinder QuickUpload command.
-                        uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                         // Define the CKFinder configuration (if necessary).
-                        options: {
-                            resourceType: 'Images'
-                        }
-                    }
-                } )
-                .then( /* ... */  )
-                .catch( error => {
-                    console.error( error );
-                } );
-</script>
 {{-- image preview --}}
 <script>
     const fileInput1 = document.querySelector('input[name="fb_image1"]');
