@@ -254,154 +254,43 @@
 @endsection
 
 @section('script')
-<script type="importmap">
-    {
-                "imports": {
-                    "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
-                    "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
-                }
-            }
-        </script>
 
-<script type="module">
-    import {
-        ClassicEditor,
-        Essentials,
-        Bold,
-        Italic,
-        Font,
-        Paragraph,
-        Table,
-        TableToolbar,
-        TableColumnResize,
-        TableCaption,
-        Strikethrough,
-        Subscript,
-        Superscript,
-        Underline,
-        Code,
-        Alignment,
-        Indent,
-        IndentBlock,
-        BlockQuote,
-        Heading,
-        Image,
-        ImageCaption,
-        ImageResize,
-        ImageStyle,
-        CKFinder,
-        CKFinderUploadAdapter,
-        ImageToolbar,
-        ImageUpload,
-        LinkImage,
-        SpecialCharacters,
-        SpecialCharactersEssentials,
-        SourceEditing,
-        List,
-        HorizontalLine,
-        AutoLink,
-        Link
-    } from 'ckeditor5';
 
-    ClassicEditor
-        .create(document.querySelector('#isd-content-en'), {
-            plugins: [Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar, TableColumnResize, TableCaption, Strikethrough, Underline,
-                Alignment, Indent, IndentBlock, BlockQuote, Heading, SourceEditing, List, AutoLink, Link,
-                Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload, SpecialCharacters, SpecialCharactersEssentials,
-                HorizontalLine, CKFinder, CKFinderUploadAdapter
-            ],
-            toolbar: {
-                items: [
-                    'undo', 'redo', 'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
-                    'fontFamily', 'fontColor', 'fontBackgroundColor',
-                    'insertTable', 'alignment', 'outdent', 'indent', 'uploadImage', 'blockQuote', 'specialCharacters',
-                    'bulletedList', 'numberedList', 'horizontalLine', 'link',
-                    'sourceEditing',
-                ]
-            },
-            table: {
-                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-            },
-            image: {
-                toolbar: [
-                    'imageStyle:block',
-                    'imageStyle:side',
-                    '|',
-                    'toggleImageCaption',
-                    'imageTextAlternative',
-                    'ckboxImageEdit',
-                    '|',
-                    'linkImage'
-                ],
-                insert: {
-                    // If this setting is omitted, the editor defaults to 'block'.
-                    // See explanation below.
-                    type: 'auto'
-                }
-            },
-            ckfinder: {
-                // Upload the images to the server using the CKFinder QuickUpload command.
-                uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                // Define the CKFinder configuration (if necessary).
-                options: {
-                    resourceType: 'Images'
-                }
-            }
-        })
-        .then( /* ... */ )
-        .catch(error => {
-            console.error(error);
+{{-- summernote --}}
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#isd-content-idn').summernote({
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+            ]
         });
-
-    ClassicEditor
-        .create(document.querySelector('#isd-content-idn'), {
-            plugins: [Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar, TableColumnResize, TableCaption, Strikethrough, Underline,
-                Alignment, Indent, IndentBlock, BlockQuote, Heading, SourceEditing, List, AutoLink, Link,
-                Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload, SpecialCharacters, SpecialCharactersEssentials,
-                HorizontalLine, CKFinder, CKFinderUploadAdapter
-            ],
-            toolbar: {
-                items: [
-                    'undo', 'redo', 'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
-                    'fontFamily', 'fontColor', 'fontBackgroundColor',
-                    'insertTable', 'alignment', 'outdent', 'indent', 'uploadImage', 'blockQuote', 'specialCharacters',
-                    'bulletedList', 'numberedList', 'horizontalLine', 'link',
-                    'sourceEditing',
-                ]
-            },
-            table: {
-                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
-            },
-            image: {
-                toolbar: [
-                    'imageStyle:block',
-                    'imageStyle:side',
-                    '|',
-                    'toggleImageCaption',
-                    'imageTextAlternative',
-                    'ckboxImageEdit',
-                    '|',
-                    'linkImage'
-                ],
-                insert: {
-                    // If this setting is omitted, the editor defaults to 'block'.
-                    // See explanation below.
-                    type: 'auto'
-                }
-            },
-            ckfinder: {
-                // Upload the images to the server using the CKFinder QuickUpload command.
-                uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
-                // Define the CKFinder configuration (if necessary).
-                options: {
-                    resourceType: 'Images'
-                }
-            }
-        })
-        .then( /* ... */ )
-        .catch(error => {
-            console.error(error);
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#isd-content-en').summernote({
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+            ]
         });
+    });
 </script>
 
 <!-- Preview Image -->

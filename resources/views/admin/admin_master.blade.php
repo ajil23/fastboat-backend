@@ -19,8 +19,6 @@
         <link href="{{asset('assets/css/icons.min.css')}}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{{asset('assets/css/app.min.css')}}" id="app-style" rel="stylesheet" type="text/css" />
-        {{-- ckeditor --}}
-        <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" />
         {{-- jquery --}}
         <script src="{{asset('assets/js/jquery.min.js')}}"></script>
 
