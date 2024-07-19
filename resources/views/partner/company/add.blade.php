@@ -62,13 +62,13 @@
     
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_phone"> Phone</label>
-                                                        <input id="cpn_phone" name="cpn_phone" type="text" class="form-control" required>
+                                                        <input id="cpn_phone" name="cpn_phone" type="text" class="form-control" placeholder="Enter Company Phone Number" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="cpn_whatsapp"> Whatsapp</label>
-                                                        <input id="cpn_whatsapp" name="cpn_whatsapp" type="text" class="form-control" required>
+                                                        <input id="cpn_whatsapp" name="cpn_whatsapp" type="text" class="form-control" placeholder="Enter Company Whatsapp Number (62)" required>
                                                     </div>
                                                 </div>
                                             </div>
