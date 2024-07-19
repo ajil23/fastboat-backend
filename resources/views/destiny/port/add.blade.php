@@ -53,23 +53,21 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_code">Code</label>
                                                     <input id="prt_code" name="prt_code" placeholder="Enter Port Code" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_map">Maps</label>
                                                     <input id="prt_map" name="prt_map" placeholder="Longitude,Latitude" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_island">Island</label>
                                                     <select class="form-control" name="prt_island" aria-label="Default select example" required>
@@ -82,13 +80,11 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="prt_address">Address</label>
-                                                    <input id="prt_address" name="prt_address" placeholder="Enter Port Address" type="text" class="form-control" required>
-                                                    </input>
-                                                </div>
-                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="prt_address">Address</label>
+                                            <textarea class="form-control" name="prt_address" cols="30" rows="5" required>
+                                                    </textarea>
                                         </div>
 
                                         <div class="row">
@@ -137,21 +133,28 @@
                                     <div class="p-4 border-top">
                                         <div class="row">
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage1" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                                    </center>
                                                     <label class="form-label" for="prt_image1">Image 1</label>
                                                     <input id="prt_image1" name="prt_image1" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage2" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                                    </center>
                                                     <label class="form-label" for="prt_image2">Image 2</label>
                                                     <input id="prt_image2" name="prt_image2" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage3" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                                    </center>
                                                     <label class="form-label" for="prt_image3">Image 3</label>
                                                     <input id="prt_image3" name="prt_image3" type="file" accept="image/*" class="form-control" required>
                                                 </div>
@@ -159,21 +162,28 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage4" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                                    </center>
                                                     <label class="form-label" for="prt_image4">Image 4</label>
                                                     <input id="prt_image4" name="prt_image4" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage5" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                                    </center>
                                                     <label class="form-label" for="prt_image5">Image 5</label>
                                                     <input id="prt_image5" name="prt_image5" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
+                                                    <center>
+                                                        <img class="rounded me-2" src="" id="previewImage6" data-holder-rendered="true" style="height: 100px; width:100px;">
+                                                    </center>
                                                     <label class="form-label" for="prt_image6">Image 6</label>
                                                     <input id="prt_image6" name="prt_image6" type="file" accept="image/*" class="form-control">
                                                 </div>
@@ -257,7 +267,7 @@
                 <div class="row mb-4">
                     <div class="col text-end">
                         <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>                    
+                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
             </form>
@@ -272,9 +282,11 @@
 </div>
 
 @endsection
+
+
 @section('script')
 <script type="importmap">
-            {
+    {
                 "imports": {
                     "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
                     "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
@@ -282,40 +294,244 @@
             }
         </script>
 
-        <script type="module">
-            import {
-                ClassicEditor,
-                Essentials,
-                Bold,
-                Italic,
-                Font,
-                Paragraph
-            } from 'ckeditor5';
+<script type="module">
+    import {
+        ClassicEditor,
+        Essentials,
+        Bold,
+        Italic,
+        Font,
+        Paragraph,
+        Table,
+        TableToolbar,
+        TableColumnResize,
+        TableCaption,
+        Strikethrough,
+        Subscript,
+        Superscript,
+        Underline,
+        Code,
+        Alignment,
+        Indent,
+        IndentBlock,
+        BlockQuote,
+        Heading,
+        Image,
+        ImageCaption,
+        ImageResize,
+        ImageStyle,
+        CKFinder,
+        CKFinderUploadAdapter,
+        ImageToolbar,
+        ImageUpload,
+        LinkImage,
+        SpecialCharacters,
+        SpecialCharactersEssentials,
+        SourceEditing,
+        List,
+        HorizontalLine,
+        AutoLink,
+        Link
+    } from 'ckeditor5';
 
-            ClassicEditor
-                .create( document.querySelector( '#prt-content-en' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                    toolbar: {
-                        items: [
-                            'undo', 'redo', '|', 'bold', 'italic', '|',
-                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
-                        ]
-                    }
-                } )
-                .then( /* ... */ )
-                .catch( /* ... */ );
+    ClassicEditor
+        .create(document.querySelector('#prt-content-en'), {
+            plugins: [Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar, TableColumnResize, TableCaption, Strikethrough, Underline,
+                Alignment, Indent, IndentBlock, BlockQuote, Heading, SourceEditing, List, AutoLink, Link,
+                Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload, SpecialCharacters, SpecialCharactersEssentials,
+                HorizontalLine, CKFinder, CKFinderUploadAdapter
+            ],
+            toolbar: {
+                items: [
+                    'undo', 'redo', 'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
+                    'fontFamily', 'fontColor', 'fontBackgroundColor',
+                    'insertTable', 'alignment', 'outdent', 'indent', 'uploadImage', 'blockQuote', 'specialCharacters',
+                    'bulletedList', 'numberedList', 'horizontalLine', 'link',
+                    'sourceEditing',
+                ]
+            },
+            table: {
+                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            },
+            image: {
+                toolbar: [
+                    'imageStyle:block',
+                    'imageStyle:side',
+                    '|',
+                    'toggleImageCaption',
+                    'imageTextAlternative',
+                    'ckboxImageEdit',
+                    '|',
+                    'linkImage'
+                ],
+                insert: {
+                    // If this setting is omitted, the editor defaults to 'block'.
+                    // See explanation below.
+                    type: 'auto'
+                }
+            },
+            ckfinder: {
+                // Upload the images to the server using the CKFinder QuickUpload command.
+                uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                // Define the CKFinder configuration (if necessary).
+                options: {
+                    resourceType: 'Images'
+                }
+            }
+        })
+        .then( /* ... */ )
+        .catch(error => {
+            console.error(error);
+        });
 
-            ClassicEditor
-                .create( document.querySelector( '#prt-content-idn' ), {
-                    plugins: [ Essentials, Bold, Italic, Font, Paragraph ],
-                    toolbar: {
-                        items: [
-                            'undo', 'redo', '|', 'bold', 'italic', '|',
-                            'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
-                        ]
-                    }
-                } )
-                .then( /* ... */ )
-                .catch( /* ... */ );
-        </script>
+    ClassicEditor
+        .create(document.querySelector('#prt-content-idn'), {
+            plugins: [Essentials, Bold, Italic, Font, Paragraph, Table, TableToolbar, TableColumnResize, TableCaption, Strikethrough, Underline,
+                Alignment, Indent, IndentBlock, BlockQuote, Heading, SourceEditing, List, AutoLink, Link,
+                Image, ImageToolbar, ImageCaption, ImageStyle, ImageResize, LinkImage, ImageUpload, SpecialCharacters, SpecialCharactersEssentials,
+                HorizontalLine, CKFinder, CKFinderUploadAdapter
+            ],
+            toolbar: {
+                items: [
+                    'undo', 'redo', 'heading', '|', 'bold', 'italic', 'underline', 'strikethrough', '|',
+                    'fontFamily', 'fontColor', 'fontBackgroundColor',
+                    'insertTable', 'alignment', 'outdent', 'indent', 'uploadImage', 'blockQuote', 'specialCharacters',
+                    'bulletedList', 'numberedList', 'horizontalLine', 'link',
+                    'sourceEditing',
+                ]
+            },
+            table: {
+                contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+            },
+            image: {
+                toolbar: [
+                    'imageStyle:block',
+                    'imageStyle:side',
+                    '|',
+                    'toggleImageCaption',
+                    'imageTextAlternative',
+                    'ckboxImageEdit',
+                    '|',
+                    'linkImage'
+                ],
+                insert: {
+                    // If this setting is omitted, the editor defaults to 'block'.
+                    // See explanation below.
+                    type: 'auto'
+                }
+            },
+            ckfinder: {
+                // Upload the images to the server using the CKFinder QuickUpload command.
+                uploadUrl: 'https://example.com/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images&responseType=json',
+                // Define the CKFinder configuration (if necessary).
+                options: {
+                    resourceType: 'Images'
+                }
+            }
+        })
+        .then( /* ... */ )
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+
+<!-- Preview Image -->
+<script>
+    const fileInput1 = document.querySelector('input[name="prt_image1"]');
+    const previewImage1 = document.getElementById('previewImage1');
+
+    fileInput1.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage1.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+    const fileInput2 = document.querySelector('input[name="prt_image2"]');
+    const previewImage2 = document.getElementById('previewImage2');
+
+    fileInput2.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage2.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+    const fileInput3 = document.querySelector('input[name="prt_image3"]');
+    const previewImage3 = document.getElementById('previewImage3');
+
+    fileInput3.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage3.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+    const fileInput4 = document.querySelector('input[name="prt_image4"]');
+    const previewImage4 = document.getElementById('previewImage4');
+
+    fileInput4.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage4.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+    const fileInput5 = document.querySelector('input[name="prt_image5"]');
+    const previewImage5 = document.getElementById('previewImage5');
+
+    fileInput5.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage5.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+    const fileInput6 = document.querySelector('input[name="prt_image6"]');
+    const previewImage6 = document.getElementById('previewImage6');
+
+    fileInput6.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function(event) {
+                previewImage6.src = event.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
 @endsection
