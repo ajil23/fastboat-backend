@@ -47,7 +47,6 @@ Route::middleware([
         Route::post('/company/update/{id}', [DataCompanyController::class, 'update'])->name('company.update');
         Route::delete('/company/delete/{id}', [DataCompanyController::class, 'delete'])->name('company.delete');
         Route::get('/company/{id}', [DataCompanyController::class, 'show'])->name('company.show');
-        Route::get('/company/{id}', [DataCompanyController::class, 'show'])->name('company.show');
         Route::get('/company/emailstatus/{id}', [DataCompanyController::class, 'emailStatus'])->name('company.emailStatus');
         Route::get('/company/status/{id}', [DataCompanyController::class, 'companyStatus'])->name('company.status');
 
