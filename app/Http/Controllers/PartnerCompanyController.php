@@ -12,6 +12,9 @@ class PartnerCompanyController extends Controller
     // this function is for view all data from company table
     public function index(){
         $company = PartnerCompany::paginate(10);
+        $title = 'Delete Company Data!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
         return view('partner.company.index', compact('company'));
     }
 
