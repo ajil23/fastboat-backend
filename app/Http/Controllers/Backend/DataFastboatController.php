@@ -17,14 +17,14 @@ class DataFastboatController extends Controller
         $title = 'Delete Fastboat Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        return view('partner.fastboat.index', compact('fastboat'));
+        return view('data.fastboat.index', compact('fastboat'));
     }
 
     // this function is for view form to add fastboat data
     public function add()
     {
         $company = DataCompany::all();
-        return view('partner.fastboat.add', compact('company'));
+        return view('data.fastboat.add', compact('company'));
     }
 
     // this function will request data from input in fast boat add form
@@ -114,7 +114,7 @@ class DataFastboatController extends Controller
     {
         $company = DataCompany::all();
         $fastboatEdit = DataFastboat::find($id);
-        return view('partner.fastboat.edit', compact('fastboatEdit', 'company'));
+        return view('data.fastboat.edit', compact('fastboatEdit', 'company'));
     }
 
     // this function will get the $id of the selected data and request data from input in fast boat edit from

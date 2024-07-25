@@ -44,7 +44,7 @@
                                             </td>
                                             <td class="fw-semibold">{{$item->fb_name}}</td>
                                             <td>
-                                                {{$item->partnercompany->cpn_name}}
+                                                {{$item->company->cpn_name}}
                                             </td>
                                             <td>
                                                 <a href="{{route('fastboat.status', $item->fb_id)}}" class="badge rounded-pill bg-{{$item->fb_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fb_status ? 'check-decagram' : 'alert-decagram'}}"></i>
