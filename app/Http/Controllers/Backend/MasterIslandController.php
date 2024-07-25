@@ -12,12 +12,15 @@ class MasterIslandController extends Controller
     // this function is for view all data from island table
     public function index () {
         $island = MasterIsland::all();
-        return view('destiny.island.index', compact('island'));
+        $title = 'Delete Island Data!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        return view('master.island.index', compact('island'));
     }
 
     // this function is for view form to add island data
     public function add () {
-        return view('destiny.island.add');
+        return view('master.island.add');
     }
 
     // this function will request data from input in island add form
@@ -107,7 +110,7 @@ class MasterIslandController extends Controller
     // this function will get the $id of the selected data and then view the island edit form
     public function edit ($id) {
         $islandEdit = MasterIsland::find($id);
-        return view ('destiny.island.edit', compact('islandEdit'));
+        return view ('master.island.edit', compact('islandEdit'));
     }
 
     // this function will get the $id of the selected data and request data from input in island edit from

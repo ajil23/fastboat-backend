@@ -15,12 +15,12 @@ class DataCompanyController extends Controller
         $title = 'Delete Company Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        return view('partner.company.index', compact('company'));
+        return view('data.company.index', compact('company'));
     }
 
     // this function is for view form to add company data
     public function add(){
-        return view('partner.company.add');
+        return view('data.company.add');
     }
 
     // this function will request data from input in company add form
@@ -59,7 +59,7 @@ class DataCompanyController extends Controller
     public function edit($id){
         $companyEdit = DataCompany::find($id);
         $logoInfo = $companyEdit->cpn_logo;
-        return view('partner.company.edit', compact('companyEdit', 'logoInfo'));
+        return view('data.company.edit', compact('companyEdit', 'logoInfo'));
     }
 
     // this function will get the $id of the selected data and request data from input in company edit from

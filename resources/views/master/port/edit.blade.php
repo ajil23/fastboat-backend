@@ -83,8 +83,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="prt_address">Address</label>
-                                            <textarea id="prt_address" name="prt_address" cols="30" rows="5" class="form-control" required>
-                                            {{$portEdit->prt_address}}</textarea>
+                                            <textarea id="prt_address" name="prt_address" cols="30" rows="5" class="form-control" required>{{$portEdit->prt_address}}</textarea>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6">

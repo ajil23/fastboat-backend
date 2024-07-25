@@ -15,14 +15,17 @@ class MasterPortController extends Controller
     {
         $port = MasterPort::all();
         $data = MasterIsland::all();
-        return view('destiny.port.index', compact('port', 'data'));
+        $title = 'Delete Port Data!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
+        return view('master.port.index', compact('port', 'data'));
     }
 
     // this function is for view form to add port data
     public function add()
     {
         $data = MasterIsland::all();
-        return view('destiny.port.add', compact('data'));
+        return view('master.port.add', compact('data'));
     }
 
     // this function will request data from input in port add form
@@ -118,7 +121,7 @@ class MasterPortController extends Controller
     {
         $portEdit = MasterPort::find($id);
         $data = MasterIsland::all();
-        return view('destiny.port.edit', compact('portEdit', 'data'));
+        return view('master.port.edit', compact('portEdit', 'data'));
     }
 
     // this function will get the $id of the selected data and request data from input in port edit from

@@ -1,4 +1,4 @@
-@extends('admin.admin_master')
+@extends('admin.admin_master') 
 @section('admin')
 
 <div class="main-content">
@@ -9,10 +9,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-wrap align-items-center mb-2">
-                                <h5 class="card-title">Port Table</h5>
+                                <h5 class="card-title">Island Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="{{route('port.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Port</a>
+                                    <a href="{{route('island.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Add New Island</a>
                                     </div>
                                 </div>
                             </div>
@@ -22,47 +22,43 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th style="width: 90px;">Image</th>
-                                            <th>Name ENG</th>
-                                            <th>Name IDN</th>
+                                            <th  style="width: 90px;">Image</th>
+                                            <th>Name</th>
                                             <th>Code</th>
                                             <th>Map</th>
-                                            <th>Address</th>
                                             <th>Slug ENG</th>
                                             <th>Slug IDN</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($port as $item)
+                                    @foreach ($island as $item)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div class="avatar">
                                                     <div class="product-img avatar-title img-thumbnail bg-primary-subtle  border-0">
-                                                        <img src="{{ asset('storage/'.$item->prt_image1) }}" class="img-fluid" alt="">
+                                                        <img src="{{ asset('storage/'.$item->isd_image1) }}" class="img-fluid" alt="">
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>{{$item->prt_name_en}}</td>
-                                            <td>{{$item->prt_name_idn}}</td>
-                                            <td>{{$item->prt_code}}</td>
+                                            <td>{{$item->isd_name}}</td>
+                                            <td>{{$item->isd_code}}</td>
                                             <td>
-                                            <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}"  class="badge bg-success-subtle text-success  font-size-12" target="blank">
-                                            See<i class="mdi mdi-arrow-right"></i></a>
-                                            </td>
-                                            <td>{{$item->prt_address}}</td>
-                                            <td>{{$item->prt_slug_en}}</td>
-                                            <td>{{$item->prt_slug_idn}}</td>
+                                                    <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}"  class="badge bg-success-subtle text-success  font-size-12" target="blank" >
+                                                    See<i class="mdi mdi-arrow-right"></i></a>
+                                                    </td>
+                                            <td>{{$item->isd_slug_en}}</td>
+                                            <td>{{$item->isd_slug_idn}}</span></td>
                                             <td>
                                                 <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('port.show', $item->prt_id)}}">View</a>
-                                                        <a class="dropdown-item" href="{{route('port.edit', $item->prt_id)}}">Edit</a>
-                                                        <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{{route('port.delete', $item->prt_id)}}" >Delete</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('island.show', $item->isd_id)}}">View</a>
+                                                        <a class="dropdown-item" href="{{route('island.edit', $item->isd_id)}}">Edit</a>
+                                                        <a class="dropdown-item" data-confirm-delete="true" href="{{route('island.delete', $item->isd_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -75,31 +71,30 @@
                     </div>
                 </div>
             </div>
-        </div>
+          </div>
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
 
-        <!-- Scrollable modal -->
-        <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
+    
+    <!-- Scrollable modal -->
+    <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
     aria-labelledby="viewDetailModalTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="viewDetailModalTitle">Port Information</h5>
+                <h5 class="modal-title" id="viewDetailModalTitle">Island Information</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p><strong>Name ENG : </strong><span id="port-nameen"></span></p>
-                <p><strong>Name IDN : </strong><span id="port-nameidn"></span></p>
-                <p><strong>Code : </strong><span id="port-code"></span></p>
-                <p><strong>Map : </strong><span id="port-map"></span></p>
-                <p><strong>Address : </strong><span id="port-address"></span></p>
-                <p><strong>Keywords : </strong><span id="port-keyword"></span></p>
-                <p><strong>Slug EN : </strong><span id="port-slugen"></span></p>
-                <p><strong>Slug IND : </strong><span id="port-slugind"></span></p>
-                <p><strong>Description EN : </strong><span id="port-descriptionen"></span></p>
-                <p><strong>Description IND : </strong><span id="port-descriptionidn"></span></p>
+                <p><strong>Name : </strong><span id="island-name"></span></p>
+                <p><strong>Code : </strong><span id="island-code"></span></p>
+                <p><strong>Map : </strong><span id="island-map"></span></p>
+                <p><strong>Keywords : </strong><span id="island-keyword"></span></p>
+                <p><strong>Slug EN : </strong><span id="island-slugen"></span></p>
+                <p><strong>Slug IND : </strong><span id="island-slugind"></span></p>
+                <p><strong>Description EN : </strong><span id="island-descriptionen"></span></p>
+                <p><strong>Description IND : </strong><span id="island-descriptionidn"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
@@ -112,6 +107,7 @@
 </div>
 @endsection
 
+
 @section('script')
 {{-- javascript to get data from database & view in modal --}}
 <script type="text/javascript">
@@ -120,16 +116,14 @@
             var detailURL = $(this).data('url');
             $.get(detailURL, function(data){
                 $('#viewDetailModal').modal('show');
-                    $('#port-nameen').text(data.prt_name_en);
-                    $('#port-nameidn').text(data.prt_name_idn);
-                    $('#port-code').text(data.prt_code);
-                    $('#port-map').text(data.prt_map);
-                    $('#port-address').text(data.prt_address);
-                    $('#port-keyword').text(data.prt_keyword);
-                    $('#port-slugen').text(data.prt_slug_en);
-                    $('#port-slugind').text(data.prt_slug_idn);
-                    $('#port-descriptionen').text(data.prt_description_en);
-                    $('#port-descriptionidn').text(data.prt_description_idn);
+                    $('#island-name').text(data.isd_name);
+                    $('#island-code').text(data.isd_code);
+                    $('#island-map').text(data.isd_map);
+                    $('#island-keyword').text(data.isd_keyword);
+                    $('#island-slugen').text(data.isd_slug_en);
+                    $('#island-slugind').text(data.isd_slug_idn);
+                    $('#island-descriptionen').text(data.isd_description_en);
+                    $('#island-descriptionidn').text(data.isd_description_idn);
             })
         })
     });
