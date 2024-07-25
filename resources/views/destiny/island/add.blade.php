@@ -293,7 +293,7 @@
     });
 </script>
 
-<!-- Preview Image -->
+{{-- image preview --}}
 <script>
     const fileInput1 = document.querySelector('input[name="isd_image1"]');
     const previewImage1 = document.getElementById('previewImage1');
@@ -311,6 +311,7 @@
             reader.readAsDataURL(file);
         }
     });
+
     const fileInput2 = document.querySelector('input[name="isd_image2"]');
     const previewImage2 = document.getElementById('previewImage2');
 
@@ -327,6 +328,7 @@
             reader.readAsDataURL(file);
         }
     });
+
     const fileInput3 = document.querySelector('input[name="isd_image3"]');
     const previewImage3 = document.getElementById('previewImage3');
 
@@ -343,6 +345,7 @@
             reader.readAsDataURL(file);
         }
     });
+
     const fileInput4 = document.querySelector('input[name="isd_image4"]');
     const previewImage4 = document.getElementById('previewImage4');
 
@@ -359,6 +362,7 @@
             reader.readAsDataURL(file);
         }
     });
+
     const fileInput5 = document.querySelector('input[name="isd_image5"]');
     const previewImage5 = document.getElementById('previewImage5');
 
@@ -375,6 +379,7 @@
             reader.readAsDataURL(file);
         }
     });
+
     const fileInput6 = document.querySelector('input[name="isd_image6"]');
     const previewImage6 = document.getElementById('previewImage6');
 

@@ -4,27 +4,31 @@ namespace App\Http\Controllers;
 
 use App\Models\DestinyIsland;
 use App\Models\DestinyPort;
+use DOMDocument;
 use Illuminate\Http\Request;
 use PhpParser\Node\Expr\FuncCall;
 
 class DestinyPortController extends Controller
 {
     // this function is for view all data from port table
-    public function index () {
+    public function index()
+    {
         $port = DestinyPort::all();
         $data = DestinyIsland::all();
         return view('destiny.port.index', compact('port', 'data'));
     }
 
     // this function is for view form to add port data
-    public function add () {
+    public function add()
+    {
         $data = DestinyIsland::all();
         return view('destiny.port.add', compact('data'));
     }
 
     // this function will request data from input in port add form
-    public function store (Request $request) {
-        
+    public function store(Request $request)
+    {
+
         // Handle the request data validation
         $request->validate([
             'prt_name_en' => 'required|max:100',
@@ -85,22 +89,43 @@ class DestinyPortController extends Controller
             $portImage = $request->file('prt_image6')->store('prt_image6');
             $portData->prt_image6 = $portImage;
         }
+
+        // summernote
+        $content = $request->prt_content_en;
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($content, 9);
+
+        $image = $dom->getElementsByTagName('img');
+
+        foreach ($image as $key => $img) {
+            $data = base64_decode(explode(',', explode(';', $img->getAttribute('src'))[1])[1]);
+            $image_name = "/upload/" . time() . $key . '.png';
+            file_put_contents(public_path() . $image_name, $data);
+
+            $img->removeAttribute('src');
+            $img->setAttribute('src', $image_name);
+        }
+        $content = $dom->saveHTML();
+
         $portData->save();
-        toast('Your data as been submited!','success');
+        toast('Your data as been submited!', 'success');
         return redirect()->route('port.view');
     }
 
     // this function will get the $id of the selected data and then view the port edit form
-    public function edit ($id) {
+    public function edit($id)
+    {
         $portEdit = DestinyPort::find($id);
         $data = DestinyIsland::all();
         return view('destiny.port.edit', compact('portEdit', 'data'));
     }
 
     // this function will get the $id of the selected data and request data from input in port edit from
-    public function update (Request $request, $id) {
+    public function update(Request $request, $id)
+    {
 
-         // Handle update data to database
+        // Handle update data to database
         $portData = DestinyPort::find($id);
         $portData->prt_name_en = $request->prt_name_en;
         $portData->prt_name_idn = $request->prt_name_idn;
@@ -141,20 +166,22 @@ class DestinyPortController extends Controller
             $portData->prt_image6 = $portImage;
         }
         $portData->save();
-         toast('Your data as been edited!','success');
+        toast('Your data as been edited!', 'success');
         return redirect()->route('port.view');
     }
 
     // this function will get the $id of selected data and do delete operation
-    public function delete ($id) {
+    public function delete($id)
+    {
         $portData = DestinyPort::find($id);
         $portData->delete();
-        toast('Your data as been deleted!','success');
+        toast('Your data as been deleted!', 'success');
         return redirect()->route('port.view');
     }
 
     // this function will get $id of selected data and view it in modal
-    public function show($id){
+    public function show($id)
+    {
         $portData = DestinyPort::find($id);
         return response()->json($portData);
     }

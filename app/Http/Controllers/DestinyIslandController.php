@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DestinyIsland;
+use DOMDocument;
 use Illuminate\Http\Request;
 
 class DestinyIslandController extends Controller
@@ -77,6 +78,26 @@ class DestinyIslandController extends Controller
             $islandImage = $request->file('isd_image6')->store('isd_image6');
             $islandData->isd_image6 = $islandImage;
         }
+
+        // summernote
+        $content_en = $request->isd_content_en;
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($content_en,9);
+
+        $image = $dom->getElementsByTagName('img');
+
+        foreach ($image as $key => $img) {
+            $data = base64_decode(explode(',',explode(';',$img->getAttribute('src'))[1])[1]);
+            $image_name = "/upload/" . time(). $key.'.png';
+            file_put_contents(public_path().$image_name,$data);
+
+            $img->removeAttribute('src');
+            $img->setAttribute('src',$image_name);
+        }
+        $content_en = $dom->saveHTML();
+        
+
         $islandData->save();
         toast('Your data as been submited!','success');
         return redirect()->route('island.view');
