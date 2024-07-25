@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\PartnerCompany;
 use App\Models\PartnerFastboat;
+use DOMDocument;
 use Illuminate\Http\Request;
 
 class PartnerFastboatController extends Controller
 {
     // this function is for view all data from fastboat table
-    public function index(){
+    public function index()
+    {
         $fastboat = PartnerFastboat::paginate(10);
         $title = 'Delete Fastboat Data!';
         $text = "Are you sure you want to delete?";
@@ -18,13 +20,15 @@ class PartnerFastboatController extends Controller
     }
 
     // this function is for view form to add fastboat data
-    public function add(){
+    public function add()
+    {
         $company = PartnerCompany::all();
         return view('partner.fastboat.add', compact('company'));
     }
 
     // this function will request data from input in fast boat add form
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         // Handle the request data validation
         $request->validate([
             'fb_name' => 'required',
@@ -43,16 +47,16 @@ class PartnerFastboatController extends Controller
 
         // Handle insert data to database
         $fastboatData = new PartnerFastboat();
-        $fastboatData -> fb_name = $request->fb_name;
-        $fastboatData -> fb_company = $request->fb_company;
-        $fastboatData -> fb_keywords = $request->fb_keywords;
-        $fastboatData -> fb_slug_en = $request->fb_slug_en;
-        $fastboatData -> fb_slug_idn = $request->fb_slug_idn;
-        $fastboatData -> fb_description_en = $request->fb_description_en;
-        $fastboatData -> fb_description_idn = $request->fb_description_idn;
-        $fastboatData -> fb_content_en = $request->fb_content_en;
-        $fastboatData -> fb_content_idn = $request->fb_content_idn;
-        $fastboatData -> fb_updated_by = Auth()->id();
+        $fastboatData->fb_name = $request->fb_name;
+        $fastboatData->fb_company = $request->fb_company;
+        $fastboatData->fb_keywords = $request->fb_keywords;
+        $fastboatData->fb_slug_en = $request->fb_slug_en;
+        $fastboatData->fb_slug_idn = $request->fb_slug_idn;
+        $fastboatData->fb_description_en = $request->fb_description_en;
+        $fastboatData->fb_description_idn = $request->fb_description_idn;
+        $fastboatData->fb_content_en = $request->fb_content_en;
+        $fastboatData->fb_content_idn = $request->fb_content_idn;
+        $fastboatData->fb_updated_by = Auth()->id();
 
         // handle image store
         if ($request->hasFile('fb_image1')) {
@@ -79,33 +83,55 @@ class PartnerFastboatController extends Controller
             $fbimg6 = $request->file('fb_image6')->store('fb_image6');
             $fastboatData->fb_image6 = $fbimg6;
         }
+
+        // summernote
+        $content = $request->fb_content_en;
+
+        $dom = new DOMDocument();
+        $dom->loadHTML($content, 9);
+
+        $image = $dom->getElementsByTagName('img');
+
+        foreach ($image as $key => $img) {
+            $data = base64_decode(explode(',', explode(';', $img->getAttribute('src'))[1])[1]);
+            $image_name = "/upload/" . time() . $key . '.png';
+            file_put_contents(public_path() . $image_name, $data);
+
+            $img->removeAttribute('src');
+            $img->setAttribute('src', $image_name);
+        }
+        $content = $dom->saveHTML();
+
+
         $fastboatData->save();
-        toast('Your data as been submited!','success');
+        toast('Your data as been submited!', 'success');
         return redirect()->route('fastboat.view');
     }
-    
+
     // this function will get the $id of the selected data and then view the fast boat edit form
-    public function edit($id){
+    public function edit($id)
+    {
         $company = PartnerCompany::all();
         $fastboatEdit = PartnerFastboat::find($id);
         return view('partner.fastboat.edit', compact('fastboatEdit', 'company'));
     }
 
     // this function will get the $id of the selected data and request data from input in fast boat edit from
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
 
         // Handle insert data to database
         $fastboatData = PartnerFastboat::find($id);
-        $fastboatData -> fb_name = $request->fb_name;
-        $fastboatData -> fb_company = $request->fb_company;
-        $fastboatData -> fb_keywords = $request->fb_keywords;
-        $fastboatData -> fb_slug_en = $request->fb_slug_en;
-        $fastboatData -> fb_slug_idn = $request->fb_slug_idn;
-        $fastboatData -> fb_description_en = $request->fb_description_en;
-        $fastboatData -> fb_description_idn = $request->fb_description_idn;
-        $fastboatData -> fb_content_en = $request->fb_content_en;
-        $fastboatData -> fb_content_idn = $request->fb_content_idn;
-        $fastboatData -> fb_updated_by = Auth()->id();
+        $fastboatData->fb_name = $request->fb_name;
+        $fastboatData->fb_company = $request->fb_company;
+        $fastboatData->fb_keywords = $request->fb_keywords;
+        $fastboatData->fb_slug_en = $request->fb_slug_en;
+        $fastboatData->fb_slug_idn = $request->fb_slug_idn;
+        $fastboatData->fb_description_en = $request->fb_description_en;
+        $fastboatData->fb_description_idn = $request->fb_description_idn;
+        $fastboatData->fb_content_en = $request->fb_content_en;
+        $fastboatData->fb_content_idn = $request->fb_content_idn;
+        $fastboatData->fb_updated_by = Auth()->id();
 
         // handle image store
         if ($request->hasFile('fb_image1')) {
@@ -133,33 +159,36 @@ class PartnerFastboatController extends Controller
             $fastboatData->fb_image6 = $fbimg6;
         }
         $fastboatData->update();
-        toast('Your data as been edited!','success');
+        toast('Your data as been edited!', 'success');
         return redirect()->route('fastboat.view');
     }
 
     // this function will get the $id of selected data and do delete operation
-    public function delete($id){
+    public function delete($id)
+    {
         $fastboatData = PartnerFastboat::find($id);
-        $fastboatData -> delete();
-        toast('Your data as been deleted!','success');
+        $fastboatData->delete();
+        toast('Your data as been deleted!', 'success');
         return redirect()->route('fastboat.view');
     }
 
     // this function will get $id of selected data and view it in modal
-    public function show($id){
+    public function show($id)
+    {
         $fastboatData = PartnerFastboat::find($id);
         return response()->json($fastboatData);
     }
 
     // this function will get $id of selected data and change the status
-    public function status($id){
+    public function status($id)
+    {
         $fastboatData = PartnerFastboat::find($id);
 
-        if($fastboatData){
-            if($fastboatData -> fb_status){
-                $fastboatData -> fb_status = 0;
-            } else{
-                $fastboatData -> fb_status = 1;
+        if ($fastboatData) {
+            if ($fastboatData->fb_status) {
+                $fastboatData->fb_status = 0;
+            } else {
+                $fastboatData->fb_status = 1;
             }
             $fastboatData->save();
         }

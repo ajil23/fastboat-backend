@@ -83,8 +83,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="prt_address">Address</label>
-                                            <textarea class="form-control" name="prt_address" cols="30" rows="5" required>
-                                                    </textarea>
+                                            <textarea class="form-control" name="prt_address" cols="30" rows="5" required></textarea>
                                         </div>
 
                                         <div class="row">
