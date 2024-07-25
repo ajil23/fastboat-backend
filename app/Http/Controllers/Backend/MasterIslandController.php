@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
-use App\Models\DestinyIsland;
+use App\Http\Controllers\Controller;
+use App\Models\MasterIsland;
 use DOMDocument;
 use Illuminate\Http\Request;
 
-class DestinyIslandController extends Controller
+class MasterIslandController extends Controller
 {
     // this function is for view all data from island table
     public function index () {
-        $island = DestinyIsland::all();
+        $island = MasterIsland::all();
         return view('destiny.island.index', compact('island'));
     }
 
@@ -42,7 +43,7 @@ class DestinyIslandController extends Controller
         ]);
 
         // Handle insert data to database
-        $islandData = new DestinyIsland();
+        $islandData = new MasterIsland();
         $islandData->isd_name = $request->isd_name;
         $islandData->isd_code = $request->isd_code;
         $islandData->isd_slug_en = $request->isd_slug_en;
@@ -105,7 +106,7 @@ class DestinyIslandController extends Controller
 
     // this function will get the $id of the selected data and then view the island edit form
     public function edit ($id) {
-        $islandEdit = DestinyIsland::find($id);
+        $islandEdit = MasterIsland::find($id);
         return view ('destiny.island.edit', compact('islandEdit'));
     }
 
@@ -113,7 +114,7 @@ class DestinyIslandController extends Controller
     public function update (Request $request, $id) {
 
          // Handle update data to database
-        $islandData = DestinyIsland::find($id);
+        $islandData = MasterIsland::find($id);
         $islandData->isd_name = $request->isd_name;
         $islandData->isd_code = $request->isd_code;
         $islandData->isd_slug_en = $request->isd_slug_en;
@@ -156,7 +157,7 @@ class DestinyIslandController extends Controller
     
     // this function will get the $id of selected data and do delete operation
     public function delete($id){
-        $islandDelete = DestinyIsland::find($id);
+        $islandDelete = MasterIsland::find($id);
         $islandDelete->delete();
         toast('Your data as been deleted!','success');
         return redirect()->route('island.view');
@@ -164,7 +165,7 @@ class DestinyIslandController extends Controller
 
     // this function will get $id of selected data and view it in modal
     public function show($id){
-        $islandData = DestinyIsland::find($id);
+        $islandData = MasterIsland::find($id);
         return response()->json($islandData);
     }
 }

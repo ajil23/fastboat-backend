@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
-use App\Models\PartnerCompany;
-use App\Models\PartnerFastboat;
+use App\Http\Controllers\Controller;
+use App\Models\DataCompany;
+use App\Models\DataFastboat;
 use DOMDocument;
 use Illuminate\Http\Request;
 
-class PartnerFastboatController extends Controller
+class DataFastboatController extends Controller
 {
     // this function is for view all data from fastboat table
     public function index()
     {
-        $fastboat = PartnerFastboat::paginate(10);
+        $fastboat = DataFastboat::paginate(10);
         $title = 'Delete Fastboat Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
@@ -22,7 +23,7 @@ class PartnerFastboatController extends Controller
     // this function is for view form to add fastboat data
     public function add()
     {
-        $company = PartnerCompany::all();
+        $company = DataCompany::all();
         return view('partner.fastboat.add', compact('company'));
     }
 
@@ -46,7 +47,7 @@ class PartnerFastboatController extends Controller
         ]);
 
         // Handle insert data to database
-        $fastboatData = new PartnerFastboat();
+        $fastboatData = new DataFastboat();
         $fastboatData->fb_name = $request->fb_name;
         $fastboatData->fb_company = $request->fb_company;
         $fastboatData->fb_keywords = $request->fb_keywords;
@@ -111,8 +112,8 @@ class PartnerFastboatController extends Controller
     // this function will get the $id of the selected data and then view the fast boat edit form
     public function edit($id)
     {
-        $company = PartnerCompany::all();
-        $fastboatEdit = PartnerFastboat::find($id);
+        $company = DataCompany::all();
+        $fastboatEdit = DataFastboat::find($id);
         return view('partner.fastboat.edit', compact('fastboatEdit', 'company'));
     }
 
@@ -121,7 +122,7 @@ class PartnerFastboatController extends Controller
     {
 
         // Handle insert data to database
-        $fastboatData = PartnerFastboat::find($id);
+        $fastboatData = DataFastboat::find($id);
         $fastboatData->fb_name = $request->fb_name;
         $fastboatData->fb_company = $request->fb_company;
         $fastboatData->fb_keywords = $request->fb_keywords;
@@ -166,7 +167,7 @@ class PartnerFastboatController extends Controller
     // this function will get the $id of selected data and do delete operation
     public function delete($id)
     {
-        $fastboatData = PartnerFastboat::find($id);
+        $fastboatData = DataFastboat::find($id);
         $fastboatData->delete();
         toast('Your data as been deleted!', 'success');
         return redirect()->route('fastboat.view');
@@ -175,14 +176,14 @@ class PartnerFastboatController extends Controller
     // this function will get $id of selected data and view it in modal
     public function show($id)
     {
-        $fastboatData = PartnerFastboat::find($id);
+        $fastboatData = DataFastboat::find($id);
         return response()->json($fastboatData);
     }
 
     // this function will get $id of selected data and change the status
     public function status($id)
     {
-        $fastboatData = PartnerFastboat::find($id);
+        $fastboatData = DataFastboat::find($id);
 
         if ($fastboatData) {
             if ($fastboatData->fb_status) {
@@ -194,4 +195,5 @@ class PartnerFastboatController extends Controller
         }
         return back();
     }
+
 }
