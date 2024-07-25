@@ -59,7 +59,7 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
-                        <i class="bx bx-anchor icon nav-icon"></i>
+                        <i class="bx bxs-ship icon nav-icon"></i>
                         <span class="menu-item">Fast Boat</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
@@ -79,7 +79,7 @@
                 
                 <li>
                     <a href="{{route ('port.view')}}">
-                        <i class="bx bx-map-alt icon nav-icon"></i>
+                        <i class="bx bx-anchor icon nav-icon"></i>
                         <span class="menu-item" data-key="t-tables">Port</span>
                     </a>
                 </li>

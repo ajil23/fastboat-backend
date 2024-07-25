@@ -155,8 +155,8 @@
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage6" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
-                                                    <label class="form-label" for="idn_image6">Image 6</label>
-                                                    <input id="idn_image6" name="idn_image6" type="file" accept="image/*" class="form-control">
+                                                    <label class="form-label" for="isd_image6">Image 6</label>
+                                                    <input id="isd_image6" name="isd_image6" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
