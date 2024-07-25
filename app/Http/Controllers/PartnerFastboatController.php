@@ -11,6 +11,9 @@ class PartnerFastboatController extends Controller
     // this function is for view all data from fastboat table
     public function index(){
         $fastboat = PartnerFastboat::paginate(10);
+        $title = 'Delete Fastboat Data!';
+        $text = "Are you sure you want to delete?";
+        confirmDelete($title, $text);
         return view('partner.fastboat.index', compact('fastboat'));
     }
 

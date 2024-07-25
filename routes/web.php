@@ -42,7 +42,7 @@ Route::middleware([
         Route::post('/company/store', [PartnerCompanyController::class, 'store'])->name('company.store');
         Route::get('/company/edit/{id}', [PartnerCompanyController::class, 'edit'])->name('company.edit');
         Route::post('/company/update/{id}', [PartnerCompanyController::class, 'update'])->name('company.update');
-        Route::get('/company/delete/{id}', [PartnerCompanyController::class, 'delete'])->name('company.delete');
+        Route::delete('/company/delete/{id}', [PartnerCompanyController::class, 'delete'])->name('company.delete');
         Route::get('/company/{id}', [PartnerCompanyController::class, 'show'])->name('company.show');
         Route::get('/company/{id}', [PartnerCompanyController::class, 'show'])->name('company.show');
         Route::get('/company/emailstatus/{id}', [PartnerCompanyController::class, 'emailStatus'])->name('company.emailStatus');
@@ -54,7 +54,7 @@ Route::middleware([
         Route::post('/fastboat/store', [PartnerFastboatController::class, 'store'])->name('fastboat.store');
         Route::get('/fastboat/edit/{id}', [PartnerFastboatController::class, 'edit'])->name('fastboat.edit');
         Route::post('/fastboat/update/{id}', [PartnerFastboatController::class, 'update'])->name('fastboat.update');
-        Route::get('/fastboat/delete/{id}', [PartnerFastboatController::class, 'delete'])->name('fastboat.delete');
+        Route::delete('/fastboat/delete/{id}', [PartnerFastboatController::class, 'delete'])->name('fastboat.delete');
         Route::get('/fastboat/{id}', [PartnerFastboatController::class, 'show'])->name('fastboat.show');
         Route::get('/fastboat/status/{id}', [PartnerFastboatController::class, 'status'])->name('fastboat.status');
 
