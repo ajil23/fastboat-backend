@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
-use App\Models\DestinyIsland;
-use App\Models\DestinyPort;
+use App\Http\Controllers\Controller;
+use App\Models\MasterIsland;
+use App\Models\MasterPort;
 use DOMDocument;
 use Illuminate\Http\Request;
-use PhpParser\Node\Expr\FuncCall;
 
-class DestinyPortController extends Controller
+class MasterPortController extends Controller
 {
     // this function is for view all data from port table
     public function index()
     {
-        $port = DestinyPort::all();
-        $data = DestinyIsland::all();
+        $port = MasterPort::all();
+        $data = MasterIsland::all();
         return view('destiny.port.index', compact('port', 'data'));
     }
 
     // this function is for view form to add port data
     public function add()
     {
-        $data = DestinyIsland::all();
+        $data = MasterIsland::all();
         return view('destiny.port.add', compact('data'));
     }
 
@@ -50,7 +50,7 @@ class DestinyPortController extends Controller
         ]);
 
         // Handle insert data to database
-        $portData = new DestinyPort();
+        $portData = new MasterPort();
         $portData->prt_name_en = $request->prt_name_en;
         $portData->prt_name_idn = $request->prt_name_idn;
         $portData->prt_island = $request->prt_island;
@@ -116,8 +116,8 @@ class DestinyPortController extends Controller
     // this function will get the $id of the selected data and then view the port edit form
     public function edit($id)
     {
-        $portEdit = DestinyPort::find($id);
-        $data = DestinyIsland::all();
+        $portEdit = MasterPort::find($id);
+        $data = MasterIsland::all();
         return view('destiny.port.edit', compact('portEdit', 'data'));
     }
 
@@ -126,7 +126,7 @@ class DestinyPortController extends Controller
     {
 
         // Handle update data to database
-        $portData = DestinyPort::find($id);
+        $portData = MasterPort::find($id);
         $portData->prt_name_en = $request->prt_name_en;
         $portData->prt_name_idn = $request->prt_name_idn;
         $portData->prt_island = $request->prt_island;
@@ -173,7 +173,7 @@ class DestinyPortController extends Controller
     // this function will get the $id of selected data and do delete operation
     public function delete($id)
     {
-        $portDelete = DestinyPort::find($id);
+        $portDelete = MasterPort::find($id);
         $portDelete->delete();
         toast('Your data as been deleted!', 'success');
         return redirect()->route('port.view');
@@ -182,7 +182,7 @@ class DestinyPortController extends Controller
     // this function will get $id of selected data and view it in modal
     public function show($id)
     {
-        $portData = DestinyPort::find($id);
+        $portData = MasterPort::find($id);
         return response()->json($portData);
     }
 }

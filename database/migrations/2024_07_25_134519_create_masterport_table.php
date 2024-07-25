@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('destinyport', function (Blueprint $table) {
+        Schema::create('masterport', function (Blueprint $table) {
             $table->id('prt_id');
             $table->unsignedBigInteger('prt_island');
-            $table->foreign('prt_island')->references('isd_id')->on('destinyisland')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('prt_island')->references('isd_id')->on('masterisland')->onDelete('cascade')->onUpdate('cascade');
             $table->string('prt_name_en', 100);
             $table->string('prt_name_idn', 100);
             $table->string('prt_address', 100)->nullable();
@@ -43,6 +43,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('destinyport');
+        Schema::dropIfExists('masterport');
     }
 };

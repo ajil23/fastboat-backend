@@ -71,10 +71,10 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="prt_island">Island</label>
                                                     <select class="form-control" name="prt_island" aria-label="Default select example" required>
-                                                        <option value="{{$portEdit->prt_island}}" selected>{{$portEdit->destinyisland->isd_name}}</option>
-                                                        @foreach ($data as $destinyisland)
-                                                        <option value="{{ $destinyisland->isd_id }}">
-                                                            {{ $destinyisland->isd_name}}
+                                                        <option value="{{$portEdit->prt_island}}" selected>{{$portEdit->masterisland->isd_name}}</option>
+                                                        @foreach ($data as $masterisland)
+                                                        <option value="{{ $masterisland->isd_id }}">
+                                                            {{ $masterisland->isd_name}}
                                                         </option>
                                                         @endforeach
                                                     </select>

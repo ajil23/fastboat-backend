@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
-use App\Models\PartnerCompany;
+use App\Http\Controllers\Controller;
+use App\Models\DataCompany;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class PartnerCompanyController extends Controller
+class DataCompanyController extends Controller
 {
     // this function is for view all data from company table
     public function index(){
-        $company = PartnerCompany::paginate(10);
+        $company = DataCompany::paginate(10);
         $title = 'Delete Company Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
@@ -37,7 +37,7 @@ class PartnerCompanyController extends Controller
         ]);
         
         // Handle insert data to database
-        $companyData = new PartnerCompany();
+        $companyData = new DataCompany();
         $companyData -> cpn_name = $request->cpn_name;
         $companyData -> cpn_email = $request->cpn_email;
         $companyData -> cpn_phone = $request->cpn_phone;
@@ -57,7 +57,7 @@ class PartnerCompanyController extends Controller
 
     // this function will get the $id of the selected data and then view the company edit form
     public function edit($id){
-        $companyEdit = PartnerCompany::find($id);
+        $companyEdit = DataCompany::find($id);
         $logoInfo = $companyEdit->cpn_logo;
         return view('partner.company.edit', compact('companyEdit', 'logoInfo'));
     }
@@ -66,7 +66,7 @@ class PartnerCompanyController extends Controller
     public function update(Request $request, $id){
 
          // Handle update data to database
-         $companyData = PartnerCompany::find($id);
+         $companyData = DataCompany::find($id);
          $companyData -> cpn_name = $request->cpn_name;
          $companyData -> cpn_email = $request->cpn_email;
          $companyData -> cpn_phone = $request->cpn_phone;
@@ -87,7 +87,7 @@ class PartnerCompanyController extends Controller
 
     // this function will get the $id of selected data and do delete operation
     public function delete($id){
-        $companyDelete = PartnerCompany::find($id);
+        $companyDelete = DataCompany::find($id);
         $companyDelete->delete();
         toast('Your data as been deleted!','success');
         return redirect()->route('company.view');
@@ -95,13 +95,13 @@ class PartnerCompanyController extends Controller
 
     // this function will get $id of selected data and view it in modal
     public function show($id){
-        $companyData = PartnerCompany::find($id);
+        $companyData = DataCompany::find($id);
         return response()->json($companyData);
     }
 
     // this function will get $id of selected data and change the email status
     public function emailStatus($id){
-        $companyData = PartnerCompany::find($id);
+        $companyData = DataCompany::find($id);
 
         if($companyData){
             if($companyData -> cpn_email_status){
@@ -116,7 +116,7 @@ class PartnerCompanyController extends Controller
 
     // this function will get $id of selected data and change the status
     public function companyStatus($id){
-        $companyData = PartnerCompany::find($id);
+        $companyData = DataCompany::find($id);
 
         if($companyData){
             if($companyData -> cpn_status){
@@ -129,4 +129,5 @@ class PartnerCompanyController extends Controller
         return back();
     }
     
+
 }

@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('partnerfastboat', function (Blueprint $table) {
+        Schema::create('datafastboat', function (Blueprint $table) {
             $table->id('fb_id');
             $table->unsignedBigInteger('fb_company'); 
-            $table->foreign('fb_company')->references('cpn_id')->on('partnercompany')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('fb_company')->references('cpn_id')->on('datacompany')->onDelete('cascade')->onUpdate('cascade');
             $table->string('fb_name', 50);
             $table->string('fb_image1', 255);
             $table->string('fb_image2', 255);
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('partnerfastboat');
+        Schema::dropIfExists('datafastboat');
     }
 };
