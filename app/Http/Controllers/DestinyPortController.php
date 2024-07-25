@@ -173,8 +173,8 @@ class DestinyPortController extends Controller
     // this function will get the $id of selected data and do delete operation
     public function delete($id)
     {
-        $portData = DestinyPort::find($id);
-        $portData->delete();
+        $portDelete = DestinyPort::find($id);
+        $portDelete->delete();
         toast('Your data as been deleted!', 'success');
         return redirect()->route('port.view');
     }
