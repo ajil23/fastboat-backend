@@ -39,8 +39,8 @@
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#">Edit</a>
-                                                        <a class="dropdown-item" data-confirm-delete="true" href="#" >Delete</a>
+                                                        <a class="dropdown-item" href="{{route('schedule.edit', $item->sch_id)}}">Edit</a>
+                                                        <a class="dropdown-item" data-confirm-delete="true" href="{{route('schedule.delete', $item->sch_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
                                             </td>
