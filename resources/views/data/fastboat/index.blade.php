@@ -1,4 +1,4 @@
-@extends('admin.admin_master') 
+@extends('admin.admin_master')
 @section('admin')
 
 <div class="main-content">
@@ -20,12 +20,17 @@
                             <div class="table-responsive">
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
                                     <thead>
+                                    <div class="search-box">
+                                        <div class="position-relative">
+                                            <input type="serach" name="search" class="form-control rounded bg-light border-0" placeholder="Search..." id="search-input"><i class="bx bx-search search-icon"></i>
+                                        </div>
+                                    </div>
                                         <tr>
                                             <th>No</th>
                                             <th style="width: 90px;">
-                                               Picture
+                                                Picture
                                             </th>
-                                            <th  style="width: 210px;">Fast Boat Name</th>
+                                            <th style="width: 210px;">Fast Boat Name</th>
                                             <th>Company Name</th>
                                             <th>Status</th>
                                             <th>Action</th>
@@ -33,7 +38,7 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($fastboat as $item)
-                                        <tr>
+                                        <tr id="baris-{{$item->fb_id}}" class="search">
                                             <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div class="avatar">
@@ -42,7 +47,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="fw-semibold">{{$item->fb_name}}</td>
+                                            <td class="fw-semibold list-group-item" data-id="{{$item->fb_id}}">{{$item->fb_name}}</td>
                                             <td>
                                                 {{$item->company->cpn_name}}
                                             </td>
@@ -73,7 +78,7 @@
                     </div>
                 </div>
             </div>
-          </div>
+        </div>
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
@@ -103,13 +108,33 @@
 </div>
 @endsection
 
+
 @section('script')
+<!-- search box -->
+<script>
+    $(document).ready(function() {
+        $('#search-input').on('input', function() {
+            var search= $(this).val();
+            var lowerCaseText = search.toLowerCase();
+            var list = $('.list-group-item');
+            // console.log(list);
+            $('.search').show()
+            list.each(function(){
+                var item = $(this).text();
+                var id = $(this).data('id');
+                if(item.toLowerCase().includes(lowerCaseText)===false){
+                    $('#baris-'+id).hide()
+                }
+            })
+        })
+    })
+</script>
 {{-- javascript to get data from database & view in modal --}}
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('body').on('click', '#showDetail', function(){
+    $(document).ready(function() {
+        $('body').on('click', '#showDetail', function() {
             var detailURL = $(this).data('url');
-            $.get(detailURL, function(data){
+            $.get(detailURL, function(data) {
                 $('#viewDetailModal').modal('show');
                     $('#fastboat-name').text(data.fb_name);
                     $('#fastboat-keywords').text(data.fb_keywords);
@@ -123,4 +148,6 @@
         })
     });
 </script>
+
+
 @endsection
