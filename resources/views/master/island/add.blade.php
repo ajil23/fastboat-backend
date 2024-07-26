@@ -39,7 +39,7 @@
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="isd_name">Name</label>
-                                                    <input id="isd_name" name="isd_name" placeholder="Enter Keyword" type="text" class="form-control">
+                                                    <input id="isd_name" name="isd_name" placeholder="Enter Island Name" type="text" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
@@ -395,6 +395,17 @@
 
             reader.readAsDataURL(file);
         }
+    });
+</script>
+
+{{-- javascript syntax to autfill slug --}}
+<script>
+    document.getElementById('isd_name').addEventListener('input', function() {
+        const isd_name = this.value;
+        const isd_slug_en = isd_name.toLowerCase().replace(/ /g, '-');
+        const isd_slug_idn = isd_name.toLowerCase().replace(/ /g, '-');
+        document.getElementById('isd_slug_en').value = isd_slug_en;
+        document.getElementById('isd_slug_idn').value = isd_slug_idn;
     });
 </script>
 @endsection

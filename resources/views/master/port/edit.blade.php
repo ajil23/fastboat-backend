@@ -417,4 +417,19 @@
         }
     });
 </script>
+
+{{-- javascript syntax to autfill slug --}}
+<script>
+    document.getElementById('prt_name_en').addEventListener('input', function() {
+        const prt_name_en = this.value;
+        const prt_slug_en = prt_name_en.toLowerCase().replace(/ /g, '-');
+        document.getElementById('prt_slug_en').value = prt_slug_en;
+    });
+
+    document.getElementById('prt_name_idn').addEventListener('input', function() {
+        const prt_name_idn = this.value;
+        const prt_slug_idn = prt_name_idn.toLowerCase().replace(/ /g, '-');
+        document.getElementById('prt_slug_idn').value = prt_slug_idn;
+    });
+</script>
 @endsection

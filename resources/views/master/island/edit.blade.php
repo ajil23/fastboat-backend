@@ -391,4 +391,14 @@
         }
     });
 </script>
+
+<script>
+    document.getElementById('isd_name').addEventListener('input', function() {
+        const isd_name = this.value;
+        const isd_slug_en = isd_name.toLowerCase().replace(/ /g, '-');
+        const isd_slug_idn = isd_name.toLowerCase().replace(/ /g, '-');
+        document.getElementById('isd_slug_en').value = isd_slug_en;
+        document.getElementById('isd_slug_idn').value = isd_slug_idn;
+    });
+</script>
 @endsection
