@@ -2,8 +2,11 @@
 
 use App\Http\Controllers\Backend\DataCompanyController;
 use App\Http\Controllers\Backend\DataFastboatController;
+use App\Http\Controllers\Backend\DataRouteController;
 use App\Http\Controllers\Backend\MasterIslandController;
 use App\Http\Controllers\Backend\MasterPortController;
+use App\Http\Controllers\Backend\SchedulesScheduleController;
+use App\Http\Controllers\Backend\SchedulesTripController;
 use App\Http\Controllers\BookingDataController;
 use App\Http\Controllers\BookingTrashController;
 use App\Http\Controllers\DestinyIslandController;
@@ -60,7 +63,34 @@ Route::middleware([
         Route::get('/fastboat/{id}', [DataFastboatController::class, 'show'])->name('fastboat.show');
         Route::get('/fastboat/status/{id}', [DataFastboatController::class, 'status'])->name('fastboat.status');
 
+        // route routes
+        Route::get('/route', [DataRouteController::class, 'index'])->name('route.view');
+        Route::get('/route/add', [DataRouteController::class, 'add'])->name('route.add');
+        Route::post('/route/store', [DataRouteController::class, 'store'])->name('route.store');
+        Route::get('/route/edit/{id}', [DataRouteController::class, 'edit'])->name('route.edit');
+        Route::post('/route/update/{id}', [DataRouteController::class, 'update'])->name('route.update');
+        Route::delete('/route/delete/{id}', [DataRouteController::class, 'delete'])->name('route.delete');
     });
+
+    Route::prefix('schedules')->group(function () {
+        // schedule routes
+        Route::get('/schedule', [SchedulesScheduleController::class, 'index'])->name('schedule.view');
+        Route::get('/schedule/add', [SchedulesScheduleController::class, 'add'])->name('schedule.add');
+        Route::post('/schedule/store', [SchedulesScheduleController::class, 'store'])->name('schedule.store');
+        Route::get('/schedule/edit/{id}', [SchedulesScheduleController::class, 'edit'])->name('schedule.edit');
+        Route::post('/schedule/update/{id}', [SchedulesScheduleController::class, 'update'])->name('schedule.update');
+        Route::delete('/schedule/delete/{id}', [SchedulesScheduleController::class, 'delete'])->name('schedule.delete');
+
+        // trip routes
+        Route::get('/trip', [SchedulesTripController::class, 'index'])->name('trip.view');
+        Route::get('/trip/add', [SchedulesTripController::class, 'add'])->name('trip.add');
+        Route::post('/trip/store', [SchedulesTripController::class, 'store'])->name('trip.store');
+        Route::get('/trip/edit/{id}', [SchedulesTripController::class, 'edit'])->name('trip.edit');
+        Route::post('/trip/update/{id}', [SchedulesTripController::class, 'update'])->name('trip.update');
+        Route::delete('/trip/delete/{id}', [SchedulesTripController::class, 'delete'])->name('trip.delete');
+        Route::get('/trip/{id}', [SchedulesTripController::class, 'show'])->name('trip.show');
+    });
+
     Route::prefix('master')->group(function () {
         // master island routes
         Route::get('/island', [MasterIslandController::class, 'index'])->name('island.view');
