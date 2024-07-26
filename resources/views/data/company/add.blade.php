@@ -39,7 +39,7 @@
                                             <div class="row">
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="cpn_name"> Name</label>
+                                                        <label class="form-label" for="cpn_name"> Name*</label>
                                                         <input id="cpn_name" name="cpn_name" placeholder="Enter Company Name" type="text" class="form-control" required>
                                                     </div>
                                                 </div>
@@ -51,7 +51,7 @@
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
-                                                        <label for="cpn_type" class="form-label"> Type</label>
+                                                        <label for="cpn_type" class="form-label"> Type*</label>
                                                         <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
                                                             <option value="">Select</option>
                                                             <option value="fast_boat">Fast Boat</option>
@@ -73,19 +73,19 @@
                                                 <div class="col-lg-4">
     
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="cpn_phone"> Phone</label>
+                                                        <label class="form-label" for="cpn_phone"> Phone*</label>
                                                         <input id="cpn_phone" name="cpn_phone" type="text" class="form-control" placeholder="Enter Company Phone Number" required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="cpn_whatsapp"> Whatsapp</label>
+                                                        <label class="form-label" for="cpn_whatsapp"> Whatsapp*</label>
                                                         <input id="cpn_whatsapp" name="cpn_whatsapp" type="text" class="form-control" placeholder="Enter Company Whatsapp Number (62)" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label" for="cpn_address"> Address</label>
+                                                <label class="form-label" for="cpn_address"> Address*</label>
                                                 <textarea class="form-control" name="cpn_address" id="cpn_address" cols="30" rows="10" required></textarea>
                                             </div>
                                     </div>
@@ -121,7 +121,7 @@
                                                 <img class="rounded me-2" src="" id="previewImage" data-holder-rendered="true" style="height: 100px; width:100px;">
                                             </center>
                                             <br>
-                                            <label class="form-label" for="cpn_logo">Logo</label>
+                                            <label class="form-label" for="cpn_logo">Logo*</label>
                                             <input id="cpn_logo" name="cpn_logo" type="file" accept="image/*" class="form-control" required>
                                         </div>
                                     </div>

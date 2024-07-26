@@ -12,7 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedulesschedule', function (Blueprint $table) {
-            $table->id();
+            $table->id('sch_id');
+            $table->unsignedBigInteger('sch_company'); 
+            $table->foreign('sch_company')->references('cpn_id')->on('datacompany')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('sch_name');
             $table->timestamps();
         });
     }
