@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('rt_id');
             $table->string('rt_dept_island', 100);
             $table->string('rt_arrival_island', 100);
-            $table->string('rt_updated_by');
+            $table->string('rt_updated_by')->nullable();
             $table->timestamps();
         });
     }
