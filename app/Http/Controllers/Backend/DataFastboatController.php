@@ -13,7 +13,7 @@ class DataFastboatController extends Controller
     // this function is for view all data from fastboat table
     public function index()
     {
-        $fastboat = DataFastboat::paginate(10);
+        $fastboat = DataFastboat::all();
         $title = 'Delete Fastboat Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
