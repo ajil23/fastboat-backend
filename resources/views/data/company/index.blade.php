@@ -122,6 +122,7 @@
                 <p><strong>Address : </strong><span id="company-address"></span></p>
                 <p><strong>Website : </strong><span id="company-website"></span></p>
                 <p><strong>Type : </strong><span id="company-type"></span></p>
+                <p><strong>Status : </strong><span id="company-status"></span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
@@ -141,13 +142,28 @@
             var detailURL = $(this).data('url');
             $.get(detailURL, function(data){
                 $('#viewDetailModal').modal('show');
-                    $('#company-name').text(data.cpn_name);
-                    $('#company-email').text(data.cpn_email);
-                    $('#company-phone').text(data.cpn_phone);
-                    $('#company-whatsapp').text(data.cpn_whatsapp);
-                    $('#company-address').text(data.cpn_address);
-                    $('#company-website').text(data.cpn_website);
-                    $('#company-type').text(data.cpn_type);
+                $('#company-name').text(data.cpn_name);
+                $('#company-email').text(data.cpn_email);
+                $('#company-phone').text(data.cpn_phone);
+                $('#company-whatsapp').text(data.cpn_whatsapp);
+                $('#company-address').text(data.cpn_address);
+                $('#company-website').text(data.cpn_website);
+                $('#company-type').text(data.cpn_type);
+                    if (data.cpn_type === 'fast_boat') {
+                        $('#company-type').text('Fast Boat');
+                    } else if(data.cpn_type === 'tour'){
+                        $('#company-type').text('Tour');
+                    } else if(data.cpn_type === 'yacht'){
+                        $('#company-type').text('Yacht');
+                    } else {
+                        $('#company-type').text('Cat Transfer');
+                    }
+                $('#company-status').text(data.cpn_status);
+                    if (data.cpn_status === 1){
+                        $('#company-status').text('Enable');
+                    }else{
+                        $('#company-status').text('Disable');
+                    }
             })
         })
     });

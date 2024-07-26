@@ -90,7 +90,7 @@
             <div class="modal-body">
                 <p><strong>Name : </strong><span id="fastboat-name"></span></p>
                 <p><strong>Keywords : </strong><span id="fastboat-keywords"></span></p>
-                <p><strong>Status : </strong><span id="fastboat-status"></span></p>
+                <p><strong>Status : </strong><span id="fastboat-status">Enable</span></p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
@@ -114,6 +114,11 @@
                     $('#fastboat-name').text(data.fb_name);
                     $('#fastboat-keywords').text(data.fb_keywords);
                     $('#fastboat-status').text(data.fb_status);
+                    if (data.fb_status === 1){
+                        $('#fastboat-status').text('enable');
+                    }else{
+                        $('#fastboat-status').text('disable');
+                    }
             })
         })
     });
