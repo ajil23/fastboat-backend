@@ -47,7 +47,7 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td class="fw-semibold list-group-item" data-id="{{$item->fb_id}}">{{$item->fb_name}}</td>
+                                            <td class="fw-semibold search-item" data-id="{{$item->fb_id}}">{{$item->fb_name}}</td>
                                             <td>
                                                 {{$item->company->cpn_name}}
                                             </td>
@@ -116,7 +116,7 @@
         $('#search-input').on('input', function() {
             var search= $(this).val();
             var lowerCaseText = search.toLowerCase();
-            var list = $('.list-group-item');
+            var list = $('.search-item');
             // console.log(list);
             $('.search').show()
             list.each(function(){
@@ -149,5 +149,11 @@
     });
 </script>
 
-
+<script>
+    document.getElementById('nama_produk').addEventListener('input', function() {
+        const namaProduk = this.value;
+        const deskripsi = namaProduk.toLowerCase().replace(/ /g, '-');
+        document.getElementById('deskripsi').value = deskripsi;
+    });
+</script>
 @endsection

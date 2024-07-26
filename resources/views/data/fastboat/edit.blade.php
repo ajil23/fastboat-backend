@@ -393,4 +393,15 @@
         }
     });
 </script>
+
+{{-- javascript syntax to autfill slug --}}
+<script>
+    document.getElementById('fb_name').addEventListener('input', function() {
+        const fb_name = this.value;
+        const fb_slug_en = fb_name.toLowerCase().replace(/ /g, '-');
+        const fb_slug_idn = fb_name.toLowerCase().replace(/ /g, '-');
+        document.getElementById('fb_slug_en').value = fb_slug_en;
+        document.getElementById('fb_slug_idn').value = fb_slug_idn;
+    });
+</script>
 @endsection
