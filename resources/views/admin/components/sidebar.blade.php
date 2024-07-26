@@ -65,6 +65,9 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route ('fastboat.view')}}">Fast Boat</a></li>
                         <li><a href="{{route ('company.view')}}">Company</a></li>
+                        <li><a href="{{route ('route.view')}}">Route</a></li>
+                        <li><a href="{{route ('schedule.view')}}">Schedule</a></li>
+                        <li><a href="{{route ('trip.view')}}">Trip</a></li>
                     </ul>
                 </li>
 
