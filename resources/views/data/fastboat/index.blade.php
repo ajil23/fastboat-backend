@@ -84,23 +84,24 @@
     <!-- End Page-content -->
 
     <!-- Scrollable modal for view detail -->
-    <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog" aria-labelledby="viewDetailModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="viewDetailModalTitle">Fast Boat Information</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Name : </strong><span id="fastboat-name"></span></p>
-                    <p><strong>Keywords : </strong><span id="fastboat-keywords"></span></p>
-                    <p><strong>Status : </strong><span id="fastboat-status"></span></p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
+    <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
+    aria-labelledby="viewDetailModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDetailModalTitle">Fast Boat Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Name : </strong><span id="fastboat-name"></span></p>
+                <p><strong>Keywords : </strong><span id="fastboat-keywords"></span></p>
+                <p><strong>Status : </strong><span id="fastboat-status">Enable</span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
     @include('admin.components.footer')
@@ -135,9 +136,14 @@
             var detailURL = $(this).data('url');
             $.get(detailURL, function(data) {
                 $('#viewDetailModal').modal('show');
-                $('#fastboat-name').text(data.fb_name);
-                $('#fastboat-keywords').text(data.fb_keywords);
-                $('#fastboat-status').text(data.fb_status);
+                    $('#fastboat-name').text(data.fb_name);
+                    $('#fastboat-keywords').text(data.fb_keywords);
+                    $('#fastboat-status').text(data.fb_status);
+                    if (data.fb_status === 1){
+                        $('#fastboat-status').text('enable');
+                    }else{
+                        $('#fastboat-status').text('disable');
+                    }
             })
         })
     });
