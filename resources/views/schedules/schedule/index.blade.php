@@ -9,7 +9,7 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-wrap align-items-center mb-2">
-                                <h5 class="card-title">Company Table</h5>
+                                <h5 class="card-title">Schedule Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
                                         <a href="{{route('schedule.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Company</a>
