@@ -39,14 +39,14 @@
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_name_en">Name (en)</label>
+                                                    <label class="form-label" for="prt_name_en">Name (en)*</label>
                                                     <input id="prt_name_en" name="prt_name_en" placeholder="Enter Port Name in English" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_name_idn">Name (idn)</label>
+                                                    <label class="form-label" for="prt_name_idn">Name (idn)*</label>
                                                     <input id="prt_name_idn" name="prt_name_idn" placeholder="Enter Port Name in Bahasa" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
@@ -55,21 +55,21 @@
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_code">Code</label>
+                                                    <label class="form-label" for="prt_code">Code*</label>
                                                     <input id="prt_code" name="prt_code" placeholder="Enter Port Code" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_map">Maps</label>
+                                                    <label class="form-label" for="prt_map">Maps*</label>
                                                     <input id="prt_map" name="prt_map" placeholder="Longitude,Latitude" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_island">Island</label>
+                                                    <label class="form-label" for="prt_island">Island*</label>
                                                     <select class="form-control" name="prt_island" aria-label="Default select example" required>
                                                         <option selected>Choose Island</option>
                                                         @foreach ($data as $masterisland)
@@ -82,14 +82,14 @@
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="prt_address">Address</label>
+                                            <label class="form-label" for="prt_address">Address*</label>
                                             <textarea class="form-control" name="prt_address" cols="30" rows="5" required></textarea>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_content_en">Content (en)</label>
+                                                    <label class="form-label" for="prt_content_en">Content (en)*</label>
                                                     <textarea class="form-control" id="prt-content-en" name="prt_content_en" placeholder="Enter Content" rows="4"></textarea>
                                                 </div>
 
@@ -97,7 +97,7 @@
 
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_content_idn">Content (idn)</label>
+                                                    <label class="form-label" for="prt_content_idn">Content (idn)*</label>
                                                     <textarea class="form-control" id="prt-content-idn" name="prt_content_idn" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
                                             </div>
@@ -136,7 +136,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage1" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
-                                                    <label class="form-label" for="prt_image1">Image 1</label>
+                                                    <label class="form-label" for="prt_image1">Image 1*</label>
                                                     <input id="prt_image1" name="prt_image1" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
@@ -145,7 +145,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage2" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
-                                                    <label class="form-label" for="prt_image2">Image 2</label>
+                                                    <label class="form-label" for="prt_image2">Image 2*</label>
                                                     <input id="prt_image2" name="prt_image2" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
@@ -154,7 +154,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage3" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
-                                                    <label class="form-label" for="prt_image3">Image 3</label>
+                                                    <label class="form-label" for="prt_image3">Image 3*</label>
                                                     <input id="prt_image3" name="prt_image3" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
@@ -220,20 +220,20 @@
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
-                                            <label class="form-label" for="prt_keyword">Keywords</label>
+                                            <label class="form-label" for="prt_keyword">Keywords*</label>
                                             <input id="prt_keyword" name="prt_keyword" placeholder="Enter Keyword" type="text" class="form-control">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_slug_en">Slug (en)</label>
+                                                    <label class="form-label" for="prt_slug_en">Slug (en)*</label>
                                                     <input id="prt_slug_en" name="prt_slug_en" placeholder="Enter Port Slug" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_slug_idn">Slug (idn)</label>
+                                                    <label class="form-label" for="prt_slug_idn">Slug (idn)*</label>
                                                     <input id="prt_slug_idn" name="prt_slug_idn" placeholder="Enter Port Slug" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
@@ -242,7 +242,7 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_description_en">Description (en)</label>
+                                                    <label class="form-label" for="prt_description_en">Description (en)*</label>
                                                     <textarea class="form-control" id="prt_description_en" name="prt_description_en" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
 
@@ -250,7 +250,7 @@
 
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="prt_description_idn">Description (idn)</label>
+                                                    <label class="form-label" for="prt_description_idn">Description (idn)*</label>
                                                     <textarea class="form-control" id="prt_description_idn" name="prt_description_idn" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
                                             </div>
