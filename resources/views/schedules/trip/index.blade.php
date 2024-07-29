@@ -1,4 +1,4 @@
-@extends('admin.admin_master') 
+@extends('admin.admin_master')
 @section('admin')
 
 <div class="main-content">
@@ -20,6 +20,11 @@
                             <div class="table-responsive">
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
                                     <thead>
+                                        <div class="search-box">
+                                            <div class="position-relative">
+                                                <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search..." id="search-input"><i class="bx bx-search search-icon"></i>
+                                            </div>
+                                        </div>
                                         <tr>
                                             <th>No</th>
                                             <th>Name</th>
@@ -27,34 +32,134 @@
                                             <th>Route</th>
                                             <th>Fast Boat</th>
                                             <th>Schedule</th>
-                                            <th>Departured Port</th>
-                                            <th>Arrival Port</th>
+                                            <th>Departured</th>
+                                            <th>Arrival</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                        @foreach ($trip as $item)
+                                        <tr id="baris-{{$item->fbt_id}}" class="search">
+                                            <td>{{$loop->iteration}}</td>
+                                            <td class="search-item">{{$item->fbt_name}}</td>
+                                            <td>
+                                                <a href="{{route('trip.status', $item->fbt_id)}}" class="badge rounded-pill bg-{{$item->fbt_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fbt_status ? 'check-decagram' : 'alert-decagram'}}"></i>
+                                                    {{$item->fbt_status ? 'Enable' : 'Disable'}}
+                                                </a>
+                                            </td>
+                                            <td class="search-item">{{$item->route->rt_dept_island}} to {{$item->route->rt_arrival_island}}</td>
+                                            <td>{{$item->fastboat->fb_name}}</td>
+                                            <td>{{$item->schedule->sch_name}}</td>
+                                            <td>{{$item->deptPort->prt_name_en}} at {{$item->fbt_dept_time}}</td>
+                                            <td>{{$item->arrivalPort->prt_name_en}} at {{$item->fbt_arrival_time}}</td>
+                                            <td>
+                                                <div class="dropstart">
+                                                    <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                        <i class="mdi mdi-dots-horizontal"></i>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-end">
+                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('trip.show', $item->fbt_id)}}">View</a>
+                                                        <a class="dropdown-item" href="{{route('trip.edit', $item->fbt_id)}}">Edit</a>
+                                                        <a class="dropdown-item" data-confirm-delete="true" href="{{route('trip.delete', $item->fbt_id)}}">Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
+                                    {{-- {{$trip->links('pagination::bootstrap-5')}} --}}
                                 </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-          </div>
+        </div>
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
+
+    <!-- Scrollable modal for view detail -->
+    <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog" aria-labelledby="viewDetailModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewDetailModalTitle">Fast Boat Trip Information</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Name : </strong><span id="trip-name"></span></p>
+                    <p><strong>Status : </strong><span id="trip-status">Enable</span></p>
+                    <p><strong>Route : </strong><span id="trip-route"></span></p>
+                    <p><strong>Fast Boat : </strong><span id="trip-fastboat"></span></p>
+                    <p><strong>Schedule : </strong><span id="trip-schedule"></span></p>
+                    <p><strong>Departured : </strong><span id="trip-departure"></span></p>
+                    <p><strong>Departured Time : </strong><span id="trip-dept-time"></span></p>
+                    <p><strong>Time Limit for Booked : </strong><span id="trip-time-limit"></span></p>
+                    <p><strong>Time Gap : </strong><span id="trip-time-gap"></span></p>
+                    <p><strong>Arrival : </strong><span id="trip-arrival"></span></p>
+                    <p><strong>Arrival Time : </strong><span id="trip-arrival-time"></span></p>
+                    <p><strong>Info (EN) : </strong><span id="trip-info-en"></span></p>
+                    <p><strong>Info (IDN) : </strong><span id="trip-info-idn"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     @include('admin.components.footer')
 </div>
+@endsection
+
+
+@section('script')
+<!-- search box -->
+<script>
+    $(document).ready(function() {
+        $('#search-input').on('input', function() {
+            var search = $(this).val();
+            var lowerCaseText = search.toLowerCase();
+            var list = $('.search-item');
+            // console.log(list);
+            $('.search').show()
+            list.each(function() {
+                var item = $(this).text();
+                var id = $(this).data('id');
+                if (item.toLowerCase().includes(lowerCaseText) === false) {
+                    $('#baris-' + id).hide()
+                }
+            })
+        })
+    })
+</script>
+{{-- javascript to get data from database & view in modal --}}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('body').on('click', '#showDetail', function() {
+            var detailURL = $(this).data('url');
+            $.get(detailURL, function(data) {
+                $('#viewDetailModal').modal('show');
+                $('#trip-name').text(data.fbt_name);
+                $('#trip-status').text(data.fbt_status);
+                if (data.fbt_status === 1) {
+                    $('#trip-status').text('enable');
+                } else {
+                    $('#trip-status').text('disable');
+                }
+                $('#trip-route').text(data.fbt_route);
+                $('#trip-fastboat').text(data.fbt_fastboat);
+                $('#trip-schedule').text(data.fbt_schedule);
+                $('#trip-departure').text(data.fbt_dept_port);
+                $('#trip-dept-time').text(data.fbt_dept_time);
+                $('#trip-time-limit').text(data.fbt_time_limit);
+                $('#trip-time-gap').text(data.fbt_time_gap);
+                $('#trip-arrival').text(data.fbt_arrival_port);
+                $('#trip-arrival-time').text(data.fbt_arrival_time);
+                $('#trip-info-en').text(data.fbt_info_en);
+                $('#trip-info-idn').text(data.fbt_info_idn);
+            })
+        })
+    });
+</script>
 @endsection

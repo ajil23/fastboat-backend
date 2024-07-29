@@ -12,7 +12,28 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('schedulestrip', function (Blueprint $table) {
-            $table->id();
+            $table->id('fbt_id');
+            $table->string('fbt_name', 255);
+            $table->integer('fbt_status')->default(1);
+            $table->unsignedBigInteger('fbt_route');
+            $table->foreign('fbt_route')->references('rt_id')->on('dataroute')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('fbt_fastboat');
+            $table->foreign('fbt_fastboat')->references('fb_id')->on('datafastboat')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('fbt_schedule');
+            $table->foreign('fbt_schedule')->references('sch_id')->on('schedulesschedule')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('fbt_dept_port');
+            $table->foreign('fbt_dept_port')->references('prt_id')->on('masterport')->onDelete('cascade')->onUpdate('cascade');
+            $table->time('fbt_dept_time');
+            $table->time('fbt_time_limit');
+            $table->time('fbt_time_gap');
+            $table->unsignedBigInteger('fbt_arrival_port');
+            $table->foreign('fbt_arrival_port')->references('prt_id')->on('masterport')->onDelete('cascade')->onUpdate('cascade');
+            $table->time('fbt_arrival_time');
+            $table->text('fbt_info_en')->nullable();
+            $table->text('fbt_info_idn')->nullable();
+            $table->string('fbt_shuttle_type')->nullable();
+            $table->string('fbt_shuttle_option')->nullable();
+            $table->string('fbt_updated_by');
             $table->timestamps();
         });
     }

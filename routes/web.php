@@ -7,13 +7,6 @@ use App\Http\Controllers\Backend\MasterIslandController;
 use App\Http\Controllers\Backend\MasterPortController;
 use App\Http\Controllers\Backend\SchedulesScheduleController;
 use App\Http\Controllers\Backend\SchedulesTripController;
-use App\Http\Controllers\BookingDataController;
-use App\Http\Controllers\BookingTrashController;
-use App\Http\Controllers\DestinyIslandController;
-use App\Http\Controllers\DestinyPortController;
-use App\Http\Controllers\MitraCompanyController;
-use App\Http\Controllers\MitraFasboatController;
-use App\Http\Controllers\PartnerFastboatController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -89,6 +82,7 @@ Route::middleware([
         Route::post('/trip/update/{id}', [SchedulesTripController::class, 'update'])->name('trip.update');
         Route::delete('/trip/delete/{id}', [SchedulesTripController::class, 'delete'])->name('trip.delete');
         Route::get('/trip/{id}', [SchedulesTripController::class, 'show'])->name('trip.show');
+        Route::get('/trip/status/{id}', [SchedulesTripController::class, 'status'])->name('trip.status');
     });
 
     Route::prefix('master')->group(function () {

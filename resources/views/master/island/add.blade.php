@@ -38,20 +38,20 @@
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_name">Name</label>
+                                                    <label class="form-label" for="isd_name">Name*</label>
                                                     <input id="isd_name" name="isd_name" placeholder="Enter Island Name" type="text" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_code">Code</label>
+                                                    <label class="form-label" for="isd_code">Code*</label>
                                                     <input id="isd_code" name="isd_code" placeholder="Enter Island Code" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_map">Maps</label>
+                                                    <label class="form-label" for="isd_map">Maps*</label>
                                                     <input id="isd_map" name="isd_map" placeholder="Longitude,Latitude" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
@@ -60,7 +60,7 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_content_en">Content (en)</label>
+                                                    <label class="form-label" for="isd_content_en">Content (en)*</label>
                                                     <textarea class="form-control" id="isd-content-en" name="isd_content_en" placeholder="Enter Content" rows="4"></textarea>
                                                 </div>
 
@@ -68,7 +68,7 @@
 
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_content_idn">Content (idn)</label>
+                                                    <label class="form-label" for="isd_content_idn">Content (idn)*</label>
                                                     <textarea class="form-control" id="isd-content-idn" name="isd_content_idn" placeholder="Enter Content" rows="4"></textarea>
                                                 </div>
                                             </div>
@@ -108,7 +108,7 @@
                                                         <img class="rounded me-2" src="" id="previewImage1" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
                                                     <br>
-                                                    <label class="form-label" for="isd_image1">Image 1</label>
+                                                    <label class="form-label" for="isd_image1">Image 1*</label>
                                                     <input id="isd_image1" name="isd_image1" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
@@ -117,7 +117,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage2" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
-                                                    <label class="form-label" for="isd_image2">Image 2</label>
+                                                    <label class="form-label" for="isd_image2">Image 2*</label>
                                                     <input id="isd_image2" name="isd_image2" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
@@ -126,7 +126,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage3" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
-                                                    <label class="form-label" for="isd_image3">Image 3</label>
+                                                    <label class="form-label" for="isd_image3">Image 3*</label>
                                                     <input id="isd_image3" name="isd_image3" type="file" accept="image/*" class="form-control" required>
                                                 </div>
                                             </div>
@@ -192,20 +192,20 @@
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
-                                            <label class="form-label" for="isd_keyword">Keywords</label>
+                                            <label class="form-label" for="isd_keyword">Keywords*</label>
                                             <input id="isd_keyword" name="isd_keyword" placeholder="Enter Keyword" type="text" class="form-control">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_slug_en">Slug (en)</label>
+                                                    <label class="form-label" for="isd_slug_en">Slug (en)*</label>
                                                     <input id="isd_slug_en" name="isd_slug_en" placeholder="Enter Island Slug" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_slug_idn">Slug (idn)</label>
+                                                    <label class="form-label" for="isd_slug_idn">Slug (idn)*</label>
                                                     <input id="isd_slug_idn" name="isd_slug_idn" placeholder="Enter Island Slug" type="text" class="form-control" required>
                                                     </input>
                                                 </div>
@@ -214,7 +214,7 @@
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_description_en">Description (en)</label>
+                                                    <label class="form-label" for="isd_description_en">Description (en)*</label>
                                                     <textarea class="form-control" id="isd_description_en" name="isd_description_en" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
 
@@ -222,7 +222,7 @@
 
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="isd_description_idn">Description (idn)</label>
+                                                    <label class="form-label" for="isd_description_idn">Description (idn)*</label>
                                                     <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4"></textarea>
                                                 </div>
                                             </div>
