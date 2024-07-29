@@ -12,18 +12,24 @@
                                 <h5 class="card-title">Schedule Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="{{route('schedule.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Schedule</a>
+                                        <button class="btn btn-dark w-100" data-bs-toggle="modal"
+                                        data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i> Create New Schedule</button>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="table-responsive">
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                                    <div class="search-box">
+                                        <div class="position-relative">
+                                            <input type="serach" name="search" class="form-control rounded bg-light border-0" placeholder="Search..." id="search-input"><i class="bx bx-search search-icon"></i>
+                                        </div>
+                                    </div>
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>Company</th>
-                                            <th>Name</th>
+                                            <th>Schedule Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -31,7 +37,7 @@
                                         @foreach ($scheduleData as $item)
                                         <tr>
                                             <td>{{$loop->iteration}}</td>
-                                            <td class="fw-semibold">{{$item->sch_company}}</td>
+                                            <td>{{$item->company->cpn_name}}</td>
                                             <td>{{$item->sch_name}}</td>
                                             <td>
                                                 <div class="dropstart">
@@ -39,7 +45,8 @@
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="{{route('schedule.edit', $item->sch_id)}}">Edit</a>
+                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editDataModal" data-id="{{ $item->sch_id }}">Edit</a>
+                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-id="{{ $item->sch_id }}">Edit</button>
                                                         <a class="dropdown-item" data-confirm-delete="true" href="{{route('schedule.delete', $item->sch_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
@@ -58,6 +65,53 @@
         <!-- container-fluid -->
     </div>
     <!-- End Page-content -->
+
+     <!-- Adding data modal -->
+    <div class="modal fade" id="addDataModal" tabindex="-1" role="dialog"
+        aria-labelledby="addDataModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDataModalTitle">Create New Schedule</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{route('schedule.store')}}" method="post">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="sch_company" class="form-label">Company</label>
+                            <select class="form-control" data-trigger name="sch_company" id="sch_company" required>
+                                <option value="">Select Fast Boat Company</option>
+                                @foreach ($company as $item)
+                                    <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sch_name" class="form-label">Schedule Name</label>
+                            <input type="text" class="form-control" name="sch_name" id="sch_name" placeholder="Type the schedule name">
+                        </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-dark">Save</button>
+                        </div>
+                    </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     @include('admin.components.footer')
 </div>
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function() {
+        $('.edit-button').on('click', function() {
+            var id = $(this).data('id');
+            $('#editModal').modal('show');
+            // Isi form dengan data yang sesuai menggunakan AJAX jika diperlukan
+        });
+    });
+</script>
 @endsection
