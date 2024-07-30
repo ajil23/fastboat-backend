@@ -129,13 +129,23 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_shuttle_type">Shuttle Type</label>
-                                                    <input class="form-control" id="fbt_shuttle_type" name="fbt_shuttle_type" placeholder="Enter Shuttle Type" type="text" ></input>
+                                                    <br>
+                                                    <input class="form-check-input" type="radio" id="null" name="fbt_shuttle_type" value="null">
+                                                    <label for="null">Null</label>
+                                                    <input class="form-check-input" type="radio" id="private" name="fbt_shuttle_type" value="Private">
+                                                    <label for="private">Private</label>
+                                                    <input class="form-check-input" type="radio" id="Sharing" name="fbt_shuttle_type" value="Sharing">
+                                                    <label for="Sharing">Sharing</label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_shuttle_option">Shuttle Option</label>
-                                                    <input class="form-control" id="fbt_shuttle_option" name="fbt_shuttle_option" placeholder="Enter Shuttle Option" type="text" ></input>
+                                                    <br>
+                                                    <input class="form-check-input" type="radio" id="pickup" name="fbt_shuttle_option" value="pickup">
+                                                    <label for="pickup">Pick up</label>
+                                                    <input class="form-check-input" type="radio" id="dropoff" name="fbt_shuttle_option" value="drop">
+                                                    <label for="drop">Drop Off</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -177,4 +187,25 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
+@section('script')
+
+<script>
+    const tipeRadioButtons = document.querySelectorAll('input[name="fbt_shuttle_type"]');
+    const opsiRadioButtons = document.querySelectorAll('input[name="fbt_shuttle_option"]');
+  
+    tipeRadioButtons.forEach(button => {
+      button.addEventListener('change', () => {
+        const selectedValue = button.value;
+        opsiRadioButtons.forEach(opsiButton => {
+          if (selectedValue === 'null') {
+            opsiButton.disabled = true;
+          } else {
+            opsiButton.disabled = false;
+          }
+        });
+      });
+    });
+  </script>
+  
 @endsection
