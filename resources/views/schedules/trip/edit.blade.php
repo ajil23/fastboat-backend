@@ -33,7 +33,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_dept_port">Departured Port*</label>
                                                     <select id="fbt_dept_port" name="fbt_dept_port" aria-label="Default select example" class="form-control" required>
-                                                        <option value="{{$tripEdit->fbt_dept_port}}" selected>{{$tripEdit->deptPort->prt_name_en}}</option>
+                                                        <option value="{{$tripEdit->fbt_dept_port}}" selected>{{$tripEdit->departure->prt_name_en}}</option>
                                                         @foreach ($departure as $item)
                                                         <option value="{{$item->prt_id}}">
                                                             {{$item->prt_name_en}}
@@ -97,7 +97,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_arrival_port">Arrival Port*</label>
                                                     <select class="form-control" id="fbt_arrival_port" name="fbt_arrival_port" aria-label="Defaut select example" required>
-                                                        <option value="{{$tripEdit->fbt_arrival_port}}" selected>{{$tripEdit->arrivalPort->prt_name_en}}</option>
+                                                        <option value="{{$tripEdit->fbt_arrival_port}}" selected>{{$tripEdit->arrival->prt_name_en}}</option>
                                                         @foreach ($arrival as $item)
                                                         <option value="{{$item->prt_id}}">
                                                             {{$item->prt_name_en}}
