@@ -28,9 +28,9 @@ class SchedulesTripController extends Controller
         $route = DataRoute::all();
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
-        $deptPort = MasterPort::all();
-        $arrivalPort = MasterPort::all();
-        return view('schedules.trip.add', compact('route', 'fastboat', 'schedule', 'deptPort', 'arrivalPort'));
+        $departure = MasterPort::all();
+        $arrival = MasterPort::all();
+        return view('schedules.trip.add', compact('route', 'fastboat', 'schedule', 'departure', 'arrival'));
     }
 
     public function store(Request $request)
@@ -77,9 +77,9 @@ class SchedulesTripController extends Controller
         $route = DataRoute::all();
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
-        $deptPort = MasterPort::all();
-        $arrivalPort = MasterPort::all();
-        return view('schedules.trip.edit', compact('tripEdit', 'route', 'fastboat', 'schedule', 'deptPort', 'arrivalPort'));
+        $departure = MasterPort::all();
+        $arrival = MasterPort::all();
+        return view('schedules.trip.edit', compact('tripEdit', 'route', 'fastboat', 'schedule', 'departure', 'arrival'));
     }
 
 
@@ -119,7 +119,12 @@ class SchedulesTripController extends Controller
     // this function will get $id of selected data and view it in modal
     public function show($id)
     {
-        $tripData = SchedulesTrip::find($id);
+        $tripData = SchedulesTrip::with(['route', 'fastboat', 'schedule', 'departure', 'arrival'])->findOrFail($id);
+        // Format waktu tanpa detik
+        $tripData->fbt_dept_time = \Carbon\Carbon::parse($tripData->fbt_dept_time)->format('H:i');
+        $tripData->fbt_time_limit = \Carbon\Carbon::parse($tripData->fbt_time_limit)->format('H:i');
+        $tripData->fbt_time_gap = \Carbon\Carbon::parse($tripData->fbt_time_gap)->format('H:i');
+        $tripData->fbt_arrival_time = \Carbon\Carbon::parse($tripData->fbt_arrival_time)->format('H:i');
         return response()->json($tripData);
     }
 

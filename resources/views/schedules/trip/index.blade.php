@@ -50,8 +50,8 @@
                                             <td class="search-item" data-id="{{$item->rt_id}}">{{$item->route->rt_dept_island}} to {{$item->route->rt_arrival_island}}</td>
                                             <td>{{$item->fastboat->fb_name}}</td>
                                             <td>{{$item->schedule->sch_name}}</td>
-                                            <td>{{$item->deptPort->prt_name_en}} at {{date('H:i', strtotime($item->fbt_dept_time));}}</td>
-                                            <td>{{$item->arrivalPort->prt_name_en}} at {{date('H:i', strtotime($item->fbt_arrival_time));}}</td>
+                                            <td>{{$item->departure->prt_name_en}} at {{date('H:i', strtotime($item->fbt_dept_time));}}</td>
+                                            <td>{{$item->arrival->prt_name_en}} at {{date('H:i', strtotime($item->fbt_arrival_time));}}</td>
                                             <td>
                                                 <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
@@ -147,14 +147,14 @@
                 } else {
                     $('#trip-status').text('disable');
                 }
-                $('#trip-route').text(data.fbt_route);
-                $('#trip-fastboat').text(data.fbt_fastboat);
-                $('#trip-schedule').text(data.fbt_schedule);
-                $('#trip-departure').text(data.fbt_dept_port);
+                $('#trip-route').text(data.route.rt_dept_island);
+                $('#trip-fastboat').text(data.fastboat.fb_name);
+                $('#trip-schedule').text(data.schedule.sch_name);
+                $('#trip-departure').text(data.departure.prt_name_en);
                 $('#trip-dept-time').text(data.fbt_dept_time);
                 $('#trip-time-limit').text(data.fbt_time_limit);
                 $('#trip-time-gap').text(data.fbt_time_gap);
-                $('#trip-arrival').text(data.fbt_arrival_port);
+                $('#trip-arrival').text(data.arrival.prt_name_en);
                 $('#trip-arrival-time').text(data.fbt_arrival_time);
                 $('#trip-info-en').text(data.fbt_info_en);
                 $('#trip-info-idn').text(data.fbt_info_idn);

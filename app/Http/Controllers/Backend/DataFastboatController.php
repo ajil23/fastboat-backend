@@ -176,7 +176,7 @@ class DataFastboatController extends Controller
     // this function will get $id of selected data and view it in modal
     public function show($id)
     {
-        $fastboatData = DataFastboat::find($id);
+        $fastboatData = DataFastboat::with(['company'])->findOrFail($id);
         return response()->json($fastboatData);
     }
 

@@ -21,10 +21,10 @@ class SchedulesTrip extends Model
     public function schedule(){
         return $this->belongsTo(SchedulesSchedule::class,'fbt_schedule','sch_id');
     }
-    public function deptPort(){
+    public function departure(){
         return $this->belongsTo(MasterPort::class,'fbt_dept_port','prt_id');
     }
-    public function arrivalPort(){
+    public function arrival(){
         return $this->belongsTo(MasterPort::class,'fbt_arrival_port','prt_id');
     }
 }

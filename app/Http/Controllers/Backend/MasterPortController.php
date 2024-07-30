@@ -14,18 +14,18 @@ class MasterPortController extends Controller
     public function index()
     {
         $port = MasterPort::all();
-        $data = MasterIsland::all();
+        $island = MasterIsland::all();
         $title = 'Delete Port Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        return view('master.port.index', compact('port', 'data'));
+        return view('master.port.index', compact('port', 'island'));
     }
 
     // this function is for view form to add port data
     public function add()
     {
-        $data = MasterIsland::all();
-        return view('master.port.add', compact('data'));
+        $island = MasterIsland::all();
+        return view('master.port.add', compact('island'));
     }
 
     // this function will request data from input in port add form
@@ -120,7 +120,7 @@ class MasterPortController extends Controller
     public function edit($id)
     {
         $portEdit = MasterPort::find($id);
-        $data = MasterIsland::all();
+        $island = MasterIsland::all();
         return view('master.port.edit', compact('portEdit', 'data'));
     }
 
@@ -185,7 +185,7 @@ class MasterPortController extends Controller
     // this function will get $id of selected data and view it in modal
     public function show($id)
     {
-        $portData = MasterPort::find($id);
+        $portData = MasterPort::with(['island'])->find($id);
         return response()->json($portData);
     }
 }
