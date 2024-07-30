@@ -20,12 +20,12 @@
 
                             <div class="table-responsive">
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
-                                    <div class="search-box">
-                                        <div class="position-relative">
-                                            <input type="serach" name="search" class="form-control rounded bg-light border-0" placeholder="Search..." id="search-input"><i class="bx bx-search search-icon"></i>
-                                        </div>
-                                    </div>
                                     <thead>
+                                        <div class="search-box">
+                                            <div class="position-relative">
+                                                <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search..." id="search-input"><i class="bx bx-search search-icon"></i>
+                                            </div>
+                                        </div>
                                         <tr>
                                             <th>No</th>
                                             <th>Company</th>
@@ -35,18 +35,17 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($scheduleData as $item)
-                                        <tr>
+                                        <tr id="baris-{{$item->sch_id}}" class="search">
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$item->company->cpn_name}}</td>
-                                            <td>{{$item->sch_name}}</td>
+                                            <td class="search-item"  data-id="{{$item->sch_id}}">{{$item->sch_name}}</td>
                                             <td>
                                                 <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editDataModal" data-id="{{ $item->sch_id }}">Edit</a>
-                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal" data-id="{{ $item->sch_id }}">Edit</button>
+                                                        <a class="dropdown-item" href="{{route('schedule.edit', $item->sch_id)}}">Edit</a>
                                                         <a class="dropdown-item" data-confirm-delete="true" href="{{route('schedule.delete', $item->sch_id)}}" >Delete</a>
                                                     </div>
                                                 </div>
@@ -89,7 +88,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="sch_name" class="form-label">Schedule Name</label>
-                            <input type="text" class="form-control" name="sch_name" id="sch_name" placeholder="Type the schedule name">
+                            <input type="text" class="form-control" name="sch_name" id="sch_name" placeholder="Type the schedule name" required>
                         </div>
                         </div>
                         <div class="modal-footer">
@@ -105,6 +104,25 @@
 @endsection
 
 @section('script')
+<!-- search box -->
+<script>
+    $(document).ready(function() {
+        $('#search-input').on('input', function() {
+            var search= $(this).val();
+            var lowerCaseText = search.toLowerCase();
+            var list = $('.search-item');
+            // console.log(list);
+            $('.search').show()
+            list.each(function(){
+                var item = $(this).text();
+                var id = $(this).data('id');
+                if(item.toLowerCase().includes(lowerCaseText)===false){
+                    $('#baris-'+id).hide()
+                }
+            })
+        })
+    })
+</script>
 <script>
     $(document).ready(function() {
         $('.edit-button').on('click', function() {

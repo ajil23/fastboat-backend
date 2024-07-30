@@ -148,12 +148,4 @@
         })
     });
 </script>
-
-<script>
-    document.getElementById('nama_produk').addEventListener('input', function() {
-        const namaProduk = this.value;
-        const deskripsi = namaProduk.toLowerCase().replace(/ /g, '-');
-        document.getElementById('deskripsi').value = deskripsi;
-    });
-</script>
 @endsection
