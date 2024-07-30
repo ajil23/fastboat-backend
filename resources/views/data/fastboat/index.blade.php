@@ -22,7 +22,7 @@
                                     <thead>
                                     <div class="search-box">
                                         <div class="position-relative">
-                                            <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search..." id="search-input"><i class="bx bx-search search-icon"></i>
+                                            <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search fastboat..." id="search-input"><i class="bx bx-search search-icon"></i>
                                         </div>
                                     </div>
                                         <tr>
