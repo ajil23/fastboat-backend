@@ -38,15 +38,15 @@ class SchedulesScheduleController extends Controller
     
     // this function will get the $id of the selected data and then view the schedule edit form
     public function edit($id){
-        $scheduleData = SchedulesSchedule::findOrFail($id);
-        $company = DataCompany::find($id);
+        $scheduleData = SchedulesSchedule::find($id);
+        $company = DataCompany::all();
         return view('schedules.schedule.edit', compact('scheduleData', 'company'));
     }
 
     //this function will get the $id of the selected data and request data from input in schedule edit from 
     public function update(Request $request, $id){
         // Handle insert data to database
-        $scheduleData = SchedulesSchedule::findOrFail($id);
+        $scheduleData = SchedulesSchedule::find($id);
         $scheduleData -> sch_company = $request->sch_company;
         $scheduleData -> sch_name = $request->sch_name;
         $scheduleData -> update();
