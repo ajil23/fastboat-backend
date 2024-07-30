@@ -22,33 +22,9 @@
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_name">Name*</label>
-                                                    <input id="fbt_name" name="fbt_name" placeholder="Enter Trip Name" type="text" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_dept_port">Departured Port*</label>
-                                                    <select id="fbt_dept_port" name="fbt_dept_port" aria-label="Default select example" class="form-control" required>
-                                                        <option selected>Select Departured Port</option>
-                                                        @foreach ($departure as $item)
-                                                        <option value="{{$item->prt_id}}">
-                                                            {{$item->prt_name_en}}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_dept_time">Departured Time*</label>
-                                                    <input id="fbt_dept_time" name="fbt_dept_time" placeholder="Enter Time" type="time" class="form-control" required>
-                                                    </input>
-                                                </div>
-                                            </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="fbt_name">Name*</label>
+                                            <input id="fbt_name" name="fbt_name" placeholder="Enter Trip Name" type="text" class="form-control" required>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-4">
@@ -64,22 +40,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_time_limit">Time Limit for Booked*</label>
-                                                    <input class="form-control" id="fbt_time_limit" name="fbt_time_limit" placeholder="Enter Time" type="time" required></input>
-                                                </div>
-
-                                            </div>
-
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_time_gap">Time Gap*</label>
-                                                    <input class="form-control" id="fbt_time_gap" name="fbt_time_gap" placeholder="Enter Content" type="time" required></input>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_fastboat">Fastboat*</label>
@@ -93,27 +53,6 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_arrival_port">Arrival Port*</label>
-                                                    <select class="form-control" id="fbt_arrival_port" name="fbt_arrival_port" aria-label="Defaut select example" required>
-                                                        <option selected>Select Arrival Port</option>
-                                                        @foreach ($arrival as $item)
-                                                        <option value="{{$item->prt_id}}">
-                                                            {{$item->prt_name_en}}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_arrival_time">Arrival Time*</label>
-                                                    <input class="form-control" id="fbt_arrival_time" name="fbt_arrival_time" placeholder="Enter Content" type="time" required></input>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_schedule">Fastboat Schedule*</label>
@@ -127,13 +66,73 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fbt_dept_port">Departured Port*</label>
+                                                    <select id="fbt_dept_port" name="fbt_dept_port" aria-label="Default select example" class="form-control" required>
+                                                        <option selected>Select Departured Port</option>
+                                                        @foreach ($departure as $item)
+                                                        <option value="{{$item->prt_id}}">
+                                                            {{$item->prt_name_en}}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fbt_dept_time">Departured Time*</label>
+                                                    <input id="fbt_dept_time" name="fbt_dept_time" placeholder="Enter Time" type="time" class="form-control" required>
+                                                    </input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fbt_arrival_port">Arrival Port*</label>
+                                                    <select class="form-control" id="fbt_arrival_port" name="fbt_arrival_port" aria-label="Defaut select example" required>
+                                                        <option selected>Select Arrival Port</option>
+                                                        @foreach ($arrival as $item)
+                                                        <option value="{{$item->prt_id}}">
+                                                            {{$item->prt_name_en}}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fbt_arrival_time">Arrival Time*</label>
+                                                    <input class="form-control" id="fbt_arrival_time" name="fbt_arrival_time" placeholder="Enter Content" type="time" required></input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fbt_time_limit">Time Limit for Booked*</label>
+                                                    <input class="form-control" id="fbt_time_limit" name="fbt_time_limit" placeholder="Enter Time" type="time" required></input>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fbt_time_gap">Time Gap*</label>
+                                                    <input class="form-control" id="fbt_time_gap" name="fbt_time_gap" placeholder="Enter Content" type="time" required></input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_shuttle_type">Shuttle Type</label>
                                                     <input class="form-control" id="fbt_shuttle_type" name="fbt_shuttle_type" placeholder="Enter Shuttle Type" type="text" ></input>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_shuttle_option">Shuttle Option</label>
                                                     <input class="form-control" id="fbt_shuttle_option" name="fbt_shuttle_option" placeholder="Enter Shuttle Option" type="text" ></input>
