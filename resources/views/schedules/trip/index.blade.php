@@ -22,7 +22,7 @@
                                     <thead>
                                         <div class="search-box">
                                             <div class="position-relative">
-                                                <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search..." id="search-input"><i class="bx bx-search search-icon"></i>
+                                                <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search by Name" id="search-input"><i class="bx bx-search search-icon"></i>
                                             </div>
                                         </div>
                                         <tr>
@@ -47,11 +47,11 @@
                                                     {{$item->fbt_status ? 'Enable' : 'Disable'}}
                                                 </a>
                                             </td>
-                                            <td class="search-item">{{$item->route->rt_dept_island}} to {{$item->route->rt_arrival_island}}</td>
+                                            <td class="search-item" data-id="{{$item->rt_id}}">{{$item->route->rt_dept_island}} to {{$item->route->rt_arrival_island}}</td>
                                             <td>{{$item->fastboat->fb_name}}</td>
                                             <td>{{$item->schedule->sch_name}}</td>
-                                            <td>{{$item->deptPort->prt_name_en}} at {{$item->fbt_dept_time}}</td>
-                                            <td>{{$item->arrivalPort->prt_name_en}} at {{$item->fbt_arrival_time}}</td>
+                                            <td>{{$item->deptPort->prt_name_en}} at {{date('H:i', strtotime($item->fbt_dept_time));}}</td>
+                                            <td>{{$item->arrivalPort->prt_name_en}} at {{date('H:i', strtotime($item->fbt_arrival_time));}}</td>
                                             <td>
                                                 <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
