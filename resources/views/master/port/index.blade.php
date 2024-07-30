@@ -92,6 +92,7 @@
             <div class="modal-body">
                 <p><strong>Name ENG : </strong><span id="port-nameen"></span></p>
                 <p><strong>Name IDN : </strong><span id="port-nameidn"></span></p>
+                <p><strong>Island : </strong><span id="port-island"></span></p>
                 <p><strong>Code : </strong><span id="port-code"></span></p>
                 <p><strong>Map : </strong><span id="port-map"></span></p>
                 <p><strong>Address : </strong><span id="port-address"></span></p>
@@ -122,6 +123,7 @@
                 $('#viewDetailModal').modal('show');
                     $('#port-nameen').text(data.prt_name_en);
                     $('#port-nameidn').text(data.prt_name_idn);
+                    $('#port-island').text(data.island.isd_name);
                     $('#port-code').text(data.prt_code);
                     $('#port-map').text(data.prt_map);
                     $('#port-address').text(data.prt_address);

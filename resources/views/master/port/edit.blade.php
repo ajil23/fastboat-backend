@@ -72,7 +72,7 @@
                                                     <label class="form-label" for="prt_island">Island</label>
                                                     <select class="form-control" name="prt_island" aria-label="Default select example" required>
                                                         <option value="{{$portEdit->prt_island}}" selected>{{$portEdit->masterisland->isd_name}}</option>
-                                                        @foreach ($data as $masterisland)
+                                                        @foreach ($island as $masterisland)
                                                         <option value="{{ $masterisland->isd_id }}">
                                                             {{ $masterisland->isd_name}}
                                                         </option>

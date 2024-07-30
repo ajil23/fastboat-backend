@@ -94,6 +94,7 @@
             </div>
             <div class="modal-body">
                 <p><strong>Name : </strong><span id="fastboat-name"></span></p>
+                <p><strong>Company : </strong><span id="fastboat-company"></span></p>
                 <p><strong>Keywords : </strong><span id="fastboat-keywords"></span></p>
                 <p><strong>Status : </strong><span id="fastboat-status">Enable</span></p>
             </div>
@@ -137,6 +138,7 @@
             $.get(detailURL, function(data) {
                 $('#viewDetailModal').modal('show');
                     $('#fastboat-name').text(data.fb_name);
+                    $('#fastboat-company').text(data.company.cpn_name);
                     $('#fastboat-keywords').text(data.fb_keywords);
                     $('#fastboat-status').text(data.fb_status);
                     if (data.fb_status === 1){
