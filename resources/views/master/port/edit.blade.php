@@ -135,6 +135,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="{{ asset('storage/'.$portEdit->prt_image1) }}" id="previewImage1" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
+                                                    <br>
                                                     <label class="form-label" for="prt_image1">Image 1</label>
                                                     <input id="prt_image1" name="prt_image1" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image1}}">
                                                 </div>
@@ -144,6 +145,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="{{ asset('storage/'.$portEdit->prt_image2) }}" id="previewImage2" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
+                                                    <br>
                                                     <label class="form-label" for="prt_image2">Image 2</label>
                                                     <input id="prt_image2" name="prt_image2" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image2}}">
                                                 </div>
@@ -153,6 +155,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="{{ asset('storage/'.$portEdit->prt_image3) }}" id="previewImage3" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
+                                                    <br>
                                                     <label class="form-label" for="prt_image3">Image 3</label>
                                                     <input id="prt_image3" name="prt_image3" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image3}}">
                                                 </div>
@@ -164,6 +167,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="{{ asset('storage/'.$portEdit->prt_image4) }}" id="previewImage4" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
+                                                    <br>
                                                     <label class="form-label" for="prt_image4">Image 4</label>
                                                     <input id="prt_image4" name="prt_image4" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image4}}">
                                                 </div>
@@ -173,6 +177,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="{{ asset('storage/'.$portEdit->prt_image5) }}" id="previewImage5" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
+                                                    <br>
                                                     <label class="form-label" for="prt_image5">Image 5</label>
                                                     <input id="prt_image5" name="prt_image5" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image5}}">
                                                 </div>
@@ -182,6 +187,7 @@
                                                     <center>
                                                         <img class="rounded me-2" src="{{ asset('storage/'.$portEdit->prt_image6) }}" id="previewImage6" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                     </center>
+                                                    <br>
                                                     <label class="form-label" for="prt_image6">Image 6</label>
                                                     <input id="prt_image6" name="prt_image6" type="file" accept="image/*" class="form-control" value="{{$portEdit->prt_image6}}">
                                                 </div>
