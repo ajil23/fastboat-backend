@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class ScheduleShuttle extends Model
+{
+    use HasFactory;
+    protected $table = "schedulesshuttle";
+    protected $primaryKey = 's_id';
+    protected $fillable = ['s_id', 's_trip', 's_area', 's_start', 's_end', 's_meeting_point','updated_by'];
+
+    public function trip(){
+        return $this->belongsTo(SchedulesTrip::class,'s_trip','fbt_id');
+    }
+    public function area(){
+        return $this->belongsTo(ScheduleShuttleArea::class,'s_area','sa_id');
+    }
+    
+}
