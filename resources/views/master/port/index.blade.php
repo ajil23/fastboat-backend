@@ -25,6 +25,7 @@
                                             <th style="width: 90px;">Image</th>
                                             <th>Name ENG</th>
                                             <th>Name IDN</th>
+                                            <th>Island</th>
                                             <th>Code</th>
                                             <th>Map</th>
                                             <th>Address</th>
@@ -46,6 +47,7 @@
                                             </td>
                                             <td>{{$item->prt_name_en}}</td>
                                             <td>{{$item->prt_name_idn}}</td>
+                                            <td>{{$item->island->isd_name}}</td>
                                             <td>{{$item->prt_code}}</td>
                                             <td>
                                             <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}"  class="badge bg-success-subtle text-success  font-size-12" target="blank">
@@ -70,6 +72,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                {{$port->links('pagination::bootstrap-5')}}
                             </div>
                         </div>
                     </div>

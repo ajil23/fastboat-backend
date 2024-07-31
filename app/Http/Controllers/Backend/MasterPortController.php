@@ -13,7 +13,7 @@ class MasterPortController extends Controller
     // this function is for view all data from port table
     public function index()
     {
-        $port = MasterPort::all();
+        $port = MasterPort::orderBy('prt_name_en', 'asc')->paginate(15);
         $island = MasterIsland::all();
         $title = 'Delete Port Data!';
         $text = "Are you sure you want to delete?";
