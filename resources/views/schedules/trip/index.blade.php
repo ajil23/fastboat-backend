@@ -12,7 +12,7 @@
                                 <h5 class="card-title">Trip Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="{{route('trip.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Trip</a>
+                                        <a href="{{route('trip.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Trip</a>
                                     </div>
                                 </div>
                             </div>

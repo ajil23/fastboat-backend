@@ -12,7 +12,7 @@
                                 <h5 class="card-title">Island Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                    <a href="{{route('island.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Add New Island</a>
+                                    <a href="{{route('island.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Island</a>
                                     </div>
                                 </div>
                             </div>

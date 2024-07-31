@@ -13,7 +13,7 @@
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
                                         <button class="btn btn-dark w-100" data-bs-toggle="modal"
-                                        data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i> Create New Route</button>
+                                        data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Route</button>
                                     </div>
                                 </div>
                             </div>
