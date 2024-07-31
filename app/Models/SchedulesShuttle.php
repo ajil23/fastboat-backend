@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ScheduleShuttle extends Model
+class SchedulesShuttle extends Model
 {
     use HasFactory;
     protected $table = "schedulesshuttle";
@@ -16,7 +16,7 @@ class ScheduleShuttle extends Model
         return $this->belongsTo(SchedulesTrip::class,'s_trip','fbt_id');
     }
     public function area(){
-        return $this->belongsTo(ScheduleShuttleArea::class,'s_area','sa_id');
+        return $this->belongsTo(SchedulesShuttleArea::class,'s_area','sa_id');
     }
     
 }
