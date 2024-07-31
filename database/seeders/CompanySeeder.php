@@ -134,29 +134,5 @@ class CompanySeeder extends Seeder
             'cpn_type' => 'fast_boat',
             'cpn_updated_by' => 1, 
         ]);
-        DB::table('datacompany')->insert([
-            'cpn_name' => 'Gilitransfers',
-            'cpn_email' => 'reservation@gilitransfers.com',
-            'cpn_email_status' => 1,
-            'cpn_phone' => 6281122223333,
-            'cpn_whatsapp' => 6281122223333,
-            'cpn_address' => 'Jl Gong Kebyar 22 Jimbaran',
-            'cpn_website' => 'https://gilitransfers.com',
-            'cpn_status' => 1,
-            'cpn_type' => 'fast_boat',
-            'cpn_updated_by' => 1, 
-        ]);
-        DB::table('datacompany')->insert([
-            'cpn_name' => 'Gilitransfers',
-            'cpn_email' => 'reservation@gilitransfers.com',
-            'cpn_email_status' => 1,
-            'cpn_phone' => 6281122223333,
-            'cpn_whatsapp' => 6281122223333,
-            'cpn_address' => 'Jl Gong Kebyar 22 Jimbaran',
-            'cpn_website' => 'https://gilitransfers.com',
-            'cpn_status' => 1,
-            'cpn_type' => 'fast_boat',
-            'cpn_updated_by' => 1, 
-        ]);
     }
 }
