@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DataFastboat;
 use App\Models\DataRoute;
 use App\Models\MasterPort;
+use App\Models\ScheduleShuttle;
 use App\Models\SchedulesSchedule;
 use App\Models\SchedulesTrip;
 use Illuminate\Http\Request;
@@ -37,7 +38,6 @@ class SchedulesTripController extends Controller
     {
         // Handle the request data validation
         $request->validate([
-            'fbt_name' => 'required',
             'fbt_route' => 'required',
             'fbt_fastboat' => 'required',
             'fbt_schedule' => 'required',
@@ -48,9 +48,17 @@ class SchedulesTripController extends Controller
             'fbt_arrival_time' => 'required',
         ]);
 
+       // Get route & schedule id
+       $fbt_route_id = $request->fbt_route;
+       $fbt_schedule_id = $request->fbt_schedule;
+
+       // Find route & schedule id
+       $fbtrip = DataRoute::findOrFail($fbt_route_id);
+       $fbtschedule = SchedulesSchedule::findOrFail($fbt_schedule_id);
+
         // Handle insert data to database
         $tripData = new SchedulesTrip();
-        $tripData->fbt_name = $request->fbt_name;
+        $tripData->fbt_name = $fbtschedule ->sch_name. ' for '.$fbtrip ->rt_dept_island .' to '. $fbtrip->rt_arrival_island;
         $tripData->fbt_route = $request->fbt_route;
         $tripData->fbt_fastboat = $request->fbt_fastboat;
         $tripData->fbt_schedule = $request->fbt_schedule;
