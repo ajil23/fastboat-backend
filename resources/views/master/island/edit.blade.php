@@ -107,6 +107,7 @@
                                                         <center>
                                                             <img class="rounded me-2" src="{{ asset('storage/'.$islandEdit->isd_image1) }}" id="previewImage1" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                         </center>
+                                                        <br>
                                                         <label class="form-label" for="isd_image1">Image 1</label>
                                                         <input id="isd_image1" name="isd_image1" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image1}}">
                                                     </div>
@@ -116,6 +117,7 @@
                                                         <center>
                                                             <img class="rounded me-2" src="{{ asset('storage/'.$islandEdit->isd_image2) }}" id="previewImage2" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                         </center>
+                                                        <br>
                                                         <label class="form-label" for="isd_image2">Image 2</label>
                                                         <input id="isd_image2" name="isd_image2" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image2}}">
                                                     </div>
@@ -125,6 +127,7 @@
                                                         <center>
                                                             <img class="rounded me-2" src="{{ asset('storage/'.$islandEdit->isd_image3) }}" id="previewImage3" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                         </center>
+                                                        <br>
                                                         <label class="form-label" for="isd_image3">Image 3</label>
                                                         <input id="isd_image3" name="isd_image3" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image3}}">
                                                     </div>
@@ -136,6 +139,7 @@
                                                         <center>
                                                             <img class="rounded me-2" src="{{ asset('storage/'.$islandEdit->isd_image4) }}" id="previewImage4" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                         </center>
+                                                        <br>
                                                         <label class="form-label" for="isd_image4">Image 4</label>
                                                         <input id="isd_image4" name="isd_image4" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image4}}">
                                                     </div>
@@ -146,6 +150,7 @@
                                                         <center>
                                                             <img class="rounded me-2" src="{{ asset('storage/'.$islandEdit->isd_image5) }}" id="previewImage5" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                         </center>
+                                                        <br>
                                                         <label class="form-label" for="isd_image5">Image 5</label>
                                                         <input id="isd_image5" name="isd_image5" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image5}}">
                                                     </div>
@@ -155,6 +160,7 @@
                                                         <center>
                                                             <img class="rounded me-2" src="{{ asset('storage/'.$islandEdit->isd_image6) }}" id="previewImage6" data-holder-rendered="true" style="height: 100px; width:100px;">
                                                         </center>
+                                                        <br>
                                                         <label class="form-label" for="isd_image6">Image 6</label>
                                                         <input id="isd_image6" name="isd_image6" type="file" accept="image/*" class="form-control" value="{{$islandEdit->isd_image6}}">
                                                     </div>
@@ -286,7 +292,7 @@
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
-                ['view', [ 'codeview', 'help']]
+                ['view', ['codeview', 'help']]
             ]
         });
     });
