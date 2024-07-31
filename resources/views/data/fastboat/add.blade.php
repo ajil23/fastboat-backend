@@ -422,10 +422,6 @@
         'height': '40px',
         'line-height': '40px'
     });
-
-    $('#fb_company').next('.select2-container').find('.select2-selection__arrow').css({
-        'height': '38px'
-    });
 });
 </script>
 @endsection
