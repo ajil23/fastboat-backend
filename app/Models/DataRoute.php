@@ -12,4 +12,9 @@ class DataRoute extends Model
     protected $primaryKey = 'rt_id';
     protected $fillable = ['rt_id', 'rt_dept_island', 'rt_arrival_island'];
 
+    public function trip()
+    {
+        return $this->hasMany(SchedulesTrip::class);
+    }
+
 }

@@ -15,4 +15,9 @@ class SchedulesSchedule extends Model
     public function company(){
         return $this->belongsTo(DataCompany::class,'sch_company','cpn_id');
     }
+
+    public function trip()
+    {
+        return $this->hasMany(SchedulesTrip::class);
+    }
 }

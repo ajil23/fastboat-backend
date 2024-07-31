@@ -22,10 +22,6 @@
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="fbt_name">Name*</label>
-                                            <input id="fbt_name" name="fbt_name" placeholder="Enter Trip Name" type="text" class="form-control" required>
-                                        </div>
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
