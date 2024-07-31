@@ -23,7 +23,7 @@ class DataFastboatController extends Controller
     // this function is for view form to add fastboat data
     public function add()
     {
-        $company = DataCompany::all();
+        $company = DataCompany::orderBy('cpn_name', 'asc')->get();
         return view('data.fastboat.add', compact('company'));
     }
 
