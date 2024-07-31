@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sa_island');
             $table->foreign('sa_island')->references('isd_id')->on('masterisland')->onDelete('cascade')->onUpdate('cascade');
             $table->string('sa_name', 100);
-            $table->string('updated_by');
+            $table->string('sa_updated_by');
             $table->timestamps();
         });
     }
