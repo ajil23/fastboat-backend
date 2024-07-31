@@ -12,7 +12,7 @@
                                 <h5 class="card-title">Port Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="{{route('port.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Port</a>
+                                        <a href="{{route('port.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Port</a>
                                     </div>
                                 </div>
                             </div>
