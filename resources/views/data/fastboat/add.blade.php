@@ -37,13 +37,13 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_name">Fast Boat Name</label>
                                                     <input id="fb_name" name="fb_name" placeholder="Enter Fast Boat Name" type="text" class="form-control" required>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="fb_company" class="form-label">Company</label>
                                                         <select class="form-control" data-trigger name="fb_company" id="fb_company" required>
@@ -410,5 +410,21 @@
         document.getElementById('fb_slug_en').value = fb_slug_en;
         document.getElementById('fb_slug_idn').value = fb_slug_idn;
     });
+</script>
+
+<script>
+    $(document).ready(function() {
+    $('#fb_company').select2();
+
+    // Mengatur tinggi Select2 menggunakan jQuery
+    $('#fb_company').next('.select2-container').find('.select2-selection--single').css({
+        'height': '40px',
+        'line-height': '40px'
+    });
+
+    $('#fb_company').next('.select2-container').find('.select2-selection__arrow').css({
+        'height': '38px'
+    });
+});
 </script>
 @endsection

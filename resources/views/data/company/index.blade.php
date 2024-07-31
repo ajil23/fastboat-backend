@@ -90,7 +90,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{$company->links('pagination::bootstrap-5')}}
+                                <br>
+                                {{$company->links('pagination::bootstrap-4')}}
                             </div>
                         </div>
                     </div>
