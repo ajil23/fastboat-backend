@@ -11,7 +11,7 @@ class DataCompanyController extends Controller
 {
     // this function is for view all data from company table
     public function index(){
-        $company = DataCompany::paginate(10);
+        $company = DataCompany::orderBy('cpn_name', 'asc')->paginate(15);
         $title = 'Delete Company Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);

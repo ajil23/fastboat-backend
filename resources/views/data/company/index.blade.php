@@ -28,7 +28,6 @@
                                             <th>Name</th>
                                             <th>Email</th>
                                             <th>Whatsapp</th>
-                                            <th>Address</th>
                                             <th>Status</th>
                                             <th>Type</th>
                                             <th>Action</th>
@@ -56,9 +55,6 @@
                                                 <a href="https://wa.me/{{$item->cpn_whatsapp}}" class="badge bg-success-subtle text-success font-size-12">
                                                     <i class="mdi mdi-whatsapp"></i>Chat
                                                 </a>
-                                            </td>
-                                            <td>
-                                                {{$item->cpn_address}}
                                             </td>
                                             <td>
                                                 <a href="{{route('company.status', $item->cpn_id)}}" class="badge rounded-pill bg-{{$item->cpn_status ? 'success' : 'danger'}}" ><i class="mdi mdi-{{$item->cpn_status ? 'check-decagram' : 'alert-decagram'}}"></i>
@@ -93,8 +89,8 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
-                                    {{$company->links('pagination::bootstrap-5')}}
                                 </table>
+                                {{$company->links('pagination::bootstrap-5')}}
                             </div>
                         </div>
                     </div>
