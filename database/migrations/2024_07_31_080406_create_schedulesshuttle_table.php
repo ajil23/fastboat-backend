@@ -20,7 +20,7 @@ return new class extends Migration
             $table->time('s_start');
             $table->time('s_end');
             $table->string('s_meeting_point', 100);
-            $table->string('updated_by');
+            $table->string('s_updated_by');
             $table->timestamps();
         });
     }
