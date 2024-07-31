@@ -23,8 +23,6 @@
         <script src="{{asset('assets/js/jquery.min.js')}}"></script>
         {{-- select2 --}}
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-        {{-- tom select --}}
-        <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
 
     </head>
 
@@ -100,7 +98,6 @@
         {{-- select2 --}}
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         {{-- tom select --}}
-        <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
         
     </body>
 

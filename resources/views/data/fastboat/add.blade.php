@@ -46,6 +46,7 @@
                                             <div class="col-md-6">
                                                 <div class="mb-3">
                                                     <label for="fb_company" class="form-label">Company</label>
+                                                    <br>
                                                         <select class="form-control" data-trigger name="fb_company" id="fb_company" required>
                                                             <option value="">Select Fast Boat Company</option>
                                                             @foreach ($company as $item)
@@ -70,7 +71,7 @@
                                                     <textarea name="fb_content_idn" id="content-idn"></textarea>
                                                 </div>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
