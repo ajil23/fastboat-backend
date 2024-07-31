@@ -68,6 +68,8 @@
                         <li><a href="{{route ('route.view')}}">Route</a></li>
                         <li><a href="{{route ('schedule.view')}}">Schedule</a></li>
                         <li><a href="{{route ('trip.view')}}">Trip</a></li>
+                        <li><a href="{{route ('shuttlearea.view')}}">Shuttle Area</a></li>
+                        <li><a href="{{route ('shuttle.view')}}">Shuttle</a></li>
                     </ul>
                 </li>
 

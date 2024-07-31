@@ -6,6 +6,8 @@ use App\Http\Controllers\Backend\DataRouteController;
 use App\Http\Controllers\Backend\MasterIslandController;
 use App\Http\Controllers\Backend\MasterPortController;
 use App\Http\Controllers\Backend\SchedulesScheduleController;
+use App\Http\Controllers\Backend\SchedulesShuttleAreaController;
+use App\Http\Controllers\Backend\SchedulesShuttleController;
 use App\Http\Controllers\Backend\SchedulesTripController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -83,6 +85,22 @@ Route::middleware([
         Route::delete('/trip/delete/{id}', [SchedulesTripController::class, 'delete'])->name('trip.delete');
         Route::get('/trip/{id}', [SchedulesTripController::class, 'show'])->name('trip.show');
         Route::get('/trip/status/{id}', [SchedulesTripController::class, 'status'])->name('trip.status');
+        
+        // shuttle area routes
+        Route::get('/shuttlearea', [SchedulesShuttleAreaController::class, 'index'])->name('shuttlearea.view');
+        Route::get('/shuttlearea/add', [SchedulesShuttleAreaController::class, 'add'])->name('shuttlearea.add');
+        Route::post('/shuttlearea/store', [SchedulesShuttleAreaController::class, 'store'])->name('shuttlearea.store');
+        Route::get('/shuttlearea/edit/{id}', [SchedulesShuttleAreaController::class, 'edit'])->name('shuttlearea.edit');
+        Route::post('/shuttlearea/update/{id}', [SchedulesShuttleAreaController::class, 'update'])->name('shuttlearea.update');
+        Route::delete('/shuttlearea/delete/{id}', [SchedulesShuttleAreaController::class, 'delete'])->name('shuttlearea.delete');
+        
+        // shuttle routes
+        Route::get('/shuttle', [SchedulesShuttleController::class, 'index'])->name('shuttle.view');
+        Route::get('/shuttle/add', [SchedulesShuttleController::class, 'add'])->name('shuttle.add');
+        Route::post('/shuttle/store', [SchedulesShuttleController::class, 'store'])->name('shuttle.store');
+        Route::get('/shuttle/edit/{id}', [SchedulesShuttleController::class, 'edit'])->name('shuttle.edit');
+        Route::post('/shuttle/update/{id}', [SchedulesShuttleController::class, 'update'])->name('shuttle.update');
+        Route::delete('/shuttle/delete/{id}', [SchedulesShuttleController::class, 'delete'])->name('shuttle.delete');
     });
 
     Route::prefix('master')->group(function () {
