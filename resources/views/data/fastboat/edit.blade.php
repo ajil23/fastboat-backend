@@ -46,7 +46,7 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label for="fb_company" class="form-label">Company</label>
-                                                    <select class="form-control" data-trigger name="fb_company" id="fb_company">
+                                                    <select data-trigger name="fb_company" id="fb_company">
                                                         <option value="{{$fastboatEdit->fb_company}}" selected>{{$fastboatEdit->company->cpn_name}}</option>
                                                         @foreach ($company as $item)
                                                         <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
@@ -403,5 +403,10 @@
         document.getElementById('fb_slug_en').value = fb_slug_en;
         document.getElementById('fb_slug_idn').value = fb_slug_idn;
     });
+</script>
+
+{{-- tom select --}}
+<script>
+    new TomSelect("#fb_company");
 </script>
 @endsection

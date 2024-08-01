@@ -47,7 +47,7 @@
                                                 <div class="mb-3">
                                                     <label for="fb_company" class="form-label">Company</label>
                                                     <br>
-                                                        <select class="form-control" data-trigger name="fb_company" id="fb_company" required>
+                                                        <select data-trigger name="fb_company" id="fb_company" required>
                                                             <option value="">Select Fast Boat Company</option>
                                                             @foreach ($company as $item)
                                                                 <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
@@ -413,15 +413,8 @@
     });
 </script>
 
+{{-- tom select --}}
 <script>
-    $(document).ready(function() {
-    $('#fb_company').select2();
-
-    // Mengatur tinggi Select2 menggunakan jQuery
-    $('#fb_company').next('.select2-container').find('.select2-selection--single').css({
-        'height': '40px',
-        'line-height': '40px'
-    });
-});
+    new TomSelect("#fb_company");
 </script>
 @endsection
