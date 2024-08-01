@@ -329,7 +329,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 25,
+            'fb_company' => 24,
             'fb_name' => 'Axe Stone Fast Cruise',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -344,7 +344,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 26,
+            'fb_company' => 25,
             'fb_name' => 'Manta Express Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -359,7 +359,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 27,
+            'fb_company' => 26,
             'fb_name' => 'Mahi Mahi Dewata',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -374,7 +374,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 28,
+            'fb_company' => 27,
             'fb_name' => 'Scoot Fast Cruises',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -389,7 +389,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 29,
+            'fb_company' => 28,
             'fb_name' => 'Semaya One Fast Cruise',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -404,7 +404,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 30,
+            'fb_company' => 29,
             'fb_name' => 'Starfish Fast Cruise',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -419,7 +419,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 33,
+            'fb_company' => 32,
             'fb_name' => "D'Stars Fast Ferry",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -434,7 +434,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 31,
+            'fb_company' => 30,
             'fb_name' => 'Bali Line Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -449,7 +449,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 38,
+            'fb_company' => 37,
             'fb_name' => 'Freebird Express Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -464,7 +464,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 36,
+            'fb_company' => 35,
             'fb_name' => 'El Rey Fast Cruise',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -479,7 +479,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 37,
+            'fb_company' => 36,
             'fb_name' => 'Marlin Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -494,7 +494,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 35,
+            'fb_company' => 34,
             'fb_name' => 'Dream Beach Express',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -509,7 +509,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 39,
+            'fb_company' => 38,
             'fb_name' => 'Inami Luxury Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -524,7 +524,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 40,
+            'fb_company' => 39,
             'fb_name' => 'Wanderlust Cruise',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -539,7 +539,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 29,
+            'fb_company' => 28,
             'fb_name' => 'Semaya One  Shuttle Bus',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -554,7 +554,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 29,
+            'fb_company' => 28,
             'fb_name' => 'Semaya One  Private Car ',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -584,7 +584,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 39,
+            'fb_company' => 38,
             'fb_name' => 'Inami  Private Car ',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -599,7 +599,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 26,
+            'fb_company' => 25,
             'fb_name' => 'Manta Express  Private Car',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -614,7 +614,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 39,
+            'fb_company' => 38,
             'fb_name' => 'Inami Luxury with Shuttle Bus',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -629,7 +629,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 26,
+            'fb_company' => 25,
             'fb_name' => 'Manta Express  Shuttle Bus',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -659,7 +659,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 41,
+            'fb_company' => 40,
             'fb_name' => 'Arjuna Fast Cruise',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -674,7 +674,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 42,
+            'fb_company' => 41,
             'fb_name' => 'Sunfish Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -689,7 +689,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 32,
+            'fb_company' => 31,
             'fb_name' => 'Invinia Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -704,7 +704,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 32,
+            'fb_company' => 31,
             'fb_name' => 'Invinia  Private Car ',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -719,7 +719,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 32,
+            'fb_company' => 31,
             'fb_name' => 'Invinia  Shuttle Bus',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -749,7 +749,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 36,
+            'fb_company' => 35,
             'fb_name' => 'El Rey With Transport',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -764,7 +764,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 25,
+            'fb_company' => 24,
             'fb_name' => 'Axe Stone With Transport',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -794,7 +794,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 43,
+            'fb_company' => 42,
             'fb_name' => 'New Ganggari',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -809,7 +809,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 44,
+            'fb_company' => 43,
             'fb_name' => 'Wahana Virendra',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -824,7 +824,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 45,
+            'fb_company' => 44,
             'fb_name' => 'Karunia Perkasa',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -839,7 +839,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 46,
+            'fb_company' => 45,
             'fb_name' => 'Orion Prince Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -854,7 +854,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 47,
+            'fb_company' => 46,
             'fb_name' => 'KKB fast boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -869,7 +869,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 48,
+            'fb_company' => 47,
             'fb_name' => 'Caspla Buyuk',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -884,7 +884,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 49,
+            'fb_company' => 48,
             'fb_name' => 'Aman Dia Cruise ',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -899,7 +899,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 50,
+            'fb_company' => 49,
             'fb_name' => 'Wijaya Perkasa Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -914,7 +914,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 50,
+            'fb_company' => 49,
             'fb_name' => 'Wijaya Perkasa with Shuttle ',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -929,7 +929,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 50,
+            'fb_company' => 49,
             'fb_name' => 'Wijaya Perkasa with Private Car',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -944,7 +944,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 51,
+            'fb_company' => 50,
             'fb_name' => 'Sanjaya Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -959,7 +959,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 52,
+            'fb_company' => 51,
             'fb_name' => 'Danayoga Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -974,7 +974,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 53,
+            'fb_company' => 52,
             'fb_name' => 'Karya Bahari Fast Boat Gili',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -989,7 +989,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 54,
+            'fb_company' => 53,
             'fb_name' => "S'Gening Fast Boat",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1004,7 +1004,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 55,
+            'fb_company' => 54,
             'fb_name' => 'Putra Zavier - Inter Island Boat Gili',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1019,7 +1019,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 56,
+            'fb_company' => 55,
             'fb_name' => 'SMILING EXPRESS FAST BOAT',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1034,7 +1034,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 57,
+            'fb_company' => 56,
             'fb_name' => 'Karunia Jaya Fast Boat',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1049,7 +1049,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 58,
+            'fb_company' => 57,
             'fb_name' => 'EINSTEIN BOAT',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1064,7 +1064,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 45,
+            'fb_company' => 44,
             'fb_name' => 'Karunia Perkasa with Shuttle ',
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1079,7 +1079,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 45,
+            'fb_company' => 44,
             'fb_name' => "Karunia Perkasa with Private Car ",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1094,7 +1094,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 57,
+            'fb_company' => 56,
             'fb_name' => "Karunia Jaya Fast Boat with Shuttle Bus",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1109,7 +1109,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 57,
+            'fb_company' => 56,
             'fb_name' => "Karunia Jaya Fast Boat with Private Car",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1124,7 +1124,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 44,
+            'fb_company' => 43,
             'fb_name' => "Wahana Virendra with Shuttle Bus",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1139,7 +1139,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 44,
+            'fb_company' => 43,
             'fb_name' => "Wahana Virendra with Private Car",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1154,7 +1154,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 60,
+            'fb_company' => 59,
             'fb_name' => "Gili Gili Fast Boat",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
@@ -1169,7 +1169,7 @@ class FastBoatSeeder extends Seeder
             'fb_updated_by' => 1,
         ]);
         DB::table('datafastboat')->insert([
-            'fb_company' => 59,
+            'fb_company' => 58,
             'fb_name' => "PUTRI ISLAND FAST BOAT",
             'fb_image1' => 'gilitransfer.png',
             'fb_image2' => 'gilitransfer.png',
