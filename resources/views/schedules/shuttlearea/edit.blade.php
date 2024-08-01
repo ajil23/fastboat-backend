@@ -39,6 +39,12 @@
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
+                                                    <label class="form-label" for="sa_name">Shuttle Area</label>
+                                                    <input id="sa_name" name="sa_name" placeholder="Enter Fast Boat Name" type="text" class="form-control" value="{{$shuttleareaData->sa_name}}">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
                                                     <label for="sa_island" class="form-label">Island</label>
                                                     <select class="form-control" data-trigger name="sa_island" id="sa_island">
                                                         <option value="{{$shuttleareaData->sa_island}}" selected>{{$shuttleareaData->island->isd_name}}</option>
@@ -46,12 +52,6 @@
                                                             <option value="{{$item->isd_id}}">{{$item->isd_name}}</option>
                                                         @endforeach
                                                     </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="sa_name">Shuttle Area</label>
-                                                    <input id="sa_name" name="sa_name" placeholder="Enter Fast Boat Name" type="text" class="form-control" value="{{$shuttleareaData->sa_name}}">
                                                 </div>
                                             </div>
                                         </div>
