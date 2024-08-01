@@ -18,7 +18,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                                <table class="table mb-0">
                                     <thead>
                                         <div class="search-box">
                                             <div class="position-relative">
@@ -26,37 +26,237 @@
                                             </div>
                                         </div>
                                         <tr>
+                                            <th></th>
+                                            <th scope="col" class="ps-4" style="width: 50px;">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck">
+                                                    <label class="form-check-label" for="contacusercheck"></label>
+                                                </div>
+                                            </th>
                                             <th>No</th>
-                                            <th>Trip</th>
-                                            <th>Shuttle Area</th>
-                                            <th>Start</th>
-                                            <th>End</th>
-                                            <th>Meeting Point</th>
-                                            <th>Action</th>
-                                        </tr>
+                                            <th>From -> To</th>
+                                            <th><center>Time Range (WITA)</center></th>
+                                            <th><center>Detail</center></th>
+                                            <th><center>Action</center></th>
+                                          </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($shuttleData as $item)
+                                        {{-- @foreach ($shuttleData as $item) --}}
                                         <tr>
-                                            <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->trip->fbt_name}}</td>
-                                            <td>{{$item->area->sa_name}}</td>
-                                            <td>{{date('H:i', strtotime($item->s_start));}}</td>
-                                            <td>{{date('H:i', strtotime($item->s_end));}}</td>
-                                            <td>{{$item->s_meeting_point}}</td>
-                                            <td>
-                                                <div class="dropstart">
-                                                    <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
-                                                        <i class="mdi mdi-dots-horizontal"></i>
-                                                    </a>
-                                                    <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="{{route('shuttle.edit', $item->s_id)}}">Edit</a>
-                                                        <a class="dropdown-item" data-confirm-delete="true" href="{{route('shuttle.delete', $item->s_id)}}">Delete</a>
-                                                    </div>
+                                            <th colspan="7" class="table-light"><center>Jimbaran (Karunia Jaya)</center></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
                                                 </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
                                             </td>
                                         </tr>
-                                        @endforeach
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB 2</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB 2</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="7" class="table-light"><center>Jimbaran (Karunia Jaya)</center></th>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB 2</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="table-light"><center>Jaya SB 2</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
+                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                </div>
+                                            </th>
+                                            <td>1</td>
+                                            <td>BWI - SBY</td>
+                                            <td><center>07:00 - 08:00</center></td>
+                                            <td><center>Detailnya ada disini</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                        {{-- @endforeach --}}
                                     </tbody>
                                     {{-- {{$shuttleData->links('pagination::bootstrap-5')}} --}}
                                 </table>
