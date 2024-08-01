@@ -301,19 +301,6 @@ class CompanySeeder extends Seeder
             'cpn_updated_by' => 1, 
         ]);
         DB::table('datacompany')->insert([
-            'cpn_name' => 'Sekar Jaya',
-            'cpn_email' => 'fastboatsekarjaya@gmail.com',
-            'cpn_email_status' => 1,
-            'cpn_phone' => 6281122223333,
-            'cpn_whatsapp' => 6281122223333,
-            'cpn_address' => 'Jl. Pasir Putih, Kusamba, Kec. Dawan, Kabupaten Klungkung, Bali',
-            'cpn_logo' => "gilitransfers.png",
-            'cpn_website' => 'https://sekarjayafastboat.com/',
-            'cpn_status' => 1,
-            'cpn_type' => 'fast_boat',
-            'cpn_updated_by' => 1, 
-        ]);
-        DB::table('datacompany')->insert([
             'cpn_name' => 'Bali Hai',
             'cpn_email' => 'reservation@balihaicruises.com',
             'cpn_email_status' => 1,
