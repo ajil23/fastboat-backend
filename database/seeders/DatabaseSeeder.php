@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CompanySeeder::class);
         $this->call(IslandSeeder::class);
         $this->call(PortSeeder::class);
+        $this->call(FastBoatSeeder::class);
     }
 }
