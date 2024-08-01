@@ -50,15 +50,15 @@ class SchedulesTripController extends Controller
 
        // Get route & schedule id
        $fbt_route_id = $request->fbt_route;
-       $fbt_schedule_id = $request->fbt_schedule;
+       $fbt_fastboat_id = $request->fbt_fastboat;
 
        // Find route & schedule id
        $fbtrip = DataRoute::findOrFail($fbt_route_id);
-       $fbtschedule = SchedulesSchedule::findOrFail($fbt_schedule_id);
+       $fbtfastboat = DataFastboat::findOrFail($fbt_fastboat_id);
 
         // Handle insert data to database
         $tripData = new SchedulesTrip();
-        $tripData->fbt_name = $fbtschedule ->sch_name. ' for '.$fbtrip ->rt_dept_island .' to '. $fbtrip->rt_arrival_island;
+        $tripData->fbt_name = $fbtfastboat ->fb_name. ' for '.$fbtrip ->rt_dept_island .' to '. $fbtrip->rt_arrival_island;
         $tripData->fbt_route = $request->fbt_route;
         $tripData->fbt_fastboat = $request->fbt_fastboat;
         $tripData->fbt_schedule = $request->fbt_schedule;

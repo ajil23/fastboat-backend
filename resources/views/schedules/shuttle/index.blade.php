@@ -41,8 +41,8 @@
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{$item->trip->fbt_name}}</td>
                                             <td>{{$item->area->sa_name}}</td>
-                                            <td>{{$item->s_start}}</td>
-                                            <td>{{$item->s_end}}</td>
+                                            <td>{{date('H:i', strtotime($item->s_start));}}</td>
+                                            <td>{{date('H:i', strtotime($item->s_end));}}</td>
                                             <td>{{$item->s_meeting_point}}</td>
                                             <td>
                                                 <div class="dropstart">
