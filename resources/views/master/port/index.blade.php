@@ -28,9 +28,6 @@
                                             <th>Island</th>
                                             <th>Code</th>
                                             <th>Map</th>
-                                            <th>Address</th>
-                                            <th>Slug ENG</th>
-                                            <th>Slug IDN</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -53,9 +50,6 @@
                                             <a href="https://www.google.com/maps/search/?api=1&query= + {{$item->isd_map}}"  class="badge bg-success-subtle text-success  font-size-12" target="blank">
                                             See<i class="mdi mdi-arrow-right"></i></a>
                                             </td>
-                                            <td>{{$item->prt_address}}</td>
-                                            <td>{{$item->prt_slug_en}}</td>
-                                            <td>{{$item->prt_slug_idn}}</td>
                                             <td>
                                                 <div class="dropstart">
                                                     <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
@@ -72,7 +66,8 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                {{$port->links('pagination::bootstrap-5')}}
+                                <br>
+                                {{$port->links('pagination::bootstrap-4')}}
                             </div>
                         </div>
                     </div>
