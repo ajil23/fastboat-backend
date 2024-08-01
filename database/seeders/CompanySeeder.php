@@ -587,19 +587,6 @@ class CompanySeeder extends Seeder
             'cpn_updated_by' => 1, 
         ]);
         DB::table('datacompany')->insert([
-            'cpn_name' => 'Wahana virendra',
-            'cpn_email' => 'wahanavirendraoffice@gmail.com',
-            'cpn_email_status' => 1,
-            'cpn_phone' => 6281122223333,
-            'cpn_whatsapp' => 6281122223333,
-            'cpn_address' => 'Jln. Raya Padangbai',
-            'cpn_logo' => "gilitransfers.png",
-            'cpn_website' => '-',
-            'cpn_status' => 1,
-            'cpn_type' => 'fast_boat',
-            'cpn_updated_by' => 1, 
-        ]);
-        DB::table('datacompany')->insert([
             'cpn_name' => 'Karunia Perkasa',
             'cpn_email' => 'suppliergilitransfers@gmail.com',
             'cpn_email_status' => 1,

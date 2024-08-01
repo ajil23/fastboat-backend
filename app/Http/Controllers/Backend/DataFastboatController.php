@@ -7,6 +7,7 @@ use App\Models\DataCompany;
 use App\Models\DataFastboat;
 use DOMDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DataFastboatController extends Controller
 {
@@ -23,7 +24,7 @@ class DataFastboatController extends Controller
     // this function is for view form to add fastboat data
     public function add()
     {
-        $company = DataCompany::orderBy('cpn_name', 'asc')->get();
+        $company = DataCompany::orderBy('cpn_name', 'asc')->having('cpn_type', 'fast_boat')->get();
         return view('data.fastboat.add', compact('company'));
     }
 
