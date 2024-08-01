@@ -47,8 +47,9 @@
                                         </tr>
                                         @endforeach
                                     </tbody>
-                                    {{-- {{$shuttlearea->links('pagination::bootstrap-5')}} --}}
                                 </table>
+                                <br>
+                                {{$shuttlearea->links('pagination::bootstrap-4')}}
                             </div>
                         </div>
                     </div>
