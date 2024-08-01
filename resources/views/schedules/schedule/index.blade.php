@@ -79,7 +79,7 @@
                         @csrf
                         <div class="mb-3">
                             <label for="sch_company" class="form-label">Company</label>
-                            <select class="form-control" data-trigger name="sch_company" id="sch_company" required>
+                            <select data-trigger name="sch_company" id="sch_company" required>
                                 <option value="">Select Fast Boat Company</option>
                                 @foreach ($company as $item)
                                     <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
@@ -122,5 +122,15 @@
             })
         })
     })
+</script>
+
+{{-- tom select --}}
+<script>
+    new TomSelect("#sch_company",{
+	    sortField: {
+		field: "text",
+		direction: "asc"
+	    }
+    });
 </script>
 @endsection

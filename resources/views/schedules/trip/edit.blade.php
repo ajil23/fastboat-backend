@@ -42,13 +42,11 @@
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fbt_fastboat">Fastboat*</label>
-                                                    <select id="fbt_fastboat" name="fbt_fastboat" aria-label="Default select example" class="form-control" required>
+                                                    <label for="fbt_fastboat" class="form-label">Fast Boat</label>
+                                                    <select data-trigger name="fbt_fastboat" id="fbt_fastboat" required>
                                                         <option value="{{$tripEdit->fbt_fastboat}}" selected>{{$tripEdit->fastboat->fb_name}}</option>
                                                         @foreach ($fastboat as $item)
-                                                        <option value="{{$item->fb_id}}">
-                                                            {{$item->fb_name}}
-                                                        </option>
+                                                            <option value="{{$item->fb_id}}">{{$item->fb_name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -221,6 +219,15 @@
         });
       });
     });
-  </script>
-  
+</script>
+
+{{-- tom select --}}
+<script>
+    new TomSelect("#fbt_fastboat",{
+	    sortField: {
+		field: "text",
+		direction: "asc"
+	    }
+    });
+</script>
 @endsection
