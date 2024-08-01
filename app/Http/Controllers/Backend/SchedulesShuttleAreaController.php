@@ -12,7 +12,7 @@ class SchedulesShuttleAreaController extends Controller
 {
     // this function is for view all data from shuttlearea table
     public function index(){
-        $shuttlearea = SchedulesShuttleArea::all();
+        $shuttlearea = SchedulesShuttleArea::paginate(10);
         $island = MasterIsland::all();
         $title = 'Delete Shuttle Area Data Data!';
         $text = "Are you sure you want to delete?";
