@@ -82,6 +82,10 @@
                                                         <div class="dropdown-menu dropdown-menu-end">
                                                             <a class="dropdown-item" href="#">Edit</a>
                                                             <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                        </div>
+                                                    </div>
+                                                </center>
+                                            </td>            
                                             @endforeach
                                         </tbody>
                                     </table>
