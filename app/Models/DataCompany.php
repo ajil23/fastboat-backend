@@ -12,5 +12,8 @@ class DataCompany extends Model
     protected $primaryKey = 'cpn_id';
     protected $fillable = ['cpn_name', 'cpn_email', 'cpn_email_status', 'cpn_phone', 'cpn_whatsapp', 'cpn_address', 'cpn_website', 'cpn_status', 'cpn_type', 'cpn_logo'];
 
-
+    public function schedules()
+    {
+        return $this->hasMany(SchedulesSchedule::class);
+    }
 }

@@ -20,4 +20,10 @@ class SchedulesSchedule extends Model
     {
         return $this->hasMany(SchedulesTrip::class);
     }
+
+    public function shuttle()
+    {
+        return $this->hasMany(SchedulesSchedule::class);
+    }
+
 }

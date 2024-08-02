@@ -27,4 +27,9 @@ class SchedulesTrip extends Model
     public function arrival(){
         return $this->belongsTo(MasterPort::class,'fbt_arrival_port','prt_id');
     }
+    public function shuttle()
+    {
+    return $this->belongsTo(SchedulesShuttle::class);
+    }
+
 }
