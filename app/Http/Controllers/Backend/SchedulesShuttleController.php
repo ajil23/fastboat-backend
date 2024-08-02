@@ -75,6 +75,28 @@ class SchedulesShuttleController extends Controller
         return redirect()->route('shuttle.view');
     }
 
+    public function multiple(Request $request)
+    {
+        $selectedIds = $request->input('selected_ids', []);
+        $sStart = $request->input('s_start', '');
+        $sEnd = $request->input('s_end', '');
+        $sMeetingPoint = $request->input('s_meeting_point', '');
+    
+        foreach ($selectedIds as $id) {
+            $shuttleItem = SchedulesShuttle::find($id);
+            if ($shuttleItem) {
+                $shuttleItem->s_start = $sStart;
+                $shuttleItem->s_end = $sEnd;
+                $shuttleItem->s_meeting_point = $sMeetingPoint;
+                $shuttleItem->save();
+            }
+        }
+    
+        return redirect()->back()->with('success', 'Selected items updated successfully.');
+    }
+    
+    
+
     // this function will get the $id of selected data and do delete operation
     public function delete($id)
     {

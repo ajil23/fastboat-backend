@@ -51,23 +51,23 @@
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="s_meeting_point">Meeting Point*</label>
-                                                    <input id="s_meeting_point" name="s_meeting_point" placeholder="Enter Meeting Point Place" type="text" class="form-control" required></input>
+                                                    <label class="form-label" for="s_meeting_point">Meeting Point</label>
+                                                    <input id="s_meeting_point" name="s_meeting_point" placeholder="Enter Meeting Point Place" type="text" class="form-control" ></input>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="s_start">Start Waiting*</label>
-                                                    <input id="s_start" name="s_start" placeholder="Enter Time" type="time" class="form-control" required>
+                                                    <label class="form-label" for="s_start">Start Waiting</label>
+                                                    <input id="s_start" name="s_start" placeholder="Enter Time" type="time" class="form-control" >
                                                     </input>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="s_end">End Waiting*</label>
-                                                    <input id="s_end" name="s_end" placeholder="Enter Time" type="time" class="form-control" required>
+                                                    <label class="form-label" for="s_end">End Waiting</label>
+                                                    <input id="s_end" name="s_end" placeholder="Enter Time" type="time" class="form-control" >
                                                     </input>
                                                 </div>
                                             </div>
