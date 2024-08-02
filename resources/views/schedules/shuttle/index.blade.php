@@ -52,31 +52,23 @@
                                                     <td class="table-light"><center>{{ $item->trip->schedule->sch_name }}</center></td>
                                                     <th scope="row" class="ps-4">
                                                         <div class="form-check font-size-16">
-                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateButtonState()">
+                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
                                                         </div>
                                                     </th>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") => " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
+                                                    <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") -> " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
                                                     <td><center>{{ date('H:i', strtotime($item->s_start)) . "-" . date('H:i', strtotime($item->s_end)) }}</center></td>
                                                     <td><center>{{ $item->s_meeting_point }}</center></td>
                                                     <td>
-                                                        <center>
-                                                            <div class="dropstart">
-                                                                <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
-                                                                    <i class="mdi mdi-dots-horizontal"></i>
-                                                                </a>
-                                                                <div class="dropdown-menu dropdown-menu-end">
-                                                                    <a class="dropdown-item" href="#">Edit</a>
-                                                                    <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
-                                                                </div>
-                                                            </div>
-                                                        </center>
+                                                        <a href="{{route('shuttle.delete', $item->s_id)}}" class="btn btn-outline-dark" data-confirm-delete="true"><i
+                                                            class="bx bx-trash"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
-                                    <!-- Modal -->
+                                    <!-- Modal Updated -->
                                     <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -122,6 +114,8 @@
 @endsection
 
 @section('script')
+
+<!-- checkebox js -->
 <script>
 function toggleSelectAll(checkbox) {
     const isChecked = checkbox.checked;
@@ -143,6 +137,20 @@ function updateButtonState() {
     });
 
     updateButton.disabled = !isAnyChecked;
+}
+
+function updateSelectAllState() {
+    const selectAllCheckbox = document.getElementById('sa_id');
+    const checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
+    let allChecked = true;
+
+    checkboxes.forEach(function (checkbox) {
+        if (!checkbox.checked) {
+            allChecked = false;
+        }
+    });
+
+    selectAllCheckbox.checked = allChecked;
 }
 </script>
 @endsection
