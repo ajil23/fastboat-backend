@@ -42,39 +42,46 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($shuttleData as $item)
+                                      @foreach ($shuttleData as $key => $item)
+                                        @if ($key == 0)
                                             <tr>
-                                                <th colspan="7" class="table-light">
-                                                    <center>{{ $item->area->sa_name }} ({{ $item->trip->first()->schedule->company->cpn_name }})</center>
-                                                </th>
+                                                <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
                                             </tr>
-                                            <tr>
-                                                <td class="table-light">
-                                                    <center>{{ $item->trip->schedule->sch_name }}</center>
-                                                </td>
-                                                <th scope="row" class="ps-4">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}">
-                                                    </div>
-                                                </th>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->trip->fbt_name }} ({{ date('H:i', strtotime($item->trip->fbt_dept_time)) . "-" . date('H:i', strtotime($item->trip->fbt_arrival_time)) }})</td>
-                                                <td><center>{{ date('H:i', strtotime($item->s_start)) . "-" . date('H:i', strtotime($item->s_end)) }}</center></td>
-                                                <td><center>{{ $item->s_meeting_point }}</center></td>
-                                                <td>
-                                                    <center>
-                                                        <div class="dropstart">
-                                                            <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
-                                                                <i class="mdi mdi-dots-horizontal"></i>
-                                                            </a>
-                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" href="#">Edit</a>
-                                                                <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
-                                                            </div>
-                                                        </div>
-                                                    </center>
-                                                </td>
-                                            </tr>
+                                        @else 
+                                        @if ($shuttleData[$key]->area->sa_name != $shuttleData[$key -1]->area->sa_name)
+                                        <tr>
+                                            <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
+                                        </tr>
+                                        @else
+                                        @if ($shuttleData[$key]->trip->schedule->company->cpn_name != $shuttleData[$key -1]->trip->schedule->company->cpn_name)
+                                        <tr>
+                                            <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
+                                        </tr>
+                                        @else
+                                        @endif
+                                        @endif
+                                        @endif
+                                        
+                                        <tr>
+                                            <td class="table-light"><center>{{$item->trip->schedule->sch_name}}</center></td>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="checkedbox" id="contacusercheck1">
+                                                </div>
+                                            </th>
+                                            <td>{{$loop->iteration}}</td>
+                                            <td>{{$item->trip->departure->prt_name_en ." " . "(" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ")" . " " ."=>" . " " . $item->trip->arrival->prt_name_en . " " ."(" .  date('H:i', strtotime($item->trip->fbt_arrival_time)) .")"}}</td>
+                                            <td><center>{{date('H:i', strtotime($item->s_start)). "-" . date('H:i', strtotime($item->s_end));}}</center></td>
+                                            <td><center>{{$item->s_meeting_point}}</center></td>
+                                            <td>
+                                                <center>
+                                                    <div class="dropstart">
+                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                            <i class="mdi mdi-dots-horizontal"></i>
+                                                        </a>
+                                                        <div class="dropdown-menu dropdown-menu-end">
+                                                            <a class="dropdown-item" href="#">Edit</a>
+                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
                                             @endforeach
                                         </tbody>
                                     </table>
