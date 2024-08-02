@@ -29,8 +29,7 @@
                                             <th></th>
                                             <th scope="col" class="ps-4" style="width: 50px;">
                                                 <div class="form-check font-size-16">
-                                                    <input type="checkbox" class="form-check-input" id="contacusercheck">
-                                                    <label class="form-check-label" for="contacusercheck"></label>
+                                                    <input type="checkbox" class="checkedbox" id="contacusercheck1">
                                                 </div>
                                             </th>
                                             <th>No</th>
@@ -49,8 +48,7 @@
                                             <td class="table-light"><center>{{$item->trip->schedule->sch_name}}</center></td>
                                             <th scope="row" class="ps-4">
                                                 <div class="form-check font-size-16">
-                                                    <input type="checkbox" class="form-check-input" id="contacusercheck1">
-                                                    <label class="form-check-label" for="contacusercheck1"></label>
+                                                    <input type="checkbox" class="checkedbox" id="contacusercheck1">
                                                 </div>
                                             </th>
                                             <td>{{$loop->iteration}}</td>
@@ -88,4 +86,14 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
+
+@section('script')
+<script>
+    $(function(e){
+        $("#contacusercheck1").click(function(){
+            $('.checkedbox').prop('checked',$(this).prop('checked'));
+        })
+    });
+</script>
 @endsection
