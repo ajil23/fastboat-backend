@@ -78,22 +78,29 @@ class SchedulesShuttleController extends Controller
     public function multiple(Request $request)
     {
         $selectedIds = $request->input('selected_ids', []);
-        $sStart = $request->input('s_start', '');
-        $sEnd = $request->input('s_end', '');
-        $sMeetingPoint = $request->input('s_meeting_point', '');
+        $s_start = $request->input('s_start', null);
+        $s_end = $request->input('s_end', null);
+        $s_meeting_point = $request->input('s_meeting_point', null);
     
         foreach ($selectedIds as $id) {
-            $shuttleItem = SchedulesShuttle::find($id);
-            if ($shuttleItem) {
-                $shuttleItem->s_start = $sStart;
-                $shuttleItem->s_end = $sEnd;
-                $shuttleItem->s_meeting_point = $sMeetingPoint;
-                $shuttleItem->save();
+            $shuttleData = SchedulesShuttle::find($id);
+            if ($shuttleData) {
+                if (!is_null($s_start)) {
+                    $shuttleData->s_start = $s_start;
+                }
+                if (!is_null($s_end)) {
+                    $shuttleData->s_end = $s_end;
+                }
+                if (!is_null($s_meeting_point)) {
+                    $shuttleData->s_meeting_point = $s_meeting_point;
+                }
+                $shuttleData->save();
             }
         }
     
         return redirect()->back()->with('success', 'Selected items updated successfully.');
     }
+    
     
     
 
@@ -103,6 +110,6 @@ class SchedulesShuttleController extends Controller
         $shuttleData = SchedulesShuttle::find($id);
         $shuttleData->delete();
         toast('Your data as been deleted!', 'success');
-        return redirect()->route('trip.view');
+        return redirect()->route('shuttle.view');
     }
 }
