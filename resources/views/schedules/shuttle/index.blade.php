@@ -40,10 +40,26 @@
                                           </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($shuttleData as $item)
+                                        @foreach ($shuttleData as $key => $item)
+                                        @if ($key == 0)
+                                            <tr>
+                                                <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
+                                            </tr>
+                                        @else 
+                                        @if ($shuttleData[$key]->area->sa_name != $shuttleData[$key -1]->area->sa_name)
                                         <tr>
-                                            <th colspan="7" class="table-light"><center>{{$item->area->sa_name}} ({{$item->trip->first()->schedule->company->cpn_name}})</center></th>
+                                            <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
                                         </tr>
+                                        @else
+                                        @if ($shuttleData[$key]->trip->schedule->company->cpn_name != $shuttleData[$key -1]->trip->schedule->company->cpn_name)
+                                        <tr>
+                                            <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
+                                        </tr>
+                                        @else
+                                        @endif
+                                        @endif
+                                        @endif
+                                        
                                         <tr>
                                             <td class="table-light"><center>{{$item->trip->schedule->sch_name}}</center></td>
                                             <th scope="row" class="ps-4">
