@@ -22,4 +22,10 @@ class SchedulesShuttle extends Model
     {
         return $this->belongsTo(SchedulesSchedule::class);
     }
+    public function departure(){
+        return $this->belongsTo(MasterPort::class);
+    }
+    public function arrival(){
+        return $this->belongsTo(MasterPort::class);
+    }
 }
