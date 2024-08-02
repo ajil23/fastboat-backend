@@ -18,5 +18,8 @@ class SchedulesShuttle extends Model
     public function area(){
         return $this->belongsTo(SchedulesShuttleArea::class,'s_area','sa_id');
     }
-    
+    public function schedule()
+    {
+        return $this->belongsTo(SchedulesSchedule::class);
+    }
 }

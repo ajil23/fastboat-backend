@@ -12,7 +12,7 @@ class SchedulesShuttleController extends Controller
 {
     // this function is for view all data from shuttlearea table
     public function index(){
-        $shuttleData = SchedulesShuttle::all();
+        $shuttleData = SchedulesShuttle::with(['trip.schedule.company'])->get();
         $trip = SchedulesTrip::all();
         $area = SchedulesShuttleArea::all();
         $title = 'Delete Shuttle Data!';
