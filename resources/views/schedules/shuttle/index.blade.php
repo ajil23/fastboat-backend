@@ -26,7 +26,7 @@
                                                 <th>
                                                     <!-- Button to trigger modal -->
                                                     <div>
-                                                        <button type="button" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#updateModal"><i class="mdi mdi-pencil"></i> Update</button>
+                                                        <button type="button" class="btn btn-dark w-100" id="updateButton" data-bs-toggle="modal" data-bs-target="#updateModal" disabled><i class="mdi mdi-pencil"></i> Update</button>
                                                     </div>
                                                 </th>
                                                 <th scope="col" class="ps-4" style="width: 50px;">
@@ -42,50 +42,37 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                      @foreach ($shuttleData as $key => $item)
-                                        @if ($key == 0)
-                                            <tr>
-                                                <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
-                                            </tr>
-                                        @else 
-                                        @if ($shuttleData[$key]->area->sa_name != $shuttleData[$key -1]->area->sa_name)
-                                        <tr>
-                                            <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
-                                        </tr>
-                                        @else
-                                        @if ($shuttleData[$key]->trip->schedule->company->cpn_name != $shuttleData[$key -1]->trip->schedule->company->cpn_name)
-                                        <tr>
-                                            <th colspan="7" class="table-light"><center>{{$item->area->sa_name}}({{$item->trip->schedule->company->cpn_name}})</center></th>
-                                        </tr>
-                                        @else
-                                        @endif
-                                        @endif
-                                        @endif
-                                        
-                                        <tr>
-                                            <td class="table-light"><center>{{$item->trip->schedule->sch_name}}</center></td>
-                                            <th scope="row" class="ps-4">
-                                                <div class="form-check font-size-16">
-                                                    <input type="checkbox" class="checkedbox" id="contacusercheck1">
-                                                </div>
-                                            </th>
-                                            <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->trip->departure->prt_name_en ." " . "(" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ")" . " " ."=>" . " " . $item->trip->arrival->prt_name_en . " " ."(" .  date('H:i', strtotime($item->trip->fbt_arrival_time)) .")"}}</td>
-                                            <td><center>{{date('H:i', strtotime($item->s_start)). "-" . date('H:i', strtotime($item->s_end));}}</center></td>
-                                            <td><center>{{$item->s_meeting_point}}</center></td>
-                                            <td>
-                                                <center>
-                                                    <div class="dropstart">
-                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
-                                                            <i class="mdi mdi-dots-horizontal"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                            <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                            @foreach ($shuttleData as $key => $item)
+                                                @if ($key == 0 || $shuttleData[$key]->area->sa_name != $shuttleData[$key - 1]->area->sa_name || $shuttleData[$key]->trip->schedule->company->cpn_name != $shuttleData[$key - 1]->trip->schedule->company->cpn_name)
+                                                    <tr>
+                                                        <th colspan="7" class="table-light"><center>{{ $item->area->sa_name }} ({{ $item->trip->schedule->company->cpn_name }})</center></th>
+                                                    </tr>
+                                                @endif
+                                                <tr>
+                                                    <td class="table-light"><center>{{ $item->trip->schedule->sch_name }}</center></td>
+                                                    <th scope="row" class="ps-4">
+                                                        <div class="form-check font-size-16">
+                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateButtonState()">
                                                         </div>
-                                                    </div>
-                                                </center>
-                                            </td>            
+                                                    </th>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") => " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
+                                                    <td><center>{{ date('H:i', strtotime($item->s_start)) . "-" . date('H:i', strtotime($item->s_end)) }}</center></td>
+                                                    <td><center>{{ $item->s_meeting_point }}</center></td>
+                                                    <td>
+                                                        <center>
+                                                            <div class="dropstart">
+                                                                <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
+                                                                    <i class="mdi mdi-dots-horizontal"></i>
+                                                                </a>
+                                                                <div class="dropdown-menu dropdown-menu-end">
+                                                                    <a class="dropdown-item" href="#">Edit</a>
+                                                                    <a class="dropdown-item" data-confirm-delete="true" href="#">Delete</a>
+                                                                </div>
+                                                            </div>
+                                                        </center>
+                                                    </td>
+                                                </tr>
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -136,29 +123,26 @@
 
 @section('script')
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('input[name="selected_ids[]"]').forEach(function (checkbox) {
-        checkbox.addEventListener('change', function () {
-            const itemId = this.value;
-            const formGroup = document.querySelector(`.selected-item-form[data-item-id="${itemId}"]`);
-            if (this.checked) {
-                formGroup.style.display = 'block';
-            } else {
-                formGroup.style.display = 'none';
-            }
-        });
-    });
-});
-
 function toggleSelectAll(checkbox) {
     const isChecked = checkbox.checked;
     document.querySelectorAll('input[name="selected_ids[]"]').forEach(function (cb) {
         cb.checked = isChecked;
-        const formGroup = document.querySelector(`.selected-item-form[data-item-id="${cb.value}"]`);
-        if (formGroup) {
-            formGroup.style.display = isChecked ? 'block' : 'none';
+    });
+    updateButtonState();
+}
+
+function updateButtonState() {
+    const checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
+    const updateButton = document.getElementById('updateButton');
+    let isAnyChecked = false;
+
+    checkboxes.forEach(function (checkbox) {
+        if (checkbox.checked) {
+            isAnyChecked = true;
         }
     });
+
+    updateButton.disabled = !isAnyChecked;
 }
 </script>
 @endsection
