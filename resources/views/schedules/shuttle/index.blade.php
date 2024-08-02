@@ -33,7 +33,7 @@
                                                 </div>
                                             </th>
                                             <th>No</th>
-                                            <th>From -> To</th>
+                                            <th>From => To</th>
                                             <th><center>Time Range (WITA)</center></th>
                                             <th><center>Detail</center></th>
                                             <th><center>Action</center></th>
@@ -52,7 +52,7 @@
                                                 </div>
                                             </th>
                                             <td>{{$loop->iteration}}</td>
-                                            <td>{{$item->trip->fbt_name}} ({{date('H:i', strtotime($item->trip->fbt_dept_time)). "-" . date('H:i', strtotime($item->trip->fbt_arrival_time));}})</td>
+                                            <td>{{$item->trip->departure->prt_name_en ." " . "(" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ")" . " " ."=>" . " " . $item->trip->arrival->prt_name_en . " " ."(" .  date('H:i', strtotime($item->trip->fbt_arrival_time)) .")"}}</td>
                                             <td><center>{{date('H:i', strtotime($item->s_start)). "-" . date('H:i', strtotime($item->s_end));}}</center></td>
                                             <td><center>{{$item->s_meeting_point}}</center></td>
                                             <td>
