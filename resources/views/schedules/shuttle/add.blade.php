@@ -182,8 +182,9 @@
                                             </td>
                                             <td>
                                                 <center>
-                                                    <input type="checkbox" id="switch9" switch="dark" checked />
-                                                    <label for="switch9" data-on-label="Yes" data-off-label="No"></label>
+                                                    <div class="form-check form-switch" style="display: flex; align-items: center;justify-content: center;">
+                                                        <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" />
+                                                    </div>
                                                 </center>
                                             </td>
                                             <td>
@@ -231,5 +232,24 @@
 <script>
     // Sembunyikan card dengan ID "myCard"
     document.getElementById('myCard').style.display = 'none';
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ambil elemen checkbox dan input teks
+      const switchElement = document.getElementById('switch');
+      const textInput = document.getElementById('s_meeting_point');
+
+      // Fungsi untuk memperbarui status input berdasarkan switch
+      function updateInputStatus() {
+          textInput.disabled = !switchElement.checked;
+      }
+
+      // Tambahkan event listener untuk switch
+      switchElement.addEventListener('change', updateInputStatus);
+
+      // Inisialisasi status input pada saat halaman dimuat
+      updateInputStatus();
+  });
 </script>
 @endsection
