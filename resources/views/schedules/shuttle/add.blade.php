@@ -4,8 +4,8 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{route('shuttle.store')}}" method="post" enctype="multipart/form-data">
-                @csrf
+            @csrf
+            <form action="{{route('shuttle.search')}}" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="addproduct-accordion">
@@ -20,7 +20,7 @@
                                         </div>
                                     </div>
                                 </a>
-                                <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="ms-auto">
                                             <div class="btn-toolbar float-end" role="toolbar">
@@ -79,134 +79,134 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-2">
-                        @foreach ($trip as $item)
-                        <div class="col-xl-3 col-sm-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="formCheck1">
-                                        <label class="form-check-label" for="formCheck1">
-                                            {{$item->schedule->company->cpn_name}}
-                                        </label>
-                                    </div>
-                                    <div class="mt-3 pt-1">
-                                        <p> From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}}) </p>
-                                        <p>To : {{$item->arrival->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
-                                    </div>
-                                </div>
+                </div>
+            </form>
+            <div id="myCard" class="row mt-2">
+                @foreach ($trip as $item)
+                <div class="col-xl-4 col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="form-check mb-3">
+                                <input class="form-check-input" type="checkbox" id="formCheck1">
+                                <label class="form-check-label" for="formCheck1">
+                                    {{$item->schedule->company->cpn_name}}
+                                </label>
                             </div>
-                            <!-- end card -->
+                            <div class="mt-3 pt-1">
+                                <p> From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}}) </p>
+                                <p>To : {{$item->arrival->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
+                            </div>
                         </div>
-                        <!-- end col -->
-                        @endforeach
                     </div>
-                    <div class="col-lg-12">
-                        <div id="addproduct-accordion">
-                            <div class="card">
-                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
-                                    {{-- add function to select all checkbox --}}
-                                    <div class="p-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1"> Shuttle Info</h5>
-                                                <p class="text-muted text-truncate mb-0">Fill all information below</p>
-                                            </div>
+                    <!-- end card -->
+                </div>
+                <!-- end col -->
+                @endforeach
+                <div class="col-lg-12">
+                    <div id="addproduct-accordion">
+                        <div class="card">
+                            <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
+                                {{-- add function to select all checkbox --}}
+                                <div class="p-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <h5 class="font-size-16 mb-1"> Shuttle Info</h5>
+                                            <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                         </div>
                                     </div>
-                                </a>
-                                <div id="addproduct-productinfo-collapse" class="collapse show">
-                                    <table class="table mb-0">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th scope="col" class="ps-4" style="width: 50px;">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)">
-                                                    </div>
-                                                </th>
-                                                <th>
-                                                    <center>No</center>
-                                                </th>
-                                                <th>
-                                                    <center>Area</center>
-                                                </th>
-                                                <th>
-                                                    <center>Start</center>
-                                                </th>
-                                                <th>
-                                                    <center>End</center>
-                                                </th>
-                                                <th>
-                                                    <center>Meeting Point</center>
-                                                </th>
-                                                <th>
-                                                    <center>Note</center>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <th scope="row" class="ps-4">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" name="#">
-                                                    </div>
-                                                </th>
-                                                <td>
-                                                    <center>1</center>
-                                                </td>
-                                                <td>
-                                                    <center>Canggu</center>
-                                                </td>
-                                                <td>
-                                                    <center>
-                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                            <option value="">Select</option>
-                                                            <option value="fast_boat">Fast Boat</option>
-                                                            <option value="car_transfer">Car Transfer</option>
-                                                            <option value="yacht">Yacht</option>
-                                                            <option value="tour">Tour</option>
-                                                        </select>
-                                                    </center>
-                                                </td>
-                                                <td>
-                                                    <center>
-                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                            <option value="">Select</option>
-                                                            <option value="fast_boat">Fast Boat</option>
-                                                            <option value="car_transfer">Car Transfer</option>
-                                                            <option value="yacht">Yacht</option>
-                                                            <option value="tour">Tour</option>
-                                                        </select>
-                                                    </center>
-                                                </td>
-                                                <td>
-                                                    <center>
-                                                        <input type="checkbox" id="switch9" switch="dark" checked />
-                                                        <label for="switch9" data-on-label="Yes" data-off-label="No"></label>
-                                                    </center>
-                                                </td>
-                                                <td>
-                                                    <center>
-                                                        <input id="s_meeting_point" name="s_meeting_point" placeholder="Note/Meeting Point Location" type="text" class="form-control"></input>
-                                                    </center>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
                                 </div>
+                            </a>
+                            <div id="addproduct-productinfo-collapse" class="collapse show">
+                                <table class="table mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th scope="col" class="ps-4" style="width: 50px;">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)">
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <center>No</center>
+                                            </th>
+                                            <th>
+                                                <center>Area</center>
+                                            </th>
+                                            <th>
+                                                <center>Start</center>
+                                            </th>
+                                            <th>
+                                                <center>End</center>
+                                            </th>
+                                            <th>
+                                                <center>Meeting Point</center>
+                                            </th>
+                                            <th>
+                                                <center>Note</center>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row" class="ps-4">
+                                                <div class="form-check font-size-16">
+                                                    <input type="checkbox" class="checkedbox" name="#">
+                                                </div>
+                                            </th>
+                                            <td>
+                                                <center>1</center>
+                                            </td>
+                                            <td>
+                                                <center>Canggu</center>
+                                            </td>
+                                            <td>
+                                                <center>
+                                                    <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
+                                                        <option value="">Select</option>
+                                                        <option value="fast_boat">Fast Boat</option>
+                                                        <option value="car_transfer">Car Transfer</option>
+                                                        <option value="yacht">Yacht</option>
+                                                        <option value="tour">Tour</option>
+                                                    </select>
+                                                </center>
+                                            </td>
+                                            <td>
+                                                <center>
+                                                    <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
+                                                        <option value="">Select</option>
+                                                        <option value="fast_boat">Fast Boat</option>
+                                                        <option value="car_transfer">Car Transfer</option>
+                                                        <option value="yacht">Yacht</option>
+                                                        <option value="tour">Tour</option>
+                                                    </select>
+                                                </center>
+                                            </td>
+                                            <td>
+                                                <center>
+                                                    <input type="checkbox" id="switch9" switch="dark" checked />
+                                                    <label for="switch9" data-on-label="Yes" data-off-label="No"></label>
+                                                </center>
+                                            </td>
+                                            <td>
+                                                <center>
+                                                    <input id="s_meeting_point" name="s_meeting_point" placeholder="Note/Meeting Point Location" type="text" class="form-control"></input>
+                                                </center>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                {{-- Button --}}
-                <div class="row mb-4">
-                    <div class="col text-end">
-                        <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
-                    </div> <!-- end col -->
-                </div> <!-- end row-->
-            </form>
+            {{-- Button --}}
+            <div class="row mb-4">
+                <div class="col text-end">
+                    <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
+                    <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
+                </div> <!-- end col -->
+            </div> <!-- end row-->
             <!-- end row -->
 
         </div>
@@ -226,5 +226,10 @@
     new TomSelect("#prt_name_dept");
     new TomSelect("#prt_name_arriv");
     new TomSelect("#prt_option");
+</script>
+
+<script>
+    // Sembunyikan card dengan ID "myCard"
+    document.getElementById('myCard').style.display = 'none';
 </script>
 @endsection
