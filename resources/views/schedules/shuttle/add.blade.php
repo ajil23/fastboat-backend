@@ -22,6 +22,12 @@
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
+                                        <div class="ms-auto">
+                                            <div class="btn-toolbar float-end" role="toolbar">
+                                                    <label class="form-label" for="s_trip">Search</label>
+                                                    <button type="search" class="btn btn-dark w-100" id="btn-new-event"><i class="bx bx-search"></i></button>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
@@ -61,11 +67,6 @@
                                                     <input id="s_start" name="s_start" placeholder="Enter Time" type="time" class="form-control" >
                                                     </input>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col mb-3">
-                                            <div class="col text-end">
-                                                <button type="search" class="btn btn-dark"><i class="bx bx-search me-1"></i></button>
                                             </div>
                                         </div>
                                     </div>
