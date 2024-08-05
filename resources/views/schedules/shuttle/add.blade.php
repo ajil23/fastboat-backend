@@ -23,9 +23,9 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="s_trip">Trip*</label>
+                                                    <label class="form-label" for="s_trip">Company</label>
                                                     <select aria-label="Default select example" name="s_trip" class="form-control" required>
                                                         <option selected>Select Trip</option>
                                                         @foreach ($trip as $item)
@@ -36,9 +36,9 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="s_area">Shuttle Area*</label>
+                                                    <label class="form-label" for="s_area">Departure Port</label>
                                                     <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
                                                         <option selected>Select Shuttle</option>
                                                         @foreach ($area as $item)
@@ -49,27 +49,23 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="s_meeting_point">Meeting Point</label>
+                                                    <label class="form-label" for="s_meeting_point">Arrival Port</label>
                                                     <input id="s_meeting_point" name="s_meeting_point" placeholder="Enter Meeting Point Place" type="text" class="form-control" ></input>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="s_start">Start Waiting</label>
+                                                    <label class="form-label" for="s_start">Option</label>
                                                     <input id="s_start" name="s_start" placeholder="Enter Time" type="time" class="form-control" >
                                                     </input>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="s_end">End Waiting</label>
-                                                    <input id="s_end" name="s_end" placeholder="Enter Time" type="time" class="form-control" >
-                                                    </input>
-                                                </div>
+                                        </div>
+                                        <div class="col mb-3">
+                                            <div class="col text-end">
+                                                <button type="search" class="btn btn-dark"><i class="bx bx-search me-1"></i></button>
                                             </div>
                                         </div>
                                     </div>
