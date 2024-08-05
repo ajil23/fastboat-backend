@@ -28,4 +28,10 @@ class SchedulesShuttle extends Model
     public function arrival(){
         return $this->belongsTo(MasterPort::class);
     }
+    public function port(){
+        return $this->belongsTo(MasterPort::class,'prt_area','prt_id');
+    }
+    public function company(){
+        return $this->belongsTo(DataCompany::class,'cpn_area','cpn_id');
+    }
 }

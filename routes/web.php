@@ -102,6 +102,7 @@ Route::middleware([
         Route::post('/shuttle/update/{id}', [SchedulesShuttleController::class, 'update'])->name('shuttle.update');
         Route::delete('/shuttle/delete/{id}', [SchedulesShuttleController::class, 'delete'])->name('shuttle.delete');
         Route::post('/shuttle/multiple', [SchedulesShuttleController::class, 'multiple'])->name('shuttle.multiple');
+        Route::post('/shuttle/search', [SchedulesShuttleController::class, 'search'])->name('shuttle.search');
     });
 
     Route::prefix('master')->group(function () {

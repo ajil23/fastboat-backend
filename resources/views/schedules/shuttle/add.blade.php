@@ -34,9 +34,9 @@
                                                     <label class="form-label" for="s_trip">Company</label>
                                                     <select aria-label="Default select example" name="s_trip" class="form-control" required>
                                                         <option selected>Select Trip</option>
-                                                        @foreach ($trip as $item)
-                                                        <option value="{{$item->fbt_id}}">
-                                                            {{$item->fbt_name}}
+                                                        @foreach ($company as $item)
+                                                        <option value="{{$item->cpn_id}}">
+                                                            {{$item->cpn_name}}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -47,9 +47,9 @@
                                                     <label class="form-label" for="s_area">Departure Port</label>
                                                     <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
                                                         <option selected>Select Shuttle</option>
-                                                        @foreach ($area as $item)
-                                                        <option value="{{$item->sa_id}}">
-                                                            {{$item->sa_name}}
+                                                        @foreach ($port as $item)
+                                                        <option value="{{$item->prt_id}}">
+                                                            {{$item->prt_name_en}}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -58,14 +58,24 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_meeting_point">Arrival Port</label>
-                                                    <input id="s_meeting_point" name="s_meeting_point" placeholder="Enter Meeting Point Place" type="text" class="form-control" ></input>
+                                                    <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
+                                                        <option selected>Select Shuttle</option>
+                                                        @foreach ($port as $item)
+                                                        <option value="{{$item->prt_id}}">
+                                                            {{$item->prt_name_en}}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_start">Option</label>
-                                                    <input id="s_start" name="s_start" placeholder="Enter Time" type="time" class="form-control" >
-                                                    </input>
+                                                    <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
+                                                        <option selected>Select Shuttle</option>
+                                                        <option value="dropoff">Drop Off</option>
+                                                        <option value="pickup">Pick Up</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
