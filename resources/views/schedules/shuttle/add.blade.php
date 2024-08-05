@@ -32,12 +32,10 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_trip">Company</label>
-                                                    <select aria-label="Default select example" name="s_trip" class="form-control" required>
-                                                        <option selected>Select Trip</option>
+                                                    <select data-trigger name="cpn_name" id="cpn_name" required>
+                                                        <option value="">Select Fast Boat Company</option>
                                                         @foreach ($company as $item)
-                                                        <option value="{{$item->cpn_id}}">
-                                                            {{$item->cpn_name}}
-                                                        </option>
+                                                            <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -45,8 +43,8 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_area">Departure Port</label>
-                                                    <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
-                                                        <option selected>Select Shuttle</option>
+                                                    <select data-trigger id="prt_name_dept" name="prt_name_dept">
+                                                        <option value="">Select Port</option>
                                                         @foreach ($port as $item)
                                                         <option value="{{$item->prt_id}}">
                                                             {{$item->prt_name_en}}
@@ -58,8 +56,8 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_meeting_point">Arrival Port</label>
-                                                    <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
-                                                        <option selected>Select Shuttle</option>
+                                                    <select data-trigger id="prt_name_arriv" name="prt_name_arriv">
+                                                        <option value="">Select Port</option>
                                                         @foreach ($port as $item)
                                                         <option value="{{$item->prt_id}}">
                                                             {{$item->prt_name_en}}
@@ -72,7 +70,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_start">Option</label>
                                                     <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
-                                                        <option selected>Select Shuttle</option>
+                                                        <option selected>Select Option</option>
                                                         <option value="dropoff">Drop Off</option>
                                                         <option value="pickup">Pick Up</option>
                                                     </select>
@@ -96,7 +94,7 @@
                                     </div>
                                     <div class="mt-3 pt-1">
                                         <p> From : Padangbai Harbor, Bali (09:30)</p>
-                                        <p>To : Gili Trawangan Port, GIli Trawangan (11:00)</p>
+                                        <p>To : Gili Trawangan Port, Gili Trawangan (11:00)</p>
                                     </div>
                                 </div>
                             </div>
@@ -203,4 +201,14 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
+
+@section('script')
+
+{{-- tom select --}}
+<script>
+    new TomSelect("#cpn_name");
+    new TomSelect("#prt_name_dept");
+    new TomSelect("#prt_name_arriv");
+</script>
 @endsection
