@@ -24,8 +24,8 @@
                                     <div class="p-4 border-top">
                                         <div class="ms-auto">
                                             <div class="btn-toolbar float-end" role="toolbar">
-                                                    <label class="form-label" for="s_trip">Search</label>
-                                                    <button type="search" class="btn btn-dark w-100" id="btn-new-event"><i class="bx bx-search"></i></button>
+                                                <label class="form-label" for="s_trip">Search</label>
+                                                <button type="search" class="btn btn-dark w-100" id="btn-new-event"><i class="bx bx-search"></i></button>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -35,7 +35,7 @@
                                                     <select data-trigger name="cpn_name" id="cpn_name" required>
                                                         <option value="">Select Fast Boat Company</option>
                                                         @foreach ($company as $item)
-                                                            <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
+                                                        <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -45,10 +45,8 @@
                                                     <label class="form-label" for="s_area">Departure Port</label>
                                                     <select data-trigger id="prt_name_dept" name="prt_name_dept">
                                                         <option value="">Select Port</option>
-                                                        @foreach ($port as $item)
-                                                        <option value="{{$item->prt_id}}">
-                                                            {{$item->prt_name_en}}
-                                                        </option>
+                                                        @foreach ($trip as $item)
+                                                        <option value="{{$item->fbt_id}}"> {{$item->departure->prt_name_en }} </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -58,10 +56,8 @@
                                                     <label class="form-label" for="s_meeting_point">Arrival Port</label>
                                                     <select data-trigger id="prt_name_arriv" name="prt_name_arriv">
                                                         <option value="">Select Port</option>
-                                                        @foreach ($port as $item)
-                                                        <option value="{{$item->prt_id}}">
-                                                            {{$item->prt_name_en}}
-                                                        </option>
+                                                        @foreach ($trip as $item)
+                                                        <option value="{{$item->fbt_id}}"> {{$item->arrival->prt_name_en}} </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -69,10 +65,11 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_start">Option</label>
-                                                    <select id="s_area" name="s_area" aria-label="Default select example" class="form-control" required>
-                                                        <option selected>Select Option</option>
-                                                        <option value="dropoff">Drop Off</option>
-                                                        <option value="pickup">Pick Up</option>
+                                                    <select data-trigger id="prt_option" name="prt_option">
+                                                        <option value="">Select Port</option>
+                                                        @foreach ($trip as $item)
+                                                        <option value="{{$item->fbt_id}}"> {{$item->fbt_shuttle_option}} </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -83,24 +80,26 @@
                         </div>
                     </div>
                     <div class="row mt-2">
+                        @foreach ($trip as $item)
                         <div class="col-xl-3 col-sm-6">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-check mb-3">
                                         <input class="form-check-input" type="checkbox" id="formCheck1">
                                         <label class="form-check-label" for="formCheck1">
-                                            Karunia Jaya
+                                            {{$item->schedule->company->cpn_name}}
                                         </label>
                                     </div>
                                     <div class="mt-3 pt-1">
-                                        <p> From : Padangbai Harbor, Bali (09:30)</p>
-                                        <p>To : Gili Trawangan Port, Gili Trawangan (11:00)</p>
+                                        <p> From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}}) </p>
+                                        <p>To : {{$item->arrival->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
                                     </div>
                                 </div>
                             </div>
                             <!-- end card -->
                         </div>
                         <!-- end col -->
+                        @endforeach
                     </div>
                     <div class="col-lg-12">
                         <div id="addproduct-accordion">
@@ -125,12 +124,24 @@
                                                         <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)">
                                                     </div>
                                                 </th>
-                                                <th><center>No</center></th>
-                                                <th><center>Area</center></th>
-                                                <th><center>Start</center></th>
-                                                <th><center>End</center></th>
-                                                <th><center>Meeting Point</center></th>
-                                                <th><center>Note</center></th>
+                                                <th>
+                                                    <center>No</center>
+                                                </th>
+                                                <th>
+                                                    <center>Area</center>
+                                                </th>
+                                                <th>
+                                                    <center>Start</center>
+                                                </th>
+                                                <th>
+                                                    <center>End</center>
+                                                </th>
+                                                <th>
+                                                    <center>Meeting Point</center>
+                                                </th>
+                                                <th>
+                                                    <center>Note</center>
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -140,18 +151,11 @@
                                                         <input type="checkbox" class="checkedbox" name="#">
                                                     </div>
                                                 </th>
-                                                <td><center>1</center></td>
-                                                <td><center>Canggu</center></td>
                                                 <td>
-                                                    <center>
-                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
-                                                            <option value="">Select</option>
-                                                            <option value="fast_boat">Fast Boat</option>
-                                                            <option value="car_transfer">Car Transfer</option>
-                                                            <option value="yacht">Yacht</option>
-                                                            <option value="tour">Tour</option>
-                                                        </select>
-                                                    </center>
+                                                    <center>1</center>
+                                                </td>
+                                                <td>
+                                                    <center>Canggu</center>
                                                 </td>
                                                 <td>
                                                     <center>
@@ -165,14 +169,25 @@
                                                     </center>
                                                 </td>
                                                 <td>
-                                                   <center>
-                                                    <input type="checkbox" id="switch9" switch="dark" checked />
-                                                    <label for="switch9" data-on-label="Yes" data-off-label="No"></label>
-                                                   </center>
+                                                    <center>
+                                                        <select class="form-control" data-trigger name="cpn_type" id="cpn_type" required>
+                                                            <option value="">Select</option>
+                                                            <option value="fast_boat">Fast Boat</option>
+                                                            <option value="car_transfer">Car Transfer</option>
+                                                            <option value="yacht">Yacht</option>
+                                                            <option value="tour">Tour</option>
+                                                        </select>
+                                                    </center>
                                                 </td>
                                                 <td>
                                                     <center>
-                                                        <input id="s_meeting_point" name="s_meeting_point" placeholder="Note/Meeting Point Location" type="text" class="form-control" ></input>
+                                                        <input type="checkbox" id="switch9" switch="dark" checked />
+                                                        <label for="switch9" data-on-label="Yes" data-off-label="No"></label>
+                                                    </center>
+                                                </td>
+                                                <td>
+                                                    <center>
+                                                        <input id="s_meeting_point" name="s_meeting_point" placeholder="Note/Meeting Point Location" type="text" class="form-control"></input>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -210,5 +225,6 @@
     new TomSelect("#cpn_name");
     new TomSelect("#prt_name_dept");
     new TomSelect("#prt_name_arriv");
+    new TomSelect("#prt_option");
 </script>
 @endsection

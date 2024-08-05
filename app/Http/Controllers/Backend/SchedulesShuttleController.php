@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataCompany;
-use App\Models\MasterPort;
 use App\Models\SchedulesShuttle;
 use App\Models\SchedulesShuttleArea;
 use App\Models\SchedulesTrip;
@@ -17,46 +16,19 @@ class SchedulesShuttleController extends Controller
         $shuttleData = SchedulesShuttle::with(['trip.schedule.company'])->orderBy('s_trip', 'asc')->orderBy('s_start', 'asc')->get();
         $trip = SchedulesTrip::with(['departure.arrival']);
         $area = SchedulesShuttleArea::all();
-        $port = MasterPort::all();
         $company = DataCompany::all();
         $title = 'Delete Shuttle Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        return view('schedules.shuttle.index', compact('shuttleData', 'trip', 'area', 'port', 'company'));
-    }
-
-    public function search(Request $request)
-    {
-        $query = SchedulesShuttle::query();
-
-        if ($request->filled('cpn_name')) {
-            $query->whereHas('company', function ($q) use ($request) {
-                $q->where('cpn_name', 'like', '%' . $request->cpn_name . '%');
-            });
-        }
-
-        if ($request->filled('prt_name_en')) {
-            $query->whereHas('port', function ($q) use ($request) {
-                $q->where('prt_name_en', 'like', '%' . $request->prt_name_en . '%');
-            });
-        }
-
-        // Tambahkan kondisi pencarian lainnya di sini
-
-        $shuttleData = $query->with(['company', 'port'])->get();
-        $port = MasterPort::all();
-        $company = DataCompany::all();
-
-        return view('schedules.shuttle.index', compact('shuttleData','port', 'company'));
+        return view('schedules.shuttle.index', compact('shuttleData', 'trip', 'area', 'company'));
     }
 
     public function add()
     {
         $trip = SchedulesTrip::all();
         $area = SchedulesShuttleArea::all();
-        $port = MasterPort::all();
         $company = DataCompany::all();
-        return view('schedules.shuttle.add', compact('trip', 'area', 'port', 'company'));
+        return view('schedules.shuttle.add', compact('trip', 'area', 'company'));
     }
 
     public function store(Request $request)
