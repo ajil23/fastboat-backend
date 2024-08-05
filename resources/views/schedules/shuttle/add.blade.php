@@ -149,7 +149,7 @@
                                         <tr>
                                             <th scope="row" class="ps-4">
                                                 <div class="form-check font-size-16">
-                                                    <input type="checkbox" class="checkedbox" name="#">
+                                                    <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
                                                 </div>
                                             </th>
                                             <td>
@@ -251,5 +251,29 @@
       // Inisialisasi status input pada saat halaman dimuat
       updateInputStatus();
   });
+</script>
+
+<script>
+    function toggleSelectAll(checkbox) {
+    const isChecked = checkbox.checked;
+    document.querySelectorAll('input[name="selected_ids[]"]').forEach(function (cb) {
+        cb.checked = isChecked;
+    });
+    updateButtonState();
+}
+
+function updateSelectAllState() {
+    const selectAllCheckbox = document.getElementById('sa_id');
+    const checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
+    let allChecked = true;
+
+    checkboxes.forEach(function (checkbox) {
+        if (!checkbox.checked) {
+            allChecked = false;
+        }
+    });
+
+    selectAllCheckbox.checked = allChecked;
+}
 </script>
 @endsection
