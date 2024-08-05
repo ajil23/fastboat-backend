@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\FastboatApiController;
+use App\Http\Controllers\Api\PortApiController;
+use App\Models\DataFastboat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//fastboat 
+Route::get('fastboat', [FastboatApiController::class, 'index']);
+
+// port
+Route::get('port', [PortApiController::class, 'index']);
