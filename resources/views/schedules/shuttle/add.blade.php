@@ -77,6 +77,26 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row mt-2">
+                        <div class="col-xl-3 col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="formCheck1">
+                                        <label class="form-check-label" for="formCheck1">
+                                            Karunia Jaya
+                                        </label>
+                                    </div>
+                                    <div class="mt-3 pt-1">
+                                        <p> From : Padangbai Harbor, Bali (09:30)</p>
+                                        <p>To : Gili Trawangan Port, GIli Trawangan (11:00)</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div>
+                        <!-- end col -->
+                    </div>
                 </div>
 
                 {{-- Button --}}
