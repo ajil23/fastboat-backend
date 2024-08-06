@@ -26,7 +26,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_trip">Company</label>
-                                                    <select name="cpn_name" id="search-company">
+                                                    <select name="cpn_name" id="search-company" class="form-control">
                                                         <option value="">Select fast boat company</option>
                                                         @foreach ($company as $item)
                                                             <option value="{{$item->cpn_name}}">{{$item->cpn_name}}</option>
@@ -37,7 +37,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_area">Departure Port</label>
-                                                    <select name="prt_name_dept" id="search-departure">
+                                                    <select name="prt_name_dept" id="search-departure" class="form-control">
                                                         <option value="">Select Departure Port</option>
                                                         @foreach ($trip as $item)
                                                             <option value="{{$item->departure->prt_name_en}}">{{$item->departure->prt_name_en}}</option>
@@ -48,7 +48,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_meeting_point">Arrival Port</label>
-                                                    <select name="prt_name_arrival" id="search-arrival">
+                                                    <select name="prt_name_arrival" id="search-arrival" class="form-control">
                                                         <option value="">Select Arrival Port</option>
                                                         @foreach ($trip as $item)
                                                             <option value="{{$item->arrival->prt_name_en}}">{{$item->arrival->prt_name_en}}</option>
@@ -59,7 +59,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_start">Option</label>
-                                                    <select name="prt_option" id="search-option">
+                                                    <select name="prt_option" id="search-option" class="form-control">
                                                         <option value="">Select Shuttle Option</option>
                                                         @foreach ($trip as $item)
                                                             <option value="{{$item->fbt_shuttle_option}}">{{$item->fbt_shuttle_option}}</option>
@@ -75,9 +75,13 @@
                     </div>
                 </div>
             </form>
-            <div id="myCard" class="row mt-2">
+            <div id="results" class="row mt-2">
                 @foreach ($trip as $item)
-                <div class="col-xl-4 col-sm-6" id="item">
+                <div class="col-xl-4 col-sm-6 card-item" 
+                     data-company="{{$item->schedule->company->cpn_name}}" 
+                     data-departure="{{$item->departure->prt_name_en}}" 
+                     data-arrival="{{$item->arrival->prt_name_en}}" 
+                     data-option="{{$item->fbt_shuttle_option}}">
                     <div class="card">
                         <div class="card-body">
                             <div class="form-check mb-3">
@@ -87,8 +91,8 @@
                                 </label>
                             </div>
                             <div class="mt-3 pt-1">
-                                <p id="form"> From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}}) </p>
-                                <p id="to">To : {{$item->arrival->prt_name_en}}, {{$item->arrival->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
+                                <p>From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}})</p>
+                                <p>To : {{$item->arrival->prt_name_en}}, {{$item->arrival->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
                                 <p hidden>Option : {{$item->fbt_shuttle_option}}</p>
                             </div>
                         </div>
@@ -287,14 +291,18 @@ function updateSelectAllState() {
 
     // Fungsi untuk menerapkan semua filter pada list item
     function applyFilters() {
-        const listItems = document.querySelectorAll('#item');
+        const listItems = document.querySelectorAll('.card-item');
 
         listItems.forEach((item) => {
-            const text = item.textContent.toLowerCase();
-            const matchesCompany = filters.company === '' || text.includes(filters.company);
-            const matchesDeparture = filters.departure === '' || text.includes(filters.departure);
-            const matchesArrival = filters.arrival === '' || text.includes(filters.arrival);
-            const matchesOption = filters.option === '' || text.includes(filters.option);
+            const company = item.getAttribute('data-company').toLowerCase();
+            const departure = item.getAttribute('data-departure').toLowerCase();
+            const arrival = item.getAttribute('data-arrival').toLowerCase();
+            const option = item.getAttribute('data-option').toLowerCase();
+
+            const matchesCompany = filters.company === '' || company.includes(filters.company);
+            const matchesDeparture = filters.departure === '' || departure.includes(filters.departure);
+            const matchesArrival = filters.arrival === '' || arrival.includes(filters.arrival);
+            const matchesOption = filters.option === '' || option.includes(filters.option);
 
             item.style.display = (matchesCompany && matchesDeparture && matchesArrival && matchesOption) ? '' : 'none';
         });
@@ -306,6 +314,5 @@ function updateSelectAllState() {
     document.querySelector('#search-arrival').addEventListener('input', (e) => updateFilter('arrival', e.target.value));
     document.querySelector('#search-option').addEventListener('input', (e) => updateFilter('option', e.target.value));
 </script>
-
 
 @endsection
