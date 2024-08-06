@@ -26,7 +26,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_trip">Company</label>
-                                                    <select name="cpn_name" id="search-company" class="form-control">
+                                                    <select name="cpn_name" id="search-company" >
                                                         <option value="">Select fast boat company</option>
                                                         @foreach ($company as $item)
                                                             <option value="{{$item->cpn_name}}">{{$item->cpn_name}}</option>
@@ -37,7 +37,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_area">Departure Port</label>
-                                                    <select name="prt_name_dept" id="search-departure" class="form-control">
+                                                    <select name="prt_name_dept" id="search-departure" >
                                                         <option value="">Select Departure Port</option>
                                                         @foreach ($trip as $item)
                                                             <option value="{{$item->departure->prt_name_en}}">{{$item->departure->prt_name_en}}</option>
@@ -48,7 +48,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_meeting_point">Arrival Port</label>
-                                                    <select name="prt_name_arrival" id="search-arrival" class="form-control">
+                                                    <select name="prt_name_arrival" id="search-arrival" >
                                                         <option value="">Select Arrival Port</option>
                                                         @foreach ($trip as $item)
                                                             <option value="{{$item->arrival->prt_name_en}}">{{$item->arrival->prt_name_en}}</option>
@@ -59,7 +59,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="s_start">Option</label>
-                                                    <select name="prt_option" id="search-option" class="form-control">
+                                                    <select name="prt_option" id="search-option" >
                                                         <option value="">Select Shuttle Option</option>
                                                         @foreach ($trip as $item)
                                                             <option value="{{$item->fbt_shuttle_option}}">{{$item->fbt_shuttle_option}}</option>
