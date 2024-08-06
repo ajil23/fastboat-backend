@@ -126,9 +126,6 @@
                                                 </div>
                                             </th>
                                             <th>
-                                                <center>No</center>
-                                            </th>
-                                            <th>
                                                 <center>Area</center>
                                             </th>
                                             <th>
@@ -146,6 +143,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($area as $item)
                                         <tr>
                                             <th scope="row" class="ps-4">
                                                 <div class="form-check font-size-16">
@@ -153,10 +151,9 @@
                                                 </div>
                                             </th>
                                             <td>
-                                                <center>1</center>
-                                            </td>
-                                            <td>
-                                                <center>Canggu</center>
+                                                <center>
+                                                    <input type="text" class="form-control" value="{{$item->sa_name}}" readonly>
+                                                </center>
                                             </td>
                                             <td>
                                                 <center>
@@ -193,6 +190,7 @@
                                                 </center>
                                             </td>
                                         </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
