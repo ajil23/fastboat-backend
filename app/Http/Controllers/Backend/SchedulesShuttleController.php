@@ -33,14 +33,15 @@ class SchedulesShuttleController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
         // Handle the request data validation
-        $request->validate([
-            's_trip' => 'required',
-            's_area' => 'required',
-            's_start' => 'required',
-            's_end' => 'required',
-            's_meeting_point' => 'required',
-        ]);
+        // $request->validate([
+        //     's_trip' => 'required',
+        //     's_area' => 'required',
+        //     's_start' => 'required',
+        //     's_end' => 'required',
+        //     's_meeting_point' => 'required',
+        // ]);
 
         // Handle insert data to database
         $shuttleData = new SchedulesShuttle();
