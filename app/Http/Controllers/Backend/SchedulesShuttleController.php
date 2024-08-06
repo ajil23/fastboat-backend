@@ -27,7 +27,7 @@ class SchedulesShuttleController extends Controller
     {
         $trip = SchedulesTrip::all();
         $area = SchedulesShuttleArea::all();
-        $company = DataCompany::all();
+        $company = DataCompany::orderBy('cpn_name', 'asc')->get();
         return view('schedules.shuttle.add', compact('trip', 'area', 'company'));
     }
 
