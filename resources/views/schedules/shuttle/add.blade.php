@@ -168,7 +168,7 @@
                                                     </td>
                                                     <td>
                                                         <center>
-                                                            <input id="s_meeting_point" name="s_meeting_point[]" placeholder="Note/Meeting Point Location" type="text" class="form-control"></input>
+                                                            <input id="s_meeting_point" name="s_meeting_point[]" placeholder="Note/Meeting Point Location" type="text" class="form-control" disabled></input>
                                                         </center>
                                                     </td>
                                                 </tr>
@@ -200,32 +200,6 @@
 @endsection
 
 @section('script')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
-    function updateInputs() {
-        document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-            // Temukan baris terkait dengan checkbox
-            const rowIndex = checkbox.getAttribute('data-row');
-            const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) .form-control`);
-            
-            // Aktifkan atau nonaktifkan input berdasarkan status checkbox
-            inputs.forEach(function(input) {
-                input.disabled = !checkbox.checked;
-            });
-        });
-    }
-
-    // Tambahkan event listener untuk setiap checkbox
-    document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-        checkbox.addEventListener('change', updateInputs);
-    });
-
-    // Panggil updateInputs pada awal untuk menyesuaikan status awal
-    updateInputs();
-});
-
-</script>
 
 <script>
     new TomSelect("#search-company");
