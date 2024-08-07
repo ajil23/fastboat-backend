@@ -4,8 +4,6 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{ route('shuttle.search') }}" method="post" enctype="multipart/form-data">
-                @csrf
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="addproduct-accordion">
@@ -74,111 +72,126 @@
                         </div>
                     </div>
                 </div>
-            </form>
-            <div id="results" class="row mt-2">
-                @foreach ($trip as $item)
-                    <div class="col-xl-4 col-sm-6 card-item" data-company="{{ $item->schedule->company->cpn_name }}" data-departure="{{ $item->departure->prt_name_en }}" data-arrival="{{ $item->arrival->prt_name_en }}" data-option="{{ $item->fbt_shuttle_option }}" data-trip="{{ $item->fbt_id }}" style="display: none;">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="form-check mb-3">
-                                    <input class="form-check-input trip-checkbox" type="checkbox" id="formCheck{{ $item->fbt_id }}">
-                                    <label class="form-check-label" for="formCheck{{ $item->fbt_id }}">
-                                        {{ $item->schedule->company->cpn_name }}
-                                    </label>
-                                </div>
-                                <div class="mt-3 pt-1">
-                                    <p>From : {{ $item->departure->prt_name_en }}, {{ $item->departure->island->isd_name }} ({{ date('H:i', strtotime($item->fbt_dept_time)) }})</p>
-                                    <p>To : {{ $item->arrival->prt_name_en }}, {{ $item->arrival->island->isd_name }} ({{ date('H:i', strtotime($item->fbt_arrival_time)) }})</p>
-                                    <p hidden>Option : {{ $item->fbt_shuttle_option }}</p>
+                <form action="{{route('shuttle.store')}}" method="POST">
+                    @csrf
+                    <div id="results" class="row mt-2">
+                        @foreach ($trip as $item)
+                        <div class="col-xl-4 col-sm-6 card-item" data-company="{{$item->schedule->company->cpn_name}}" data-departure="{{$item->departure->prt_name_en}}" data-arrival="{{$item->arrival->prt_name_en}}" data-option="{{$item->fbt_shuttle_option}}" style="display: none;"> <!-- Sembunyikan card secara default -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="formCheck1" value="{{$item->fbt_id}}" name="s_trip">
+                                        <label class="form-check-label" for="formCheck1">
+                                            {{$item->schedule->company->cpn_name}}
+                                        </label>
+                                    </div>
+                                    <div class="mt-3 pt-1">
+                                        <p>From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}})</p>
+                                        <p>To : {{$item->arrival->prt_name_en}}, {{$item->arrival->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
+                                        <p hidden>Option : {{$item->fbt_shuttle_option}}</p>
+                                    </div>
                                 </div>
                             </div>
+                            <!-- end card -->
                         </div>
-                    </div>
-                @endforeach
-                <div id="shuttle-info" class="col-lg-12" style="display: none;">
-                    <form action="{{ route('shuttle.store') }}" method="post" enctype="multipart/form-data">
-                        @csrf
-                        <div id="addproduct-accordion">
-                            <div class="card">
-                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
-                                    <div class="p-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1"> Shuttle Info</h5>
-                                                <p class="text-muted text-truncate mb-0">Fill all information below</p>
+                        <!-- end col -->
+                        @endforeach
+                        <div id="shuttle-info" class="col-lg-12" style="display: none;"> <!-- Sembunyikan tabel shuttle info secara default -->
+                            <div id="addproduct-accordion">
+                                <div class="card">
+                                    <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
+                                        <div class="p-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h5 class="font-size-16 mb-1"> Shuttle Info</h5>
+                                                    <p class="text-muted text-truncate mb-0">Fill all information below</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </a>
-                                <div id="addproduct-productinfo-collapse" class="collapse show">
-                                    <table class="table mb-0">
-                                        <thead class="table-light">
-                                            <tr>
-                                                <th scope="col" class="ps-4" style="width: 50px;">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" id="s_id" onclick="toggleSelectAll(this)">
-                                                    </div>
-                                                </th>
-                                                <th><center>Area</center></th>
-                                                <th><center>Start</center></th>
-                                                <th><center>End</center></th>
-                                                <th><center>Meeting Point</center></th>
-                                                <th><center>Note</center></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($area as $item)
+                                    </a>
+                                    <div id="addproduct-productinfo-collapse" class="collapse show">
+                                        <table class="table mb-0">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th scope="col" class="ps-4" style="width: 50px;">
+                                                        <div class="form-check font-size-16">
+                                                            <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)"> 
+                                                        </div>
+                                                    </th>
+                                                    <th>
+                                                        <center>Area</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Start</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>End</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Meeting Point</center>
+                                                    </th>
+                                                    <th>
+                                                        <center>Note</center>
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($area as $index => $item)
                                                 <tr>
                                                     <th scope="row" class="ps-4">
                                                         <div class="form-check font-size-16">
-                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
+                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" data-row="{{ $index }}"onclick="updateSelectAllState(); updateButtonState()">
                                                         </div>
                                                     </th>
                                                     <td>
                                                         <center>
-                                                            <input type="text" class="form-control" value="{{ $item->sa_name }}" readonly>
-                                                            <input type="hidden" name="s_area[]" value="{{ $item->sa_name }}">
+                                                            <input type="text" class="form-control" value="{{$item->sa_name}}" name="s_area[]" readonly>
                                                         </center>
                                                     </td>
                                                     <td>
                                                         <center>
-                                                            <input id="s_start" name="s_start[]" type="time" class="form-control">
+                                                            <input type="time" class="form-control" name="s_start[]">
                                                         </center>
                                                     </td>
                                                     <td>
                                                         <center>
-                                                            <input id="s_end" name="s_end[]" type="time" class="form-control">
+                                                            <input type="time" class="form-control" name="s_end[]">
                                                         </center>
                                                     </td>
                                                     <td>
                                                         <center>
                                                             <div class="form-check form-switch" style="display: flex; align-items: center;justify-content: center;">
-                                                                <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" name="meeting_point_switch[]">
+                                                                <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" name="meeting_point_switch[]"/>
                                                             </div>
                                                         </center>
                                                     </td>
                                                     <td>
                                                         <center>
-                                                            <input id="s_meeting_point" name="s_meeting_point[]" placeholder="Note/Meeting Point Location" type="text" class="form-control" disabled>
+                                                            <input id="s_meeting_point" name="s_meeting_point[]" placeholder="Note/Meeting Point Location" type="text" class="form-control"></input>
                                                         </center>
                                                     </td>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                    <input type="hidden" name="s_trip" id="s_trip">
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row mb-4">
-                            <div class="col text-end">
-                                <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                                <button type="submit" class="btn btn-dark"><i class="bx bx-file me-1"></i> Save</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+                    </div>
+        
+        
+                    {{-- Button --}}
+                    <div class="row mb-4">
+                        <div class="col text-end">
+                            <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
+                            <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
+                        </div> <!-- end col -->
+                    </div> <!-- end row-->
+                    <!-- end row -->
+        
+                </form>
+            
         </div>
         @include('admin.components.footer')
     </div>
@@ -186,6 +199,32 @@
 @endsection
 
 @section('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
+    function updateInputs() {
+        document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
+            // Temukan baris terkait dengan checkbox
+            const rowIndex = checkbox.getAttribute('data-row');
+            const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) .form-control`);
+            
+            // Aktifkan atau nonaktifkan input berdasarkan status checkbox
+            inputs.forEach(function(input) {
+                input.disabled = !checkbox.checked;
+            });
+        });
+    }
+
+    // Tambahkan event listener untuk setiap checkbox
+    document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateInputs);
+    });
+
+    // Panggil updateInputs pada awal untuk menyesuaikan status awal
+    updateInputs();
+});
+
+</script>
 
 <script>
     new TomSelect("#search-company");
