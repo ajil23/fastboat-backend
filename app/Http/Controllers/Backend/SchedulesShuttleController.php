@@ -123,4 +123,12 @@ class SchedulesShuttleController extends Controller
         toast('Your data as been deleted!', 'success');
         return redirect()->route('shuttle.view');
     }
+
+    public function deleteMultiple(Request $request)
+    {
+        $selectedIds = explode(',', $request->input('selected_ids', ''));
+        SchedulesShuttle::whereIn('s_id', $selectedIds)->delete();
+        toast('Your data as been deleted!', 'success');
+        return redirect()->route('shuttle.view');
+    }
 }
