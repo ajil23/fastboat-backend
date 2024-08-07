@@ -146,17 +146,17 @@
                                                     <td>
                                                         <center>
                                                             <input type="text" class="form-control" value="{{$item->sa_name}}" readonly>
-                                                            <input type="hidden" class="form-control" value="{{$item->sa_id}}" name="s_area[]" >
+                                                            <input type="hidden" id="input" class="form-control" value="{{$item->sa_id}}" name="s_area[]" >
                                                         </center>
                                                     </td>
                                                     <td>
                                                         <center>
-                                                            <input type="time" class="form-control" name="s_start[]">
+                                                            <input type="time" class="form-control" name="s_start[]" id="input">
                                                         </center>
                                                     </td>
                                                     <td>
                                                         <center>
-                                                            <input type="time" class="form-control" name="s_end[]">
+                                                            <input type="time" class="form-control" name="s_end[]" id="input">
                                                         </center>
                                                     </td>
                                                     <td>
@@ -200,6 +200,32 @@
 @endsection
 
 @section('script')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
+    function updateInputs() {
+        document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
+            // Temukan baris terkait dengan checkbox
+            const rowIndex = checkbox.getAttribute('data-row');
+            const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
+            
+            // Aktifkan atau nonaktifkan input berdasarkan status checkbox
+            inputs.forEach(function(input) {
+                input.disabled = !checkbox.checked;
+            });
+        });
+    }
+
+    // Tambahkan event listener untuk setiap checkbox
+    document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateInputs);
+    });
+
+    // Panggil updateInputs pada awal untuk menyesuaikan status awal
+    updateInputs();
+});
+
+</script>
 
 <script>
     new TomSelect("#search-company");
