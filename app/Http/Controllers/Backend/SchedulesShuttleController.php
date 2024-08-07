@@ -32,29 +32,43 @@ class SchedulesShuttleController extends Controller
     }
 
     public function store(Request $request)
-    {
-        dd($request);
-        // Handle the request data validation
-        // $request->validate([
-        //     's_trip' => 'required',
-        //     's_area' => 'required',
-        //     's_start' => 'required',
-        //     's_end' => 'required',
-        //     's_meeting_point' => 'required',
-        // ]);
+{
+    dd($request);
+    // Validasi input
+    $validatedData = $request->validate([
+        's_trip.*' => 'required',
+        's_area.*' => 'required',
+        's_start.*' => 'required|date_format:H:i',
+        's_end.*' => 'required|date_format:H:i',
+        's_meeting_point.*' => 'nullable|string'
+    ]);
 
-        // Handle insert data to database
-        $shuttleData = new SchedulesShuttle();
-        $shuttleData->s_trip = $request->s_trip;
-        $shuttleData->s_area = $request->s_area;
-        $shuttleData->s_start = $request->s_start;
-        $shuttleData->s_end = $request->s_end;
-        $shuttleData->s_meeting_point = $request->s_meeting_point;
-        $shuttleData->s_updated_by = Auth()->id();
-        $shuttleData->save();
-        toast('Your data as been submited!', 'success');
-        return redirect()->route('shuttle.view');
+    // Ambil data dari request dan pastikan mereka adalah array
+    $trips = $request->input('s_trip', []);
+    $areas = $request->input('s_area', []);
+    $starts = $request->input('s_start', []);
+    $ends = $request->input('s_end', []);
+    $meetingPoints = $request->input('s_meeting_point', []);
+
+    // Menyimpan data ke database
+    foreach ($trips as $index => $trip) {
+        if (isset($areas[$index], $starts[$index], $ends[$index])) {
+            $shuttleData = new SchedulesShuttle();
+            $shuttleData->s_trip = $trip;
+            $shuttleData->s_area = $areas[$index];
+            $shuttleData->s_start = $starts[$index];
+            $shuttleData->s_end = $ends[$index];
+            $shuttleData->s_meeting_point = $meetingPoints[$index] ?? '';
+            $shuttleData->s_updated_by = auth()->id(); // Menggunakan auth() helper
+            $shuttleData->save();
+        }
     }
+
+    toast('Your data has been submitted!', 'success');
+    return redirect()->route('shuttle.view');
+}
+
+    
 
     public function edit($id)
     {

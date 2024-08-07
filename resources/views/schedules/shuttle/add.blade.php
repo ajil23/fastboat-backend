@@ -80,7 +80,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" id="formCheck1" value="{{$item->fbt_id}}" name="s_trip">
+                                        <input class="form-check-input" type="checkbox" id="formCheck1" value="{{$item->fbt_id}}" name="s_trip[]">
                                         <label class="form-check-label" for="formCheck1">
                                             {{$item->schedule->company->cpn_name}}
                                         </label>
@@ -145,7 +145,8 @@
                                                     </th>
                                                     <td>
                                                         <center>
-                                                            <input type="text" class="form-control" value="{{$item->sa_name}}" name="s_area[]" readonly>
+                                                            <input type="text" class="form-control" value="{{$item->sa_name}}" readonly>
+                                                            <input type="hidden" class="form-control" value="{{$item->sa_id}}" name="s_area[]" >
                                                         </center>
                                                     </td>
                                                     <td>
