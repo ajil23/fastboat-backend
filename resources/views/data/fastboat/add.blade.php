@@ -62,13 +62,25 @@
                                                     <label class="form-label" for="fb_content_en">Content (en)</label>
                                                     <textarea name="fb_content_en" id="content-en"></textarea>
                                                 </div>
-
                                             </div>
-
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_content_idn">Content (idn)</label>
                                                     <textarea name="fb_content_idn" id="content-idn"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_term_condition_en">Term & Condition (en)</label>
+                                                    <textarea name="fb_term_condition_en" id="term-condition-en"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_term_condition_idn">Term & Condition (idn)</label>
+                                                    <textarea name="fb_term_condition_idn" id="term-condition-idn"></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -280,9 +292,42 @@
                 ]
             });
         });
-    </script><script>
+    </script>
+    <script>
         $(document).ready(function() {
             $('#content-en').summernote({
+                height: 300,
+                toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+                ]
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#term-condition-en').summernote({
+                height: 300,
+                toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+                ]
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#term-condition-idn').summernote({
                 height: 300,
                 toolbar: [
                 ['style', ['style']],

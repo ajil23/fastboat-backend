@@ -33,6 +33,8 @@ return new class extends Migration
             $table->text('prt_description_idn');
             $table->longText('prt_content_en');
             $table->longText('prt_content_idn');
+            $table->longText('prt_term_condition_en')->nullable();
+            $table->longText('prt_term_condition_idn')->nullable();
             $table->string('prt_updated_by');
             $table->timestamps();
         });

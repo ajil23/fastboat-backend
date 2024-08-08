@@ -58,6 +58,8 @@ class DataFastboatController extends Controller
         $fastboatData->fb_description_idn = $request->fb_description_idn;
         $fastboatData->fb_content_en = $request->fb_content_en;
         $fastboatData->fb_content_idn = $request->fb_content_idn;
+        $fastboatData->fb_term_condition_en = $request->fb_term_condition_en;
+        $fastboatData->fb_term_condition_idn = $request->fb_term_condition_idn;
         $fastboatData->fb_updated_by = Auth()->id();
 
         // handle image store
@@ -133,6 +135,8 @@ class DataFastboatController extends Controller
         $fastboatData->fb_description_idn = $request->fb_description_idn;
         $fastboatData->fb_content_en = $request->fb_content_en;
         $fastboatData->fb_content_idn = $request->fb_content_idn;
+        $fastboatData->fb_term_condition_en = $request->fb_term_condition_en;
+        $fastboatData->fb_term_condition_idn = $request->fb_term_condition_idn;
         $fastboatData->fb_updated_by = Auth()->id();
 
         // handle image store
