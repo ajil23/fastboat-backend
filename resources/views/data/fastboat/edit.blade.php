@@ -71,6 +71,20 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_term_condition_en">Term & Condition (en)</label>
+                                                    <textarea name="fb_term_condition_en" id="term-condition-en">{{$fastboatEdit->fb_term_condition_en}}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_term_condition_idn">Term & Condition (idn)</label>
+                                                    <textarea name="fb_term_condition_idn" id="term-condition-idn">{{$fastboatEdit->fb_term_condition_idn}}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -288,6 +302,38 @@
         });
     });
 </script>
+    <script>
+        $(document).ready(function() {
+            $('#term-condition-en').summernote({
+                height: 300,
+                toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+                ]
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#term-condition-idn').summernote({
+                height: 300,
+                toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['codeview', 'help']]
+                ]
+            });
+        });
+    </script>
 
 {{-- image preview --}}
 <script>
