@@ -13,7 +13,7 @@ class SchedulesShuttleController extends Controller
 {
     // this function is for view all data from shuttlearea table
     public function index(){
-        $shuttleData = SchedulesShuttle::with(['trip.schedule.company'])->get();
+        $shuttleData = SchedulesShuttle::with(['trip.schedule.company'])->orderBy('s_trip', 'asc')->orderBy('s_start', 'asc')->get();
         $trip = SchedulesTrip::with(['departure.arrival']);
         $area = SchedulesShuttleArea::all();
         $company = DataCompany::all();
@@ -142,23 +142,4 @@ class SchedulesShuttleController extends Controller
         toast('Your data as been deleted!', 'success');
         return redirect()->route('shuttle.view');
     }
-
-    public function multipleAdd(Request $request)
-{
-    $selectedIds = $request->input('selected_ids', []);
-    
-    foreach ($selectedIds as $id) {
-        $shuttleData = SchedulesShuttle::find($id);
-        if ($shuttleData) {
-            $shuttleData->update([
-                's_start' => $request->s_start[$id] ?? $shuttleData->s_start,
-                's_end' => $request->s_end[$id] ?? $shuttleData->s_end,
-                's_meeting_point' => $request->s_meeting_point[$id] ?? $shuttleData->s_meeting_point,
-                's_updated_by' => auth()->id(),
-            ]);
-        }
-    }
-
-    return redirect()->back()->with('success', 'Selected items updated successfully.');
-}
 }
