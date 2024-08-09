@@ -43,33 +43,38 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($shuttleData as $key => $item)
-                                            @if ($key == 0 || $shuttleData[$key]->area->sa_name != $shuttleData[$key - 1]->area->sa_name || $shuttleData[$key]->trip->schedule->company->cpn_name != $shuttleData[$key - 1]->trip->schedule->company->cpn_name)
+                                        @php
+                                            $groupedShuttleData = $shuttleData->groupBy(fn($item) => $item->area->sa_name . '-' . $item->trip->schedule->company->cpn_name);
+                                        @endphp
+                                        
+                                        @foreach ($groupedShuttleData as $key => $group)
                                             <tr>
                                                 <th colspan="7" class="table-light">
-                                                    <center>{{ $item->area->sa_name }} ({{ $item->trip->schedule->company->cpn_name }})</center>
+                                                    <center>{{ $group->first()->area->sa_name }} ({{ $group->first()->trip->schedule->company->cpn_name }})</center>
                                                 </th>
                                             </tr>
-                                            @endif
-                                            <tr>
-                                                <td class="table-light">
-                                                    <center>{{ $item->trip->schedule->sch_name }}</center>
-                                                </td>
-                                                <th scope="row" class="ps-4">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
-                                                    </div>
-                                                </th>
-                                                <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") -> " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
-                                                <td>
-                                                    <center>{{ date('H:i', strtotime($item->s_start)) . "-" . date('H:i', strtotime($item->s_end)) }}</center>
-                                                </td>
-                                                <td>
-                                                    <center>{{ $item->s_meeting_point }}</center>
-                                                </td>
-                                            </tr>
+                                        
+                                            @foreach ($group as $index => $item)
+                                                <tr>
+                                                    <td class="table-light">
+                                                        <center>{{ $item->trip->schedule->sch_name }}</center>
+                                                    </td>
+                                                    <th scope="row" class="ps-4">
+                                                        <div class="form-check font-size-16">
+                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
+                                                        </div>
+                                                    </th>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") -> " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
+                                                    <td>
+                                                        <center>{{ date('H:i', strtotime($item->s_start)) . "-" . date('H:i', strtotime($item->s_end)) }}</center>
+                                                    </td>
+                                                    <td>
+                                                        <center>{{ $item->s_meeting_point }}</center>
+                                                    </td>
+                                                </tr>
                                             @endforeach
+                                        @endforeach
                                         </tbody>
                                     </table>
                                     <!-- Modal Updated -->
