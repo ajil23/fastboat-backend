@@ -75,16 +75,16 @@
             <form action="{{route('shuttle.store')}}" method="POST">
                 @csrf
                 <div id="results" class="row mt-2">
-                    <div id="select-all-container" style="display: none;"> <!-- Sembunyikan checkbox ini pada awal -->
-                        <input type="checkbox" id="select-all-trip"> Pilih Semua Trip
+                    <div class="form-check font-size-16" id="selectAlltrips"  style="display: none;">
+                        <input type="checkbox" class="checkedbox" id="select-all-trip"> Select All
                     </div>
                     @foreach ($trip as $item)
                     <div class="col-xl-4 col-sm-6 card-item" data-company="{{$item->schedule->company->cpn_name}}" data-departure="{{$item->departure->prt_name_en}}" data-arrival="{{$item->arrival->prt_name_en}}" data-option="{{$item->fbt_shuttle_option}}" style="display: none;"> <!-- Sembunyikan card secara default -->
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" id="formCheck1" value="{{$item->fbt_id}}" name="s_trip[]">
-                                    <label class="form-check-label" for="formCheck1">
+                                    <input class="form-check-input" type="checkbox" value="{{$item->fbt_id}}" name="s_trip[]">
+                                    <label class="form-check-label">
                                         {{$item->schedule->company->cpn_name}}
                                     </label>
                                 </div>
@@ -272,43 +272,45 @@
                 textInputs[index].disabled = !switchElement.checked;
             });
         });
-
-        const tripCheckboxes = document.querySelectorAll('.trip-checkbox');
-        const selectAllCheckbox = document.getElementById('select-all-trip'); // Checkbox "Pilih Semua"
-
-        function updateSelectedTrips() {
-            const selectedTrips = [];
-            tripCheckboxes.forEach((cb) => {
-                if (cb.checked) {
-                    selectedTrips.push(cb.closest('.card-item').getAttribute('data-trip'));
-                }
-            });
-
-            if (selectedTrips.length > 0) {
-                document.getElementById('s_trip').value = selectedTrips.join(',');
-                document.getElementById('shuttle-info').style.display = '';
-            } else {
-                document.getElementById('s_trip').value = '';
-                document.getElementById('shuttle-info').style.display = 'none';
-            }
-
-            // Update status "Pilih Semua" checkbox
-            selectAllCheckbox.checked = selectedTrips.length === tripCheckboxes.length;
-        }
-
-        tripCheckboxes.forEach((checkbox) => {
-            checkbox.addEventListener('change', updateSelectedTrips);
-        });
-
-        selectAllCheckbox.addEventListener('change', function() {
-            const isChecked = selectAllCheckbox.checked;
-            tripCheckboxes.forEach((cb) => {
-                cb.checked = isChecked;
-            });
-            updateSelectedTrips();
-        });
-
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    function updateInputs() {
+        document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
+            const rowIndex = checkbox.getAttribute('data-row');
+            const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
+            inputs.forEach(function(input) {
+                input.disabled = !checkbox.checked;
+            });
+        });
+    }
+
+    function toggleSelectAll() {
+        const isChecked = document.querySelector('#select-all-trip').checked;
+        document.querySelectorAll('.card-item').forEach(function(cardItem) {
+            if (cardItem.style.display !== 'none') {
+                const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
+                if (checkbox) {
+                    checkbox.checked = isChecked;
+                }
+            }
+        });
+        updateInputs();
+    }
+
+    function updateSelectAllStatus() {
+        const visibleCheckboxes = Array.from(document.querySelectorAll('.card-item input[name="s_trip[]"]'))
+            .filter(checkbox => checkbox.closest('.card-item').style.display !== 'none');
+        const allChecked = visibleCheckboxes.length > 0 && visibleCheckboxes.every(checkbox => checkbox.checked);
+        document.querySelector('#select-all-trip').checked = allChecked;
+    }
+
+    document.querySelector('#select-all-trip').addEventListener('change', toggleSelectAll);
+
+    updateInputs();
+});
+
+
 
     // search
     const filters = {
@@ -347,6 +349,9 @@
 
         const shuttleInfoTable = document.getElementById('shuttle-info');
         shuttleInfoTable.style.display = filterActive ? '' : 'none';
+
+        const selectAlltrips = document.getElementById('selectAlltrips');
+        selectAlltrips.style.display = filterActive ? '' : 'none';
 
         const noResultsMessage = document.getElementById('no-results-message');
         if (filterActive && document.querySelectorAll('.card-item[style="display: none;"]').length === listItems.length) {
