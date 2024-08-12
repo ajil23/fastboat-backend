@@ -29,6 +29,8 @@ return new class extends Migration
             $table->text('fb_description_idn');
             $table->longText('fb_content_en');
             $table->longText('fb_content_idn');
+            $table->longText('prt_term_condition_en')->nullable();
+            $table->longText('prt_term_condition_idn')->nullable();
             $table->integer('fb_status')->default(1);
             $table->string('fb_updated_by');
             $table->timestamps();
