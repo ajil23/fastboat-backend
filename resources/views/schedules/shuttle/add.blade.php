@@ -274,6 +274,7 @@
         });
     });
 
+    // checkbox button for trip
     document.addEventListener('DOMContentLoaded', function() {
     function updateInputs() {
         document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
@@ -288,11 +289,9 @@
     function toggleSelectAll() {
         const isChecked = document.querySelector('#select-all-trip').checked;
         document.querySelectorAll('.card-item').forEach(function(cardItem) {
-            if (cardItem.style.display !== 'none') {
-                const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
-                if (checkbox) {
-                    checkbox.checked = isChecked;
-                }
+            const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
+            if (checkbox) {
+                checkbox.checked = isChecked && cardItem.style.display !== 'none';
             }
         });
         updateInputs();
@@ -307,8 +306,19 @@
 
     document.querySelector('#select-all-trip').addEventListener('change', toggleSelectAll);
 
+    document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            updateSelectAllStatus();
+            if (checkbox.checked && checkbox.closest('.card-item').style.display === 'none') {
+                document.querySelector('#select-all-trip').checked = false;
+            }
+        });
+    });
+
     updateInputs();
+    updateSelectAllStatus();
 });
+
 
 
 
