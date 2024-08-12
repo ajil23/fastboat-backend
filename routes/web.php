@@ -100,7 +100,6 @@ Route::middleware([
         Route::post('/shuttle/store', [SchedulesShuttleController::class, 'store'])->name('shuttle.store');
         Route::get('/shuttle/edit/{id}', [SchedulesShuttleController::class, 'edit'])->name('shuttle.edit');
         Route::post('/shuttle/update/{id}', [SchedulesShuttleController::class, 'update'])->name('shuttle.update');
-        Route::delete('/shuttle/delete/{id}', [SchedulesShuttleController::class, 'delete'])->name('shuttle.delete');
         Route::post('/shuttle/multiple', [SchedulesShuttleController::class, 'multiple'])->name('shuttle.multiple');
         Route::post('/shuttle/search', [SchedulesShuttleController::class, 'search'])->name('shuttle.search');
         Route::post('/shuttle/delete-multiple', [SchedulesShuttleController::class, 'deleteMultiple'])->name('shuttle.deleteMultiple');
