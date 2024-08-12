@@ -124,17 +124,7 @@ class SchedulesShuttleController extends Controller
     }
     
     
-    
-
     // this function will get the $id of selected data and do delete operation
-    public function delete($id)
-    {
-        $shuttleData = SchedulesShuttle::find($id);
-        $shuttleData->delete();
-        toast('Your data as been deleted!', 'success');
-        return redirect()->route('shuttle.view');
-    }
-
     public function deleteMultiple(Request $request)
     {
         $selectedIds = explode(',', $request->input('selected_ids', ''));
