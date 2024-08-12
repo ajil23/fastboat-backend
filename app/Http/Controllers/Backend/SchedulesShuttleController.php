@@ -33,6 +33,19 @@ class SchedulesShuttleController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            's_trip' => 'required|array',
+            's_trip.*' => 'required|string|max:255',
+            's_area' => 'required|array',
+            's_area.*' => 'required|string|max:255',
+            's_start' => 'required|array',
+            's_start.*' => 'required|date_format:H:i',
+            's_end' => 'required|array',
+            's_end.*' => 'required|date_format:H:i|after:s_start.*',
+            's_meeting_point' => 'required|array',
+            's_meeting_point.*' => 'required|string|max:255',
+        ]);
+
         // Looping melalui array trip
         foreach ($request->s_trip as $trip) {
             // Looping melalui array shuttle info
