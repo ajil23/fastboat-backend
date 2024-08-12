@@ -115,7 +115,7 @@
                                                 <tr>
                                                     <th scope="col" class="ps-4" style="width: 50px;">
                                                         <div class="form-check font-size-16">
-                                                            <input type="checkbox" class="checkedbox" id="select-all"> 
+                                                            <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)"> 
                                                         </div>
                                                     </th>
                                                     <th>
@@ -140,7 +140,7 @@
                                                 <tr>
                                                     <th scope="row" class="ps-4">
                                                         <div class="form-check font-size-16">
-                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" data-row="{{ $index }}">
+                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" data-row="{{ $index }}"onclick="updateSelectAllState(); updateButtonState()">
                                                         </div>
                                                     </th>
                                                     <td>
@@ -184,8 +184,8 @@
         
                     {{-- Button --}}
                     <div class="row mb-4">
-                        <div class="col text-end">
-                            <button onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
+                        <div class="text-end">
+                            <button type="button" onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
                             <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
                         </div> <!-- end col -->
                     </div> <!-- end row-->
@@ -200,67 +200,39 @@
 @endsection
 
 @section('script')
-
-<!-- script untuk mengatur checkbox shuttle info -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
-        function updateInputs() {
-            document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-                // Temukan baris terkait dengan checkbox
-                const rowIndex = checkbox.getAttribute('data-row');
-                const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
-
-                // Aktifkan atau nonaktifkan input berdasarkan status checkbox
-                inputs.forEach(function(input) {
-                    input.disabled = !checkbox.checked;
-                });
-            });
-        }
-
-        // Fungsi untuk memilih atau membatalkan semua checkbox
-        function toggleSelectAll() {
-            const isChecked = document.querySelector('#select-all').checked;
-            document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-                checkbox.checked = isChecked;
-            });
-            updateInputs();
-        }
-
-        // Fungsi untuk mengatur status checkbox "Pilih Semua"
-        function updateSelectAllStatus() {
-            const allChecked = document.querySelectorAll('input[name="selected_ids[]"]:checked').length === 
-                               document.querySelectorAll('input[name="selected_ids[]"]').length;
-            document.querySelector('#select-all').checked = allChecked;
-        }
-
-        // Tambahkan event listener untuk setiap checkbox
+    // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
+    function updateInputs() {
         document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                updateInputs();
-                updateSelectAllStatus(); // Update status "Pilih Semua" setiap kali checkbox diubah
+            // Temukan baris terkait dengan checkbox
+            const rowIndex = checkbox.getAttribute('data-row');
+            const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
+            
+            // Aktifkan atau nonaktifkan input berdasarkan status checkbox
+            inputs.forEach(function(input) {
+                input.disabled = !checkbox.checked;
             });
         });
+    }
 
-        // Tambahkan event listener untuk checkbox 'Pilih Semua'
-        document.querySelector('#select-all').addEventListener('change', toggleSelectAll);
-
-        // Panggil updateInputs pada awal untuk menyesuaikan status awal
-        updateInputs();
+    // Tambahkan event listener untuk setiap checkbox
+    document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateInputs);
     });
+
+    // Panggil updateInputs pada awal untuk menyesuaikan status awal
+    updateInputs();
+});
+
 </script>
 
-
-
 <script>
-
-    // mengatur tampilan pencarian
     new TomSelect("#search-company");
     new TomSelect("#search-departure");
     new TomSelect("#search-arrival");
     new TomSelect("#search-option");
 
-    // switch button meeting point
     document.addEventListener('DOMContentLoaded', function() {
     const switchElements = document.querySelectorAll('input[name="meeting_point_switch[]"]');
     const textInputs = document.querySelectorAll('input[name="s_meeting_point[]"]');
@@ -291,7 +263,28 @@
     });
 });
 
-// search
+function toggleSelectAll(checkbox) {
+    const isChecked = checkbox.checked;
+    document.querySelectorAll('input[name="selected_ids[]"]').forEach(function (cb) {
+        cb.checked = isChecked;
+    });
+    updateButtonState();
+}
+
+function updateSelectAllState() {
+    const selectAllCheckbox = document.getElementById('s_id');
+    const checkboxes = document.querySelectorAll('input[name="selected_ids[]"]');
+    let allChecked = true;
+
+    checkboxes.forEach(function (checkbox) {
+        if (!checkbox.checked) {
+            allChecked = false;
+        }
+    });
+
+    selectAllCheckbox.checked = allChecked;
+}
+
 const filters = {
     company: '',
     departure: '',

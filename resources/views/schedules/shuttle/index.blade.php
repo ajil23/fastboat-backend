@@ -33,7 +33,7 @@
                                                     </div>
                                                 </th>
                                                 <th>No</th>
-                                                <th>From -> To</th>
+                                                <th><center>From -> To</center></th>
                                                 <th>
                                                     <center>Time Range (WITA)</center>
                                                 </th>
