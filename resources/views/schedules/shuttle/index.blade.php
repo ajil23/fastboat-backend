@@ -67,7 +67,7 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") -> " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
                                                     <td>
-                                                        <center>{{ date('H:i', strtotime($item->s_start)) . "-" . date('H:i', strtotime($item->s_end)) }}</center>
+                                                        <center>{{$item->s_start . "-" . $item->s_end }}</center>
                                                     </td>
                                                     <td>
                                                         <center>{{ $item->s_meeting_point }}</center>
