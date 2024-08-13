@@ -26,14 +26,18 @@
                                     <table class="table mb-0">
                                         <thead>
                                             <tr>
-                                                <th><center>Schedule</center></th>
+                                                <th>
+                                                    <center>Schedule</center>
+                                                </th>
                                                 <th scope="col" class="ps-4" style="width: 50px;">
                                                     <div class="form-check font-size-16">
                                                         <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)">
                                                     </div>
                                                 </th>
                                                 <th>No</th>
-                                                <th><center>From -> To</center></th>
+                                                <th>
+                                                    <center>From -> To</center>
+                                                </th>
                                                 <th>
                                                     <center>Time Range (WITA)</center>
                                                 </th>
@@ -43,38 +47,44 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        @php
+                                            @php
                                             $groupedShuttleData = $shuttleData->groupBy(fn($item) => $item->area->sa_name . '-' . $item->trip->schedule->company->cpn_name);
-                                        @endphp
-                                        
-                                        @foreach ($groupedShuttleData as $key => $group)
+                                            @endphp
+
+                                            @foreach ($groupedShuttleData as $key => $group)
                                             <tr>
                                                 <th colspan="7" class="table-light">
                                                     <center>{{ $group->first()->area->sa_name }} ({{ $group->first()->trip->schedule->company->cpn_name }})</center>
                                                 </th>
                                             </tr>
-                                        
+
                                             @foreach ($group as $index => $item)
-                                                <tr>
-                                                    <td class="table-light">
-                                                        <center>{{ $item->trip->schedule->sch_name }}</center>
-                                                    </td>
-                                                    <th scope="row" class="ps-4">
-                                                        <div class="form-check font-size-16">
-                                                            <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
-                                                        </div>
-                                                    </th>
-                                                    <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") -> " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
-                                                    <td>
-                                                        <center>{{$item->s_start . "-" . $item->s_end }}</center>
-                                                    </td>
-                                                    <td>
-                                                        <center>{{ $item->s_meeting_point }}</center>
-                                                    </td>
-                                                </tr>
+                                            <tr>
+                                                <td class="table-light">
+                                                    <center>{{ $item->trip->schedule->sch_name }}</center>
+                                                </td>
+                                                <th scope="row" class="ps-4">
+                                                    <div class="form-check font-size-16">
+                                                        <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
+                                                    </div>
+                                                </th>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") -> " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
+                                                <td>
+                                                    <center>{{$item->s_start . "-" . $item->s_end }}</center>
+                                                </td>
+                                                <td>
+                                                    @if ($item->s_meeting_point)
+                                                        @if($item->s_meeting_point === 'not_set')
+                                                        <span><i class="mdi mdi-office-building"></i>- {{$item->trip->fbt_shuttle_option}}</span>
+                                                        @else
+                                                        <span><i class="mdi mdi-map-marker"></i>{{ $item->s_meeting_point }} - {{$item->trip->fbt_shuttle_option}}</span>
+                                                        @endif
+                                                    @endif
+                                                </td>
+                                            </tr>
                                             @endforeach
-                                        @endforeach
+                                            @endforeach
                                         </tbody>
                                     </table>
                                     <!-- Modal Updated -->
