@@ -23,7 +23,7 @@
                                     <div class="row">
                                         <div class="col-lg-3">
                                             <div class="mb-3">
-                                                <label class="form-label" for="s_trip">Company</label>
+                                                <label class="form-label">Company</label>
                                                 <select name="cpn_name" id="search-company">
                                                     <option value="">Select fast boat company</option>
                                                     @foreach ($company as $item)
@@ -34,7 +34,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="mb-3">
-                                                <label class="form-label" for="s_area">Departure Port</label>
+                                                <label class="form-label">Departure Port</label>
                                                 <select name="prt_name_dept" id="search-departure">
                                                     <option value="">Select Departure Port</option>
                                                     @foreach ($trip as $item)
@@ -45,7 +45,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="mb-3">
-                                                <label class="form-label" for="s_meeting_point">Arrival Port</label>
+                                                <label class="form-label">Arrival Port</label>
                                                 <select name="prt_name_arrival" id="search-arrival">
                                                     <option value="">Select Arrival Port</option>
                                                     @foreach ($trip as $item)
@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="col-lg-3">
                                             <div class="mb-3">
-                                                <label class="form-label" for="s_start">Option</label>
+                                                <label class="form-label">Option</label>
                                                 <select name="prt_option" id="search-option">
                                                     <option value="">Select Shuttle Option</option>
                                                     @foreach ($trip as $item)
@@ -76,15 +76,16 @@
                 @csrf
                 <div id="results" class="row mt-2">
                     <div class="form-check font-size-16" id="selectAlltrips" style="display: none;">
-                        <input type="checkbox" class="checkedbox" id="select-all-trip"> Select All
+                        <input type="checkbox" class="form-check-input" id="select-all-trip">
+                        <label for="select-all-trip">Select All</label>
                     </div>
                     @foreach ($trip as $item)
                     <div class="col-xl-4 col-sm-6 card-item" data-company="{{$item->schedule->company->cpn_name}}" data-departure="{{$item->departure->prt_name_en}}" data-arrival="{{$item->arrival->prt_name_en}}" data-option="{{$item->fbt_shuttle_option}}" style="display: none;"> <!-- Sembunyikan card secara default -->
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" value="{{$item->fbt_id}}" name="s_trip[]">
-                                    <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" value="{{$item->fbt_id}}" name="s_trip[]" id="trip + {{$item->fbt_id}}">
+                                    <label class="form-check-label" for="trip + {{$item->fbt_id}}">
                                         {{$item->schedule->company->cpn_name}}
                                     </label>
                                 </div>
@@ -118,7 +119,7 @@
                                             <tr>
                                                 <th scope="col" class="ps-4" style="width: 50px;">
                                                     <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" id="select-all">
+                                                        <input type="checkbox" class="form-check-input" id="select-all">
                                                     </div>
                                                 </th>
                                                 <th>
@@ -143,23 +144,23 @@
                                             <tr>
                                                 <th scope="row" class="ps-4">
                                                     <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" name="selected_ids[]" data-row="{{ $index }}">
+                                                        <input type="checkbox" class="form-check-input" name="selected_ids[]" data-row="{{ $index }}">
                                                     </div>
                                                 </th>
                                                 <td>
                                                     <center>
-                                                        <input type="text" class="form-control" value="{{$item->sa_name}}" readonly>
-                                                        <input type="hidden" id="input" class="form-control" value="{{$item->sa_id}}" name="s_area[]">
+                                                        <input type="text" class="form-control input_info" value="{{$item->sa_name}}" readonly>
+                                                        <input type="hidden" class="form-control input_info" value="{{$item->sa_id}}" name="s_area[]">
                                                     </center>
                                                 </td>
                                                 <td>
                                                     <center>
-                                                        <input type="time" class="form-control" name="s_start[]" id="input">
+                                                        <input type="time" class="form-control input_info" name="s_start[]">
                                                     </center>
                                                 </td>
                                                 <td>
                                                     <center>
-                                                        <input type="time" class="form-control" name="s_end[]" id="input">
+                                                        <input type="time" class="form-control input_info" name="s_end[]">
                                                     </center>
                                                 </td>
                                                 <td>
@@ -206,51 +207,45 @@
 
 <!-- script untuk mengatur checkbox shuttle info -->
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
-        function updateInputs() {
-            document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-                // Temukan baris terkait dengan checkbox
-                const rowIndex = checkbox.getAttribute('data-row');
-                const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
+    $(document).ready(function() {
+    // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
+    function updateInputs() {
+        $('input[name="selected_ids[]"]').each(function() {
+            // Temukan baris terkait dengan checkbox
+            const rowIndex = $(this).data('row');
+            const inputs = $(`tr:nth-child(${parseInt(rowIndex) + 1}) .input_info`);
 
-                // Aktifkan atau nonaktifkan input berdasarkan status checkbox
-                inputs.forEach(function(input) {
-                    input.disabled = !checkbox.checked;
-                });
-            });
-        }
-
-        // Fungsi untuk memilih atau membatalkan semua checkbox
-        function toggleSelectAll() {
-            const isChecked = document.querySelector('#select-all').checked;
-            document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-                checkbox.checked = isChecked;
-            });
-            updateInputs();
-        }
-
-        // Fungsi untuk mengatur status checkbox "Pilih Semua"
-        function updateSelectAllStatus() {
-            const allChecked = document.querySelectorAll('input[name="selected_ids[]"]:checked').length ===
-                document.querySelectorAll('input[name="selected_ids[]"]').length;
-            document.querySelector('#select-all').checked = allChecked;
-        }
-
-        // Tambahkan event listener untuk setiap checkbox
-        document.querySelectorAll('input[name="selected_ids[]"]').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                updateInputs();
-                updateSelectAllStatus(); // Update status "Pilih Semua" setiap kali checkbox diubah
-            });
+            // Aktifkan atau nonaktifkan input berdasarkan status checkbox
+            inputs.prop('disabled', !$(this).is(':checked'));
         });
+    }
 
-        // Tambahkan event listener untuk checkbox 'Pilih Semua'
-        document.querySelector('#select-all').addEventListener('change', toggleSelectAll);
-
-        // Panggil updateInputs pada awal untuk menyesuaikan status awal
+    // Fungsi untuk memilih atau membatalkan semua checkbox
+    function toggleSelectAll() {
+        const isChecked = $('#select-all').is(':checked');
+        $('input[name="selected_ids[]"]').prop('checked', isChecked);
         updateInputs();
+    }
+
+    // Fungsi untuk mengatur status checkbox "Pilih Semua"
+    function updateSelectAllStatus() {
+        const allChecked = $('input[name="selected_ids[]"]:checked').length === $('input[name="selected_ids[]"]').length;
+        $('#select-all').prop('checked', allChecked);
+    }
+
+    // Tambahkan event listener untuk setiap checkbox
+    $('input[name="selected_ids[]"]').on('change', function() {
+        updateInputs();
+        updateSelectAllStatus(); // Update status "Pilih Semua" setiap kali checkbox diubah
     });
+
+    // Tambahkan event listener untuk checkbox 'Pilih Semua'
+    $('#select-all').on('change', toggleSelectAll);
+
+    // Panggil updateInputs pada awal untuk menyesuaikan status awal
+    updateInputs();
+});
+
 </script>
 
 
@@ -263,144 +258,139 @@
     new TomSelect("#search-option");
 
     // switch button meeting point
-    document.addEventListener('DOMContentLoaded', function() {
-        const switchElements = document.querySelectorAll('input[name="meeting_point_switch[]"]');
-        const textInputs = document.querySelectorAll('input[name="s_meeting_point[]"]');
+    $(document).ready(function() {
+        const $switchElements = $('input[name="meeting_point_switch[]"]');
+        const $textInputs = $('input[name="s_meeting_point[]"]');
 
-        switchElements.forEach((switchElement, index) => {
-            switchElement.addEventListener('change', function() {
-                textInputs[index].disabled = !switchElement.checked;
+        $switchElements.each(function(index) {
+            $(this).on('change', function() {
+                $textInputs.eq(index).prop('disabled', !$(this).is(':checked'));
             });
         });
     });
 
     // checkbox button for trip
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateInputs() {
-            document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
-                const rowIndex = checkbox.getAttribute('data-row');
-                const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
-                inputs.forEach(function(input) {
-                    input.disabled = !checkbox.checked;
-                });
-            });
-        }
-
+    $(document).ready(function() {
         function toggleSelectAll() {
-            const isChecked = document.querySelector('#select-all-trip').checked;
-            document.querySelectorAll('.card-item').forEach(function(cardItem) {
-                const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
-                if (checkbox) {
-                    checkbox.checked = isChecked && cardItem.style.display !== 'none';
+            const isChecked = $('#select-all-trip').is(':checked');
+            $('.card-item').each(function() {
+                const $checkbox = $(this).find('input[name="s_trip[]"]');
+                if ($checkbox.length) {
+                    $checkbox.prop('checked', isChecked && $(this).is(':visible'));
                 }
             });
-            updateInputs();
         }
 
         function updateSelectAllStatus() {
-            const visibleCheckboxes = Array.from(document.querySelectorAll('.card-item input[name="s_trip[]"]'))
-                .filter(checkbox => checkbox.closest('.card-item').style.display !== 'none');
-            const allChecked = visibleCheckboxes.length > 0 && visibleCheckboxes.every(checkbox => checkbox.checked);
-            document.querySelector('#select-all-trip').checked = allChecked;
+            const visibleCheckboxes = $('.card-item:visible').find('input[name="s_trip[]"]');
+            const allChecked = visibleCheckboxes.length > 0 && visibleCheckboxes.filter(':checked').length === visibleCheckboxes.length;
+            $('#select-all-trip').prop('checked', allChecked);
         }
 
-        document.querySelector('#select-all-trip').addEventListener('change', toggleSelectAll);
+        $('#select-all-trip').on('change', toggleSelectAll);
 
-        document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
-            checkbox.addEventListener('change', function() {
-                updateSelectAllStatus();
-                if (checkbox.checked && checkbox.closest('.card-item').style.display === 'none') {
-                    checkbox.checked = false;
-                }
-            });
+        $('input[name="s_trip[]"]').on('change', function() {
+            updateSelectAllStatus();
+            if ($(this).is(':checked') && $(this).closest('.card-item').is(':hidden')) {
+                $(this).prop('checked', false);
+            }
         });
 
         const observer = new MutationObserver(function(mutationsList) {
             mutationsList.forEach(function(mutation) {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                    const cardItem = mutation.target;
-                    const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
-                    if (checkbox && cardItem.style.display === 'none') {
-                        checkbox.checked = false;
+                    const $cardItem = $(mutation.target);
+                    const $checkbox = $cardItem.find('input[name="s_trip[]"]');
+                    if ($checkbox.length && $cardItem.is(':hidden')) {
+                        $checkbox.prop('checked', false);
                     }
                     updateSelectAllStatus();
                 }
             });
         });
 
-        document.querySelectorAll('.card-item').forEach(function(cardItem) {
-            observer.observe(cardItem, {
-                attributes: true
-            });
+        $('.card-item').each(function() {
+            observer.observe(this, { attributes: true });
         });
 
-        updateInputs();
         updateSelectAllStatus();
     });
 
 
-
-
-
     // search
-    const filters = {
-        company: '',
-        departure: '',
-        arrival: '',
-        option: ''
-    };
+    $(document).ready(function() {
+        const filters = {
+            company: '',
+            departure: '',
+            arrival: '',
+            option: ''
+        };
 
-    function updateFilter(key, value) {
-        filters[key] = value.toLowerCase();
-        applyFilters();
-    }
+        function updateFilter(key, value) {
+            filters[key] = value.toLowerCase();
+            applyFilters();
+        }
 
-    function applyFilters() {
-        const listItems = document.querySelectorAll('.card-item');
-        let filterActive = false;
+        function applyFilters() {
+            const $listItems = $('.card-item');
+            let filterActive = false;
+            let companyMatched = false; // Tambahkan variabel untuk mengecek apakah company cocok
 
-        listItems.forEach((item) => {
-            const company = item.getAttribute('data-company').toLowerCase();
-            const departure = item.getAttribute('data-departure').toLowerCase();
-            const arrival = item.getAttribute('data-arrival').toLowerCase();
-            const option = item.getAttribute('data-option').toLowerCase();
+            $listItems.each(function() {
+                const $item = $(this);
+                const company = $item.data('company').toLowerCase();
+                const departure = $item.data('departure').toLowerCase();
+                const arrival = $item.data('arrival').toLowerCase();
+                const option = $item.data('option').toLowerCase();
 
-            const matchesCompany = filters.company === '' || company.includes(filters.company);
-            const matchesDeparture = filters.departure === '' || departure.includes(filters.departure);
-            const matchesArrival = filters.arrival === '' || arrival.includes(filters.arrival);
-            const matchesOption = filters.option === '' || option.includes(filters.option);
+                const matchesCompany = filters.company === '' || company.includes(filters.company);
+                const matchesDeparture = filters.departure === '' || departure.includes(filters.departure);
+                const matchesArrival = filters.arrival === '' || arrival.includes(filters.arrival);
+                const matchesOption = filters.option === '' || option.includes(filters.option);
 
-            if (filters.company || filters.departure || filters.arrival || filters.option) {
-                filterActive = true;
+                if (filters.company || filters.departure || filters.arrival || filters.option) {
+                    filterActive = true;
+                }
+
+                // Cek apakah ada company yang cocok
+                if (matchesCompany) {
+                    companyMatched = true;
+                }
+
+                $item.toggle(matchesCompany && matchesDeparture && matchesArrival && matchesOption);
+            });
+
+            // Menampilkan atau menyembunyikan Shuttle Info dan Select All Trips berdasarkan hasil filter company
+            const $shuttleInfoTable = $('#shuttle-info');
+            const $selectAllTrips = $('#selectAlltrips');
+
+            if (companyMatched && filterActive) {
+                $shuttleInfoTable.show();
+                $selectAllTrips.show();
+            } else {
+                $shuttleInfoTable.hide();
+                $selectAllTrips.hide();
             }
 
-            item.style.display = (matchesCompany && matchesDeparture && matchesArrival && matchesOption) ? '' : 'none';
+            const $noResultsMessage = $('#no-results-message');
+            if (filterActive && $listItems.filter(':visible').length === 0) {
+                $noResultsMessage.show();
+            } else {
+                $noResultsMessage.hide();
+            }
+        }
+
+
+        $('#search-company, #search-departure, #search-arrival, #search-option').on('input', function() {
+            const key = $(this).attr('id').replace('search-', '');
+            updateFilter(key, $(this).val());
         });
 
-        const shuttleInfoTable = document.getElementById('shuttle-info');
-        shuttleInfoTable.style.display = filterActive ? '' : 'none';
-
-        const selectAlltrips = document.getElementById('selectAlltrips');
-        selectAlltrips.style.display = filterActive ? '' : 'none';
-
-        const noResultsMessage = document.getElementById('no-results-message');
-        if (filterActive && document.querySelectorAll('.card-item[style="display: none;"]').length === listItems.length) {
-            noResultsMessage.style.display = '';
-        } else {
-            noResultsMessage.style.display = 'none';
-        }
-    }
-
-    document.querySelector('#search-company').addEventListener('input', (e) => updateFilter('company', e.target.value));
-    document.querySelector('#search-departure').addEventListener('input', (e) => updateFilter('departure', e.target.value));
-    document.querySelector('#search-arrival').addEventListener('input', (e) => updateFilter('arrival', e.target.value));
-    document.querySelector('#search-option').addEventListener('input', (e) => updateFilter('option', e.target.value));
-
-    document.querySelectorAll('#search-company, #search-departure, #search-arrival, #search-option').forEach((element) => {
-        element.addEventListener('change', function() {
+        $('#search-company, #search-departure, #search-arrival, #search-option').on('change', function() {
             if (!filters.company && !filters.departure && !filters.arrival && !filters.option) {
-                document.querySelectorAll('.card-item').forEach(item => item.style.display = 'none');
-                document.getElementById('shuttle-info').style.display = 'none';
+                $('.card-item').hide();
+                $('#shuttle-info').hide();
+                $('#selectAlltrips').hide(); // Pastikan elemen checkbox "Select All" juga disembunyikan
             }
         });
     });
