@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreign('s_trip')->references('fbt_id')->on('schedulestrip')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('s_area');
             $table->foreign('s_area')->references('sa_id')->on('schedulesshuttlearea')->onDelete('cascade')->onUpdate('cascade');
-            $table->time('s_start')->nullable();
-            $table->time('s_end')->nullable();
+            $table->string('s_start', 10)->nullable();
+            $table->string('s_end', 10)->nullable();
             $table->string('s_meeting_point', 100)->nullable();
             $table->string('s_updated_by');
             $table->timestamps();

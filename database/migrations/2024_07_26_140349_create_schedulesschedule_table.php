@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('sch_company'); 
             $table->foreign('sch_company')->references('cpn_id')->on('datacompany')->onDelete('cascade')->onUpdate('cascade');
             $table->string('sch_name');
+            $table->string('sch_updated_by');
             $table->timestamps();
         });
     }
