@@ -310,14 +310,32 @@
         checkbox.addEventListener('change', function() {
             updateSelectAllStatus();
             if (checkbox.checked && checkbox.closest('.card-item').style.display === 'none') {
-                document.querySelector('#select-all-trip').checked = false;
+                checkbox.checked = false;
             }
         });
+    });
+
+    const observer = new MutationObserver(function(mutationsList) {
+        mutationsList.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                const cardItem = mutation.target;
+                const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
+                if (checkbox && cardItem.style.display === 'none') {
+                    checkbox.checked = false;
+                }
+                updateSelectAllStatus();
+            }
+        });
+    });
+
+    document.querySelectorAll('.card-item').forEach(function(cardItem) {
+        observer.observe(cardItem, { attributes: true });
     });
 
     updateInputs();
     updateSelectAllStatus();
 });
+
 
 
 
