@@ -24,5 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(IslandSeeder::class);
         $this->call(PortSeeder::class);
         $this->call(FastBoatSeeder::class);
+        $this->call(ScheduleSeeder::class);
+        $this->call(ShuttleAreaSeeder::class);
     }
 }
