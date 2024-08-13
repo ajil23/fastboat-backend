@@ -26,15 +26,10 @@
                                     <table class="table mb-0">
                                         <thead>
                                             <tr>
+                                                <th>No</th>
                                                 <th>
                                                     <center>Schedule</center>
                                                 </th>
-                                                <th scope="col" class="ps-4" style="width: 50px;">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)">
-                                                    </div>
-                                                </th>
-                                                <th>No</th>
                                                 <th>
                                                     <center>From -> To</center>
                                                 </th>
@@ -43,6 +38,11 @@
                                                 </th>
                                                 <th>
                                                     <center>Detail</center>
+                                                </th>
+                                                <th scope="col" class="ps-4" style="width: 50px;">
+                                                    <div class="form-check font-size-16">
+                                                        <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)">
+                                                    </div>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -60,15 +60,10 @@
 
                                             @foreach ($group as $index => $item)
                                             <tr>
+                                                <td>{{ $loop->iteration }}</td>
                                                 <td class="table-light">
                                                     <center>{{ $item->trip->schedule->sch_name }}</center>
                                                 </td>
-                                                <th scope="row" class="ps-4">
-                                                    <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
-                                                    </div>
-                                                </th>
-                                                <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->trip->departure->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_dept_time)) . ") -> " . $item->trip->arrival->prt_name_en . " (" . date('H:i', strtotime($item->trip->fbt_arrival_time)) . ")" }}</td>
                                                 <td>
                                                     <center>{{$item->s_start . "-" . $item->s_end }}</center>
@@ -82,6 +77,11 @@
                                                         @endif
                                                     @endif
                                                 </td>
+                                                <th scope="row" class="ps-4">
+                                                    <div class="form-check font-size-16">
+                                                        <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
+                                                    </div>
+                                                </th>
                                             </tr>
                                             @endforeach
                                             @endforeach
