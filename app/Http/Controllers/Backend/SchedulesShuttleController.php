@@ -33,29 +33,34 @@ class SchedulesShuttleController extends Controller
 
     public function store(Request $request)
     {
+        // Validasi inputan
         $request->validate([
             's_trip' => 'required|array',
             's_trip.*' => 'required|string|max:255',
             's_area' => 'required|array',
             's_area.*' => 'required|string|max:255',
-            's_start' => 'required|array',
-            's_start.*' => 'required|date_format:H:i',
-            's_end' => 'required|array',
-            's_end.*' => 'required|date_format:H:i|after:s_start.*',
-            's_meeting_point' => 'required|array',
-            's_meeting_point.*' => 'required|string|max:255',
+            's_start' => 'nullable|array',
+            's_start.*' => 'nullable|date_format:H:i',
+            's_end' => 'nullable|array',
+            's_end.*' => 'nullable|date_format:H:i|after:s_start.*',
+            's_meeting_point' => 'nullable|array',
+            's_meeting_point.*' => 'nullable|string|max:255',
         ]);
 
         // Looping melalui array trip
-        foreach ($request->s_trip as $trip) {
+        foreach ($request->s_trip as $tripIndex => $trip) {
             // Looping melalui array shuttle info
             for ($i = 0; $i < count($request->s_area); $i++) {
+                // Cek apakah waktu tidak diisi dan set nilai "Not Set" jika kosong
+                $s_start = $request->s_start[$i] ?? 'Not Set';
+                $s_end = $request->s_end[$i] ?? 'Not Set';
+
                 // Cek apakah data sudah ada di database
                 $existingData = SchedulesShuttle::where([
                     ['s_trip', $trip],
                     ['s_area', $request->s_area[$i]],
-                    ['s_start', $request->s_start[$i]],
-                    ['s_end', $request->s_end[$i]],
+                    ['s_start', $s_start],
+                    ['s_end', $s_end],
                 ])->first();
 
                 if ($existingData) {
@@ -63,8 +68,8 @@ class SchedulesShuttleController extends Controller
                     $existingData->update([
                         's_trip' => $trip,
                         's_area' => $request->s_area[$i],
-                        's_start' => $request->s_start[$i],
-                        's_end' => $request->s_end[$i],
+                        's_start' => $s_start,
+                        's_end' => $s_end,
                         's_meeting_point' => $request->s_meeting_point[$i],
                         's_updated_by' => auth()->id(),
                     ]);
@@ -73,8 +78,8 @@ class SchedulesShuttleController extends Controller
                     $shuttleData = new SchedulesShuttle();
                     $shuttleData->s_trip = $trip;
                     $shuttleData->s_area = $request->s_area[$i];
-                    $shuttleData->s_start = $request->s_start[$i];
-                    $shuttleData->s_end = $request->s_end[$i];
+                    $shuttleData->s_start = $s_start;
+                    $shuttleData->s_end = $s_end;
                     $shuttleData->s_meeting_point = $request->s_meeting_point[$i];
                     $shuttleData->s_updated_by = auth()->id();
                     $shuttleData->save();
