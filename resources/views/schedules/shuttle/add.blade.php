@@ -75,7 +75,7 @@
             <form action="{{route('shuttle.store')}}" method="POST">
                 @csrf
                 <div id="results" class="row mt-2">
-                    <div class="form-check font-size-16" id="selectAlltrips"  style="display: none;">
+                    <div class="form-check font-size-16" id="selectAlltrips" style="display: none;">
                         <input type="checkbox" class="checkedbox" id="select-all-trip"> Select All
                     </div>
                     @foreach ($trip as $item)
@@ -276,65 +276,67 @@
 
     // checkbox button for trip
     document.addEventListener('DOMContentLoaded', function() {
-    function updateInputs() {
-        document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
-            const rowIndex = checkbox.getAttribute('data-row');
-            const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
-            inputs.forEach(function(input) {
-                input.disabled = !checkbox.checked;
+        function updateInputs() {
+            document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
+                const rowIndex = checkbox.getAttribute('data-row');
+                const inputs = document.querySelectorAll(`tr:nth-child(${parseInt(rowIndex) + 1}) #input`);
+                inputs.forEach(function(input) {
+                    input.disabled = !checkbox.checked;
+                });
             });
-        });
-    }
+        }
 
-    function toggleSelectAll() {
-        const isChecked = document.querySelector('#select-all-trip').checked;
-        document.querySelectorAll('.card-item').forEach(function(cardItem) {
-            const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
-            if (checkbox) {
-                checkbox.checked = isChecked && cardItem.style.display !== 'none';
-            }
-        });
-        updateInputs();
-    }
-
-    function updateSelectAllStatus() {
-        const visibleCheckboxes = Array.from(document.querySelectorAll('.card-item input[name="s_trip[]"]'))
-            .filter(checkbox => checkbox.closest('.card-item').style.display !== 'none');
-        const allChecked = visibleCheckboxes.length > 0 && visibleCheckboxes.every(checkbox => checkbox.checked);
-        document.querySelector('#select-all-trip').checked = allChecked;
-    }
-
-    document.querySelector('#select-all-trip').addEventListener('change', toggleSelectAll);
-
-    document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            updateSelectAllStatus();
-            if (checkbox.checked && checkbox.closest('.card-item').style.display === 'none') {
-                checkbox.checked = false;
-            }
-        });
-    });
-
-    const observer = new MutationObserver(function(mutationsList) {
-        mutationsList.forEach(function(mutation) {
-            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                const cardItem = mutation.target;
+        function toggleSelectAll() {
+            const isChecked = document.querySelector('#select-all-trip').checked;
+            document.querySelectorAll('.card-item').forEach(function(cardItem) {
                 const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
-                if (checkbox && cardItem.style.display === 'none') {
+                if (checkbox) {
+                    checkbox.checked = isChecked && cardItem.style.display !== 'none';
+                }
+            });
+            updateInputs();
+        }
+
+        function updateSelectAllStatus() {
+            const visibleCheckboxes = Array.from(document.querySelectorAll('.card-item input[name="s_trip[]"]'))
+                .filter(checkbox => checkbox.closest('.card-item').style.display !== 'none');
+            const allChecked = visibleCheckboxes.length > 0 && visibleCheckboxes.every(checkbox => checkbox.checked);
+            document.querySelector('#select-all-trip').checked = allChecked;
+        }
+
+        document.querySelector('#select-all-trip').addEventListener('change', toggleSelectAll);
+
+        document.querySelectorAll('input[name="s_trip[]"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                updateSelectAllStatus();
+                if (checkbox.checked && checkbox.closest('.card-item').style.display === 'none') {
                     checkbox.checked = false;
                 }
-                updateSelectAllStatus();
-            }
+            });
         });
-    });
 
-    document.querySelectorAll('.card-item').forEach(function(cardItem) {
-        observer.observe(cardItem, { attributes: true });
-    });
+        const observer = new MutationObserver(function(mutationsList) {
+            mutationsList.forEach(function(mutation) {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const cardItem = mutation.target;
+                    const checkbox = cardItem.querySelector('input[name="s_trip[]"]');
+                    if (checkbox && cardItem.style.display === 'none') {
+                        checkbox.checked = false;
+                    }
+                    updateSelectAllStatus();
+                }
+            });
+        });
 
-    updateInputs();
-    updateSelectAllStatus();
-});
+        document.querySelectorAll('.card-item').forEach(function(cardItem) {
+            observer.observe(cardItem, {
+                attributes: true
+            });
+        });
+
+        updateInputs();
+        updateSelectAllStatus();
+    });
 
 
 

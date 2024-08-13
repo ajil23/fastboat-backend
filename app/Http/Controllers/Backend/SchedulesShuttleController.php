@@ -64,7 +64,7 @@ class SchedulesShuttleController extends Controller
                 // Cek apakah waktu tidak diisi dan set nilai "Not Set" jika kosong
                 $s_start = $request->s_start[$i] ?? 'Not Set';
                 $s_end = $request->s_end[$i] ?? 'Not Set';
-                $s_meeting_point = $request->s_meeting_point[$i] ?? 'Not Set';
+                $s_meeting_point = $request->s_meeting_point[$i] ?? 'not_set';
 
     
                 // Cek apakah data sudah ada di database
