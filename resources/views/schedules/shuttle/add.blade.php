@@ -144,35 +144,35 @@
                                             <tr>
                                                 <th scope="row" class="ps-4">
                                                     <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="form-check-input" name="selected_ids[]" data-row="{{ $index }}">
+                                                        <input type="checkbox" class="form-check-input" name="selected_ids[{{ $index }}]" data-row="{{ $index }}">
                                                     </div>
                                                 </th>
                                                 <td>
                                                     <center>
                                                         <input type="text" class="form-control input_info" value="{{$item->sa_name}}" readonly>
-                                                        <input type="hidden" class="form-control input_info" value="{{$item->sa_id}}" name="s_area[]">
+                                                        <input type="hidden" class="form-control input_info" value="{{$item->sa_id}}" name="s_area[{{ $index }}]">
                                                     </center>
                                                 </td>
                                                 <td>
                                                     <center>
-                                                        <input type="time" class="form-control input_info" name="s_start[]">
+                                                        <input type="time" class="form-control input_info" name="s_start[{{ $index }}]">
                                                     </center>
                                                 </td>
                                                 <td>
                                                     <center>
-                                                        <input type="time" class="form-control input_info" name="s_end[]">
+                                                        <input type="time" class="form-control input_info" name="s_end[{{ $index }}]">
                                                     </center>
                                                 </td>
                                                 <td>
                                                     <center>
                                                         <div class="form-check form-switch" style="display: flex; align-items: center;justify-content: center;">
-                                                            <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" name="meeting_point_switch[]" />
+                                                            <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch_{{ $index }}" name="meeting_point_switch[{{ $index }}]" />
                                                         </div>
                                                     </center>
                                                 </td>
                                                 <td>
                                                     <center>
-                                                        <input id="s_meeting_point" name="s_meeting_point[]" placeholder="Note/Meeting Point Location" type="text" class="form-control" disabled></input>
+                                                        <input id="s_meeting_point_{{ $index }}" name="s_meeting_point[{{ $index }}]" placeholder="Note/Meeting Point Location" type="text" class="form-control" disabled></input>
                                                     </center>
                                                 </td>
                                             </tr>
@@ -208,42 +208,61 @@
 <!-- script untuk mengatur checkbox shuttle info -->
 <script>
     $(document).ready(function() {
-    // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
-    function updateInputs() {
-        $('input[name="selected_ids[]"]').each(function() {
-            // Temukan baris terkait dengan checkbox
-            const rowIndex = $(this).data('row');
-            const inputs = $(`tr:nth-child(${parseInt(rowIndex) + 1}) .input_info`);
+    const $form = $('form');
+    const $checkboxes = $('input[name^="selected_ids"]');
+    const $switchElements = $('input[name^="meeting_point_switch"]');
+    const $textInputs = $('input[name^="s_meeting_point"]');
+    const $startInputs = $('input[name^="s_start"]');
+    const $endInputs = $('input[name^="s_end"]');
+    const $selectAllCheckbox = $('#select-all');
 
-            // Aktifkan atau nonaktifkan input berdasarkan status checkbox
-            inputs.prop('disabled', !$(this).is(':checked'));
+    // Function to enable/disable inputs based on checkbox status
+    function updateInputs() {
+        $checkboxes.each(function(index) {
+            const isChecked = $(this).is(':checked');
+            const row = $(this).data('row');
+            $switchElements.eq(row).prop('disabled', !isChecked);
+            $textInputs.eq(row).prop('disabled', !isChecked || !$switchElements.eq(row).is(':checked'));
+            $startInputs.eq(row).prop('disabled', !isChecked);
+            $endInputs.eq(row).prop('disabled', !isChecked);
         });
     }
 
-    // Fungsi untuk memilih atau membatalkan semua checkbox
-    function toggleSelectAll() {
-        const isChecked = $('#select-all').is(':checked');
-        $('input[name="selected_ids[]"]').prop('checked', isChecked);
-        updateInputs();
-    }
-
-    // Fungsi untuk mengatur status checkbox "Pilih Semua"
-    function updateSelectAllStatus() {
-        const allChecked = $('input[name="selected_ids[]"]:checked').length === $('input[name="selected_ids[]"]').length;
-        $('#select-all').prop('checked', allChecked);
-    }
-
-    // Tambahkan event listener untuk setiap checkbox
-    $('input[name="selected_ids[]"]').on('change', function() {
-        updateInputs();
-        updateSelectAllStatus(); // Update status "Pilih Semua" setiap kali checkbox diubah
+    // Function to enable/disable switch and text inputs based on switch status
+    $switchElements.on('change', function() {
+        const index = $switchElements.index(this);
+        $textInputs.eq(index).prop('disabled', !$(this).is(':checked'));
     });
 
-    // Tambahkan event listener untuk checkbox 'Pilih Semua'
-    $('#select-all').on('change', toggleSelectAll);
+    // Event listener for select-all checkbox
+    $selectAllCheckbox.on('change', function() {
+        const isChecked = $(this).is(':checked');
+        $checkboxes.each(function(index) {
+            $(this).prop('checked', isChecked);
+            updateInputs();
+        });
+    });
 
-    // Panggil updateInputs pada awal untuk menyesuaikan status awal
+    // Initial call to update inputs based on their initial state
     updateInputs();
+
+    // Update inputs on checkbox change
+    $checkboxes.on('change', function() {
+        updateInputs();
+    });
+
+    // Handle form submission to ensure correct data is submitted
+    $form.on('submit', function(e) {
+        $checkboxes.each(function(index) {
+            if (!$(this).is(':checked')) {
+                const row = $(this).data('row');
+                $switchElements.eq(row).prop('disabled', true);
+                $textInputs.eq(row).prop('disabled', true);
+                $startInputs.eq(row).prop('disabled', true);
+                $endInputs.eq(row).prop('disabled', true);
+            }
+        });
+    });
 });
 
 </script>
