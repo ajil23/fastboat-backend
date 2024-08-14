@@ -258,16 +258,81 @@
     new TomSelect("#search-option");
 
     // switch button meeting point
-    $(document).ready(function() {
-        const $switchElements = $('input[name="meeting_point_switch[]"]');
-        const $textInputs = $('input[name="s_meeting_point[]"]');
+$(document).ready(function() {
+    const $form = $('form');
+    const $checkboxes = $('input[name="selected_ids[]"]');
+    const $switchElements = $('input[name="meeting_point_switch[]"]');
+    const $textInputs = $('input[name="s_meeting_point[]"]');
+    const $startInputs = $('input[name="s_start[]"]');
+    const $endInputs = $('input[name="s_end[]"]');
+    const $selectAllCheckbox = $('#select-all');
 
-        $switchElements.each(function(index) {
-            $(this).on('change', function() {
-                $textInputs.eq(index).prop('disabled', !$(this).is(':checked'));
-            });
+    // Fungsi untuk mengaktifkan atau menonaktifkan input berdasarkan status checkbox
+    function updateInputs() {
+        $checkboxes.each(function(index) {
+            const isChecked = $(this).is(':checked');
+            $switchElements.eq(index).prop('disabled', !isChecked);
+            $textInputs.eq(index).prop('disabled', !isChecked || !$switchElements.eq(index).is(':checked'));
+            $startInputs.eq(index).prop('disabled', !isChecked);
+            $endInputs.eq(index).prop('disabled', !isChecked);
+        });
+    }
+
+    // Fungsi untuk mengaktifkan semua switch jika checkbox select-all dicentang
+    function updateSelectAll() {
+        const isChecked = $selectAllCheckbox.is(':checked');
+        $checkboxes.each(function(index) {
+            $(this).prop('checked', isChecked);
+            $switchElements.eq(index).prop('disabled', !isChecked);
+            $textInputs.eq(index).prop('disabled', !isChecked || !$switchElements.eq(index).is(':checked'));
+            $startInputs.eq(index).prop('disabled', !isChecked);
+            $endInputs.eq(index).prop('disabled', !isChecked);
+        });
+    }
+
+    // Event listener untuk checkbox individual
+    $checkboxes.on('change', function() {
+        updateInputs();
+        updateSelectAllStatus();
+    });
+
+    // Event listener untuk switch
+    $switchElements.on('change', function() {
+        const index = $switchElements.index(this);
+        $textInputs.eq(index).prop('disabled', !$(this).is(':checked'));
+    });
+
+    // Event listener untuk checkbox select-all
+    $selectAllCheckbox.on('change', function() {
+        updateSelectAll();
+    });
+
+    // Fungsi untuk memperbarui status checkbox select-all
+    function updateSelectAllStatus() {
+        const visibleCheckboxes = $checkboxes.filter(':visible');
+        const allChecked = visibleCheckboxes.length > 0 && visibleCheckboxes.filter(':checked').length === visibleCheckboxes.length;
+        $selectAllCheckbox.prop('checked', allChecked);
+    }
+
+    // Nonaktifkan input yang tidak dipilih sebelum form di-submit
+    $form.on('submit', function(e) {
+        $checkboxes.each(function(index) {
+            if (!$(this).is(':checked')) {
+                // Nonaktifkan input yang tidak dipilih checkbox-nya
+                $switchElements.eq(index).prop('disabled', true);
+                $textInputs.eq(index).prop('disabled', true);
+                $startInputs.eq(index).prop('disabled', true);
+                $endInputs.eq(index).prop('disabled', true);
+            }
         });
     });
+
+    // Panggil updateInputs dan updateSelectAllStatus pada awal untuk menyesuaikan status awal
+    updateInputs();
+    updateSelectAllStatus();
+});
+
+
 
     // checkbox button for trip
     $(document).ready(function() {
