@@ -210,6 +210,7 @@
     $(document).ready(function() {
     const $form = $('form');
     const $checkboxes = $('input[name^="selected_ids"]');
+    const $areaInputs = $('input[name^="s_area"]');
     const $switchElements = $('input[name^="meeting_point_switch"]');
     const $textInputs = $('input[name^="s_meeting_point"]');
     const $startInputs = $('input[name^="s_start"]');
@@ -222,6 +223,7 @@
             const isChecked = $(this).is(':checked');
             const row = $(this).data('row');
             $switchElements.eq(row).prop('disabled', !isChecked);
+            $areaInputs.eq(row).prop('disabled', !isChecked);
             $textInputs.eq(row).prop('disabled', !isChecked || !$switchElements.eq(row).is(':checked'));
             $startInputs.eq(row).prop('disabled', !isChecked);
             $endInputs.eq(row).prop('disabled', !isChecked);
@@ -257,6 +259,7 @@
             if (!$(this).is(':checked')) {
                 const row = $(this).data('row');
                 $switchElements.eq(row).prop('disabled', true);
+                $areaInputs.eq(row).prop('disabled', true);
                 $textInputs.eq(row).prop('disabled', true);
                 $startInputs.eq(row).prop('disabled', true);
                 $endInputs.eq(row).prop('disabled', true);
