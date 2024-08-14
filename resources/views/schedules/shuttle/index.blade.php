@@ -41,7 +41,7 @@
                                                 </th>
                                                 <th scope="col" class="ps-4" style="width: 50px;">
                                                     <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" id="sa_id" onclick="toggleSelectAll(this)">
+                                                        <input type="checkbox" class="form-check-input" id="sa_id" onclick="toggleSelectAll(this)">
                                                     </div>
                                                 </th>
                                             </tr>
@@ -79,7 +79,7 @@
                                                 </td>
                                                 <th scope="row" class="ps-4">
                                                     <div class="form-check font-size-16">
-                                                        <input type="checkbox" class="checkedbox" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
+                                                        <input type="checkbox" class="form-check-input" name="selected_ids[]" value="{{ $item->s_id }}" onclick="updateSelectAllState(); updateButtonState()">
                                                     </div>
                                                 </th>
                                             </tr>

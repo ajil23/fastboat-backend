@@ -71,8 +71,6 @@ class SchedulesShuttleController extends Controller
                 $existingData = SchedulesShuttle::where([
                     ['s_trip', $trip],
                     ['s_area', $request->s_area[$i]],
-                    ['s_start', $s_start],
-                    ['s_end', $s_end],
                 ])->first();
     
                 if ($existingData) {
