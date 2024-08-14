@@ -228,6 +228,10 @@
             $startInputs.eq(row).prop('disabled', !isChecked);
             $endInputs.eq(row).prop('disabled', !isChecked);
         });
+
+        // Check if all checkboxes are checked
+        const allChecked = $checkboxes.length === $checkboxes.filter(':checked').length;
+        $selectAllCheckbox.prop('checked', allChecked);
     }
 
     // Function to enable/disable switch and text inputs based on switch status
@@ -241,8 +245,8 @@
         const isChecked = $(this).is(':checked');
         $checkboxes.each(function(index) {
             $(this).prop('checked', isChecked);
-            updateInputs();
         });
+        updateInputs();
     });
 
     // Initial call to update inputs based on their initial state
@@ -267,6 +271,7 @@
         });
     });
 });
+
 
 </script>
 
