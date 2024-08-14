@@ -150,7 +150,7 @@
                                                 <td>
                                                     <center>
                                                         <input type="text" class="form-control input_info" value="{{$item->sa_name}}" readonly>
-                                                        <input type="hidden" class="form-control input_info" value="{{$item->sa_id}}" name="s_area[{{ $index }}]">
+                                                        <input type="hidden" class="form-control input_info" value="{{$item->sa_id}}" name="s_area[]">
                                                     </center>
                                                 </td>
                                                 <td>
