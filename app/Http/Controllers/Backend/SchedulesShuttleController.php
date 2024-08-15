@@ -47,7 +47,7 @@ class SchedulesShuttleController extends Controller
             's_meeting_point' => 'nullable|array',
             's_meeting_point.*' => 'nullable|string|max:255',
         ]);
-    
+
         // Cek apakah validasi gagal
         if ($validator->fails()) {
             // Menambahkan pesan toast ke dalam session
@@ -56,28 +56,27 @@ class SchedulesShuttleController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-    
+
         // Looping melalui array trip
         foreach ($request->s_trip as $tripIndex => $trip) {
-            // Looping melalui array shuttle info
-            for ($i = 0; $i < count($request->s_area); $i++) {
+            // Looping melalui array shuttle info menggunakan foreach
+            foreach ($request->s_area as $areaIndex => $area) {
                 // Cek apakah waktu tidak diisi dan set nilai "Not Set" jika kosong
-                $s_start = $request->s_start[$i] ?? 'Not Set';
-                $s_end = $request->s_end[$i] ?? 'Not Set';
-                $s_meeting_point = $request->s_meeting_point[$i] ?? 'not_set';
+                $s_start = $request->s_start[$areaIndex] ?? 'Not Set';
+                $s_end = $request->s_end[$areaIndex] ?? 'Not Set';
+                $s_meeting_point = $request->s_meeting_point[$areaIndex] ?? 'not_set';
 
-    
                 // Cek apakah data sudah ada di database
                 $existingData = SchedulesShuttle::where([
                     ['s_trip', $trip],
-                    ['s_area', $request->s_area[$i]],
+                    ['s_area', $area],
                 ])->first();
-    
+
                 if ($existingData) {
                     // Update data yang sudah ada
                     $existingData->update([
                         's_trip' => $trip,
-                        's_area' => $request->s_area[$i],
+                        's_area' => $area,
                         's_start' => $s_start,
                         's_end' => $s_end,
                         's_meeting_point' => $s_meeting_point,
@@ -87,7 +86,7 @@ class SchedulesShuttleController extends Controller
                     // Buat data baru
                     $shuttleData = new SchedulesShuttle();
                     $shuttleData->s_trip = $trip;
-                    $shuttleData->s_area = $request->s_area[$i];
+                    $shuttleData->s_area = $area;
                     $shuttleData->s_start = $s_start;
                     $shuttleData->s_end = $s_end;
                     $shuttleData->s_meeting_point = $s_meeting_point;
@@ -96,11 +95,12 @@ class SchedulesShuttleController extends Controller
                 }
             }
         }
-    
+
         // Menambahkan pesan toast sukses ke dalam session
         toast('Your data has been submitted!', 'success');
         return redirect()->route('shuttle.view');
     }
+
 
 
     public function edit($id)
