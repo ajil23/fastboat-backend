@@ -14,9 +14,9 @@ class FastboatApiController extends Controller
     public function index()
     {
         $data = DataFastboat::all();
-  
+
         return response()->json([
-              'data' => $data,
+            'data' => $data,
         ], 200);
     }
 
@@ -29,11 +29,37 @@ class FastboatApiController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified resource (fb_slug_en).
      */
-    public function show(string $id)
+    public function show_en($fb_slug_en)
     {
-        //
+        // Mencari post berdasarkan slug
+        $data = DataFastboat::where('fb_slug_en', $fb_slug_en)->first();
+
+        // Jika post tidak ditemukan, return 404
+        if (!$data) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        // Jika ditemukan, return data post
+        return response()->json($data, 200);
+    }
+
+      /**
+     * Display the specified resource (fb_slug_idn).
+     */
+    public function show_idn($fb_slug_idn)
+    {
+        // Mencari post berdasarkan slug
+        $data = DataFastboat::where('fb_slug_idn', $fb_slug_idn)->first();
+
+        // Jika post tidak ditemukan, return 404
+        if (!$data) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        // Jika ditemukan, return data post
+        return response()->json($data, 200);
     }
 
     /**
