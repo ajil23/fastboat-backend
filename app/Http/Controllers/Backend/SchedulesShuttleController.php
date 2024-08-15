@@ -102,30 +102,6 @@ class SchedulesShuttleController extends Controller
     }
 
 
-
-    public function edit($id)
-    {
-        $shuttleData = SchedulesShuttle::find($id);
-        $trip = SchedulesTrip::all();
-        $area = SchedulesShuttleArea::all();
-        return view('schedules.shuttle.edit', compact('shuttleData', 'trip', 'area'));
-    }
-
-    public function update (Request $request, $id)
-    {
-        // Handle insert data to database
-        $shuttleData = SchedulesShuttle::find($id);
-        $shuttleData->s_trip = $request->s_trip;
-        $shuttleData->s_area = $request->s_area;
-        $shuttleData->s_start = $request->s_start;
-        $shuttleData->s_end = $request->s_end;
-        $shuttleData->s_meeting_point = $request->s_meeting_point;
-        $shuttleData->s_updated_by = Auth()->id();
-        $shuttleData->save();
-        toast('Your data as been updated!', 'success');
-        return redirect()->route('shuttle.view');
-    }
-
     public function multiple(Request $request)
     {
         $selectedIds = $request->input('selected_ids', []);
