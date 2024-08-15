@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('fb_image6', 255)->nullable();
             $table->string('fb_slug_en', 50);
             $table->string('fb_slug_idn', 50);
+            $table->text('fb_fasilitas')->nullable();
             $table->text('fb_keywords');
             $table->text('fb_description_en');
             $table->text('fb_description_idn');

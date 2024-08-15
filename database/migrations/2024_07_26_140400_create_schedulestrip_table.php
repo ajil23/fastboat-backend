@@ -26,6 +26,7 @@ return new class extends Migration
             $table->time('fbt_dept_time');
             $table->time('fbt_time_limit');
             $table->time('fbt_time_gap');
+            $table->string('fbt_min_pax', 11);
             $table->unsignedBigInteger('fbt_arrival_port');
             $table->foreign('fbt_arrival_port')->references('prt_id')->on('masterport')->onDelete('cascade')->onUpdate('cascade');
             $table->time('fbt_arrival_time');
