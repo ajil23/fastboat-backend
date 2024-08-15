@@ -3,6 +3,7 @@
 use App\Http\Controllers\Backend\DataCompanyController;
 use App\Http\Controllers\Backend\DataFastboatController;
 use App\Http\Controllers\Backend\DataRouteController;
+use App\Http\Controllers\Backend\FastboatAvailabilityController;
 use App\Http\Controllers\Backend\MasterIslandController;
 use App\Http\Controllers\Backend\MasterPortController;
 use App\Http\Controllers\Backend\SchedulesScheduleController;
@@ -103,6 +104,16 @@ Route::middleware([
         Route::post('/shuttle/multiple', [SchedulesShuttleController::class, 'multiple'])->name('shuttle.multiple');
         Route::post('/shuttle/search', [SchedulesShuttleController::class, 'search'])->name('shuttle.search');
         Route::post('/shuttle/delete-multiple', [SchedulesShuttleController::class, 'deleteMultiple'])->name('shuttle.deleteMultiple');
+    });
+
+    Route::prefix('fast-boat')->group(function(){
+        // fast-boat availability
+        Route::get('/availability', [FastboatAvailabilityController::class, 'index'])->name('availability.view');
+        Route::get('/availability/add', [FastboatAvailabilityController::class, 'add'])->name('availability.add');
+        Route::post('/availability/store', [FastboatAvailabilityController::class, 'store'])->name('availability.store');
+        Route::get('/availability/edit/{id}', [FastboatAvailabilityController::class, 'edit'])->name('availability.edit');
+        Route::post('/availability/update/{id}', [FastboatAvailabilityController::class, 'update'])->name('availability.update');
+        Route::delete('/availability/delete/{id}', [FastboatAvailabilityController::class, 'delete'])->name('availability.delete');
     });
 
     Route::prefix('master')->group(function () {
