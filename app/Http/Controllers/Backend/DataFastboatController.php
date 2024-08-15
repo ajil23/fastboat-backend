@@ -15,7 +15,7 @@ class DataFastboatController extends Controller
     public function index()
     {
         $fastboat = DataFastboat::all();
-        $title = 'Delete Fastboat Data!';
+        $title = 'Delete Fast-boat Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         return view('data.fastboat.index', compact('fastboat'));
@@ -109,7 +109,7 @@ class DataFastboatController extends Controller
 
         $fastboatData->save();
         toast('Your data as been submited!', 'success');
-        return redirect()->route('fastboat.view');
+        return redirect()->route('fast-boat.view');
     }
 
     // this function will get the $id of the selected data and then view the fast boat edit form
@@ -166,7 +166,7 @@ class DataFastboatController extends Controller
         }
         $fastboatData->update();
         toast('Your data as been edited!', 'success');
-        return redirect()->route('fastboat.view');
+        return redirect()->route('fast-boat.view');
     }
 
     // this function will get the $id of selected data and do delete operation
@@ -175,7 +175,7 @@ class DataFastboatController extends Controller
         $fastboatData = DataFastboat::find($id);
         $fastboatData->delete();
         toast('Your data as been deleted!', 'success');
-        return redirect()->route('fastboat.view');
+        return redirect()->route('fast-boat.view');
     }
 
     // this function will get $id of selected data and view it in modal
