@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //fastboat 
-Route::get('fastboat', [FastboatApiController::class, 'index']);
+Route::get('fast-boat', [FastboatApiController::class, 'index']);
 
 // port
 Route::get('port', [PortApiController::class, 'index']);

@@ -12,7 +12,7 @@
                                 <h5 class="card-title">Fast Boat Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="{{route('fastboat.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Fast Boat</a>
+                                        <a href="{{route('fast-boat.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Fast Boat</a>
                                     </div>
                                 </div>
                             </div>
@@ -22,7 +22,7 @@
                                     <thead>
                                     <div class="search-box">
                                         <div class="position-relative">
-                                            <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search fastboat..." id="search-input"><i class="bx bx-search search-icon"></i>
+                                            <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search fast-boat..." id="search-input"><i class="bx bx-search search-icon"></i>
                                         </div>
                                     </div>
                                         <tr>
@@ -52,7 +52,7 @@
                                                 {{$item->company->cpn_name}}
                                             </td>
                                             <td>
-                                                <a href="{{route('fastboat.status', $item->fb_id)}}" class="badge rounded-pill bg-{{$item->fb_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fb_status ? 'check-decagram' : 'alert-decagram'}}"></i>
+                                                <a href="{{route('fast-boat.status', $item->fb_id)}}" class="badge rounded-pill bg-{{$item->fb_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fb_status ? 'check-decagram' : 'alert-decagram'}}"></i>
                                                     {{$item->fb_status ? 'Enable' : 'Disable'}}
                                                 </a>
                                             </td>
@@ -62,9 +62,9 @@
                                                         <i class="mdi mdi-dots-horizontal"></i>
                                                     </a>
                                                     <div class="dropdown-menu dropdown-menu-end">
-                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('fastboat.show', $item->fb_id)}}">View</a>
-                                                        <a class="dropdown-item" href="{{route('fastboat.edit', $item->fb_id)}}">Edit</a>
-                                                        <a class="dropdown-item" data-confirm-delete="true" href="{{route('fastboat.delete', $item->fb_id)}}">Delete</a>
+                                                        <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="{{route('fast-boat.show', $item->fb_id)}}">View</a>
+                                                        <a class="dropdown-item" href="{{route('fast-boat.edit', $item->fb_id)}}">Edit</a>
+                                                        <a class="dropdown-item" data-confirm-delete="true" href="{{route('fast-boat.delete', $item->fb_id)}}">Delete</a>
                                                     </div>
                                                 </div>
                                             </td>

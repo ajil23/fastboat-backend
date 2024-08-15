@@ -4,7 +4,7 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{route('fastboat.update', $fastboatEdit->fb_id)}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('fast-boat.update', $fastboatEdit->fb_id)}}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-lg-12">

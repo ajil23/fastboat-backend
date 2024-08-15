@@ -48,15 +48,15 @@ Route::middleware([
         Route::get('/company/emailstatus/{id}', [DataCompanyController::class, 'emailStatus'])->name('company.emailStatus');
         Route::get('/company/status/{id}', [DataCompanyController::class, 'companyStatus'])->name('company.status');
 
-        // fast boat routes
-        Route::get('/fastboat', [DataFastboatController::class, 'index'])->name('fastboat.view');
-        Route::get('/fastboat/add', [DataFastboatController::class, 'add'])->name('fastboat.add');
-        Route::post('/fastboat/store', [DataFastboatController::class, 'store'])->name('fastboat.store');
-        Route::get('/fastboat/edit/{id}', [DataFastboatController::class, 'edit'])->name('fastboat.edit');
-        Route::post('/fastboat/update/{id}', [DataFastboatController::class, 'update'])->name('fastboat.update');
-        Route::delete('/fastboat/delete/{id}', [DataFastboatController::class, 'delete'])->name('fastboat.delete');
-        Route::get('/fastboat/{id}', [DataFastboatController::class, 'show'])->name('fastboat.show');
-        Route::get('/fastboat/status/{id}', [DataFastboatController::class, 'status'])->name('fastboat.status');
+        // fast-boat routes
+        Route::get('/fast-boat', [DataFastboatController::class, 'index'])->name('fast-boat.view');
+        Route::get('/fast-boat/add', [DataFastboatController::class, 'add'])->name('fast-boat.add');
+        Route::post('/fast-boat/store', [DataFastboatController::class, 'store'])->name('fast-boat.store');
+        Route::get('/fast-boat/edit/{id}', [DataFastboatController::class, 'edit'])->name('fast-boat.edit');
+        Route::post('/fast-boat/update/{id}', [DataFastboatController::class, 'update'])->name('fast-boat.update');
+        Route::delete('/fast-boat/delete/{id}', [DataFastboatController::class, 'delete'])->name('fast-boat.delete');
+        Route::get('/fast-boat/{id}', [DataFastboatController::class, 'show'])->name('fast-boat.show');
+        Route::get('/fast-boat/status/{id}', [DataFastboatController::class, 'status'])->name('fast-boat.status');
 
         // route routes
         Route::get('/route', [DataRouteController::class, 'index'])->name('route.view');
