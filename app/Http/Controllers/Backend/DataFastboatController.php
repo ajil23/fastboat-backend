@@ -52,6 +52,7 @@ class DataFastboatController extends Controller
         $fastboatData->fb_name = $request->fb_name;
         $fastboatData->fb_company = $request->fb_company;
         $fastboatData->fb_keywords = $request->fb_keywords;
+        $fastboatData->fb_fasilitas = $request->fb_fasilitas;
         $fastboatData->fb_slug_en = $request->fb_slug_en;
         $fastboatData->fb_slug_idn = $request->fb_slug_idn;
         $fastboatData->fb_description_en = $request->fb_description_en;
@@ -129,6 +130,7 @@ class DataFastboatController extends Controller
         $fastboatData->fb_name = $request->fb_name;
         $fastboatData->fb_company = $request->fb_company;
         $fastboatData->fb_keywords = $request->fb_keywords;
+        $fastboatData->fb_fasilitas = $request->fb_fasilitas;
         $fastboatData->fb_slug_en = $request->fb_slug_en;
         $fastboatData->fb_slug_idn = $request->fb_slug_idn;
         $fastboatData->fb_description_en = $request->fb_description_en;

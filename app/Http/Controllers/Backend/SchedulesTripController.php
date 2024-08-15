@@ -46,6 +46,7 @@ class SchedulesTripController extends Controller
             'fbt_time_limit' => 'required',
             'fbt_arrival_port' => 'required',
             'fbt_arrival_time' => 'required',
+            'fbt_min_pax' => 'required',
         ]);
 
        // Get route & schedule id
@@ -66,6 +67,7 @@ class SchedulesTripController extends Controller
         $tripData->fbt_dept_time = $request->fbt_dept_time;
         $tripData->fbt_time_limit = $request->fbt_time_limit;
         $tripData->fbt_time_gap = $request->fbt_time_gap;
+        $tripData->fbt_min_pax = $request->fbt_min_pax;
         $tripData->fbt_arrival_port = $request->fbt_arrival_port;
         $tripData->fbt_arrival_time = $request->fbt_arrival_time;
         $tripData->fbt_info_en = $request->fbt_info_en;
@@ -103,6 +105,7 @@ class SchedulesTripController extends Controller
         $tripData->fbt_dept_time = $request->fbt_dept_time;
         $tripData->fbt_time_limit = $request->fbt_time_limit;
         $tripData->fbt_time_gap = $request->fbt_time_gap;
+        $tripData->fbt_min_pax = $request->fbt_min_pax;
         $tripData->fbt_arrival_port = $request->fbt_arrival_port;
         $tripData->fbt_arrival_time = $request->fbt_arrival_time;
         $tripData->fbt_info_en = $request->fbt_info_en;

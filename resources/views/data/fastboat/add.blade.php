@@ -1,4 +1,4 @@
-@extends('admin.admin_master') 
+@extends('admin.admin_master')
 @section('admin')
 
 <div class="main-content">
@@ -12,7 +12,6 @@
                             <div class="card">
                                 <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
-    
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -28,12 +27,9 @@
                                             <div class="flex-shrink-0">
                                                 <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
                                             </div>
-    
                                         </div>
-    
                                     </div>
                                 </a>
-    
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
@@ -47,14 +43,18 @@
                                                 <div class="mb-3">
                                                     <label for="fb_company" class="form-label">Company</label>
                                                     <br>
-                                                        <select data-trigger name="fb_company" id="fb_company" required>
-                                                            <option value="">Select Fast Boat Company</option>
-                                                            @foreach ($company as $item)
-                                                                <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <select data-trigger name="fb_company" id="fb_company" required>
+                                                        <option value="">Select Fast Boat Company</option>
+                                                        @foreach ($company as $item)
+                                                        <option value="{{$item->cpn_id}}">{{$item->cpn_name}}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label" for="fb_fasilitas">Fasilitas</label>
+                                            <textarea class="form-control" id="fb_fasilitas" name="fb_fasilitas" cols="30" rows="5" placeholder="Enter Fasilitas" required></textarea>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6">
@@ -87,7 +87,6 @@
                                     </div>
                                 </div>
                             </div>
-    
                             <div class="card">
                                 <a href="#addproduct-img-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-img-collapse">
                                     <div class="p-4">
@@ -109,7 +108,6 @@
                                         </div>
                                     </div>
                                 </a>
-    
                                 <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
@@ -124,7 +122,6 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage2" data-holder-rendered="true" style="height: 100px;">
@@ -147,14 +144,13 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-4">
-
                                                 <div class="mb-3">
                                                     <center>
                                                         <img class="rounded me-2" src="" id="previewImage4" data-holder-rendered="true" style="height: 100px;">
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image4">Image 4</label>
-                                                    <input id="fb_image4" name="fb_image4" type="file" accept="image/*" class="form-control">                                                  
+                                                    <input id="fb_image4" name="fb_image4" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
@@ -164,7 +160,7 @@
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image5">Image 5</label>
-                                                    <input id="fb_image5" name="fb_image5" type="file" accept="image/*" class="form-control">                                                  
+                                                    <input id="fb_image5" name="fb_image5" type="file" accept="image/*" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
@@ -181,11 +177,9 @@
                                     </div>
                                 </div>
                             </div>
-    
                             <div class="card">
                                 <a href="#addproduct-metadata-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-metadata-collapse">
                                     <div class="p-4">
-    
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar">
@@ -201,12 +195,9 @@
                                             <div class="flex-shrink-0">
                                                 <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
                                             </div>
-    
                                         </div>
-    
                                     </div>
                                 </a>
-    
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="mb-3">
@@ -217,41 +208,36 @@
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_slug_en">Slug (en)</label>
-                                                    <input type="text" class="form-control" id="fb_slug_en" name="fb_slug_en" placeholder="Enter Slug" required ></input>
+                                                    <input type="text" class="form-control" id="fb_slug_en" name="fb_slug_en" placeholder="Enter Slug" required></input>
                                                 </div>
-
                                             </div>
-
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_slug_idn">Slug (idn)</label>
-                                                    <input  type="text"  class="form-control" id="fb_slug_idn" name="fb_slug_idn" placeholder="Enter Slug" required></input>
+                                                    <input type="text" class="form-control" id="fb_slug_idn" name="fb_slug_idn" placeholder="Enter Slug" required></input>
                                                 </div>
                                             </div>
-                                        </div> 
+                                        </div>
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_description_en">Description (en)</label>
                                                     <textarea class="form-control" id="fb_description_en" name="fb_description_en" placeholder="Enter Description" required></textarea>
                                                 </div>
-
                                             </div>
-
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_description_idn">Description (idn)</label>
                                                     <textarea class="form-control" id="fb_description_idn" name="fb_description_idn" placeholder="Enter Description" required></textarea>
                                                 </div>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 {{-- Button --}}
                 <div class="row mb-4">
                     <div class="col text-end">
@@ -277,11 +263,11 @@
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#content-idn').summernote({
-                height: 300,
-                toolbar: [
+<script>
+    $(document).ready(function() {
+        $('#content-idn').summernote({
+            height: 300,
+            toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'underline', 'clear']],
                 ['color', ['color']],
@@ -289,15 +275,15 @@
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['codeview', 'help']]
-                ]
-            });
+            ]
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#content-en').summernote({
-                height: 300,
-                toolbar: [
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#content-en').summernote({
+            height: 300,
+            toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'underline', 'clear']],
                 ['color', ['color']],
@@ -305,15 +291,15 @@
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['codeview', 'help']]
-                ]
-            });
+            ]
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#term-condition-en').summernote({
-                height: 300,
-                toolbar: [
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#term-condition-en').summernote({
+            height: 300,
+            toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'underline', 'clear']],
                 ['color', ['color']],
@@ -321,15 +307,15 @@
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['codeview', 'help']]
-                ]
-            });
+            ]
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#term-condition-idn').summernote({
-                height: 300,
-                toolbar: [
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#term-condition-idn').summernote({
+            height: 300,
+            toolbar: [
                 ['style', ['style']],
                 ['font', ['bold', 'underline', 'clear']],
                 ['color', ['color']],
@@ -337,10 +323,10 @@
                 ['table', ['table']],
                 ['insert', ['link', 'picture', 'video']],
                 ['view', ['codeview', 'help']]
-                ]
-            });
+            ]
         });
-    </script>
+    });
+</script>
 
 {{-- image preview --}}
 <script>
