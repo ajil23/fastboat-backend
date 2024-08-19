@@ -97,82 +97,14 @@
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Availability Add</h5>
+                                                <h5 class="font-size-16 mb-1"> Availability Extand</h5>
                                                 <p class="text-danger text-truncat font-size-12">*All price are in Indonesian Rupiah</p>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
-                                    <div class="p-4 border-top">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="fba_date">From*</label>
-                                            <input type="text" name="fba_date" placeholder="Input Date" class="form-control flatpickr-input" id="daterange">
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_adult_nett">Adult Nett*</label>
-                                                    <input type="text" id="fba_adult_nett" name="fba_adult_nett" placeholder="Enter Adult Nett" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_child_nett">Child Nett*</label>
-                                                    <input type="text" id="fba_child_nett" name="fba_child_nett" placeholder="Enter Child Nett" type="number" class="form-control" required></input>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_adult_publish">Adult Publish*</label>
-                                                    <input type="text" id="fba_adult_publish" name="fba_adult_publish" placeholder="Enter Adult Publish" type="number" class="form-control" required></input>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_child_publish">Child Publish*</label>
-                                                    <input type="text" id="fba_child_publish" name="fba_child_publish" placeholder="Enter Child Publish" type="number" class="form-control" required></input>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_discount">Discount*</label>
-                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_stock">Stock*</label>
-                                                    <input type="number" id="fba_stock" name="fba_stock" placeholder="Enter Stock" class="form-control" required>
-                                                    </input>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_status">Status*</label>
-                                                    <select name="fba_status" id="fba_status" class="form-control">
-                                                        <option value="enable">Enable</option>
-                                                        <option value="disable">Disable</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_shuttle_status">Status Shuttle*</label>
-                                                    <select name="fba_shuttle_status" id="fba_shuttle_status" class="form-control">
-                                                        <option value="enable">Enable</option>
-                                                        <option value="disable">Disable</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label" for="fba_info">Info</label>
-                                            <textarea class="form-control" id="fba_info" name="fba_info" placeholder="Enter Info" rows="4"></textarea>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -336,30 +268,6 @@
                 return !(date.getDate() % 100);
             }
         ]
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
-        function formatCurrencyInput(selector) {
-            $(selector).on('input', function() {
-                let value = $(this).val().replace(/\D/g, '');
-                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                $(this).val(value);
-            });
-
-            $('form').on('submit', function() {
-                const rawValue = $(selector).val().replace(/\./g, '');
-                $(selector).val(rawValue);
-            });
-        }
-
-        // Panggil fungsi untuk input yang diinginkan
-        formatCurrencyInput('#fba_adult_nett');
-        formatCurrencyInput('#fba_child_nett');
-        formatCurrencyInput('#fba_adult_publish');
-        formatCurrencyInput('#fba_child_publish');
-        formatCurrencyInput('#fba_discount');
     });
 </script>
 @endsection

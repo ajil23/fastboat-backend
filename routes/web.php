@@ -114,6 +114,7 @@ Route::middleware([
         Route::get('/availability/edit/{id}', [FastboatAvailabilityController::class, 'edit'])->name('availability.edit');
         Route::post('/availability/update/{id}', [FastboatAvailabilityController::class, 'update'])->name('availability.update');
         Route::delete('/availability/delete/{id}', [FastboatAvailabilityController::class, 'delete'])->name('availability.delete');
+        Route::get('/availability/extend', [FastboatAvailabilityController::class, 'extend'])->name('availability.extend');
     });
 
     Route::prefix('master')->group(function () {

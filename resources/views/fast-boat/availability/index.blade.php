@@ -12,7 +12,12 @@
                                 <h5 class="card-title">Availability Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="{{route('availability.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Availability</a>
+                                        <div class="btn-group me-2 mb-2">
+                                            <a href="{{route('availability.extend')}}" class="btn btn-warning w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Extend</a>
+                                        </div>
+                                        <div class="btn-group me-2 mb-2">
+                                            <a href="{{route('availability.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Add</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -56,4 +61,3 @@
     @include('admin.components.footer')
 </div>
 @endsection
-
