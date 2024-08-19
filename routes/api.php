@@ -29,3 +29,6 @@ Route::get('fast-boat/idn/{fb_slug_idn}', [FastboatApiController::class, 'show_i
 
 // port
 Route::get('port', [PortApiController::class, 'index']);
+Route::get('port/en/{prt_slug_en}', [PortApiController::class, 'show_en']);
+Route::get('port/idn/{prt_slug_idn}', [PortApiController::class, 'show_idn']);
+
