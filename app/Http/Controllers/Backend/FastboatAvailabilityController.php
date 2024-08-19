@@ -64,5 +64,11 @@ class FastboatAvailabilityController extends Controller
         toast('Your data has been submitted!', 'success');
         return redirect()->route('availability.view');
     }
+
+    public function extend() 
+    {
+        $trip = SchedulesTrip::all();
+        return view('fast-boat.availability.extend', compact('trip'));    
+    }
     
 }
