@@ -24,6 +24,8 @@
         {{-- tom select --}}
         <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+        <!-- datepicker css -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
     </head>
 
@@ -85,6 +87,9 @@
         <script src="{{asset('assets/js/pages/dashboard-sales.init.js')}}"></script> --}}
 
         <script src="{{asset('assets/js/app.js')}}"></script>
+        
+        <!-- datepicker js -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
         <!-- include libraries(jQuery, bootstrap) -->
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>

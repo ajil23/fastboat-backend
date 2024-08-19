@@ -9,10 +9,10 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex flex-wrap align-items-center mb-2">
-                                <h5 class="card-title">Fast Boat Table</h5>
+                                <h5 class="card-title">Availability Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="{{route('availability.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Fast Boat</a>
+                                        <a href="{{route('availability.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Availability</a>
                                     </div>
                                 </div>
                             </div>
@@ -25,7 +25,7 @@
                                             <th style="width: 90px;">
                                                 Picture
                                             </th>
-                                            <th style="width: 210px;">Fast Boat Name</th>
+                                            <th style="width: 210px;">Availability Name</th>
                                             <th>Company Name</th>
                                             <th>Status</th>
                                             <th>Action</th>

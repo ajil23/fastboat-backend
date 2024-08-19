@@ -69,7 +69,7 @@
                                             <div class="col-lg-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_min_pax">Minimal Pax*</label>
-                                                    <input id="fbt_min_pax" name="fbt_min_pax" placeholder="Enter Minimal Pax" type="text" class="form-control" value="{{tripEdit->fbt_min_pax}}" required></input>
+                                                    <input id="fbt_min_pax" name="fbt_min_pax" placeholder="Enter Minimal Pax" type="text" class="form-control" value="{{$tripEdit->fbt_min_pax}}" required></input>
                                                 </div>
                                             </div>
                                         </div>
