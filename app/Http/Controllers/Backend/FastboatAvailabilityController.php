@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\DataCompany;
+use App\Models\DataFastboat;
+use App\Models\DataRoute;
 use App\Models\FastboatAvailability;
+use App\Models\MasterPort;
+use App\Models\SchedulesSchedule;
 use App\Models\SchedulesTrip;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,8 +20,15 @@ class FastboatAvailabilityController extends Controller
     public function index()
     {
         $availability = FastboatAvailability::all();
+        $company = DataCompany::all();
+        $fastboat = DataFastboat::all();
+        $schedule = SchedulesSchedule::all();
+        $route = DataRoute::all();
+        $departure = MasterPort::all();
+        $arrival = MasterPort::all();
+        $deptTime = SchedulesTrip::all();
         $trip = SchedulesTrip::with(['departure.arrival.fastboat']);
-        return view('fast-boat.availability.index', compact('availability', 'trip'));
+        return view('fast-boat.availability.index', compact('availability', 'trip', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
     }
 
     public function add()
