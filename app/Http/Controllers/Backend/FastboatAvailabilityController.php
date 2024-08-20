@@ -77,10 +77,72 @@ class FastboatAvailabilityController extends Controller
         return redirect()->route('availability.view');
     }
 
-    public function extend() 
+    public function extend(Request $request)
     {
+        // Validasi input trip ID
+        $tripIds = $request->input('fba_trip_id', []);
+
+        // Mengambil data availability berdasarkan trip ID yang dipilih
+        $availability = FastboatAvailability::all();
         $trip = SchedulesTrip::all();
-        return view('fast-boat.availability.extend', compact('trip'));    
+
+        return view('fast-boat.availability.extend', compact('availability', 'trip'));
     }
+
+    public function storeExtend(Request $request)
+    {
+        // Mengambil rentang tanggal yang dipilih
+        $dates = explode(" to ", $request->fba_date);
     
+        // Konversi format tanggal
+        $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]));
+        $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]));
+    
+        // Mengambil array trip ID yang dipilih
+        $tripIds = $request->fba_trip_id;
+    
+        // Iterasi setiap tanggal dari awal hingga akhir
+        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+            foreach ($tripIds as $tripId) {
+                // Cari data availability yang sudah ada
+                $existingAvailability = FastboatAvailability::where('fba_trip_id', $tripId)
+                    ->where('fba_date', $date->format('Y-m-d'))
+                    ->first();
+    
+                if ($existingAvailability) {
+                    // Update data yang ada dengan informasi baru
+                    $existingAvailability->fba_stock = $request->fba_stock;  // Update stock
+                    $existingAvailability->fba_status = $request->fba_status; // Update status
+                    $existingAvailability->fba_updated_by = auth()->id();
+                    $existingAvailability->save();
+                } else {
+                    // Jika tidak ada data yang ada, buat data baru
+                    $templateAvailability = FastboatAvailability::where('fba_trip_id', $tripId)->orderBy('fba_date', 'desc')->first();
+    
+                    if ($templateAvailability) {
+                        $availabilityData = new FastboatAvailability();
+                        $availabilityData->fba_trip_id = $tripId;
+                        $availabilityData->fba_date = $date->format('Y-m-d');
+                        $availabilityData->fba_dept_time = $templateAvailability->fba_dept_time;
+                        $availabilityData->fba_arriv_time = $templateAvailability->fba_arriv_time;
+                        $availabilityData->fba_adult_nett = $templateAvailability->fba_adult_nett;
+                        $availabilityData->fba_child_nett = $templateAvailability->fba_child_nett;
+                        $availabilityData->fba_adult_publish = $templateAvailability->fba_adult_publish;
+                        $availabilityData->fba_child_publish = $templateAvailability->fba_child_publish;
+                        $availabilityData->fba_discount = $templateAvailability->fba_discount;
+                        $availabilityData->fba_stock = $request->fba_stock; // Update stock
+                        $availabilityData->fba_status = $request->fba_status; // Update status
+                        $availabilityData->fba_shuttle_status = $templateAvailability->fba_shuttle_status;
+                        $availabilityData->fba_info = $templateAvailability->fba_info;
+                        $availabilityData->fba_created_by = auth()->id();
+                        $availabilityData->fba_updated_by = auth()->id();
+                        $availabilityData->save();
+                    }
+                }
+            }
+        }
+    
+        toast('Your data has been extended successfully!', 'success');
+        return redirect()->route('availability.view');
+    }  
 }
