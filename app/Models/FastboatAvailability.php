@@ -24,4 +24,16 @@ class FastboatAvailability extends Model
     public function fastboat(){
         return $this->belongsTo(DataFastboat::class);
     }
+    public function company(){
+        return $this->belongsTo(DataCompany::class);
+    }
+    public function schedule(){
+        return $this->belongsTo(SchedulesSchedule::class);
+    }
+    public function route(){
+        return $this->belongsTo(DataRoute::class);
+    }
+    public function deptTime(){
+        return $this->belongsTo(SchedulesTrip::class);
+    }
 }
