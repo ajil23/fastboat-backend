@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <form action="{{route('availability.store')}}" method="POST">
+            <form action="{{ route('availability.storeExtend') }}" method="POST">
                 @csrf
                 <div id="results" class="row mt-2">
                     <div class="form-check font-size-16" id="selectAlltrips" style="display: none;">
@@ -70,60 +70,84 @@
                         <p class="text-danger font-size-12">*It's better to check one by one to reduce mismatches in adding trip availability</p>
                     </div>
                     @foreach ($trip as $item)
-                    <div class="col-xl-4 col-sm-6 card-item" data-fastboat="{{$item->fastboat->fb_name}}" data-departure="{{$item->departure->prt_name_en}}" data-arrival="{{$item->arrival->prt_name_en}}" data-option="{{$item->fbt_shuttle_option}}" style="display: none;"> <!-- Sembunyikan card secara default -->
+                    <div class="col-xl-4 col-sm-6 card-item" data-fastboat="{{ $item->fastboat->fb_name }}" data-departure="{{ $item->departure->prt_name_en }}" data-arrival="{{ $item->arrival->prt_name_en }}" data-option="{{ $item->fbt_shuttle_option }}" style="display: none;">
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" value="{{$item->fbt_id}}" name="fba_trip_id[]" id="trip + {{$item->fbt_id}}">
-                                    <label class="form-check-label" for="trip + {{$item->fbt_id}}">
-                                        {{$item->fastboat->fb_name}}
+                                    <input class="form-check-input" type="checkbox" value="{{ $item->fbt_id }}" name="fba_trip_id[]" id="trip{{ $item->fbt_id }}">
+                                    <label class="form-check-label" for="trip{{ $item->fbt_id }}">
+                                        {{ $item->fastboat->fb_name }}
                                     </label>
                                 </div>
                                 <div class="mt-3 pt-1">
-                                    <p>From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}})</p>
-                                    <p>To : {{$item->arrival->prt_name_en}}, {{$item->arrival->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
-                                    <p>Avb : until </p>
+                                    <p>From : {{ $item->departure->prt_name_en }}, {{ $item->departure->island->isd_name }} ({{ date('H:i', strtotime($item->fbt_dept_time)) }})</p>
+                                    <p>To : {{ $item->arrival->prt_name_en }}, {{ $item->arrival->island->isd_name }} ({{ date('H:i', strtotime($item->fbt_arrival_time)) }})</p>
+
+                                    @php
+                                    $lastAvailability = $item->availability()->orderBy('fba_date', 'desc')->first();
+                                    @endphp
+
+                                    <p>Avb : until {{ $lastAvailability ? $lastAvailability->fba_date : 'No availability' }}</p>
                                 </div>
                             </div>
                         </div>
-                        <!-- end card -->
                     </div>
-                    <!-- end col -->
                     @endforeach
-                    <div id="shuttle-info" class="col-lg-12" style="display: none;"> <!-- Sembunyikan tabel shuttle info secara default -->
+                    <div id="shuttle-info" class="col-lg-12" style="display: none;">
                         <div id="addproduct-accordion">
                             <div class="card">
                                 <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1"> Availability Extand</h5>
-                                                <p class="text-danger text-truncat font-size-12">*All price are in Indonesian Rupiah</p>
+                                                <h5 class="font-size-16 mb-1">Availability Extend</h5>
+                                                <p class="text-danger text-truncate font-size-12">*All prices are in Indonesian Rupiah</p>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
-                                    
+                                    <div class="p-4 border-top">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_date">Until*</label>
+                                                    <input type="text" name="fba_date" placeholder="Input Date" class="form-control flatpickr-input" id="daterange">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_status">Status*</label>
+                                                    <select name="fba_status" id="fba_status" class="form-control">
+                                                        <option value="enable">Enable</option>
+                                                        <option value="disable">Disable</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_stock">Stock*</label>
+                                                    <input type="number" id="fba_stock" name="fba_stock" placeholder="Enter Stock" class="form-control" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Button --}}
                 <div class="row mb-4">
                     <div class="col text-end">
                         <button type="button" onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
-                        <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
-                    </div> <!-- end col -->
-                </div> <!-- end row-->
-                <!-- end row -->
+                        <button type="submit" class="btn btn-dark"><i class="bx bx-file me-1"></i> Save</button>
+                    </div>
+                </div>
+            </form>
         </div>
-        </form>
+        @include('admin.components.footer')
     </div>
-    @include('admin.components.footer')
-</div>
 </div>
 @endsection
 
@@ -270,4 +294,5 @@
         ]
     });
 </script>
+
 @endsection

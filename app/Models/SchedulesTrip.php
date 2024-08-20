@@ -45,4 +45,8 @@ class SchedulesTrip extends Model
     {
         return $this->belongsTo(MasterPort::class, 'fbt_arrival_port', 'prt_id');
     }
+    public function availability()
+    {
+        return $this->hasMany(FastboatAvailability::class, 'fba_trip_id', 'fbt_id');
+    }
 }
