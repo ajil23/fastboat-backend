@@ -1,6 +1,12 @@
 @extends('admin.admin_master')
 @section('admin')
-
+<style>
+    #calendar {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+</style>
 <div class="main-content">
     <div class="page-content">
         <div id="addproduct-accordion" class="custom-accordion">
@@ -27,9 +33,7 @@
                             <div class="flex-shrink-0">
                                 <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
                             </div>
-
                         </div>
-
                     </div>
                 </a>
 
@@ -123,10 +127,82 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-12">
+                            <h5 class="font-size-14 mb-3">Update Type </h5>
+                        </div>
+                        <div class="row border-bottom">
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="price">
+                                    <label for="price">Price</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="stock">
+                                    <label for="stock">Stock</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="pax">
+                                    <label for="pax">Min Pax</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="shuttle-status">
+                                    <label for="shuttle-status">Shuttle Status</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="available-status">
+                                    <label for="available-status">Available Status</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="availability-info">
+                                    <label for="availability-info">Availability Info</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="custom-time">
+                                    <label for="custom-time">Custom Dept & Arriv Time</label>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="all-type">
+                                    <label for="all-type">Select All Type</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="position-relative text-center border-bottom pb-3">
+                        <button class="btn  btn-outline-dark"><i class="mdi mdi-pencil"></i>&thinsp;Update</button>
+                    </div>
+                    <div class="mb-4 mt-4" id="calendar"></div>
+                </div>
+            </div>
+        </div>
+               
     </div>
     <!-- End Page-content -->
-
-
     @include('admin.components.footer')
 </div>
 @endsection
@@ -149,6 +225,25 @@
                 return !(date.getDate() % 100);
             }
         ]
+    });
+    
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid', 'interaction' ],
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,dayGridWeek,dayGridDay'
+            },
+            events: '/calendar-events', // URL to fetch events
+            editable: true
+        });
+
+        calendar.render();
     });
 </script>
 @endsection
