@@ -82,7 +82,12 @@
                                 <div class="mt-3 pt-1">
                                     <p>From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}})</p>
                                     <p>To : {{$item->arrival->prt_name_en}}, {{$item->arrival->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
-                                    <p>Avb : until </p>
+                                    
+                                    @php
+                                    $lastAvailability = $item->availability()->orderBy('fba_date', 'desc')->first();
+                                    @endphp
+
+                                    <p>Avb : until {{ $lastAvailability ? $lastAvailability->fba_date : '-' }}</p>
                                 </div>
                             </div>
                         </div>
