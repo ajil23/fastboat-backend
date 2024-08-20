@@ -87,7 +87,7 @@
                                     $lastAvailability = $item->availability()->orderBy('fba_date', 'desc')->first();
                                     @endphp
 
-                                    <p>Avb : until {{ $lastAvailability ? $lastAvailability->fba_date : 'No availability' }}</p>
+                                    <p>Avb : until {{ $lastAvailability ? $lastAvailability->fba_date : '-' }}</p>
                                 </div>
                             </div>
                         </div>
