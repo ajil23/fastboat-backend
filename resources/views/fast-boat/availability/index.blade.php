@@ -188,56 +188,56 @@
                         <div class="row border-bottom">
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="price">
+                                    <input type="checkbox" class="form-check-input type" id="price">
                                     <label for="price">Price</label>
                                 </div>
                             </div>
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="stock">
+                                    <input type="checkbox" class="form-check-input type" id="stock">
                                     <label for="stock">Stock</label>
                                 </div>
                             </div>
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="pax">
+                                    <input type="checkbox" class="form-check-input type" id="pax">
                                     <label for="pax">Min Pax</label>
                                 </div>
                             </div>
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="shuttle-status">
+                                    <input type="checkbox" class="form-check-input type" id="shuttle-status">
                                     <label for="shuttle-status">Shuttle Status</label>
                                 </div>
                             </div>
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="available-status">
+                                    <input type="checkbox" class="form-check-input type" id="available-status">
                                     <label for="available-status">Available Status</label>
                                 </div>
                             </div>
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="availability-info">
+                                    <input type="checkbox" class="form-check-input type" id="availability-info">
                                     <label for="availability-info">Availability Info</label>
                                 </div>
                             </div>
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="custom-time">
+                                    <input type="checkbox" class="form-check-input type" id="custom-time">
                                     <label for="custom-time">Custom Dept & Arriv Time</label>
                                 </div>
                             </div>
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="all-type">
+                                    <input type="checkbox" class="form-check-input type" id="all-type">
                                     <label for="all-type">Select All Type</label>
                                 </div>
                             </div>
@@ -246,7 +246,15 @@
                     <div class="position-relative text-center border-bottom pb-3">
                         <button class="btn  btn-outline-dark"><i class="mdi mdi-pencil"></i>&thinsp;Update</button>
                     </div>
-                    <div id="custom-calendar" class="mb-4 mt-4"></div>
+                    <div class="card-body">
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="form-check font-size-16">
+                                <input type="checkbox" class="form-check-input" id="all-trips">
+                                <label for="all-trips">All Trips</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="custom-calendar" class="mb-4"></div>
                 </div>
             </div>
         </div>
@@ -277,6 +285,28 @@
         ]
     });
     
+    // all check update type
+    $(document).ready(function() {
+        const $allTypeCheckbox = $('#all-type');
+        const $checkboxes = $('.type').not('#all-type');
+
+        // Fungsi untuk mengaktifkan/menonaktifkan semua checkbox
+        function toggleAllCheckboxes(state) {
+            $checkboxes.prop('checked', state);
+        }
+
+        // Event listener untuk checkbox "all-type"
+        $allTypeCheckbox.on('change', function() {
+            toggleAllCheckboxes($(this).is(':checked'));
+        });
+
+        // Event listeners untuk semua checkbox lainnya
+        $checkboxes.on('change', function() {
+            const allChecked = $checkboxes.length === $checkboxes.filter(':checked').length;
+            $allTypeCheckbox.prop('checked', allChecked);
+        });
+    });
+
     // Add custom calendar script here
     document.addEventListener('DOMContentLoaded', function() {
     const calendar = document.getElementById('custom-calendar');
