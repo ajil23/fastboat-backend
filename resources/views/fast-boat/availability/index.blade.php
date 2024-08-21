@@ -1,12 +1,5 @@
 @extends('admin.admin_master')
 @section('admin')
-<style>
-    #calendar {
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-</style>
 <div class="main-content">
     <div class="page-content">
         <div id="addproduct-accordion" class="custom-accordion">
