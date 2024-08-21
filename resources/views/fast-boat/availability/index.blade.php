@@ -2,60 +2,59 @@
 @section('admin')
 <style>
     #custom-calendar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        grid-template-rows: repeat(6, auto);
-        gap: 2px;
-    }
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: repeat(6, auto);
+    gap: 2px;
+}
 
-    #custom-calendar div {
-        border: 1px solid #ddd;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 5px;
-        cursor: pointer;
-        height: 120px;
-    }
+#custom-calendar div {
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 5px;
+    cursor: pointer;
+    height: 120px;
+}
 
-    #custom-calendar .header {
-        background-color: #f5f5f5;
-        font-weight: bold;
-        height: auto;
-    }
+#custom-calendar .header {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    height: auto;
+}
 
-    /* Remove colors for today and selected days */
-    #custom-calendar .today,
-    #custom-calendar .selected {
-        background-color: transparent;
-        color: inherit;
-    }
+/* Colors for header days only */
+#custom-calendar .header:nth-child(1) {
+    background-color: #f9dcdc; /* Red background for Sunday */
+    color: red; /* Red text for Sunday */
+}
 
-    /* Sunday and Friday colors */
-    #custom-calendar div:nth-child(7n + 1) {
-        background-color: #f9dcdc;
-        color: red;
-    }
+#custom-calendar .header:nth-child(6) {
+    background-color: #d9f9dc; /* Green background for Friday */
+    color: green; /* Green text for Friday */
+}
 
-    #custom-calendar div:nth-child(7n + 6) {
-        background-color: #d9f9dc;
-        color: green;
-    }
+#custom-calendar .today,
+#custom-calendar .selected {
+    background-color: transparent;
+    color: inherit;
+}
 
-    #custom-calendar table {
-        width: 100%;
-        margin-top: 5px;
-    }
+#custom-calendar table {
+    width: 100%;
+    margin-top: 5px;
+}
 
-    #custom-calendar table td {
-        padding: 2px;
-        text-align: center;
-    }
+#custom-calendar table td {
+    padding: 2px;
+    text-align: center;
+}
 
-    #custom-calendar table input[type="checkbox"] {
-        margin: 0;
-    }
+#custom-calendar table input[type="checkbox"] {
+    margin: 0;
+}
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -185,7 +184,7 @@
                         <div class="col-12">
                             <h5 class="font-size-14 mb-3">Update Type </h5>
                         </div>
-                        <div class="row border-bottom">
+                        <div class="row">
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
                                     <input type="checkbox" class="form-check-input type" id="price">
@@ -254,7 +253,15 @@
                             </div>
                         </div>
                     </div>
-                    <div id="custom-calendar" class="mb-4"></div>
+                    <div id="custom-calendar" class="mb-4">
+                        <div class="header">SUN</div>
+                        <div class="header">MON</div>
+                        <div class="header">TUE</div>
+                        <div class="header">WED</div>
+                        <div class="header">THU</div>
+                        <div class="header">FRI</div>
+                        <div class="header">SAT</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -310,73 +317,77 @@
     // Add custom calendar script here
     document.addEventListener('DOMContentLoaded', function() {
     const calendar = document.getElementById('custom-calendar');
-    const today = new Date();
     let selectedDate = null;
 
-    function renderCalendar(year, month) {
+    // Ensure availability data is available
+    const availability = @json($availability);
+    console.log(availability);
+
+    // Find the earliest and latest date in the availability data
+    const earliestDate = availability.length > 0 ? new Date(Math.min(...availability.map(a => new Date(a.fba_date)))) : new Date();
+    const latestDate = availability.length > 0 ? new Date(Math.max(...availability.map(a => new Date(a.fba_date)))) : new Date();
+
+    // Calculate the starting date for the calendar, which is 2 days before the earliest date
+    earliestDate.setDate(earliestDate.getDate() - 2);
+
+    function renderCalendar(startDate, endDate) {
         calendar.innerHTML = '';
 
-        // Days of the week header
         const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
         daysOfWeek.forEach(day => {
             const dayHeader = document.createElement('div');
             dayHeader.classList.add('header');
-            if (day === 'SUN') {
-                dayHeader.style.color = 'red';  // Sunday in red
-            } else if (day === 'FRI') {
-                dayHeader.style.color = 'green'; // Friday in green
-            }
             dayHeader.textContent = day;
             calendar.appendChild(dayHeader);
         });
 
-        // Determine the first day of the month
-        const firstDay = new Date(year, month).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        let currentDate = new Date(startDate);
+        const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
 
-        // Fill in the blanks before the first day
-        for (let i = 0; i < firstDay; i++) {
-            calendar.appendChild(document.createElement('div'));
+        // Add empty cells for days before the start date
+        for (let i = 0; i < currentDate.getDay(); i++) {
+            const dayCell = document.createElement('div');
+            calendar.appendChild(dayCell);
         }
 
-        // Example data for each day (could be replaced with real data)
-        const exampleData = [
-            { label: 'Event 1', checked: false },
-            { label: 'Event 2', checked: false }
-        ];
-
-        // Populate the days of the month
-        for (let i = 1; i <= daysInMonth; i++) {
+        // Add days from startDate to endDate
+        for (let i = 0; i < totalDays; i++) {
             const dayCell = document.createElement('div');
-            dayCell.textContent = i;
+            dayCell.textContent = currentDate.getDate();
 
-            const date = new Date(year, month, i);
-            if (date.toDateString() === today.toDateString()) {
+            if (currentDate.toDateString() === new Date().toDateString()) {
                 dayCell.classList.add('today');
             }
 
-            if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
+            if (selectedDate && currentDate.toDateString() === selectedDate.toDateString()) {
                 dayCell.classList.add('selected');
             }
 
-            // Create the table with checkboxes and associated data
+            // Add a red outline for the last day of the month
+            const lastDateInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            if (currentDate.getDate() === lastDateInMonth.getDate()) {
+                dayCell.style.outline = '2px solid red';
+            }
+
             const table = document.createElement('table');
             const tbody = document.createElement('tbody');
 
-            // Loop over the example data array to create multiple rows
-            exampleData.forEach((data, index) => {
+            // Filter and show availability for the current day
+            const dailyAvailability = availability.filter(a => new Date(a.fba_date).toDateString() === currentDate.toDateString());
+
+            dailyAvailability.forEach((data, index) => {
                 const row = document.createElement('tr');
                 const cellCheckbox = document.createElement('td');
                 const cellData = document.createElement('td');
 
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                checkbox.name = `checkbox-${year}-${month}-${i}-${index + 1}`;
-                checkbox.id = `checkbox-${year}-${month}-${i}-${index + 1}`;
-                checkbox.checked = data.checked; // Set the checkbox state based on data
+                checkbox.name = `checkbox-${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}-${index + 1}`;
+                checkbox.id = `checkbox-${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}-${index + 1}`;
+                checkbox.checked = false; // Adjust if needed
 
                 cellCheckbox.appendChild(checkbox);
-                cellData.textContent = data.label;
+                cellData.textContent = `Trip ID: ${data.fba_trip_id}`; // Customize based on your data
 
                 row.appendChild(cellCheckbox);
                 row.appendChild(cellData);
@@ -386,21 +397,22 @@
             table.appendChild(tbody);
             dayCell.appendChild(table);
 
-            // Add event listener for selecting a date
             dayCell.addEventListener('click', function(event) {
-                // Prevent triggering the date selection if clicking on a checkbox
                 if (event.target.tagName !== 'INPUT') {
-                    selectedDate = date;
-                    renderCalendar(year, month);
+                    selectedDate = new Date(currentDate);
+                    renderCalendar(startDate, endDate);
                 }
             });
 
             calendar.appendChild(dayCell);
+
+            // Move to the next day
+            currentDate.setDate(currentDate.getDate() + 1);
         }
     }
 
-    // Initial render
-    renderCalendar(today.getFullYear(), today.getMonth());
+    // Render calendar starting from the calculated startDate until the latest date in availability data
+    renderCalendar(earliestDate, latestDate);
 });
 
 </script>
