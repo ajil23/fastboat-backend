@@ -1,59 +1,49 @@
 @extends('admin.admin_master')
 @section('admin')
 <style>
-    #custom-calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    grid-template-rows: repeat(6, auto);
-    gap: 2px;
-}
-
-#custom-calendar div {
-    border: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 5px;
-    cursor: pointer;
-    height: 120px;
-}
-
-#custom-calendar .header {
-    background-color: #f5f5f5;
-    font-weight: bold;
-    height: auto;
-}
-
-/* Colors for header days only */
-#custom-calendar .header:nth-child(1) {
-    background-color: #f9dcdc; /* Red background for Sunday */
-    color: red; /* Red text for Sunday */
-}
-
-#custom-calendar .header:nth-child(6) {
-    background-color: #d9f9dc; /* Green background for Friday */
-    color: green; /* Green text for Friday */
-}
-
-#custom-calendar .today,
-#custom-calendar .selected {
-    background-color: transparent;
-    color: inherit;
-}
-
-#custom-calendar table {
+.calendar-table {
+    table-layout: fixed;
     width: 100%;
-    margin-top: 5px;
+    border-spacing: 0 5px; /* Add spacing between rows */
 }
 
-#custom-calendar table td {
-    padding: 2px;
-    text-align: center;
+.calendar-table th,
+.calendar-table td {
+    width: 14.28%; /* 100% divided by 7 days */
+    height: 120px; /* Increased height for better visibility */
+    vertical-align: top;
+    padding: 10px; /* Adjusted padding for better fit */
+    position: relative;
 }
 
-#custom-calendar table input[type="checkbox"] {
-    margin: 0;
+.calendar-table th {
+    font-size: 0.9rem; /* Smaller font size for headers */
+    height: 40px; /* Reduced height for headers */
+}
+
+.calendar-table td {
+    padding: 15px; /* Increased padding for more space in data cells */
+}
+
+.calendar-table .calendar-date {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-weight: bold;
+}
+
+.calendar-entry {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.calendar-entry input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.border-danger {
+    border: 2px solid red !important; /* Ensure the red border is visible */
 }
 </style>
 <div class="main-content">
@@ -253,15 +243,60 @@
                             </div>
                         </div>
                     </div>
-                    <div id="custom-calendar" class="mb-4">
-                        <div class="header">SUN</div>
-                        <div class="header">MON</div>
-                        <div class="header">TUE</div>
-                        <div class="header">WED</div>
-                        <div class="header">THU</div>
-                        <div class="header">FRI</div>
-                        <div class="header">SAT</div>
-                    </div>
+                    <table class="table table-bordered calendar-table"
+                            <tr>
+                                <th class="text-center text-danger">SUN</th>
+                                <th class="text-center">MON</th>
+                                <th class="text-center">TUE</th>
+                                <th class="text-center">WED</th>
+                                <th class="text-center">THU</th>
+                                <th class="text-center text-success">FRI</th>
+                                <th class="text-center">SAT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php
+                            $currentDate = \Carbon\Carbon::parse($startDate);
+                            $endDate = \Carbon\Carbon::parse($endDate);
+                            $dayOfWeek = $currentDate->dayOfWeek;
+                        @endphp
+
+                        <tr>
+                            @for ($i = 0; $i < $dayOfWeek; $i++)
+                                <td></td>
+                            @endfor
+
+                            @while ($currentDate <= $endDate)
+                                @for ($i = $currentDate->dayOfWeek; $i < 7; $i++)
+                                    <td class="{{ $currentDate->isLastOfMonth() ? 'border border-danger' : '' }}">
+                                        <small>{{ $currentDate->format('j') }}</small>
+                                        @foreach ($availability as $item)
+                                            @if ($item->fba_date == $currentDate->toDateString())
+                                                <div>
+                                                    <input type="checkbox" name="item[]" value="{{ $item->fba_trip_id }}">
+                                                    Trip ID: {{ $item->fba_trip_id }}
+                                                </div>
+                                            @endif
+                                        @endforeach
+                                        @php
+                                            $currentDate->addDay();
+                                        @endphp
+                                    </td>
+                                    @if ($currentDate > $endDate)
+                                        @break
+                                    @endif
+                                @endfor
+                                @if ($currentDate <= $endDate)
+                                    </tr><tr>
+                                @endif
+                            @endwhile
+
+                            @for ($i = $currentDate->dayOfWeek; $i < 7; $i++)
+                                <td></td>
+                            @endfor
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -313,107 +348,6 @@
             $allTypeCheckbox.prop('checked', allChecked);
         });
     });
-
-    // Add custom calendar script here
-    document.addEventListener('DOMContentLoaded', function() {
-    const calendar = document.getElementById('custom-calendar');
-    let selectedDate = null;
-
-    // Ensure availability data is available
-    const availability = @json($availability);
-    console.log(availability);
-
-    // Find the earliest and latest date in the availability data
-    const earliestDate = availability.length > 0 ? new Date(Math.min(...availability.map(a => new Date(a.fba_date)))) : new Date();
-    const latestDate = availability.length > 0 ? new Date(Math.max(...availability.map(a => new Date(a.fba_date)))) : new Date();
-
-    // Calculate the starting date for the calendar, which is 2 days before the earliest date
-    earliestDate.setDate(earliestDate.getDate() - 2);
-
-    function renderCalendar(startDate, endDate) {
-        calendar.innerHTML = '';
-
-        const daysOfWeek = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
-        daysOfWeek.forEach(day => {
-            const dayHeader = document.createElement('div');
-            dayHeader.classList.add('header');
-            dayHeader.textContent = day;
-            calendar.appendChild(dayHeader);
-        });
-
-        let currentDate = new Date(startDate);
-        const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-
-        // Add empty cells for days before the start date
-        for (let i = 0; i < currentDate.getDay(); i++) {
-            const dayCell = document.createElement('div');
-            calendar.appendChild(dayCell);
-        }
-
-        // Add days from startDate to endDate
-        for (let i = 0; i < totalDays; i++) {
-            const dayCell = document.createElement('div');
-            dayCell.textContent = currentDate.getDate();
-
-            if (currentDate.toDateString() === new Date().toDateString()) {
-                dayCell.classList.add('today');
-            }
-
-            if (selectedDate && currentDate.toDateString() === selectedDate.toDateString()) {
-                dayCell.classList.add('selected');
-            }
-
-            // Add a red outline for the last day of the month
-            const lastDateInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-            if (currentDate.getDate() === lastDateInMonth.getDate()) {
-                dayCell.style.outline = '2px solid red';
-            }
-
-            const table = document.createElement('table');
-            const tbody = document.createElement('tbody');
-
-            // Filter and show availability for the current day
-            const dailyAvailability = availability.filter(a => new Date(a.fba_date).toDateString() === currentDate.toDateString());
-
-            dailyAvailability.forEach((data, index) => {
-                const row = document.createElement('tr');
-                const cellCheckbox = document.createElement('td');
-                const cellData = document.createElement('td');
-
-                const checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.name = `checkbox-${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}-${index + 1}`;
-                checkbox.id = `checkbox-${currentDate.getFullYear()}-${currentDate.getMonth()}-${currentDate.getDate()}-${index + 1}`;
-                checkbox.checked = false; // Adjust if needed
-
-                cellCheckbox.appendChild(checkbox);
-                cellData.textContent = `Trip ID: ${data.fba_trip_id}`; // Customize based on your data
-
-                row.appendChild(cellCheckbox);
-                row.appendChild(cellData);
-                tbody.appendChild(row);
-            });
-
-            table.appendChild(tbody);
-            dayCell.appendChild(table);
-
-            dayCell.addEventListener('click', function(event) {
-                if (event.target.tagName !== 'INPUT') {
-                    selectedDate = new Date(currentDate);
-                    renderCalendar(startDate, endDate);
-                }
-            });
-
-            calendar.appendChild(dayCell);
-
-            // Move to the next day
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
-    }
-
-    // Render calendar starting from the calculated startDate until the latest date in availability data
-    renderCalendar(earliestDate, latestDate);
-});
 
 </script>
 @endsection
