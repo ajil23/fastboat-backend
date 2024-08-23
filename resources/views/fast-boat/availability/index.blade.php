@@ -45,6 +45,16 @@
 .border-danger {
     border: 2px solid red !important; /* Ensure the red border is visible */
 }
+
+.calendar-table th.sunday {
+    background-color: #f8d7da; /* Latar belakang merah muda untuk hari Minggu */
+    color: #dc3545; /* Teks merah untuk hari Minggu */
+}
+
+.calendar-table th.friday {
+    background-color: #d4edda; /* Latar belakang hijau muda untuk hari Jumat */
+    color: #28a745; /* Teks hijau untuk hari Jumat */
+}
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -245,12 +255,12 @@
                     </div>
                     <table class="table table-bordered calendar-table">
                             <tr>
-                                <th class="text-center text-danger">SUN</th>
+                                <th class="text-center sunday">SUN</th>
                                 <th class="text-center">MON</th>
                                 <th class="text-center">TUE</th>
                                 <th class="text-center">WED</th>
                                 <th class="text-center">THU</th>
-                                <th class="text-center text-success">FRI</th>
+                                <th class="text-center friday">FRI</th>
                                 <th class="text-center">SAT</th>
                             </tr>
                         </thead>
@@ -260,12 +270,12 @@
                             $endDate = \Carbon\Carbon::parse($endDate);
                             $dayOfWeek = $currentDate->dayOfWeek;
                         @endphp
-
+    
                         <tr>
                             @for ($i = 0; $i < $dayOfWeek; $i++)
                                 <td></td>
                             @endfor
-
+    
                             @while ($currentDate <= $endDate)
                                 @for ($i = $currentDate->dayOfWeek; $i < 7; $i++)
                                     <td class="{{ $currentDate->isLastOfMonth() ? 'border border-danger' : '' }}">
@@ -273,8 +283,26 @@
                                         @foreach ($availability as $item)
                                             @if ($item->fba_date == $currentDate->toDateString())
                                                 <div>
-                                                    <input type="checkbox" name="item[]" value="{{ $item->fba_trip_id }}">
-                                                    Trip ID: {{ $item->fba_trip_id }}
+                                                    <input type="checkbox" class="form-check-input" name="item[]" value="{{ $item->fba_trip_id }}">
+                                                    <a href="#" class="calendar-entry-text" data-bs-toggle="modal" data-bs-target="#detailModal-{{ $item->fba_trip_id }}">Trip ID: {{ $item->fba_trip_id }}</a>
+                                                </div>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="detailModal-{{ $item->fba_trip_id }}" tabindex="-1" role="dialog" aria-labelledby="detailModalLabel-{{ $item->fba_trip_id }}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="detailModalLabel-{{ $item->fba_trip_id }}">Trip Details</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>Trip ID: {{ $item->trip->fbt_name }}</p>
+                                                                <p>Date: {{ $item->fba_date }}</p>
+                                                                <p>Departure Time: {{ $item->trip->fbt_dept_time}}</p>
+                                                                <p>Arrival Time: {{ $item->trip->fbt_arrival_time}}</p>
+                                                                <!-- Add more details as needed -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             @endif
                                         @endforeach
@@ -290,7 +318,7 @@
                                     </tr><tr>
                                 @endif
                             @endwhile
-
+    
                             @for ($i = $currentDate->dayOfWeek; $i < 7; $i++)
                                 <td></td>
                             @endfor
@@ -348,6 +376,29 @@
             $allTypeCheckbox.prop('checked', allChecked);
         });
     });
+
+    // Fungsi untuk memperbarui status checkbox 'all-trips'
+    function updateAllTripsCheckbox() {
+        const checkboxes = document.querySelectorAll('input.form-check-input[name="item[]"]');
+        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+        document.getElementById('all-trips').checked = allChecked;
+    }
+
+    // Event listener untuk checkbox 'all-trips'
+    document.getElementById('all-trips').addEventListener('change', function() {
+        const checkboxes = document.querySelectorAll('input.form-check-input[name="item[]"]');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.checked = this.checked;
+        }, this);
+    });
+
+    // Event listener untuk semua checkbox dengan name 'item[]'
+    document.querySelectorAll('input.form-check-input[name="item[]"]').forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            updateAllTripsCheckbox();
+        });
+    });
+
 
 </script>
 @endsection
