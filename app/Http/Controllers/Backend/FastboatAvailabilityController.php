@@ -26,9 +26,6 @@ class FastboatAvailabilityController extends Controller
         $startDate = $availability->first()->fba_date ?? now();
         $endDate = $availability->last()->fba_date ?? now();
 
-        // Adjust startDate to be 2 days before the earliest data   
-        $startDate = \Carbon\Carbon::parse($startDate)->subDays(2);
-
         $company = DataCompany::all();
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
