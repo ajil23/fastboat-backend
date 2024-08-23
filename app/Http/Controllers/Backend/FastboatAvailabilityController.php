@@ -19,7 +19,16 @@ class FastboatAvailabilityController extends Controller
     // this function is for view all data from fastboat table
     public function index()
     {
-        $availability = FastboatAvailability::all();
+        // Fetch all availability data sorted by date
+        $availability = FastboatAvailability::orderBy('fba_date')->get();
+
+        // Get the earliest and latest dates
+        $startDate = $availability->first()->fba_date ?? now();
+        $endDate = $availability->last()->fba_date ?? now();
+
+        // Adjust startDate to be 2 days before the earliest data   
+        $startDate = \Carbon\Carbon::parse($startDate)->subDays(2);
+
         $company = DataCompany::all();
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
@@ -28,7 +37,7 @@ class FastboatAvailabilityController extends Controller
         $arrival = MasterPort::all();
         $deptTime = SchedulesTrip::all();
         $trip = SchedulesTrip::with(['departure.arrival.fastboat']);
-        return view('fast-boat.availability.index', compact('availability', 'trip', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
+        return view('fast-boat.availability.index', compact('availability', 'trip', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime', 'startDate', 'endDate'));
     }
 
     public function add()
