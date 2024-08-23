@@ -243,7 +243,7 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered calendar-table"
+                    <table class="table table-bordered calendar-table">
                             <tr>
                                 <th class="text-center text-danger">SUN</th>
                                 <th class="text-center">MON</th>
