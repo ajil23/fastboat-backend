@@ -20,7 +20,7 @@ class FastboatAvailabilityController extends Controller
     public function index()
     {
         // Fetch all availability data sorted by date
-        $availability = FastboatAvailability::orderBy('fba_date')->get();
+        $availability = FastboatAvailability::with(['company', 'schedule', 'route', 'departure', 'island'])->orderBy('fba_date')->get();
 
         // Get the earliest and latest dates
         $startDate = $availability->first()->fba_date ?? now();
