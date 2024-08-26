@@ -6,8 +6,6 @@
         table-layout: fixed;
         width: 100%;
         border-spacing: 0 5px;
-        
-    /* Add spacing between rows */
     }
 
     .calendar-table th,
@@ -78,48 +76,6 @@
     .calendar-table th.friday {
         background-color: #d4edda;
         color: #28a745;
-        height: 40px;
-    }
-
-    .calendar-table td {
-        padding: 15px;
-        /* Increased padding for more space in data cells */
-    }
-
-    .calendar-table .calendar-date {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        font-weight: bold;
-    }
-
-    .calendar-entry {
-        display: flex;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    .calendar-entry input[type="checkbox"] {
-        margin-right: 5px;
-    }
-
-    .border-danger {
-        border: 2px solid red !important;
-        /* Ensure the red border is visible */
-    }
-
-    .calendar-table th.sunday {
-        background-color: #f8d7da;
-        /* Latar belakang merah muda untuk hari Minggu */
-        color: #dc3545;
-        /* Teks merah untuk hari Minggu */
-    }
-
-    .calendar-table th.friday {
-        background-color: #d4edda;
-        /* Latar belakang hijau muda untuk hari Jumat */
-        color: #28a745;
-        /* Teks hijau untuk hari Jumat */
     }
 </style>
 <div class="main-content">
@@ -176,8 +132,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
+                            </div><div class="col-lg-3">
                                 <div class="mb-3">
                                     <label class="form-label">Schedule</label>
                                     <select name="fba_schedule" id="search-schedule">
@@ -415,7 +370,7 @@
                 </div>
             </div>
         </div>
-
+               
     </div>
     <!-- End Page-content -->
     @include('admin.components.footer')
@@ -441,7 +396,7 @@
             }
         ]
     });
-
+    
     // all check update type
     $(document).ready(function() {
         const $allTypeCheckbox = $('#all-type');
@@ -485,5 +440,7 @@
             updateAllTripsCheckbox();
         });
     });
+
+
 </script>
 @endsection
