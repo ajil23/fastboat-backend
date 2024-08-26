@@ -121,7 +121,7 @@ class MasterPortController extends Controller
     {
         $portEdit = MasterPort::find($id);
         $island = MasterIsland::all();
-        return view('master.port.edit', compact('portEdit', 'data'));
+        return view('master.port.edit', compact('portEdit', 'island'));
     }
 
     // this function will get the $id of the selected data and request data from input in port edit from
