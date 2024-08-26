@@ -77,6 +77,10 @@
         background-color: #d4edda;
         color: #28a745;
     }
+
+    .end-of-month {
+    border: 2px solid red;
+    }
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -285,87 +289,100 @@
                     <div class="card-body">
                         <h5 class="font-size-14 mb-3">Availability Calendar</h5>
                         @php
-                            // Mendapatkan tanggal awal dan akhir dari data availability
-                            $firstDate = \Carbon\Carbon::parse($availability->first()->fba_date)->startOfMonth();
-                            $lastDate = \Carbon\Carbon::parse($availability->last()->fba_date)->endOfMonth();
+                        // Mendapatkan tanggal awal dan akhir dari data availability
+                        $firstDate = \Carbon\Carbon::parse($availability->min('fba_date'));
+                        $lastDate = \Carbon\Carbon::parse($availability->max('fba_date'));
+                    
+                        // Mendapatkan hari pertama dari tanggal awal (0 untuk Minggu, 6 untuk Sabtu)
+                        $startDayOfWeek = $firstDate->dayOfWeek;
+                        $currentDate = $firstDate->copy();
+                    
+                        // Hitung total minggu yang diperlukan dalam kalender
+                        $totalWeeks = ceil(($lastDate->diffInDays($firstDate) + $startDayOfWeek + 1) / 7);
+                    
+                        // Mengelompokkan data availability berdasarkan tanggal
+                        $availabilityByDate = $availability->groupBy(function ($item) {
+                            return \Carbon\Carbon::parse($item->fba_date)->format('Y-m-d');
+                        });
 
-                            // Mendapatkan hari pertama dalam bulan ini (0 untuk Minggu, 6 untuk Sabtu)
-                            $startDayOfWeek = $firstDate->dayOfWeek;
-                            $currentDate = $firstDate->copy();
-
-                            // Hitung total minggu yang diperlukan dalam kalender
-                            $totalWeeks = ceil(($lastDate->day + $startDayOfWeek) / 7);
-
-                            // Mengelompokkan data availability berdasarkan tanggal
-                            $availabilityByDate = $availability->groupBy(function ($item) {
-                                return \Carbon\Carbon::parse($item->fba_date)->format('Y-m-d');
-                            });
-                        @endphp
-                        <table class="table table-bordered calendar-table">
-                            <thead>
+                        // Mendapatkan hari terakhir dari bulan untuk setiap tanggal dalam rentang
+                    $endOfMonthDates = [];
+                    $currentDateTemp = $firstDate->copy();
+                    while ($currentDateTemp->lte($lastDate)) {
+                        $endOfMonthDates[] = $currentDateTemp->endOfMonth()->format('Y-m-d');
+                        $currentDateTemp->addMonth();
+                    }
+                    @endphp
+                    
+                    <table class="table table-bordered calendar-table">
+                        <thead>
+                            <tr>
+                                <th class="text-center sunday">SUN</th>
+                                <th class="text-center">MON</th>
+                                <th class="text-center">TUE</th>
+                                <th class="text-center">WED</th>
+                                <th class="text-center">THU</th>
+                                <th class="text-center friday">FRI</th>
+                                <th class="text-center">SAT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for ($week = 0; $week < $totalWeeks; $week++)
                                 <tr>
-                                    <th class="text-center sunday">SUN</th>
-                                    <th class="text-center">MON</th>
-                                    <th class="text-center">TUE</th>
-                                    <th class="text-center">WED</th>
-                                    <th class="text-center">THU</th>
-                                    <th class="text-center friday">FRI</th>
-                                    <th class="text-center">SAT</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @for ($week = 0; $week < $totalWeeks; $week++)
-                                    <tr>
-                                        @for ($day = 0; $day < 7; $day++)
-                                            @if ($week === 0 && $day < $startDayOfWeek)
-                                                <!-- Kosongkan sel sebelum tanggal pertama -->
-                                                <td></td>
-                                            @elseif ($currentDate->gt($lastDate))
-                                                <!-- Kosongkan sel setelah tanggal terakhir -->
-                                                <td></td>
-                                            @else
-                                                @php
-                                                    $dateString = $currentDate->format('Y-m-d');
-                                                @endphp
-
-                                                @if ($availabilityByDate->has($dateString))
-                                                    <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}">
-                                                        <!-- Tampilkan Tanggal dengan Checkbox -->
-                                                        <div class="calendar-date">
-                                                            <input type="checkbox" name="select_date[]" value="{{ $dateString }}" />
-                                                            <span>{{ $currentDate->format('d M Y') }}</span>
-                                                        </div>
-
-                                                        <!-- Looping untuk setiap perusahaan dan schedule -->
-                                                        @foreach ($availabilityByDate[$dateString]->groupBy('trip.fastboat.company.cpn_name') as $companyName => $companyData)
-                                                            @foreach ($companyData->groupBy('trip.schedule.sch_name') as $scheduleName => $scheduleData)
-                                                                <div class="company-name">{{ $companyName }} / {{ $scheduleName }}</div>
-
-                                                                <!-- Looping untuk setiap availability dalam schedule -->
-                                                                @foreach ($scheduleData as $item)
-                                                                    <div class="availability-entry">
-                                                                        <input type="checkbox" name="select_availability[]" value="{{ $item->id }}" />
-                                                                        <span>{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }} 
-                                                                        {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }} 
-                                                                        ({{ $item->fba_stock }})</span>
-                                                                    </div>
-                                                                @endforeach
-                                                            @endforeach
+                                    @for ($day = 0; $day < 7; $day++)
+                                        @if ($week === 0 && $day < $startDayOfWeek)
+                                            <!-- Kosongkan sel sebelum tanggal pertama -->
+                                            <td></td>
+                                        @elseif ($currentDate->gt($lastDate))
+                                            <!-- Kosongkan sel setelah tanggal terakhir -->
+                                            <td></td>
+                                        @else
+                                        @php
+                                            $dateString = $currentDate->format('Y-m-d');
+                                            $isEndOfMonth = $currentDate->isSameDay($currentDate->copy()->endOfMonth());
+                                        @endphp
+                        
+                                        @if ($availabilityByDate->has($dateString))
+                                            <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }} {{ $isEndOfMonth ? 'end-of-month' : '' }}">
+                                                <!-- Tampilkan Tanggal dengan Checkbox -->
+                                                <div class="calendar-date">
+                                                    <input type="checkbox" name="select_date[]" value="{{ $dateString }}" />
+                                                    <span>{{ $currentDate->format('d M Y') }}</span>
+                                                </div>
+                        
+                                                <!-- Looping untuk setiap perusahaan dan schedule -->
+                                                @foreach ($availabilityByDate[$dateString]->groupBy('trip.fastboat.company.cpn_name') as $companyName => $companyData)
+                                                    @foreach ($companyData->groupBy('trip.schedule.sch_name') as $scheduleName => $scheduleData)
+                                                        <div class="company-name">{{ $companyName }} / {{ $scheduleName }}</div>
+                        
+                                                        <!-- Looping untuk setiap availability dalam schedule -->
+                                                        @foreach ($scheduleData as $item)
+                                                            <div class="availability-entry">
+                                                                <input type="checkbox" name="select_availability[]" value="{{ $item->id }}" />
+                                                                <span>{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }} 
+                                                                {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }} 
+                                                                ({{ $item->fba_stock }})</span>
+                                                            </div>
                                                         @endforeach
-                                                    </td>
-                                                @else
-                                                    <td></td>
-                                                @endif
-
-                                                @php
-                                                    $currentDate->addDay();
-                                                @endphp
-                                            @endif
-                                        @endfor
-                                    </tr>
-                                @endfor
-                            </tbody>
-                        </table>
+                                                    @endforeach
+                                                @endforeach
+                                            </td>
+                                        @else
+                                            <td class="{{ $isEndOfMonth ? 'end-of-month' : '' }}"></td>
+                                        @endif
+                        
+                                        @php
+                                            $currentDate->addDay();
+                                        @endphp
+                                    @endif
+                                    @endfor
+                                </tr>
+                            @endfor
+                        </tbody>
+                        
+                    </table>
+                    
+                        
                     </div>
                 </div>
             </div>
