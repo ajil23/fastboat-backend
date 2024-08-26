@@ -119,6 +119,7 @@ Route::middleware([
         Route::delete('/availability/delete/{id}', [FastboatAvailabilityController::class, 'delete'])->name('availability.delete');
         Route::get('/availability/extend', [FastboatAvailabilityController::class, 'extend'])->name('availability.extend');
         Route::post('/availability/storeExtend', [FastboatAvailabilityController::class, 'storeExtend'])->name('availability.storeExtend');
+        Route::post('/availability/search', [FastboatAvailabilityController::class, 'search'])->name('availability.search');
     });
 
     Route::prefix('master')->group(function () {

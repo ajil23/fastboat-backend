@@ -20,11 +20,11 @@ class FastboatAvailabilityController extends Controller
     public function index()
     {
         // Fetch all availability data sorted by date
-        $availability = FastboatAvailability::with(['company', 'schedule', 'route', 'departure', 'island'])->orderBy('fba_date')->get();
+        // $availability = FastboatAvailability::with(['company', 'schedule', 'route', 'departure', 'island']);
 
         // Get the earliest and latest dates
-        $startDate = $availability->first()->fba_date ?? now();
-        $endDate = $availability->last()->fba_date ?? now();
+        // $startDate = $availability->first()->fba_date ?? now();
+        // $endDate = $availability->last()->fba_date ?? now();
 
         $company = DataCompany::all();
         $fastboat = DataFastboat::all();
@@ -34,7 +34,7 @@ class FastboatAvailabilityController extends Controller
         $arrival = MasterPort::all();
         $deptTime = SchedulesTrip::all();
         $trip = SchedulesTrip::with(['departure.arrival.fastboat']);
-        return view('fast-boat.availability.index', compact('availability', 'trip', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime', 'startDate', 'endDate'));
+        return view('fast-boat.availability.index', compact('trip', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
     }
 
     public function add()
@@ -47,14 +47,14 @@ class FastboatAvailabilityController extends Controller
     {
         // Mengambil rentang tanggal yang dipilih
         $dates = explode(" to ", $request->fba_date);
-    
+
         // Konversi format tanggal
         $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]));
         $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]));
-    
+
         // Mengambil array trip ID yang dipilih
         $tripIds = $request->fba_trip_id;
-    
+
         // Iterasi setiap tanggal dari awal hingga akhir
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             foreach ($tripIds as $tripId) {
@@ -77,7 +77,7 @@ class FastboatAvailabilityController extends Controller
                 $availabilityData->save();
             }
         }
-    
+
         // Menambahkan pesan toast sukses ke dalam session
         toast('Your data has been submitted!', 'success');
         return redirect()->route('availability.view');
@@ -99,14 +99,14 @@ class FastboatAvailabilityController extends Controller
     {
         // Mengambil rentang tanggal yang dipilih
         $dates = explode(" to ", $request->fba_date);
-    
+
         // Konversi format tanggal
         $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[0]));
         $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', trim($dates[1]));
-    
+
         // Mengambil array trip ID yang dipilih
         $tripIds = $request->fba_trip_id;
-    
+
         // Iterasi setiap tanggal dari awal hingga akhir
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             foreach ($tripIds as $tripId) {
@@ -114,7 +114,7 @@ class FastboatAvailabilityController extends Controller
                 $existingAvailability = FastboatAvailability::where('fba_trip_id', $tripId)
                     ->where('fba_date', $date->format('Y-m-d'))
                     ->first();
-    
+
                 if ($existingAvailability) {
                     // Update data yang ada dengan informasi baru
                     $existingAvailability->fba_stock = $request->fba_stock;  // Update stock
@@ -124,7 +124,7 @@ class FastboatAvailabilityController extends Controller
                 } else {
                     // Jika tidak ada data yang ada, buat data baru
                     $templateAvailability = FastboatAvailability::where('fba_trip_id', $tripId)->orderBy('fba_date', 'desc')->first();
-    
+
                     if ($templateAvailability) {
                         $availabilityData = new FastboatAvailability();
                         $availabilityData->fba_trip_id = $tripId;
@@ -147,8 +147,87 @@ class FastboatAvailabilityController extends Controller
                 }
             }
         }
-    
+
         toast('Your data has been extended successfully!', 'success');
         return redirect()->route('availability.view');
-    }  
+    }
+
+    public function search(Request $request)
+    {
+        $query = FastboatAvailability::query();
+    
+        $company = DataCompany::all();
+        $fastboat = DataFastboat::all();
+        $schedule = SchedulesSchedule::all();
+        $route = DataRoute::all();
+        $departure = MasterPort::all();
+        $arrival = MasterPort::all();
+        $deptTime = SchedulesTrip::all();
+
+        // Validasi input
+        $validated = $request->validate([
+            'company' => 'nullable|string',
+            'fba_fastboat' => 'nullable|string',
+            'fba_schedule' => 'nullable|string',
+            'fba_route' => 'nullable|string',
+            'fba_departure' => 'nullable|string',
+            'fba_arrival' => 'nullable|string',
+            'fba_dept_time' => 'nullable|string',
+            'daterange' => 'nullable|regex:/\d{2}-\d{2}-\d{4} to \d{2}-\d{2}-\d{4}/', // Format date range
+        ]);
+    
+        // Filter berdasarkan parameter yang ada
+        if ($request->filled('company')) {
+            $query->whereHas('trip.fastboat.company', function ($q) use ($request) {
+                $q->where('cpn_name', $request->input('company'));
+            });
+        }
+    
+        if ($request->filled('fba_fastboat')) {
+            $query->whereHas('trip.fastboat', function ($q) use ($request) {
+                $q->where('fb_name', $request->input('fba_fastboat'));
+            });
+        }
+    
+        if ($request->filled('fba_schedule')) {
+            $query->whereHas('trip.schedule', function ($q) use ($request) {
+                $q->where('sch_name', $request->input('fba_schedule'));
+            });
+        }
+    
+        if ($request->filled('fba_route')) {
+            $query->whereHas('trip.route', function ($q) use ($request) {
+                $routeParts = explode(' to ', $request->input('fba_route'));
+                $q->where('rt_dept_island', $routeParts[0])
+                  ->where('rt_arrival_island', $routeParts[1]);
+            });
+        }
+    
+        if ($request->filled('fba_departure')) {
+            $query->whereHas('trip.departure', function ($q) use ($request) {
+                $q->where('prt_name_en', $request->input('fba_departure'));
+            });
+        }
+    
+        if ($request->filled('fba_arrival')) {
+            $query->whereHas('trip.arrival', function ($q) use ($request) {
+                $q->where('prt_name_en', $request->input('fba_arrival'));
+            });
+        }
+    
+        if ($request->filled('fba_dept_time')) {
+            $query->where('fba_dept_time', $request->input('fba_dept_time'));
+        }
+    
+        if ($request->filled('daterange')) {
+            $dates = explode(' to ', $request->input('daterange'));
+            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[0]);
+            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[1]);
+            $query->whereBetween('fba_date', [$startDate, $endDate]);
+        }
+    
+        $availabilities = $query->get();
+    
+        return view('fast-boat.availability.index', compact('availabilities', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
+    }    
 }
