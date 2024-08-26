@@ -283,7 +283,7 @@
             <div class="col-xl-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="font-size-14 mb-3">Kalender Ketersediaan</h5>
+                        <h5 class="font-size-14 mb-3">Availability Calendar</h5>
                         @php
                             // Mendapatkan tanggal awal dan akhir dari data availability
                             $firstDate = \Carbon\Carbon::parse($availability->first()->fba_date)->startOfMonth();
