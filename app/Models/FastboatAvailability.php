@@ -36,4 +36,7 @@ class FastboatAvailability extends Model
     public function deptTime(){
         return $this->belongsTo(SchedulesTrip::class);
     }
+    public function island(){
+        return $this->belongsTo(MasterIsland::class);
+    }
 }
