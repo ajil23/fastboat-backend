@@ -78,9 +78,6 @@
         color: #28a745;
     }
 
-    .end-of-month {
-    border: 2px solid red;
-    }
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -271,14 +268,6 @@
                     <div class="position-relative text-center border-bottom pb-3">
                         <button class="btn  btn-outline-dark"><i class="mdi mdi-pencil"></i>&thinsp;Update</button>
                     </div>
-                    <div class="card-body">
-                        <div class="col-xl-3 col-lg-6">
-                            <div class="form-check font-size-16">
-                                <input type="checkbox" class="form-check-input" id="all-trips">
-                                <label for="all-trips">All Trips</label>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -288,6 +277,12 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="font-size-14 mb-3">Availability Calendar</h5>
+                        <div class="col-xl-3 col-lg-6">
+                            <div class="form-check font-size-16">
+                                <input type="checkbox" class="form-check-input" id="all-trips">
+                                <label for="all-trips">All Trips</label>
+                            </div>
+                        </div>
                         @php
                         // Mendapatkan tanggal awal dan akhir dari data availability
                         $firstDate = \Carbon\Carbon::parse($availability->min('fba_date'));
@@ -305,16 +300,6 @@
                             return \Carbon\Carbon::parse($item->fba_date)->format('Y-m-d');
                         });
 
-                        // Mendapatkan hari terakhir dari bulan untuk setiap tanggal dalam rentang
-                    $endOfMonthDates = [];
-                    $currentDateTemp = $firstDate->copy();
-                    while ($currentDateTemp->lte($lastDate)) {
-                        $endOfMonthDates[] = $currentDateTemp->endOfMonth()->format('Y-m-d');
-                        $currentDateTemp->addMonth();
-                    }
-
-                    // echo (date('d', strtotime('2024-08-31')));
-                    // echo (date('t', strtotime('2024-08-1')));)
                     @endphp
                     
                     <table class="table table-bordered calendar-table">
@@ -349,7 +334,7 @@
                                             <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ date('d', strtotime($dateString)) == date('t', strtotime($dateString)) ? 'border: 3px solid red' : '' }}">
                                                 <!-- Tampilkan Tanggal dengan Checkbox -->
                                                 <div class="calendar-date">
-                                                    <input type="checkbox" name="select_date[]" value="{{ $dateString }}" />
+                                                    <input type="checkbox" class="form-check-input" name="select_date[]" value="{{ $dateString }}" />
                                                     <span>{{ $currentDate->format('d M Y') }}</span>
                                                 </div>
                         
@@ -361,10 +346,17 @@
                                                         <!-- Looping untuk setiap availability dalam schedule -->
                                                         @foreach ($scheduleData as $item)
                                                             <div class="availability-entry">
-                                                                <input type="checkbox" name="select_availability[]" value="{{ $item->id }}" />
+                                                                <input type="checkbox" class="form-check-input" name="select_availability[]" value="{{ $item->id }}" />
+                                                                @if ($item->fba_status == 'disable')
+                                                                <span class="text-danger">{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }} 
+                                                                    {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }} 
+                                                                    ({{ $item->fba_stock }})</span>
+                                                                @else
                                                                 <span>{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }} 
-                                                                {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }} 
-                                                                ({{ $item->fba_stock }})</span>
+                                                                    {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }} 
+                                                                    ({{ $item->fba_stock }})</span>
+                                                                @endif
+                                                                
                                                             </div>
                                                         @endforeach
                                                     @endforeach
