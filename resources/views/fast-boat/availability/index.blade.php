@@ -312,6 +312,9 @@
                         $endOfMonthDates[] = $currentDateTemp->endOfMonth()->format('Y-m-d');
                         $currentDateTemp->addMonth();
                     }
+
+                    // echo (date('d', strtotime('2024-08-31')));
+                    // echo (date('t', strtotime('2024-08-1')));)
                     @endphp
                     
                     <table class="table table-bordered calendar-table">
@@ -343,7 +346,7 @@
                                         @endphp
                         
                                         @if ($availabilityByDate->has($dateString))
-                                            <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }} {{ $isEndOfMonth ? 'end-of-month' : '' }}">
+                                            <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ date('d', strtotime($dateString)) == date('t', strtotime($dateString)) ? 'border: 3px solid red' : '' }}">
                                                 <!-- Tampilkan Tanggal dengan Checkbox -->
                                                 <div class="calendar-date">
                                                     <input type="checkbox" name="select_date[]" value="{{ $dateString }}" />
@@ -368,7 +371,7 @@
                                                 @endforeach
                                             </td>
                                         @else
-                                            <td class="{{ $isEndOfMonth ? 'end-of-month' : '' }}"></td>
+                                            <td style="{{ date('d', strtotime($dateString)) == date('t', strtotime($dateString)) ? 'border: 3px solid red' : ''}}"></td>
                                         @endif
                         
                                         @php
