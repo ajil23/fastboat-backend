@@ -287,8 +287,8 @@
                         <h5 class="font-size-14 mb-3">Availability Calendar</h5>
                         <div class="col-xl-3 col-lg-6">
                             <div class="form-check font-size-16">
-                                <input type="checkbox" class="form-check-input" id="all-trips">
-                                <label for="all-trips">All Trips</label>
+                                <input type="checkbox" class="form-check-input" id="select_all_trips">
+                                <label for="select_all_trips">All Trips</label>
                             </div>
                         </div>
                         @php
@@ -342,9 +342,9 @@
 
                                         @if ($availabilityByDate->has($dateString))
                                         <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ date('d', strtotime($dateString)) == date('t', strtotime($dateString)) ? 'border: 3px solid red' : '' }}">
-                                            <!-- Tampilkan Tanggal dengan Checkbox -->
-                                            <div class="calendar-date">
-                                                <input type="checkbox" class="form-check-input" name="select_date[]" value="{{ $dateString }}" />
+                                        <!-- Tampilkan Tanggal dengan Checkbox -->
+                                        <div class="calendar-date">
+                                            <input type="checkbox" class="form-check-input select-day" name="select_date[]" value="{{ $dateString }}" />
                                                 <span>{{ $currentDate->format('d M Y') }}</span>
                                             </div>
 
@@ -356,7 +356,7 @@
                                             <!-- Looping untuk setiap availability dalam schedule -->
                                             @foreach ($scheduleData as $item)
                                             <div class="availability-entry">
-                                                <input type="checkbox" class="form-check-input" name="select_availability[]" value="{{ $item->id }}" />
+                                                <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->id }}" />
                                                 @if ($item->fba_status == 'disable')
                                                 <span class="text-danger">{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
@@ -442,26 +442,106 @@
         });
     });
 
-    // Fungsi untuk memperbarui status checkbox 'all-trips'
-    function updateAllTripsCheckbox() {
-        const checkboxes = document.querySelectorAll('input.form-check-input[name="item[]"]');
-        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-        document.getElementById('all-trips').checked = allChecked;
+    document.addEventListener("DOMContentLoaded", function () {
+    // Checkbox "All Trips"
+    const selectAllTrips = document.getElementById("select_all_trips");
+
+    // Checkbox untuk hari-hari
+    const dayCheckboxes = document.querySelectorAll('.calendar-date input[type="checkbox"]');
+
+    // Checkbox untuk setiap item dalam hari
+    const itemCheckboxes = document.querySelectorAll('.availability-entry input[type="checkbox"]');
+
+    // Fungsi untuk mengaktifkan atau menonaktifkan semua checkbox hari
+    function toggleDayCheckboxes(checked) {
+        dayCheckboxes.forEach(dayCheckbox => {
+            dayCheckbox.checked = checked;
+            // Trigger event change untuk setiap checkbox hari
+            dayCheckbox.dispatchEvent(new Event('change'));
+        });
+
+        // Juga aktifkan/nonaktifkan semua checkbox item dalam hari
+        itemCheckboxes.forEach(itemCheckbox => {
+            itemCheckbox.checked = checked;
+        });
     }
 
-    // Event listener untuk checkbox 'all-trips'
-    document.getElementById('all-trips').addEventListener('change', function() {
-        const checkboxes = document.querySelectorAll('input.form-check-input[name="item[]"]');
-        checkboxes.forEach(function(checkbox) {
-            checkbox.checked = this.checked;
-        }, this);
+    // Event listener untuk checkbox "All Trips"
+    selectAllTrips.addEventListener("change", function () {
+        toggleDayCheckboxes(this.checked);
     });
 
-    // Event listener untuk semua checkbox dengan name 'item[]'
-    document.querySelectorAll('input.form-check-input[name="item[]"]').forEach(function(checkbox) {
-        checkbox.addEventListener('change', function() {
-            updateAllTripsCheckbox();
+    // Event listener untuk setiap checkbox hari
+    dayCheckboxes.forEach(dayCheckbox => {
+        dayCheckbox.addEventListener("change", function () {
+            // Jika salah satu checkbox hari dinonaktifkan, matikan "All Trips"
+            if (!this.checked) {
+                selectAllTrips.checked = false;
+            } else {
+                // Periksa apakah semua checkbox hari diaktifkan
+                const allDaysChecked = Array.from(dayCheckboxes).every(cb => cb.checked);
+                selectAllTrips.checked = allDaysChecked;
+            }
         });
     });
+
+    // Event listener untuk setiap checkbox item dalam hari
+    itemCheckboxes.forEach(itemCheckbox => {
+        itemCheckbox.addEventListener("change", function () {
+            // Cari checkbox hari yang sesuai
+            const dayCheckbox = this.closest('td').querySelector('.calendar-date input[type="checkbox"]');
+
+            // Jika salah satu checkbox item dinonaktifkan, matikan checkbox hari dan "All Trips"
+            if (!this.checked) {
+                dayCheckbox.checked = false;
+                selectAllTrips.checked = false;
+            } else {
+                // Jika semua checkbox item dalam hari diaktifkan, aktifkan checkbox hari
+                const allItemsChecked = Array.from(this.closest('td').querySelectorAll('.availability-entry input[type="checkbox"]')).every(cb => cb.checked);
+                dayCheckbox.checked = allItemsChecked;
+
+                // Periksa apakah semua checkbox hari dan item diaktifkan
+                const allDaysAndItemsChecked = Array.from(dayCheckboxes).every(cb => cb.checked) &&
+                    Array.from(itemCheckboxes).every(cb => cb.checked);
+                selectAllTrips.checked = allDaysAndItemsChecked;
+            }
+        });
+    });
+});
+
+
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    // Mendapatkan semua checkbox hari
+    const dayCheckboxes = document.querySelectorAll('.select-day');
+
+    dayCheckboxes.forEach(dayCheckbox => {
+        dayCheckbox.addEventListener('change', function() {
+            // Mendapatkan semua checkbox availability pada hari tersebut
+            const availabilityCheckboxes = this.closest('td').querySelectorAll('.select-availability');
+
+            availabilityCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    });
+
+    // Mengatur agar checkbox hari nonaktif jika salah satu checkbox availability di hari tersebut dinonaktifkan
+    const availabilityCheckboxes = document.querySelectorAll('.select-availability');
+
+    availabilityCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const dayCheckbox = this.closest('td').querySelector('.select-day');
+            if (!this.checked) {
+                dayCheckbox.checked = false;
+            } else {
+                // Periksa apakah semua checkbox availability pada hari tersebut sudah aktif
+                const allChecked = Array.from(this.closest('td').querySelectorAll('.select-availability')).every(chk => chk.checked);
+                dayCheckbox.checked = allChecked;
+            }
+        });
+    });
+});
+
 </script>
 @endsection
