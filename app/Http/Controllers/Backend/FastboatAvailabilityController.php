@@ -154,6 +154,7 @@ class FastboatAvailabilityController extends Controller
 
     public function search(Request $request)
     {
+        // Koleksi data untuk dropdown atau kebutuhan lainnya
         $company = DataCompany::all();
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
@@ -161,7 +162,7 @@ class FastboatAvailabilityController extends Controller
         $departure = MasterPort::all();
         $arrival = MasterPort::all();
         $deptTime = SchedulesTrip::all();
-    
+
         // Validasi input
         $validated = $request->validate([
             'company' => 'nullable|string',
@@ -173,79 +174,85 @@ class FastboatAvailabilityController extends Controller
             'dept_time' => 'nullable|string',
             'daterange' => 'nullable|regex:/\d{2}-\d{2}-\d{4} to \d{2}-\d{2}-\d{4}/', // Format date range
         ]);
-    
-        // Cek jika semua input kosong
-        if (!$request->filled('company') &&
+
+        // Jika tidak ada input yang diisi, kembalikan ke halaman index dengan koleksi kosong
+        if (
+            !$request->filled('company') &&
             !$request->filled('fastboat') &&
             !$request->filled('schedule') &&
             !$request->filled('route') &&
             !$request->filled('departure') &&
             !$request->filled('arrival') &&
             !$request->filled('dept_time') &&
-            !$request->filled('daterange')) {
-            
-            // Kembalikan view tanpa data
-            return view('fast-boat.availability.index', compact('fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'))
-                ->with('availabilities', collect()); // Mengirimkan koleksi kosong
+            !$request->filled('daterange')
+        ) {
+
+            // Kembalikan ke halaman index dengan data kosong
+            return redirect()->route('availability.view')
+                ->with('availabilities', collect()) // Mengirimkan koleksi kosong
+                ->with(compact('fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
         }
-    
+
         $query = FastboatAvailability::query();
-    
+
         // Filter berdasarkan parameter yang ada
         if ($request->filled('company')) {
             $query->whereHas('trip.fastboat.company', function ($q) use ($request) {
                 $q->where('cpn_name', $request->input('company'));
             });
         }
-    
+
         if ($request->filled('fastboat')) {
             $query->whereHas('trip.fastboat', function ($q) use ($request) {
                 $q->where('fb_name', $request->input('fastboat'));
             });
         }
-    
+
         if ($request->filled('schedule')) {
             $query->whereHas('trip.schedule', function ($q) use ($request) {
                 $q->where('sch_name', $request->input('schedule'));
             });
         }
-    
+
         if ($request->filled('route')) {
             $query->whereHas('trip.route', function ($q) use ($request) {
                 $routeParts = explode(' to ', $request->input('route'));
                 $q->where('rt_dept_island', $routeParts[0])
-                  ->where('rt_arrival_island', $routeParts[1]);
+                    ->where('rt_arrival_island', $routeParts[1]);
             });
         }
-    
+
         if ($request->filled('departure')) {
             $query->whereHas('trip.departure', function ($q) use ($request) {
                 $q->where('prt_name_en', $request->input('departure'));
             });
         }
-    
+
         if ($request->filled('arrival')) {
             $query->whereHas('trip.arrival', function ($q) use ($request) {
                 $q->where('prt_name_en', $request->input('arrival'));
             });
         }
-    
+
         if ($request->filled('dept_time')) {
             $query->whereHas('trip', function ($q) use ($request) {
                 $q->where('fbt_dept_time', $request->input('dept_time'));
             });
         }
-    
+
         if ($request->filled('daterange')) {
             $dates = explode(' to ', $request->input('daterange'));
             $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[0]);
             $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[1]);
             $query->whereBetween('fba_date', [$startDate, $endDate]);
         }
-    
+
         $availabilities = $query->get();
-    
-        return view('fast-boat.availability.index', compact('availabilities', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
+
+        // Redirect ke index dengan hasil pencarian
+        return redirect()->route('availability.view')
+            ->with('availabilities', $availabilities)
+            ->with(compact('fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'))
+            ->withInput(); // Menyimpan nilai input yang telah diisi
     }
-       
 }
