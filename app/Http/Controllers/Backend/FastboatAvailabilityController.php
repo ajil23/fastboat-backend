@@ -167,12 +167,12 @@ class FastboatAvailabilityController extends Controller
         // Validasi input
         $validated = $request->validate([
             'company' => 'nullable|string',
-            'fba_fastboat' => 'nullable|string',
-            'fba_schedule' => 'nullable|string',
-            'fba_route' => 'nullable|string',
-            'fba_departure' => 'nullable|string',
-            'fba_arrival' => 'nullable|string',
-            'fba_dept_time' => 'nullable|string',
+            'fastboat' => 'nullable|string',
+            'schedule' => 'nullable|string',
+            'route' => 'nullable|string',
+            'departure' => 'nullable|string',
+            'arrival' => 'nullable|string',
+            'dept_time' => 'nullable|string',
             'daterange' => 'nullable|regex:/\d{2}-\d{2}-\d{4} to \d{2}-\d{2}-\d{4}/', // Format date range
         ]);
     
@@ -183,40 +183,42 @@ class FastboatAvailabilityController extends Controller
             });
         }
     
-        if ($request->filled('fba_fastboat')) {
+        if ($request->filled('fastboat')) {
             $query->whereHas('trip.fastboat', function ($q) use ($request) {
-                $q->where('fb_name', $request->input('fba_fastboat'));
+                $q->where('fb_name', $request->input('fastboat'));
             });
         }
     
-        if ($request->filled('fba_schedule')) {
+        if ($request->filled('schedule')) {
             $query->whereHas('trip.schedule', function ($q) use ($request) {
-                $q->where('sch_name', $request->input('fba_schedule'));
+                $q->where('sch_name', $request->input('schedule'));
             });
         }
     
-        if ($request->filled('fba_route')) {
+        if ($request->filled('route')) {
             $query->whereHas('trip.route', function ($q) use ($request) {
-                $routeParts = explode(' to ', $request->input('fba_route'));
+                $routeParts = explode(' to ', $request->input('route'));
                 $q->where('rt_dept_island', $routeParts[0])
                   ->where('rt_arrival_island', $routeParts[1]);
             });
         }
     
-        if ($request->filled('fba_departure')) {
+        if ($request->filled('departure')) {
             $query->whereHas('trip.departure', function ($q) use ($request) {
-                $q->where('prt_name_en', $request->input('fba_departure'));
+                $q->where('prt_name_en', $request->input('departure'));
             });
         }
     
-        if ($request->filled('fba_arrival')) {
+        if ($request->filled('arrival')) {
             $query->whereHas('trip.arrival', function ($q) use ($request) {
-                $q->where('prt_name_en', $request->input('fba_arrival'));
+                $q->where('prt_name_en', $request->input('arrival'));
             });
         }
     
-        if ($request->filled('fba_dept_time')) {
-            $query->where('fba_dept_time', $request->input('fba_dept_time'));
+        if ($request->filled('dept_time')) {
+            $query->whereHas('trip', function ($q) use ($request) {
+                $q->where('fbt_dept_time', $request->input('dept_time'));
+            });
         }
     
         if ($request->filled('daterange')) {

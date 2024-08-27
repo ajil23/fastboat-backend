@@ -162,7 +162,7 @@
                                 <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label">Date range</label>
-                                        <input type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range">
+                                        <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range">
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
@@ -190,7 +190,7 @@
                                 <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label">Dept time</label>
-                                        <select name="deptTime" id="search-dept_time">
+                                        <select name="dept_time" id="search-dept_time">
                                             <option value="">Select Dept time</option>
                                             @foreach ($deptTime as $item)
                                             <option value="{{date('H:i', strtotime($item->fbt_dept_time));}}">{{date('H:i', strtotime($item->fbt_dept_time));}}</option>
@@ -412,7 +412,6 @@
 
     flatpickr("#daterange", {
         mode: "range",
-        minDate: "today",
         dateFormat: "d-m-Y",
         disable: [
             function(date) {
