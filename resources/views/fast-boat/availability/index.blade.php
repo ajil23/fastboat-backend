@@ -79,6 +79,43 @@
         background-color: #d4edda;
         color: #28a745;
     }
+
+    .modal-header {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    line-height: 1.5;
+}
+
+.table-bordered {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    vertical-align: middle;
+}
+
+.table tbody tr td:first-child {
+    font-weight: bold;
+}
+
+.table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.table .text-center {
+    text-align: center;
+}
+
+
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -358,13 +395,13 @@
                                             <div class="availability-entry">
                                                 <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->id }}" />
                                                 @if ($item->fba_status == 'disable')
-                                                <span class="text-danger">{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" class="text-danger">{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
-                                                    ({{ $item->fba_stock }})</span>
+                                                    ({{ $item->fba_stock }})</a>
                                                 @else
-                                                <span>{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal">{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
-                                                    ({{ $item->fba_stock }})</span>
+                                                    ({{ $item->fba_stock }})</a>
                                                 @endif
 
                                             </div>
@@ -388,14 +425,99 @@
                             <p class="text-center">No Availability Found</p>
                             @endif
                         </table>
-
-
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
+
+    <!-- Scrollable modal for view detail-->
+    <div class="modal fade" id="availabilityModal" tabindex="-1" role="dialog" aria-labelledby="availabilityModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="availabilityModalLabel">Padangbai Harbor to Gili Trawangan Port with Karunia Perkasa<br>~ 15 Aug 2024</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered mb-4">
+                            <tr>
+                                <td>Fast Boat :</td>
+                                <td>Karunia Perkasa</td>
+                                <td>Route :</td>
+                                <td>Padangbai Harbor(Bali) to <br> Gili Trawangan Port(Gili Trawangan)</td>
+                            </tr>
+                            <tr>
+                                <td>Time :</td>
+                                <td>09:30:00-11:00:00</td>
+                                <td>Min pax :</td>
+                                <td>1</td>
+                            </tr>
+                            <tr>
+                                <td>Trip Info :</td>
+                                <td>-</td>
+                                <td>Availability info :</td>
+                                <td>-</td>
+                            </tr>
+                        </table>
+                        <table class="table table-bordered mb-4">
+                            <tr>
+                                <td>Available :</td>
+                                <td>189</td>
+                                <td>Shuttle Status :</td>
+                                <td>Disabled</td>
+                            </tr>
+                            <tr>
+                                <td>Trip Status :</td>
+                                <td>Enabled</td>
+                                <td>Availability Status :</td>
+                                <td>Disabled</td>
+                            </tr>
+                            <tr>
+                                <td>Discount :</td>
+                                <td colspan="3">Discount IDR 0 for round trip with same fast boat</td>
+                            </tr>
+                        </table>
+                        <table class="table table-bordered text-center">
+                            <thead class="bg-warning">
+                                <tr>
+                                    <th></th>
+                                    <th>Publish</th>
+                                    <th>Nett</th>
+                                    <th>Reseller 1</th>
+                                    <th>Reseller 2</th>
+                                    <th>Reseller 3</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Adult</td>
+                                    <td>IDR 300.000</td>
+                                    <td>IDR 200.000</td>
+                                    <td>IDR 225.000</td>
+                                    <td>IDR 235.000</td>
+                                    <td>IDR 245.000</td>
+                                </tr>
+                                <tr>
+                                    <td>Child</td>
+                                    <td>IDR 300.000</td>
+                                    <td>IDR 200.000</td>
+                                    <td>IDR 225.000</td>
+                                    <td>IDR 235.000</td>
+                                    <td>IDR 245.000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- End Page-content -->
     @include('admin.components.footer')
 </div>
@@ -509,8 +631,6 @@
     });
 });
 
-
-    
     document.addEventListener('DOMContentLoaded', function() {
     // Mendapatkan semua checkbox hari
     const dayCheckboxes = document.querySelectorAll('.select-day');
@@ -543,5 +663,12 @@
     });
 });
 
+
+$(document).ready(function(){
+        $('body').on('click', '#availabilityButton', function(){
+
+        }
+    )}
+);
 </script>
 @endsection
