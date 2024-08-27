@@ -424,7 +424,6 @@
                                 </tbody>
                                 @endfor
                                 @else
-                                <p>No data found.</p>
                                 @endif
                         </table>
                     </div>
