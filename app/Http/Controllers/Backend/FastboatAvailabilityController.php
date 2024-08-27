@@ -154,8 +154,6 @@ class FastboatAvailabilityController extends Controller
 
     public function search(Request $request)
     {
-        $query = FastboatAvailability::query();
-    
         $company = DataCompany::all();
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
@@ -163,7 +161,7 @@ class FastboatAvailabilityController extends Controller
         $departure = MasterPort::all();
         $arrival = MasterPort::all();
         $deptTime = SchedulesTrip::all();
-
+    
         // Validasi input
         $validated = $request->validate([
             'company' => 'nullable|string',
@@ -175,6 +173,23 @@ class FastboatAvailabilityController extends Controller
             'dept_time' => 'nullable|string',
             'daterange' => 'nullable|regex:/\d{2}-\d{2}-\d{4} to \d{2}-\d{2}-\d{4}/', // Format date range
         ]);
+    
+        // Cek jika semua input kosong
+        if (!$request->filled('company') &&
+            !$request->filled('fastboat') &&
+            !$request->filled('schedule') &&
+            !$request->filled('route') &&
+            !$request->filled('departure') &&
+            !$request->filled('arrival') &&
+            !$request->filled('dept_time') &&
+            !$request->filled('daterange')) {
+            
+            // Kembalikan view tanpa data
+            return view('fast-boat.availability.index', compact('fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'))
+                ->with('availabilities', collect()); // Mengirimkan koleksi kosong
+        }
+    
+        $query = FastboatAvailability::query();
     
         // Filter berdasarkan parameter yang ada
         if ($request->filled('company')) {
@@ -231,5 +246,6 @@ class FastboatAvailabilityController extends Controller
         $availabilities = $query->get();
     
         return view('fast-boat.availability.index', compact('availabilities', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
-    }    
+    }
+       
 }
