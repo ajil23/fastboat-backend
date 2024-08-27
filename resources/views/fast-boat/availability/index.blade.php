@@ -81,41 +81,40 @@
     }
 
     .modal-header {
-    border-bottom: 1px solid #dee2e6;
-}
+        border-bottom: 1px solid #dee2e6;
+    }
 
-.modal-title {
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    width: 100%;
-    line-height: 1.5;
-}
+    .modal-title {
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        width: 100%;
+        line-height: 1.5;
+    }
 
-.table-bordered {
-    border: 1px solid #dee2e6;
-}
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
 
-.table-bordered td, .table-bordered th {
-    border: 1px solid #dee2e6;
-    padding: 8px;
-    vertical-align: middle;
-}
+    .table-bordered td,
+    .table-bordered th {
+        border: 1px solid #dee2e6;
+        padding: 8px;
+        vertical-align: middle;
+    }
 
-.table tbody tr td:first-child {
-    font-weight: bold;
-}
+    .table tbody tr td:first-child {
+        font-weight: bold;
+    }
 
-.table-responsive {
-    max-height: 400px;
-    overflow-y: auto;
-}
+    .table-responsive {
+        max-height: 400px;
+        overflow-y: auto;
+    }
 
-.table .text-center {
-    text-align: center;
-}
-
-
+    .table .text-center {
+        text-align: center;
+    }
 </style>
 <div class="main-content">
     <div class="page-content">
@@ -132,7 +131,7 @@
                     </div>
                 </div>
             </div>
-            <form method="post" action="{{route('availability.search')}}">
+            <form method="get" action="{{route('availability.search')}}">
                 @csrf
                 <div class="card">
                     <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
@@ -158,7 +157,7 @@
                                         <select name="company" id="search-company">
                                             <option value="">Select Company</option>
                                             @foreach ($company as $item)
-                                            <option value="{{ $item->cpn_name }}">{{ $item->cpn_name }}</option>
+                                            <option value="{{ $item->cpn_name }}" {{ old('company') == $item->cpn_name ? 'selected' : '' }}>{{ $item->cpn_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -169,7 +168,7 @@
                                         <select name="fastboat" id="search-fastboat">
                                             <option value="">Select Fast Boat</option>
                                             @foreach ($fastboat as $item)
-                                            <option value="{{ $item->fb_name }}">{{ $item->fb_name }}</option>
+                                            <option value="{{ $item->fb_name }}" {{ old('fastboat') == $item->fb_name ? 'selected' : '' }}>{{ $item->fb_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -180,7 +179,7 @@
                                         <select name="schedule" id="search-schedule">
                                             <option value="">Select Schedule</option>
                                             @foreach ($schedule as $item)
-                                            <option value="{{ $item->sch_name }}">{{ $item->sch_name }}</option>
+                                            <option value="{{ $item->sch_name }}" {{ old('schedule') == $item->sch_name ? 'selected' : '' }}>{{ $item->sch_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -191,7 +190,7 @@
                                         <select name="route" id="search-route">
                                             <option value="">Select Route</option>
                                             @foreach ($route as $item)
-                                            <option value="{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}">{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}</option>
+                                            <option value="{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}" {{ old('route') == $item->rt_dept_island . ' to ' . $item->rt_arrival_island ? 'selected' : '' }}>{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -199,7 +198,7 @@
                                 <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label">Date range</label>
-                                        <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range">
+                                        <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range" value="{{ old('daterange') }}">
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
@@ -208,7 +207,7 @@
                                         <select name="departure" id="search-departure">
                                             <option value="">Select Departure Port</option>
                                             @foreach ($departure as $item)
-                                            <option value="{{ $item->prt_name_en}}">{{ $item->prt_name_en}}</option>
+                                            <option value="{{ $item->prt_name_en }}" {{ old('departure') == $item->prt_name_en ? 'selected' : '' }}>{{ $item->prt_name_en }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -219,7 +218,7 @@
                                         <select name="arrival" id="search-arrival">
                                             <option value="">Select Arrival Port</option>
                                             @foreach ($arrival as $item)
-                                            <option value="{{ $item->prt_name_en}}">{{ $item->prt_name_en}}</option>
+                                            <option value="{{ $item->prt_name_en }}" {{ old('arrival') == $item->prt_name_en ? 'selected' : '' }}>{{ $item->prt_name_en }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -230,7 +229,7 @@
                                         <select name="dept_time" id="search-dept_time">
                                             <option value="">Select Dept time</option>
                                             @foreach ($deptTime as $item)
-                                            <option value="{{date('H:i', strtotime($item->fbt_dept_time));}}">{{date('H:i', strtotime($item->fbt_dept_time));}}</option>
+                                            <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}" {{ old('dept_time') == date('H:i', strtotime($item->fbt_dept_time)) ? 'selected' : '' }}>{{ date('H:i', strtotime($item->fbt_dept_time)) }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -328,11 +327,12 @@
                                 <label for="select_all_trips">All Trips</label>
                             </div>
                         </div>
+
                         @php
                         // Mendapatkan tanggal awal dan akhir dari data availability
-                        $availabilities = $availabilities ?? collect();
-                        $firstDate = \Carbon\Carbon::parse($availabilities->min('fba_date'));
-                        $lastDate = \Carbon\Carbon::parse($availabilities->max('fba_date'));
+                        $availabilities = session('availabilities', collect());
+                        $firstDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->min('fba_date')) : \Carbon\Carbon::now();
+                        $lastDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->max('fba_date')) : \Carbon\Carbon::now();
 
                         // Mendapatkan hari pertama dari tanggal awal (0 untuk Minggu, 6 untuk Sabtu)
                         $startDayOfWeek = $firstDate->dayOfWeek;
@@ -345,11 +345,9 @@
                         $availabilityByDate = $availabilities->groupBy(function ($item) {
                         return \Carbon\Carbon::parse($item->fba_date)->format('Y-m-d');
                         });
-
                         @endphp
 
                         <table class="table table-bordered calendar-table">
-                            @if ($availabilities->isNotEmpty())
                             <thead>
                                 <tr>
                                     <th class="text-center sunday">SUN</th>
@@ -361,9 +359,11 @@
                                     <th class="text-center">SAT</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @for ($week = 0; $week < $totalWeeks; $week++)
-                                    <tr>
+
+                            @if($availabilities->isNotEmpty())
+                            @for ($week = 0; $week < $totalWeeks; $week++)
+                                <tbody>
+                                <tr>
                                     @for ($day = 0; $day < 7; $day++)
                                         @if ($week===0 && $day < $startDayOfWeek)
                                         <!-- Kosongkan sel sebelum tanggal pertama -->
@@ -374,14 +374,13 @@
                                         @else
                                         @php
                                         $dateString = $currentDate->format('Y-m-d');
-                                        $isEndOfMonth = $currentDate->isSameDay($currentDate->copy()->endOfMonth());
                                         @endphp
 
                                         @if ($availabilityByDate->has($dateString))
-                                        <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ date('d', strtotime($dateString)) == date('t', strtotime($dateString)) ? 'border: 3px solid red' : '' }}">
-                                        <!-- Tampilkan Tanggal dengan Checkbox -->
-                                        <div class="calendar-date">
-                                            <input type="checkbox" class="form-check-input select-day" name="select_date[]" value="{{ $dateString }}" />
+                                        <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ $currentDate->isLastOfMonth() ? 'border: 3px solid red' : '' }}">
+                                            <!-- Tampilkan Tanggal dengan Checkbox -->
+                                            <div class="calendar-date">
+                                                <input type="checkbox" class="form-check-input select-day" name="select_date[]" value="{{ $dateString }}" />
                                                 <span>{{ $currentDate->format('d M Y') }}</span>
                                             </div>
 
@@ -395,22 +394,25 @@
                                             <div class="availability-entry">
                                                 <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->id }}" />
                                                 @if ($item->fba_status == 'disable')
-                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" class="text-danger">{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" class="text-danger">
+                                                    {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
-                                                    ({{ $item->fba_stock }})</a>
+                                                    ({{ $item->fba_stock }})
+                                                </a>
                                                 @else
-                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal">{{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal">
+                                                    {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
-                                                    ({{ $item->fba_stock }})</a>
+                                                    ({{ $item->fba_stock }})
+                                                </a>
                                                 @endif
-
                                             </div>
                                             @endforeach
                                             @endforeach
                                             @endforeach
                                         </td>
                                         @else
-                                        <td style="{{ date('d', strtotime($dateString)) == date('t', strtotime($dateString)) ? 'border: 3px solid red' : ''}}"></td>
+                                        <td style="{{ $currentDate->isLastOfMonth() ? 'border: 3px solid red' : '' }}"></td>
                                         @endif
 
                                         @php
@@ -418,17 +420,18 @@
                                         @endphp
                                         @endif
                                         @endfor
-                                        </tr>
-                                        @endfor
-                            </tbody>
-                            @else
-                            <p class="text-center">No Availability Found</p>
-                            @endif
+                                </tr>
+                                </tbody>
+                                @endfor
+                                @else
+                                <p>No data found.</p>
+                                @endif
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Scrollable modal for view detail-->
@@ -517,7 +520,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- End Page-content -->
     @include('admin.components.footer')
 </div>
@@ -564,111 +567,110 @@
         });
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
-    // Checkbox "All Trips"
-    const selectAllTrips = document.getElementById("select_all_trips");
+    document.addEventListener("DOMContentLoaded", function() {
+        // Checkbox "All Trips"
+        const selectAllTrips = document.getElementById("select_all_trips");
 
-    // Checkbox untuk hari-hari
-    const dayCheckboxes = document.querySelectorAll('.calendar-date input[type="checkbox"]');
+        // Checkbox untuk hari-hari
+        const dayCheckboxes = document.querySelectorAll('.calendar-date input[type="checkbox"]');
 
-    // Checkbox untuk setiap item dalam hari
-    const itemCheckboxes = document.querySelectorAll('.availability-entry input[type="checkbox"]');
+        // Checkbox untuk setiap item dalam hari
+        const itemCheckboxes = document.querySelectorAll('.availability-entry input[type="checkbox"]');
 
-    // Fungsi untuk mengaktifkan atau menonaktifkan semua checkbox hari
-    function toggleDayCheckboxes(checked) {
+        // Fungsi untuk mengaktifkan atau menonaktifkan semua checkbox hari
+        function toggleDayCheckboxes(checked) {
+            dayCheckboxes.forEach(dayCheckbox => {
+                dayCheckbox.checked = checked;
+                // Trigger event change untuk setiap checkbox hari
+                dayCheckbox.dispatchEvent(new Event('change'));
+            });
+
+            // Juga aktifkan/nonaktifkan semua checkbox item dalam hari
+            itemCheckboxes.forEach(itemCheckbox => {
+                itemCheckbox.checked = checked;
+            });
+        }
+
+        // Event listener untuk checkbox "All Trips"
+        selectAllTrips.addEventListener("change", function() {
+            toggleDayCheckboxes(this.checked);
+        });
+
+        // Event listener untuk setiap checkbox hari
         dayCheckboxes.forEach(dayCheckbox => {
-            dayCheckbox.checked = checked;
-            // Trigger event change untuk setiap checkbox hari
-            dayCheckbox.dispatchEvent(new Event('change'));
+            dayCheckbox.addEventListener("change", function() {
+                // Jika salah satu checkbox hari dinonaktifkan, matikan "All Trips"
+                if (!this.checked) {
+                    selectAllTrips.checked = false;
+                } else {
+                    // Periksa apakah semua checkbox hari diaktifkan
+                    const allDaysChecked = Array.from(dayCheckboxes).every(cb => cb.checked);
+                    selectAllTrips.checked = allDaysChecked;
+                }
+            });
         });
 
-        // Juga aktifkan/nonaktifkan semua checkbox item dalam hari
+        // Event listener untuk setiap checkbox item dalam hari
         itemCheckboxes.forEach(itemCheckbox => {
-            itemCheckbox.checked = checked;
-        });
-    }
+            itemCheckbox.addEventListener("change", function() {
+                // Cari checkbox hari yang sesuai
+                const dayCheckbox = this.closest('td').querySelector('.calendar-date input[type="checkbox"]');
 
-    // Event listener untuk checkbox "All Trips"
-    selectAllTrips.addEventListener("change", function () {
-        toggleDayCheckboxes(this.checked);
-    });
+                // Jika salah satu checkbox item dinonaktifkan, matikan checkbox hari dan "All Trips"
+                if (!this.checked) {
+                    dayCheckbox.checked = false;
+                    selectAllTrips.checked = false;
+                } else {
+                    // Jika semua checkbox item dalam hari diaktifkan, aktifkan checkbox hari
+                    const allItemsChecked = Array.from(this.closest('td').querySelectorAll('.availability-entry input[type="checkbox"]')).every(cb => cb.checked);
+                    dayCheckbox.checked = allItemsChecked;
 
-    // Event listener untuk setiap checkbox hari
-    dayCheckboxes.forEach(dayCheckbox => {
-        dayCheckbox.addEventListener("change", function () {
-            // Jika salah satu checkbox hari dinonaktifkan, matikan "All Trips"
-            if (!this.checked) {
-                selectAllTrips.checked = false;
-            } else {
-                // Periksa apakah semua checkbox hari diaktifkan
-                const allDaysChecked = Array.from(dayCheckboxes).every(cb => cb.checked);
-                selectAllTrips.checked = allDaysChecked;
-            }
-        });
-    });
-
-    // Event listener untuk setiap checkbox item dalam hari
-    itemCheckboxes.forEach(itemCheckbox => {
-        itemCheckbox.addEventListener("change", function () {
-            // Cari checkbox hari yang sesuai
-            const dayCheckbox = this.closest('td').querySelector('.calendar-date input[type="checkbox"]');
-
-            // Jika salah satu checkbox item dinonaktifkan, matikan checkbox hari dan "All Trips"
-            if (!this.checked) {
-                dayCheckbox.checked = false;
-                selectAllTrips.checked = false;
-            } else {
-                // Jika semua checkbox item dalam hari diaktifkan, aktifkan checkbox hari
-                const allItemsChecked = Array.from(this.closest('td').querySelectorAll('.availability-entry input[type="checkbox"]')).every(cb => cb.checked);
-                dayCheckbox.checked = allItemsChecked;
-
-                // Periksa apakah semua checkbox hari dan item diaktifkan
-                const allDaysAndItemsChecked = Array.from(dayCheckboxes).every(cb => cb.checked) &&
-                    Array.from(itemCheckboxes).every(cb => cb.checked);
-                selectAllTrips.checked = allDaysAndItemsChecked;
-            }
-        });
-    });
-});
-
-    document.addEventListener('DOMContentLoaded', function() {
-    // Mendapatkan semua checkbox hari
-    const dayCheckboxes = document.querySelectorAll('.select-day');
-
-    dayCheckboxes.forEach(dayCheckbox => {
-        dayCheckbox.addEventListener('change', function() {
-            // Mendapatkan semua checkbox availability pada hari tersebut
-            const availabilityCheckboxes = this.closest('td').querySelectorAll('.select-availability');
-
-            availabilityCheckboxes.forEach(checkbox => {
-                checkbox.checked = this.checked;
+                    // Periksa apakah semua checkbox hari dan item diaktifkan
+                    const allDaysAndItemsChecked = Array.from(dayCheckboxes).every(cb => cb.checked) &&
+                        Array.from(itemCheckboxes).every(cb => cb.checked);
+                    selectAllTrips.checked = allDaysAndItemsChecked;
+                }
             });
         });
     });
 
-    // Mengatur agar checkbox hari nonaktif jika salah satu checkbox availability di hari tersebut dinonaktifkan
-    const availabilityCheckboxes = document.querySelectorAll('.select-availability');
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mendapatkan semua checkbox hari
+        const dayCheckboxes = document.querySelectorAll('.select-day');
 
-    availabilityCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            const dayCheckbox = this.closest('td').querySelector('.select-day');
-            if (!this.checked) {
-                dayCheckbox.checked = false;
-            } else {
-                // Periksa apakah semua checkbox availability pada hari tersebut sudah aktif
-                const allChecked = Array.from(this.closest('td').querySelectorAll('.select-availability')).every(chk => chk.checked);
-                dayCheckbox.checked = allChecked;
-            }
+        dayCheckboxes.forEach(dayCheckbox => {
+            dayCheckbox.addEventListener('change', function() {
+                // Mendapatkan semua checkbox availability pada hari tersebut
+                const availabilityCheckboxes = this.closest('td').querySelectorAll('.select-availability');
+
+                availabilityCheckboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+        });
+
+        // Mengatur agar checkbox hari nonaktif jika salah satu checkbox availability di hari tersebut dinonaktifkan
+        const availabilityCheckboxes = document.querySelectorAll('.select-availability');
+
+        availabilityCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const dayCheckbox = this.closest('td').querySelector('.select-day');
+                if (!this.checked) {
+                    dayCheckbox.checked = false;
+                } else {
+                    // Periksa apakah semua checkbox availability pada hari tersebut sudah aktif
+                    const allChecked = Array.from(this.closest('td').querySelectorAll('.select-availability')).every(chk => chk.checked);
+                    dayCheckbox.checked = allChecked;
+                }
+            });
         });
     });
-});
 
 
-$(document).ready(function(){
-        $('body').on('click', '#availabilityButton', function(){
+    $(document).ready(function() {
+        $('body').on('click', '#availabilityButton', function() {
 
-        }
-    )}
-);
+        })
+    });
 </script>
 @endsection
