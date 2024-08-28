@@ -120,6 +120,7 @@ Route::middleware([
         Route::get('/availability/extend', [FastboatAvailabilityController::class, 'extend'])->name('availability.extend');
         Route::post('/availability/storeExtend', [FastboatAvailabilityController::class, 'storeExtend'])->name('availability.storeExtend');
         Route::get('/availability/search', [FastboatAvailabilityController::class, 'search'])->name('availability.search');
+        Route::get('/availability/{id}', [FastboatAvailabilityController::class, 'show'])->name('availability.show');
     });
 
     Route::prefix('master')->group(function () {

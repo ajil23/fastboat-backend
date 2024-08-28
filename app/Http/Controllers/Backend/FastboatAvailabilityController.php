@@ -255,4 +255,11 @@ class FastboatAvailabilityController extends Controller
             ->with(compact('fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'))
             ->withInput(); // Menyimpan nilai input yang telah diisi
     }
+
+    public function show($id)
+    {
+        $availability = FastboatAvailability::with(['trip.departure.island', 'trip.arrival.island', 'trip.fastboat'])->findOrFail($id);
+
+        return response()->json($availability);
+    }
 }

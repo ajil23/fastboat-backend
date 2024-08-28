@@ -103,7 +103,7 @@
         vertical-align: middle;
     }
 
-    .table tbody tr td:first-child {
+    .bold-text {
         font-weight: bold;
     }
 
@@ -275,8 +275,8 @@
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input type" id="shuttle-status">
-                                    <label for="shuttle-status">Shuttle Status</label>
+                                    <input type="checkbox" class="form-check-input type" id="shuttle-status-check">
+                                    <label for="shuttle-status-check">Shuttle Status</label>
                                 </div>
                             </div>
 
@@ -289,8 +289,8 @@
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input type" id="availability-info">
-                                    <label for="availability-info">Availability Info</label>
+                                    <input type="checkbox" class="form-check-input type" id="availability-info-check">
+                                    <label for="availability-info-check">Availability Info</label>
                                 </div>
                             </div>
 
@@ -394,13 +394,13 @@
                                             <div class="availability-entry">
                                                 <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->id }}" />
                                                 @if ($item->fba_status == 'disable')
-                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" class="text-danger">
+                                                <a href="javascript:void(0)" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}" class="text-danger">
                                                     {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                     ({{ $item->fba_stock }})
                                                 </a>
                                                 @else
-                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal">
+                                                <a href="javascript:void(0)" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}">
                                                     {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                     ({{ $item->fba_stock }})
@@ -435,7 +435,7 @@
 
     <!-- Scrollable modal for view detail-->
     <div class="modal fade" id="availabilityModal" tabindex="-1" role="dialog" aria-labelledby="availabilityModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-m modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="availabilityModalLabel">Padangbai Harbor to Gili Trawangan Port with Karunia Perkasa<br>~ 15 Aug 2024</h5>
@@ -445,69 +445,60 @@
                     <div class="table-responsive">
                         <table class="table table-bordered mb-4">
                             <tr>
-                                <td>Fast Boat :</td>
-                                <td>Karunia Perkasa</td>
-                                <td>Route :</td>
-                                <td>Padangbai Harbor(Bali) to <br> Gili Trawangan Port(Gili Trawangan)</td>
+                                <td class="bold-text">Fast Boat :</td>
+                                <td id="fastboat-name"></td>
+                                <td class="bold-text">Route :</td>
+                                <td id="trip"></td>
                             </tr>
                             <tr>
-                                <td>Time :</td>
-                                <td>09:30:00-11:00:00</td>
-                                <td>Min pax :</td>
-                                <td>1</td>
+                                <td class="bold-text">Time :</td>
+                                <td id="time"></td>
+                                <td class="bold-text">Min pax :</td>
+                                <td id="min-pax"></td>
                             </tr>
                             <tr>
-                                <td>Trip Info :</td>
-                                <td>-</td>
-                                <td>Availability info :</td>
-                                <td>-</td>
+                                <td class="bold-text">Trip Info :</td>
+                                <td id="trip-info"></td>
+                                <td class="bold-text">Availability info :</td>
+                                <td id="availability-info"></td>
                             </tr>
                         </table>
                         <table class="table table-bordered mb-4">
                             <tr>
-                                <td>Available :</td>
-                                <td>189</td>
-                                <td>Shuttle Status :</td>
-                                <td>Disabled</td>
+                                <td class="bold-text">Available :</td>
+                                <td id="available"></td>
+                                <td class="bold-text">Shuttle Status :</td>
+                                <td id="shuttle-status"></td>
                             </tr>
                             <tr>
-                                <td>Trip Status :</td>
-                                <td>Enabled</td>
-                                <td>Availability Status :</td>
-                                <td>Disabled</td>
+                                <td class="bold-text">Trip Status :</td>
+                                <td id="trip-status"></td>
+                                <td class="bold-text">Availability Status :</td>
+                                <td id="availability-status"></td>
                             </tr>
                             <tr>
-                                <td>Discount :</td>
-                                <td colspan="3">Discount IDR 0 for round trip with same fast boat</td>
+                                <td class="bold-text">Discount :</td>
+                                <td colspan="3">Discount IDR <span id="discount"></span> for round trip with same fast boat</td>
                             </tr>
                         </table>
                         <table class="table table-bordered text-center">
                             <thead class="bg-warning">
                                 <tr>
                                     <th></th>
-                                    <th>Publish</th>
-                                    <th>Nett</th>
-                                    <th>Reseller 1</th>
-                                    <th>Reseller 2</th>
-                                    <th>Reseller 3</th>
+                                    <th class="bold-text">Publish</th>
+                                    <th class="bold-text">Nett</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>Adult</td>
-                                    <td>IDR 300.000</td>
-                                    <td>IDR 200.000</td>
-                                    <td>IDR 225.000</td>
-                                    <td>IDR 235.000</td>
-                                    <td>IDR 245.000</td>
+                                    <td class="bold-text">Adult</td>
+                                    <td>IDR <span id="adult-publish"></span></td>
+                                    <td>IDR <span id="adult-nett"></span></td>
                                 </tr>
                                 <tr>
-                                    <td>Child</td>
-                                    <td>IDR 300.000</td>
-                                    <td>IDR 200.000</td>
-                                    <td>IDR 225.000</td>
-                                    <td>IDR 235.000</td>
-                                    <td>IDR 245.000</td>
+                                    <td class="bold-text">Child</td>
+                                    <td>IDR <span id="child-publish"></span> </td>
+                                    <td>IDR <span  id="child-nett"></span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -669,6 +660,35 @@
     $(document).ready(function() {
         $('body').on('click', '#availabilityButton', function() {
 
+        })
+    });
+
+    $(document).ready(function(){
+        $('body').on('click', '#availabilityButton', function(){
+            var detailURL = $(this).data('url');
+            $.get(detailURL, function(data){
+                $('#availabilityModal').modal('show');
+                $('#fastboat-name').text(data.trip.fastboat.fb_name);
+                $('#trip').text(data.trip.fbt_name);
+                $('#time').text(data.trip.fbt_dept_time.substring(0, 5) + ' - ' + data.trip.fbt_arrival_time.substring(0, 5));
+                $('#min-pax').text(data.trip.fbt_min_pax);
+                $('#trip-info').text(data.trip.fbt_info_en);
+                $('#availability-info').text(data.fba_info);
+                $('#available').text(data.fba_stock);
+                $('#shuttle-status').text(data.fba_shuttle_status);
+                $('#trip-status').text(data.trip.fbt_status);
+                if (data.trip.fbt_status === 1){
+                        $('#trip-status').text('enable');
+                    }else{
+                        $('#trip-status').text('disable');
+                    }
+                $('#availability-status').text(data.fba_status);
+                $('#discount').text(data.fba_discount);
+                $('#adult-publish').text(data.fba_adult_publish)
+                $('#adult-nett').text(data.fba_adult_nett)
+                $('#child-publish').text(data.fba_child_publish)
+                $('#child-nett').text(data.fba_child_nett)
+            })
         })
     });
 </script>
