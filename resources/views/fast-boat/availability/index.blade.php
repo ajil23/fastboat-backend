@@ -435,10 +435,14 @@
 
     <!-- Scrollable modal for view detail-->
     <div class="modal fade" id="availabilityModal" tabindex="-1" role="dialog" aria-labelledby="availabilityModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-m modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="availabilityModalLabel">Padangbai Harbor to Gili Trawangan Port with Karunia Perkasa<br>~ 15 Aug 2024</h5>
+                    <h5 class="modal-title" id="availabilityModalLabel">
+                        <span id="trip-title"></span><br>
+                        <small class="bold-text" id="trip-date"></small>
+                    </h5>
+                    
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -668,6 +672,11 @@
             var detailURL = $(this).data('url');
             $.get(detailURL, function(data){
                 $('#availabilityModal').modal('show');
+                $('#trip-title').text(data.trip.fbt_name);
+                var date = new Date(data.fba_date);
+                var options = { day: '2-digit', month: 'short', year: 'numeric' };
+                var formattedDate = date.toLocaleDateString('en-GB', options);
+                $('#trip-date').text(formattedDate);
                 $('#fastboat-name').text(data.trip.fastboat.fb_name);
                 $('#trip').text(data.trip.fbt_name);
                 $('#time').text(data.trip.fbt_dept_time.substring(0, 5) + ' - ' + data.trip.fbt_arrival_time.substring(0, 5));
@@ -683,11 +692,15 @@
                         $('#trip-status').text('disable');
                     }
                 $('#availability-status').text(data.fba_status);
-                $('#discount').text(data.fba_discount);
-                $('#adult-publish').text(data.fba_adult_publish)
-                $('#adult-nett').text(data.fba_adult_nett)
-                $('#child-publish').text(data.fba_child_publish)
-                $('#child-nett').text(data.fba_child_nett)
+                // Format numerical values
+                function formatNumber(number) {
+                    return Number(number).toLocaleString('id-ID'); // 'id-ID' for Indonesian locale, use 'en-US' for English locale
+                }
+                $('#discount').text(formatNumber(data.fba_discount));
+                $('#adult-publish').text(formatNumber(data.fba_adult_publish));
+                $('#adult-nett').text(formatNumber(data.fba_adult_nett));
+                $('#child-publish').text(formatNumber(data.fba_child_publish));
+                $('#child-nett').text(formatNumber(data.fba_child_nett));
             })
         })
     });
