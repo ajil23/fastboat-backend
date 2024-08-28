@@ -62,6 +62,8 @@ class FastboatApiController extends Controller
                     'departure_time' => $scheduleTrip->fbt_dept_time,
                     'arrival_port' => $scheduleTrip->arrivalPort ? $scheduleTrip->arrivalPort->prt_name_en : null,
                     'arrival_time' => $scheduleTrip->fbt_arrival_time,
+                    'departure_port_slug' => $scheduleTrip->deptPort ? $scheduleTrip->deptPort->prt_slug_en : null,
+                    'arrival_port_slug' => $scheduleTrip->arrivalPort ? $scheduleTrip->arrivalPort->prt_slug_en : null,
                 ];
             })
         ];

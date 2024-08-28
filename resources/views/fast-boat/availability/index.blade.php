@@ -394,13 +394,13 @@
                                             <div class="availability-entry">
                                                 <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->id }}" />
                                                 @if ($item->fba_status == 'disable')
-                                                <a href="javascript:void(0)" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}" class="text-danger">
+                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}" class="text-danger">
                                                     {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                     ({{ $item->fba_stock }})
                                                 </a>
                                                 @else
-                                                <a href="javascript:void(0)" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}">
+                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}">
                                                     {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                     {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                     ({{ $item->fba_stock }})
