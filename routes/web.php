@@ -142,4 +142,6 @@ Route::middleware([
         Route::delete('/port/delete/{id}', [MasterPortController::class, 'delete'])->name('port.delete');
         Route::get('/port/{id}', [MasterPortController::class, 'show'])->name('port.show');
     });
+
+    Route::post('api/fetch-fastboat', [FastboatAvailabilityController::class, 'fetchFastboat']);
 });
