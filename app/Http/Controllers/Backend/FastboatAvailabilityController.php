@@ -242,12 +242,16 @@ class FastboatAvailabilityController extends Controller
 
         if ($request->filled('daterange')) {
             $dates = explode(' to ', $request->input('daterange'));
-            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[0]);
-            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[1]);
+            // $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[0]);
+            $startDate = date('Y-m-d', strtotime($dates[0]));
+            $endDate = date('Y-m-d', strtotime($dates[1]));
+            // $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[1]);
             $query->whereBetween('fba_date', [$startDate, $endDate]);
         }
 
+        // dd($startDate);
         $availabilities = $query->get();
+        // dd($availabilities);
 
         // Redirect ke index dengan hasil pencarian
         return redirect()->route('availability.view')
