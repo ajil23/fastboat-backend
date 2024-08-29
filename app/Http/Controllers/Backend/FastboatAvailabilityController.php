@@ -19,14 +19,7 @@ class FastboatAvailabilityController extends Controller
     // this function is for view all data from fastboat table
     public function index()
     {
-        // Fetch all availability data sorted by date
-        // $availability = FastboatAvailability::with(['company', 'schedule', 'route', 'departure', 'island']);
-
-        // Get the earliest and latest dates
-        // $startDate = $availability->first()->fba_date ?? now();
-        // $endDate = $availability->last()->fba_date ?? now();
-
-        $company = DataCompany::all();
+        $company = DataCompany::get(["cpn_name", "cpn_id"]);
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
         $route = DataRoute::all();
@@ -35,6 +28,11 @@ class FastboatAvailabilityController extends Controller
         $deptTime = SchedulesTrip::all();
         $trip = SchedulesTrip::with(['departure.arrival.fastboat']);
         return view('fast-boat.availability.index', compact('trip', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
+    }
+
+    public function fetchFastboat(Request $request) {
+        $data = DataFastboat::where("fb_company", $request->cpn_id)->get(["fb_name", "fb_id"]);
+        return response()->json(['fastboat' => $data]);
     }
 
     public function add()
@@ -198,13 +196,13 @@ class FastboatAvailabilityController extends Controller
         // Filter berdasarkan parameter yang ada
         if ($request->filled('company')) {
             $query->whereHas('trip.fastboat.company', function ($q) use ($request) {
-                $q->where('cpn_name', $request->input('company'));
+                $q->where('cpn_id', $request->input('company'));
             });
         }
 
         if ($request->filled('fastboat')) {
             $query->whereHas('trip.fastboat', function ($q) use ($request) {
-                $q->where('fb_name', $request->input('fastboat'));
+                $q->where('fb_id', $request->input('fastboat'));
             });
         }
 
