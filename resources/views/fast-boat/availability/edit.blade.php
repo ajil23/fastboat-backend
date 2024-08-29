@@ -22,54 +22,52 @@
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div id="field-price" class="form-field">
-                                            <div class="row">
-                                                <div  class="col-lg-3 col-md-6 form-field">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fba_adult_nett">Adult Nett*</label>
-                                                        <input type="text" id="fba_adult_nett" name="fba_adult_nett" placeholder="Enter Adult Nett" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div  class="col-lg-3 col-md-6 form-field">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fba_child_nett">Child Nett*</label>
-                                                        <input type="text" id="fba_child_nett" name="fba_child_nett" placeholder="Enter Child Nett" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div  class="col-lg-3 col-md-6 form-field">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fba_adult_publish">Adult Publish*</label>
-                                                        <input type="text" id="fba_adult_publish" name="fba_adult_publish" placeholder="Enter Adult Publish" class="form-control">
-                                                    </div>
-                                                </div>
-                                                <div  class="col-lg-3 col-md-6 form-field">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fba_child_publish">Child Publish*</label>
-                                                        <input type="text" id="fba_child_publish" name="fba_child_publish" placeholder="Enter Child Publish" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div id="field-fbt_min_pax" class="col-lg-3 form-field">
+                                        <div class="row form-field" id="field-price">
+                                            <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fba_discount">Min Pax*</label>
-                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control">
+                                                    <label class="form-label" for="fba_adult_nett">Adult Nett*</label>
+                                                    <input type="text" id="fba_adult_nett" name="fba_adult_nett" placeholder="Enter Adult Nett" class="form-control">
                                                 </div>
                                             </div>
-                                            <div  class="col-lg-3 form-field">
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_child_nett">Child Nett*</label>
+                                                    <input type="text" id="fba_child_nett" name="fba_child_nett" placeholder="Enter Child Nett" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_adult_publish">Adult Publish*</label>
+                                                    <input type="text" id="fba_adult_publish" name="fba_adult_publish" placeholder="Enter Adult Publish" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_child_publish">Child Publish*</label>
+                                                    <input type="text" id="fba_child_publish" name="fba_child_publish" placeholder="Enter Child Publish" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fba_discount">Discount*</label>
                                                     <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control">
                                                 </div>
                                             </div>
-                                            <div id="field-fba_stock" class="col-lg-3 form-field">
+                                        </div>
+                                        <div class="row">
+                                            <div id="field-pax" class="col-lg-3 form-field">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_discount">Min Pax*</label>
+                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div id="field-stock" class="col-lg-3 form-field">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fba_stock">Stock*</label>
                                                     <input type="number" id="fba_stock" name="fba_stock" placeholder="Enter Stock" class="form-control">
                                                 </div>
                                             </div>
-                                            <div id="field-fba_status" class="col-lg-3 form-field">
+                                            <div id="field-status" class="col-lg-3 form-field">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fba_status">Status*</label>
                                                     <select name="fba_status" id="fba_status" class="form-control">
@@ -78,7 +76,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div id="field-fba_shuttle_status" class="col-lg-3 form-field">
+                                            <div id="field-shuttle_status" class="col-lg-3 form-field">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fba_shuttle_status">Status Shuttle*</label>
                                                     <select name="fba_shuttle_status" id="fba_shuttle_status" class="form-control">
@@ -88,7 +86,21 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="field-fba_info" class="mb-3 form-field">
+                                        <div class="row form-field" id="field-custom-time">
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_dept_time">Departure Time*</label>
+                                                    <input type="text" id="fba_dept_time" name="fba_dept_time" placeholder="Enter Departure Time" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_arriv_time">Arrival Time*</label>
+                                                    <input type="text" id="fba_arriv_time" name="fba_arriv_time" placeholder="Enter Arrival Time" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="field-info" class="mb-3 form-field">
                                             <label class="form-label" for="fba_info">Info</label>
                                             <textarea class="form-control" id="fba_info" name="fba_info" placeholder="Enter Info" rows="4"></textarea>
                                         </div>
@@ -146,22 +158,19 @@
 @section('script')
 <script>
     $(document).ready(function() {
-        const selectedFields = JSON.parse(localStorage.getItem('selectedFields')) || [];
+        // Sembunyikan semua field terlebih dahulu
+        $('.form-field').hide();
 
-        // Loop melalui setiap field di halaman update dan sembunyikan jika tidak dipilih
-        $('.form-field').each(function() {
-            const fieldId = this.id.replace('field-', ''); // Menghapus 'field-' dari id
-            if (!selectedFields.includes(fieldId)) {
-                $(this).hide(); // Sembunyikan field yang tidak dipilih
-            } else {
-                $(this).show(); // Tampilkan field yang dipilih
+        // Ambil data field yang dipilih dari localStorage
+        let selectedFields = JSON.parse(localStorage.getItem('selectedFields')) || [];
+
+        // Tampilkan field yang dipilih
+        selectedFields.forEach(function(fieldId) {
+            let $field = $(`#field-${fieldId}`);
+            if ($field.length) {
+                $field.show();
             }
         });
-
-        // Untuk memastikan lebih dari satu field price ditampilkan
-        if (selectedFields.includes('price')) {
-            $('#field-price').show(); // Menampilkan field price jika dipilih
-        }
     });
 </script>
 
