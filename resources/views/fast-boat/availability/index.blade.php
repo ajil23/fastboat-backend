@@ -275,7 +275,7 @@
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input type" id="shuttle-status-check">
+                                    <input type="checkbox" class="form-check-input type" id="shuttle-status">
                                     <label for="shuttle-status-check">Shuttle Status</label>
                                 </div>
                             </div>
@@ -289,7 +289,7 @@
 
                             <div class="col-xl-3 col-lg-6">
                                 <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input type" id="availability-info-check">
+                                    <input type="checkbox" class="form-check-input type" id="info">
                                     <label for="availability-info-check">Availability Info</label>
                                 </div>
                             </div>
@@ -310,7 +310,7 @@
                         </div>
                     </div>
                     <div class="position-relative text-center border-bottom pb-3">
-                        <button class="btn  btn-outline-dark"><i class="mdi mdi-pencil"></i>&thinsp;Update</button>
+                        <a href="{{route('availability.edit')}}" class="btn  btn-outline-dark"><i class="mdi mdi-pencil"></i>&thinsp;Update</a>
                     </div>
                 </div>
             </div>
@@ -442,7 +442,7 @@
                         <span id="trip-title"></span><br>
                         <small class="bold-text" id="trip-date"></small>
                     </h5>
-                    
+
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -502,7 +502,7 @@
                                 <tr>
                                     <td class="bold-text">Child</td>
                                     <td>IDR <span id="child-publish"></span> </td>
-                                    <td>IDR <span  id="child-nett"></span></td>
+                                    <td>IDR <span id="child-nett"></span></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -667,14 +667,18 @@
         })
     });
 
-    $(document).ready(function(){
-        $('body').on('click', '#availabilityButton', function(){
+    $(document).ready(function() {
+        $('body').on('click', '#availabilityButton', function() {
             var detailURL = $(this).data('url');
-            $.get(detailURL, function(data){
+            $.get(detailURL, function(data) {
                 $('#availabilityModal').modal('show');
                 $('#trip-title').text(data.trip.fbt_name);
                 var date = new Date(data.fba_date);
-                var options = { day: '2-digit', month: 'short', year: 'numeric' };
+                var options = {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                };
                 var formattedDate = date.toLocaleDateString('en-GB', options);
                 $('#trip-date').text(formattedDate);
                 $('#fastboat-name').text(data.trip.fastboat.fb_name);
@@ -686,11 +690,11 @@
                 $('#available').text(data.fba_stock);
                 $('#shuttle-status').text(data.fba_shuttle_status);
                 $('#trip-status').text(data.trip.fbt_status);
-                if (data.trip.fbt_status === 1){
-                        $('#trip-status').text('enable');
-                    }else{
-                        $('#trip-status').text('disable');
-                    }
+                if (data.trip.fbt_status === 1) {
+                    $('#trip-status').text('enable');
+                } else {
+                    $('#trip-status').text('disable');
+                }
                 $('#availability-status').text(data.fba_status);
                 // Format numerical values
                 function formatNumber(number) {
@@ -703,6 +707,36 @@
                 $('#child-nett').text(formatNumber(data.fba_child_nett));
             })
         })
+    });
+
+    $(document).ready(function() {
+        const $checkboxes = $('.form-check-input');
+        const $allTypeCheckbox = $('#all-type');
+
+        // Function to update selected fields in localStorage
+        function updateSelectedFields() {
+            let selectedFields = [];
+            $checkboxes.each(function() {
+                if ($(this).is(':checked') && this.id !== 'all-type') {
+                    selectedFields.push(this.id);
+                }
+            });
+            localStorage.setItem('selectedFields', JSON.stringify(selectedFields));
+        }
+
+        // Event listener for all checkboxes
+        $checkboxes.on('change', function() {
+            updateSelectedFields();
+        });
+
+        // Event listener for select all type
+        $allTypeCheckbox.on('change', function() {
+            $checkboxes.prop('checked', $allTypeCheckbox.is(':checked'));
+            updateSelectedFields();
+        });
+
+        // Initialize with the correct checked state
+        updateSelectedFields();
     });
 </script>
 @endsection
