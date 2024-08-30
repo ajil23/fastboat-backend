@@ -174,8 +174,7 @@ class FastboatAvailabilityController extends Controller
             'route' => 'nullable|string',
             'departure' => 'nullable|string',
             'arrival' => 'nullable|string',
-            'dept_time' => 'nullable|string',
-            'daterange' => 'nullable|regex:/\d{2}-\d{2}-\d{4} to \d{2}-\d{2}-\d{4}/', // Format date range
+            'dept_time' => 'nullable|string', // Format date range
         ]);
 
         // Jika tidak ada input yang diisi, kembalikan ke halaman index dengan koleksi kosong
@@ -245,10 +244,12 @@ class FastboatAvailabilityController extends Controller
 
         if ($request->filled('daterange')) {
             $dates = explode(' to ', $request->input('daterange'));
-            // $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[0]);
             $startDate = date('Y-m-d', strtotime($dates[0]));
-            $endDate = date('Y-m-d', strtotime($dates[1]));
-            // $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $dates[1]);
+            if (count($dates) == 1) {
+                $endDate = $startDate;
+            } else {
+                $endDate = date('Y-m-d', strtotime($dates[1]));
+            }
             $query->whereBetween('fba_date', [$startDate, $endDate]);
         }
 
