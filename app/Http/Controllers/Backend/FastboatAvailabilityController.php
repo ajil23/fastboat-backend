@@ -35,6 +35,11 @@ class FastboatAvailabilityController extends Controller
         return response()->json(['fastboat' => $data]);
     }
 
+    public function fetchSchedule(Request $request) {
+        $data = SchedulesSchedule::where("sch_company", $request->cpn_id)->get(["sch_name", "sch_id"]);
+        return response()->json(['schedule' => $data]);
+    }
+
     public function add()
     {
         $trip = SchedulesTrip::all();
@@ -208,7 +213,7 @@ class FastboatAvailabilityController extends Controller
 
         if ($request->filled('schedule')) {
             $query->whereHas('trip.schedule', function ($q) use ($request) {
-                $q->where('sch_name', $request->input('schedule'));
+                $q->where('sch_id', $request->input('schedule'));
             });
         }
 

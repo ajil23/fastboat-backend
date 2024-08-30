@@ -173,11 +173,8 @@
                                 <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label">Schedule</label>
-                                        <select name="schedule" id="search-schedule">
+                                        <select class="form-control" name="schedule" id="search-schedule">
                                             <option value="">Select Schedule</option>
-                                            @foreach ($schedule as $item)
-                                            <option value="{{ $item->sch_name }}" {{ old('schedule') == $item->sch_name ? 'selected' : '' }}>{{ $item->sch_name }}</option>
-                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -231,7 +228,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="position-relative text-center border-bottom pb-3">
+                                <div class="position-relative text-center pb-3">
                                     <button type="submit" class="btn btn-outline-dark"><i class="mdi mdi-magnify"></i>&thinsp;Search</button>
                                 </div>
                             </div>
@@ -469,7 +466,7 @@
                                 <td class="bold-text">Available :</td>
                                 <td id="available"></td>
                                 <td class="bold-text">Shuttle Status :</td>
-                                <td id="shuttle-status"></td>
+                                <td id="shuttle_status"></td>
                             </tr>
                             <tr>
                                 <td class="bold-text">Trip Status :</td>
@@ -519,7 +516,6 @@
 @section('script')
 <script>
     new TomSelect("#search-company");
-    new TomSelect("#search-schedule");
     new TomSelect("#search-departure");
     new TomSelect("#search-arrival");
     new TomSelect("#search-route");
@@ -538,9 +534,9 @@
     // dependensi select untuk fast boat
     $(document).ready(function () {
     $('#search-company').on('change', function () {
-                var cpn_id = this.value;
-                $("#fastboat-search").html('');
-                $.ajax({
+        var cpn_id = this.value;
+        $("#fastboat-search").html('');
+            $.ajax({
                 url: "{{ url('api/fetch-fastboat') }}",
                 type: "POST",
                 data: {
@@ -550,7 +546,7 @@
                 dataType: 'json',
                 success: function (result) {
                     console.log(result);
-                    $('#fastboat-search').html('<option value="">-- Select Fastboat --</option>');
+                    $('#fastboat-search').html('<option value="">Select Fast Boat</option>');
                     $.each(result.fastboat, function (key, value) {
                         $("#fastboat-search").append('<option value="' + value.fb_id + '">' + value.fb_name + '</option>');
                     });
@@ -559,9 +555,35 @@
                     console.log(xhr.responseText); // Untuk menangkap pesan error
                 }
             });
-
         });
-    });        
+    });    
+    
+    // dependensi select untuk schedule
+    $(document).ready(function () {
+    $('#search-company').on('change', function () {
+        var cpn_id = this.value;
+        $("#search-schedule").html('');
+            $.ajax({
+                url: "{{ url('api/fetch-schedule') }}",
+                type: "POST",
+                data: {
+                    cpn_id: cpn_id,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function (result) {
+                    console.log(result);
+                    $('#search-schedule').html('<option value="">Select Schedule</option>');
+                    $.each(result.schedule, function (key, value) {
+                        $("#search-schedule").append('<option value="' + value.sch_id + '">' + value.sch_name + '</option>');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText); // Untuk menangkap pesan error
+                }
+            });
+        });
+    });    
     
     // all check update type
     $(document).ready(function() {
@@ -712,7 +734,7 @@
                 $('#trip-info').text(data.trip.fbt_info_en);
                 $('#availability-info').text(data.fba_info);
                 $('#available').text(data.fba_stock);
-                $('#shuttle-status').text(data.fba_shuttle_status);
+                $('#shuttle_status').text(data.fba_shuttle_status);
                 $('#trip-status').text(data.trip.fbt_status);
                 if (data.trip.fbt_status === 1) {
                     $('#trip-status').text('enable');
