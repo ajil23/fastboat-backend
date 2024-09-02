@@ -33,14 +33,12 @@ class FastboatApiController extends Controller
     public function show_en($fb_slug_en)
     {
         // Mencari post berdasarkan slug dan memuat data terkait dari tabel ScheduleTrip
-        $data = DataFastboat::with('scheduleTrips')->where('fb_slug_en', $fb_slug_en)->first();
+        $data = DataFastboat::with('scheduleTrips.deptPort', 'scheduleTrips.arrivalPort')
+            ->where('fb_slug_en', $fb_slug_en)
+            ->first();
 
         if (!$data) {
             return response()->json(['message' => 'Data not found'], 404);
-        }
-
-        if ($data->scheduleTrips->isEmpty()) {
-            return response()->json(['message' => 'No schedule trips found'], 404);
         }
 
         $result = [
@@ -54,7 +52,11 @@ class FastboatApiController extends Controller
             'fb_image4' => $data->fb_image4,
             'fb_image5' => $data->fb_image5,
             'fb_image6' => $data->fb_image6,
-            'schedule_trips' => $data->scheduleTrips->map(function ($scheduleTrip) {
+        ];
+
+        // Menambahkan schedule_trips jika ada
+        if ($data->scheduleTrips->isNotEmpty()) {
+            $result['schedule_trips'] = $data->scheduleTrips->map(function ($scheduleTrip) {
                 return [
                     'fbt_id' => $scheduleTrip->fbt_id,
                     'fbt_name' => $scheduleTrip->fbt_name,
@@ -65,11 +67,12 @@ class FastboatApiController extends Controller
                     'departure_port_slug' => $scheduleTrip->deptPort ? $scheduleTrip->deptPort->prt_slug_en : null,
                     'arrival_port_slug' => $scheduleTrip->arrivalPort ? $scheduleTrip->arrivalPort->prt_slug_en : null,
                 ];
-            })
-        ];
+            });
+        }
 
         return response()->json($result, 200);
     }
+
 
     public function show_idn($fb_slug_idn)
     {
