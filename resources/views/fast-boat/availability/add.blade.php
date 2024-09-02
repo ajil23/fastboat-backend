@@ -82,7 +82,7 @@
                                 <div class="mt-3 pt-1">
                                     <p>From : {{$item->departure->prt_name_en}}, {{$item->departure->island->isd_name}} ({{date('H:i', strtotime($item->fbt_dept_time))}})</p>
                                     <p>To : {{$item->arrival->prt_name_en}}, {{$item->arrival->island->isd_name}} ({{date('H:i', strtotime($item->fbt_arrival_time))}})</p>
-                                    
+
                                     @php
                                     $lastAvailability = $item->availability()->orderBy('fba_date', 'desc')->first();
                                     @endphp
@@ -110,9 +110,19 @@
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="mb-3">
-                                            <label class="form-label" for="fba_date">From*</label>
-                                            <input type="text" name="fba_date" placeholder="Input Date" class="form-control flatpickr-input" id="daterange">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_date">From*</label>
+                                                    <input type="text" name="fba_date" placeholder="Input Date" class="form-control flatpickr-input" id="daterange">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_min_pax">Min Pax*</label>
+                                                    <input type="number" name="fba_min_pax" placeholder="Input Min Pax" class="form-control" id="fba_min_pax">
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-lg-3">
