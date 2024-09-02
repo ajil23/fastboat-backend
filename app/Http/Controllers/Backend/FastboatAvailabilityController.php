@@ -259,8 +259,8 @@ class FastboatAvailabilityController extends Controller
 
         // Redirect ke index dengan hasil pencarian
         return redirect()->route('availability.view')
-            ->with('availabilities', $availabilities)
-            ->with(compact('fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'))
+            ->with('availabilities')
+            ->with(compact('fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime', 'availabilities'))
             ->withInput(); // Menyimpan nilai input yang telah diisi
     }
 
@@ -271,8 +271,10 @@ class FastboatAvailabilityController extends Controller
         return response()->json($availability);
     }
 
-    public function edit()
+    public function edit(Request $request)
     {
+        $selectedIds = $request->input('select_availability', []);
+        dd($selectedIds);
         $availabilities = FastboatAvailability::all();
         return view('fast-boat.availability.edit', compact('availabilities'));
     }
