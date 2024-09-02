@@ -72,6 +72,7 @@ class FastboatAvailabilityController extends Controller
                 $availabilityData->fba_child_publish = $request->fba_child_publish;
                 $availabilityData->fba_discount = $request->fba_discount;
                 $availabilityData->fba_stock = $request->fba_stock;
+                $availabilityData->fba_min_pax = $request->fba_min_pax;
                 $availabilityData->fba_status = $request->fba_status;
                 $availabilityData->fba_shuttle_status = $request->fba_shuttle_status;
                 $availabilityData->fba_info = $request->fba_info;
@@ -139,6 +140,7 @@ class FastboatAvailabilityController extends Controller
                         $availabilityData->fba_adult_publish = $templateAvailability->fba_adult_publish;
                         $availabilityData->fba_child_publish = $templateAvailability->fba_child_publish;
                         $availabilityData->fba_discount = $templateAvailability->fba_discount;
+                        $availabilityData->fba_min_pax = $templateAvailability->fba_min_pax;
                         $availabilityData->fba_stock = $request->fba_stock; // Update stock
                         $availabilityData->fba_status = $request->fba_status; // Update status
                         $availabilityData->fba_shuttle_status = $templateAvailability->fba_shuttle_status;
@@ -274,7 +276,7 @@ class FastboatAvailabilityController extends Controller
     public function edit(Request $request)
     {
         $selectedIds = $request->input('select_availability', []);
-        dd($selectedIds);
+        // dd($selectedIds);
         $availabilities = FastboatAvailability::all();
         return view('fast-boat.availability.edit', compact('availabilities'));
     }

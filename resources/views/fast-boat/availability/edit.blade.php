@@ -126,22 +126,26 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Picture</th>
-                                    <th>Fast Boat Name</th>
-                                    <th>Company Name</th>
+                                    <th>Fast Boat</th>
+                                    <th>Price</th>
+                                    <th>Shuttle</th>
                                     <th>Status</th>
-                                    <th>Action</th>
+                                    <th>Stock</th>
+                                    <th>Min Pax</th>
+                                    <th>Info</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($availability as $item)
                                 <tr>
-                                    <td></td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
+                                @endforeach
                             </tbody>
                             {{-- {{$fastboat->links('pagination::bootstrap-5')}} --}}
                         </table>

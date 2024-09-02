@@ -23,7 +23,7 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_route">Fastboat Route*</label>
                                                     <select aria-label="Default select example" name="fbt_route" class="form-control" required>
@@ -36,7 +36,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label for="fbt_fastboat" class="form-label">Fast Boat</label>
                                                     <select data-trigger name="fbt_fastboat" id="fbt_fastboat" required>
@@ -47,9 +47,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fbt_schedule">Fastboat Schedule*</label>
                                                     <select id="fbt_schedule" name="fbt_schedule" aria-label="Default select example" class="form-control" required>
@@ -60,12 +58,6 @@
                                                         </option>
                                                         @endforeach
                                                     </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbt_min_pax">Minimal Pax*</label>
-                                                    <input id="fbt_min_pax" name="fbt_min_pax" placeholder="Enter Minimal Pax" type="number" class="form-control" required></input>
                                                 </div>
                                             </div>
                                         </div>

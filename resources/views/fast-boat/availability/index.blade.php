@@ -238,7 +238,7 @@
             </form>
         </div>
 
-        <form action="{{route('availability.edit')}}" method="post">
+        <form action="{{route('availability.edit')}}" method="get">
             @csrf
             <div class="row">
                 <div class="col-xl-12">
