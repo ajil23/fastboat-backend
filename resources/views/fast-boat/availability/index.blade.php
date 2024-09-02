@@ -238,185 +238,189 @@
             </form>
         </div>
 
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-12">
-                            <h5 class="font-size-14 mb-3">Update Type </h5>
-                        </div>
-                        <div class="row">
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="price">
-                                    <label for="price">Price</label>
-                                </div>
+        <form action="{{route('availability.edit')}}" method="post">
+            @csrf
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="col-12">
+                                <h5 class="font-size-14 mb-3">Update Type </h5>
                             </div>
-
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="stock">
-                                    <label for="stock">Stock</label>
+                            <div class="row">
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="form-check font-size-16">
+                                        <input type="checkbox" class="form-check-input" id="price">
+                                        <label for="price">Price</label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="pax">
-                                    <label for="pax">Min Pax</label>
+    
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="form-check font-size-16">
+                                        <input type="checkbox" class="form-check-input" id="stock">
+                                        <label for="stock">Stock</label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="shuttle-status">
-                                    <label for="shuttle-status-check">Shuttle Status</label>
+    
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="form-check font-size-16">
+                                        <input type="checkbox" class="form-check-input" id="pax">
+                                        <label for="pax">Min Pax</label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="available-status">
-                                    <label for="available-status">Available Status</label>
+    
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="form-check font-size-16">
+                                        <input type="checkbox" class="form-check-input" id="shuttle-status">
+                                        <label for="shuttle-status-check">Shuttle Status</label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="info">
-                                    <label for="availability-info-check">Availability Info</label>
+    
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="form-check font-size-16">
+                                        <input type="checkbox" class="form-check-input" id="available-status">
+                                        <label for="available-status">Available Status</label>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div class="col-xl-3 col-lg-6">
-                                <div class="form-check font-size-16">
-                                    <input type="checkbox" class="form-check-input" id="custom-time">
-                                    <label for="custom-time">Custom Dept & Arriv Time</label>
+    
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="form-check font-size-16">
+                                        <input type="checkbox" class="form-check-input" id="info">
+                                        <label for="availability-info-check">Availability Info</label>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="position-relative text-center border-bottom pb-3">
-                        <a href="{{route('availability.edit')}}" class="btn  btn-outline-dark"><i class="mdi mdi-pencil"></i>&thinsp;Update</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xl-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="font-size-14 mb-3">Availability Calendar</h5>
-                        <div class="col-xl-3 col-lg-6">
-                            <div class="form-check font-size-16">
-                                <input type="checkbox" class="form-check-input" id="select_all_trips">
-                                <label for="select_all_trips">All Trips</label>
+    
+                                <div class="col-xl-3 col-lg-6">
+                                    <div class="form-check font-size-16">
+                                        <input type="checkbox" class="form-check-input" id="custom-time">
+                                        <label for="custom-time">Custom Dept & Arriv Time</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
-                        @php
-                        // Mendapatkan tanggal awal dan akhir dari data availability
-                        $availabilities = session('availabilities', collect());
-                        $firstDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->min('fba_date')) : \Carbon\Carbon::now();
-                        $lastDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->max('fba_date')) : \Carbon\Carbon::now();
-
-                        // Mendapatkan hari pertama dari tanggal awal (0 untuk Minggu, 6 untuk Sabtu)
-                        $startDayOfWeek = $firstDate->dayOfWeek;
-                        $currentDate = $firstDate->copy();
-
-                        // Hitung total minggu yang diperlukan dalam kalender
-                        $totalWeeks = ceil(($lastDate->diffInDays($firstDate) + $startDayOfWeek + 1) / 7);
-
-                        // Mengelompokkan data availability berdasarkan tanggal
-                        $availabilityByDate = $availabilities->groupBy(function ($item) {
-                        return \Carbon\Carbon::parse($item->fba_date)->format('Y-m-d');
-                        });
-                        @endphp
-
-                        <table class="table table-bordered calendar-table">
-                            <thead>
-                                <tr>
-                                    <th class="text-center sunday">SUN</th>
-                                    <th class="text-center">MON</th>
-                                    <th class="text-center">TUE</th>
-                                    <th class="text-center">WED</th>
-                                    <th class="text-center">THU</th>
-                                    <th class="text-center friday">FRI</th>
-                                    <th class="text-center">SAT</th>
-                                </tr>
-                            </thead>
-
-                            @if($availabilities->isNotEmpty())
-                            @for ($week = 0; $week < $totalWeeks; $week++)
-                                <tbody>
-                                <tr>
-                                    @for ($day = 0; $day < 7; $day++)
-                                        @if ($week===0 && $day < $startDayOfWeek)
-                                        <!-- Kosongkan sel sebelum tanggal pertama -->
-                                        <td></td>
-                                        @elseif ($currentDate->gt($lastDate))
-                                        <!-- Kosongkan sel setelah tanggal terakhir -->
-                                        <td></td>
-                                        @else
-                                        @php
-                                        $dateString = $currentDate->format('Y-m-d');
-                                        @endphp
-
-                                        @if ($availabilityByDate->has($dateString))
-                                        <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ $currentDate->isLastOfMonth() ? 'border: 3px solid red' : '' }}">
-                                            <!-- Tampilkan Tanggal dengan Checkbox -->
-                                            <div class="calendar-date">
-                                                <input type="checkbox" class="form-check-input select-day" name="select_date[]" value="{{ $dateString }}" />
-                                                <span>{{ $currentDate->format('d M Y') }}</span>
-                                            </div>
-
-                                            <!-- Looping untuk setiap perusahaan dan schedule -->
-                                            @foreach ($availabilityByDate[$dateString]->groupBy('trip.fastboat.company.cpn_name') as $companyName => $companyData)
-                                            @foreach ($companyData->groupBy('trip.schedule.sch_name') as $scheduleName => $scheduleData)
-                                            <div class="company-name">{{ $companyName }} / {{ $scheduleName }}</div>
-
-                                            <!-- Looping untuk setiap availability dalam schedule -->
-                                            @foreach ($scheduleData as $item)
-                                            <div class="availability-entry">
-                                                <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->id }}" />
-                                                @if ($item->fba_status == 'disable')
-                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}" class="text-danger">
-                                                    {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
-                                                    {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
-                                                    ({{ $item->fba_stock }})
-                                                </a>
-                                                @else
-                                                <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}">
-                                                    {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
-                                                    {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
-                                                    ({{ $item->fba_stock }})
-                                                </a>
-                                                @endif
-                                            </div>
-                                            @endforeach
-                                            @endforeach
-                                            @endforeach
-                                        </td>
-                                        @else
-                                        <td style="{{ $currentDate->isLastOfMonth() ? 'border: 3px solid red' : '' }}"></td>
-                                        @endif
-
-                                        @php
-                                        $currentDate->addDay();
-                                        @endphp
-                                        @endif
-                                        @endfor
-                                </tr>
-                                </tbody>
-                                @endfor
-                                @else
-                                @endif
-                        </table>
+                        <div class="position-relative text-center border-bottom pb-3">
+                            <button class="btn  btn-outline-dark" type="submit"><i class="mdi mdi-pencil"></i>&thinsp;Update </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+    
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="font-size-14 mb-3">Availability Calendar</h5>
+                            <div class="col-xl-3 col-lg-6">
+                                <div class="form-check font-size-16">
+                                    <input type="checkbox" class="form-check-input" id="select_all_trips">
+                                    <label for="select_all_trips">All Trips</label>
+                                </div>
+                            </div>
+    
+                            @php
+                            // Mendapatkan tanggal awal dan akhir dari data availability
+                            $availabilities = session('availabilities', collect());
+                            $firstDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->min('fba_date')) : \Carbon\Carbon::now();
+                            $lastDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->max('fba_date')) : \Carbon\Carbon::now();
+    
+                            // Mendapatkan hari pertama dari tanggal awal (0 untuk Minggu, 6 untuk Sabtu)
+                            $startDayOfWeek = $firstDate->dayOfWeek;
+                            $currentDate = $firstDate->copy();
+    
+                            // Hitung total minggu yang diperlukan dalam kalender
+                            $totalWeeks = ceil(($lastDate->diffInDays($firstDate) + $startDayOfWeek + 1) / 7);
+    
+                            // Mengelompokkan data availability berdasarkan tanggal
+                            $availabilityByDate = $availabilities->groupBy(function ($item) {
+                            return \Carbon\Carbon::parse($item->fba_date)->format('Y-m-d');
+                            });
+                            @endphp
+    
+                            <table class="table table-bordered calendar-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center sunday">SUN</th>
+                                        <th class="text-center">MON</th>
+                                        <th class="text-center">TUE</th>
+                                        <th class="text-center">WED</th>
+                                        <th class="text-center">THU</th>
+                                        <th class="text-center friday">FRI</th>
+                                        <th class="text-center">SAT</th>
+                                    </tr>
+                                </thead>
+    
+                                @if($availabilities->isNotEmpty())
+                                @for ($week = 0; $week < $totalWeeks; $week++)
+                                    <tbody>
+                                    <tr>
+                                        @for ($day = 0; $day < 7; $day++)
+                                            @if ($week===0 && $day < $startDayOfWeek)
+                                            <!-- Kosongkan sel sebelum tanggal pertama -->
+                                            <td></td>
+                                            @elseif ($currentDate->gt($lastDate))
+                                            <!-- Kosongkan sel setelah tanggal terakhir -->
+                                            <td></td>
+                                            @else
+                                            @php
+                                            $dateString = $currentDate->format('Y-m-d');
+                                            @endphp
+    
+                                            @if ($availabilityByDate->has($dateString))
+                                            <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ $currentDate->isLastOfMonth() ? 'border: 3px solid red' : '' }}">
+                                                <!-- Tampilkan Tanggal dengan Checkbox -->
+                                                <div class="calendar-date">
+                                                    <input type="checkbox" class="form-check-input select-day" name="select_date[]" value="{{ $dateString }}" />
+                                                    <span>{{ $currentDate->format('d M Y') }}</span>
+                                                </div>
+    
+                                                <!-- Looping untuk setiap perusahaan dan schedule -->
+                                                @foreach ($availabilityByDate[$dateString]->groupBy('trip.fastboat.company.cpn_name') as $companyName => $companyData)
+                                                @foreach ($companyData->groupBy('trip.schedule.sch_name') as $scheduleName => $scheduleData)
+                                                <div class="company-name">{{ $companyName }} / {{ $scheduleName }}</div>
+    
+                                                <!-- Looping untuk setiap availability dalam schedule -->
+                                                @foreach ($scheduleData as $item)
+                                                <div class="availability-entry">
+                                                    <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->fba_id }}" />
+                                                    @if ($item->fba_status == 'disable')
+                                                    <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}" class="text-danger">
+                                                        {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                        {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
+                                                        ({{ $item->fba_stock }})
+                                                    </a>
+                                                    @else
+                                                    <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}">
+                                                        {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                        {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
+                                                        ({{ $item->fba_stock }})
+                                                    </a>
+                                                    @endif
+                                                </div>
+                                                @endforeach
+                                                @endforeach
+                                                @endforeach
+                                            </td>
+                                            @else
+                                            <td style="{{ $currentDate->isLastOfMonth() ? 'border: 3px solid red' : '' }}"></td>
+                                            @endif
+    
+                                            @php
+                                            $currentDate->addDay();
+                                            @endphp
+                                            @endif
+                                            @endfor
+                                    </tr>
+                                    </tbody>
+                                    @endfor
+                                    @else
+                                    @endif
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        
 
     </div>
 
