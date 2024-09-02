@@ -58,7 +58,7 @@
                                             <div id="field-pax" class="col-lg-3 form-field">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fba_discount">Min Pax*</label>
-                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control">
+                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Minimal Pax" class="form-control">
                                                 </div>
                                             </div>
                                             <div id="field-stock" class="col-lg-3 form-field">
@@ -102,7 +102,7 @@
                                         </div>
                                         <div id="field-info" class="mb-3 form-field">
                                             <label class="form-label" for="fba_info">Info</label>
-                                            <textarea class="form-control" id="fba_info" name="fba_info" placeholder="Enter Info" rows="4"></textarea>
+                                            <textarea class="form-control" id="fba_info" name="fba_info" placeholder="Enter Info Availability" rows="4"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -174,4 +174,27 @@
     });
 </script>
 
+<script>
+    $(document).ready(function() {
+        function formatCurrencyInput(selector) {
+            $(selector).on('input', function() {
+                let value = $(this).val().replace(/\D/g, '');
+                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                $(this).val(value);
+            });
+
+            $('form').on('submit', function() {
+                const rawValue = $(selector).val().replace(/\./g, '');
+                $(selector).val(rawValue);
+            });
+        }
+
+        // Panggil fungsi untuk input yang diinginkan
+        formatCurrencyInput('#fba_adult_nett');
+        formatCurrencyInput('#fba_child_nett');
+        formatCurrencyInput('#fba_adult_publish');
+        formatCurrencyInput('#fba_child_publish');
+        formatCurrencyInput('#fba_discount');
+    });
+</script>
 @endsection
