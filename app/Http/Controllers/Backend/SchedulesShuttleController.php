@@ -26,7 +26,7 @@ class SchedulesShuttleController extends Controller
 
     public function add()
     {
-        $trip = SchedulesTrip::all();
+        $trip = SchedulesTrip::whereIn('fbt_shuttle_option', ['pickup', 'dropoff'])->get();
         $area = SchedulesShuttleArea::all();
         $company = DataCompany::orderBy('cpn_name', 'asc')->get();
         return view('schedules.shuttle.add', compact('trip', 'area', 'company'));

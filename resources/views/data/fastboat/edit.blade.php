@@ -60,9 +60,11 @@
                                             <textarea class="form-control" id="fb_fasilitas" name="fb_fasilitas" cols="30" rows="5" placeholder="Enter Fasilitas" required>{{$fastboatEdit->fb_fasilitas}}</textarea>
                                         </div>
                                         <div class="row">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="fb_content_en">Content (en)</label>
-                                                <textarea name="fb_content_en" id="content-en">{{$fastboatEdit->fb_content_en}}</textarea>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_content_en">Content (en)</label>
+                                                    <textarea name="fb_content_en" id="content-en">{{$fastboatEdit->fb_content_en}}</textarea>
+                                                </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="mb-3">
