@@ -4,8 +4,9 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <form action="{{route('availability.update')}}" method="POST">
+            <form action="{{ route('availability.update') }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div id="results" class="row mt-2">
                     <div id="shuttle-info" class="col-lg-12">
                         <div id="addproduct-accordion">
@@ -14,96 +15,122 @@
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Availability Edit</h5>
-                                                <p class="text-danger text-truncat font-size-12">*All price are in Indonesian Rupiah</p>
+                                                <h5 class="font-size-16 mb-1">Edit Availability</h5>
+                                                <p class="text-danger text-truncate font-size-12">*All prices are in Indonesian Rupiah</p>
                                             </div>
                                         </div>
                                     </div>
                                 </a>
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="row form-field" id="field-price">
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_adult_nett">Adult Nett*</label>
-                                                    <input type="text" id="fba_adult_nett" name="fba_adult_nett" placeholder="Enter Adult Nett" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_child_nett">Child Nett*</label>
-                                                    <input type="text" id="fba_child_nett" name="fba_child_nett" placeholder="Enter Child Nett" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_adult_publish">Adult Publish*</label>
-                                                    <input type="text" id="fba_adult_publish" name="fba_adult_publish" placeholder="Enter Adult Publish" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_child_publish">Child Publish*</label>
-                                                    <input type="text" id="fba_child_publish" name="fba_child_publish" placeholder="Enter Child Publish" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_discount">Discount*</label>
-                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row form-field" id="field-custom-time">
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_dept_time">Departure Time*</label>
-                                                    <input type="text" id="fba_dept_time" name="fba_dept_time" placeholder="Enter Departure Time" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6 col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fba_arriv_time">Arrival Time*</label>
-                                                    <input type="text" id="fba_arriv_time" name="fba_arriv_time" placeholder="Enter Arrival Time" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
+                                        @foreach($availabilities as $availability)
+                                        @if(in_array('price', $selectedFields))
                                         <div class="row">
-                                            <div id="field-pax" class="col-lg-3 form-field">
+                                            <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fba_discount">Min Pax*</label>
-                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Minimal Pax" class="form-control">
+                                                    <label class="form-label" for="fba_adult_nett_{{ $availability->fba_id }}">Adult Nett*</label>
+                                                    <input type="text" id="fba_adult_nett_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_adult_nett]" placeholder="Enter Adult Nett" class="form-control" value="{{ number_format($availability->fba_adult_nett, 0, ',', '.') }}">
                                                 </div>
                                             </div>
-                                            <div id="field-stock" class="col-lg-3 form-field">
+                                            <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fba_stock">Stock*</label>
-                                                    <input type="number" id="fba_stock" name="fba_stock" placeholder="Enter Stock" class="form-control">
+                                                    <label class="form-label" for="fba_child_nett_{{ $availability->fba_id }}">Child Nett*</label>
+                                                    <input type="text" id="fba_child_nett_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_child_nett]" placeholder="Enter Child Nett" class="form-control" value="{{ number_format($availability->fba_child_nett, 0, ',', '.') }}">
                                                 </div>
                                             </div>
-                                            <div id="field-available-status" class="col-lg-3 form-field">
+                                            <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fba_status">Status*</label>
-                                                    <select name="fba_status" id="fba_status" class="form-control">
-                                                        <option value="enable">Enable</option>
-                                                        <option value="disable">Disable</option>
-                                                    </select>
+                                                    <label class="form-label" for="fba_adult_publish_{{ $availability->fba_id }}">Adult Publish*</label>
+                                                    <input type="text" id="fba_adult_publish_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_adult_publish]" placeholder="Enter Adult Publish" class="form-control" value="{{ number_format($availability->fba_adult_publish, 0, ',', '.') }}">
                                                 </div>
                                             </div>
-                                            <div id="field-shuttle-status" class="col-lg-3 form-field">
+                                            <div class="col-lg-3 col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fba_shuttle_status">Status Shuttle*</label>
-                                                    <select name="fba_shuttle_status" id="fba_shuttle_status" class="form-control">
-                                                        <option value="enable">Enable</option>
-                                                        <option value="disable">Disable</option>
-                                                    </select>
+                                                    <label class="form-label" for="fba_child_publish_{{ $availability->fba_id }}">Child Publish*</label>
+                                                    <input type="text" id="fba_child_publish_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_child_publish]" placeholder="Enter Child Publish" class="form-control" value="{{ number_format($availability->fba_child_publish, 0, ',', '.') }}">
                                                 </div>
                                             </div>
                                         </div>
-                                        <div id="field-info" class="mb-3 form-field">
-                                            <label class="form-label" for="fba_info">Info</label>
-                                            <textarea class="form-control" id="fba_info" name="fba_info" placeholder="Enter Info Availability" rows="4"></textarea>
+                                        @endif
+                                        <div class="row">
+                                            @if(in_array('price', $selectedFields))
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_discount_{{ $availability->fba_id }}">Discount*</label>
+                                                    <input type="text" id="fba_discount_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_discount]" placeholder="Enter Discount Nominal" class="form-control" value="{{ number_format($availability->fba_discount, 0, ',', '.') }}">
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if(in_array('stock', $selectedFields))
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_stock_{{ $availability->fba_id }}">Stock*</label>
+                                                    <input type="number" id="fba_stock_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_stock]" placeholder="Enter Stock" class="form-control" value="{{ $availability->fba_stock }}">
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if(in_array('available-status', $selectedFields))
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_status_{{ $availability->fba_id }}">Status*</label>
+                                                    <select name="availabilities[{{ $availability->fba_id }}][fba_status]" id="fba_status_{{ $availability->fba_id }}" class="form-control">
+                                                        <option value="enable" {{ $availability->fba_status == 'enable' ? 'selected' : '' }}>Enable</option>
+                                                        <option value="disable" {{ $availability->fba_status == 'disable' ? 'selected' : '' }}>Disable</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if(in_array('shuttle-status', $selectedFields))
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_shuttle_status_{{ $availability->fba_id }}">Shuttle Status*</label>
+                                                    <select name="availabilities[{{ $availability->fba_id }}][fba_shuttle_status]" id="fba_shuttle_status_{{ $availability->fba_id }}" class="form-control">
+                                                        <option value="enable" {{ $availability->fba_shuttle_status == 'enable' ? 'selected' : '' }}>Enable</option>
+                                                        <option value="disable" {{ $availability->fba_shuttle_status == 'disable' ? 'selected' : '' }}>Disable</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
+
+                                        <div class="row">
+                                            @if(in_array('pax', $selectedFields))
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_min_pax_{{ $availability->fba_id }}">Min Pax*</label>
+                                                    <input type="text" id="fba_min_pax_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_min_pax]" placeholder="Enter Minimal Pax" class="form-control" value="{{ $availability->fba_min_pax }}">
+                                                </div>
+                                            </div>
+                                            @endif
+
+                                            @if(in_array('custom-time', $selectedFields))
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_dept_time_{{ $availability->fba_id }}">Departure Time*</label>
+                                                    <input type="time" id="fba_dept_time_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_dept_time]" placeholder="Enter Departure Time" class="form-control" value="{{ $availability->fba_dept_time }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fba_arriv_time_{{ $availability->fba_id }}">Arrival Time*</label>
+                                                    <input type="time" id="fba_arriv_time_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_arriv_time]" placeholder="Enter Arrival Time" class="form-control" value="{{ $availability->fba_arriv_time }}">
+                                                </div>
+                                            </div>
+                                            @endif
+                                        </div>
+
+                                        @if(in_array('info', $selectedFields))
+                                        <div class="col-lg-12">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="fba_info_{{ $availability->fba_id }}">Info</label>
+                                                <textarea class="form-control" id="fba_info_{{ $availability->fba_id }}" name="availabilities[{{ $availability->fba_id }}][fba_info]" placeholder="Enter Info Availability" rows="4">{{ $availability->fba_info }}</textarea>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -117,6 +144,7 @@
                     </div> <!-- end col -->
                 </div>
             </form>
+
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -126,7 +154,7 @@
                                     <th>No</th>
                                     <th>Fast Boat</th>
                                     @if(in_array('price', $selectedFields))
-                                    <th colspan="3" class="text-center">Price</th>
+                                    <th colspan="4" class="text-center">Price</th>
                                     @endif
                                     @if(in_array('shuttle-status', $selectedFields))
                                     <th>
@@ -149,7 +177,9 @@
                                     </th>
                                     @endif
                                     @if(in_array('info', $selectedFields))
-                                    <th><center>Info</center></th>
+                                    <th>
+                                        <center>Info</center>
+                                    </th>
                                     @endif
                                 </tr>
                                 <tr>
@@ -159,6 +189,7 @@
                                     <th></th>
                                     <th>Nett</th>
                                     <th>Publish</th>
+                                    <th>Discount</th>
                                     @endif
                                 </tr>
                             </thead>
@@ -183,21 +214,32 @@
                                         <div>{{ number_format($availability->fba_adult_publish, 0, ',', '.') }}</div>
                                         <div>{{ number_format($availability->fba_child_publish, 0, ',', '.') }}</div>
                                     </td>
+                                    <td>{{ number_format($availability->fba_discount, 0, ',', '.') }}</td>
                                     @endif
                                     @if(in_array('shuttle-status', $selectedFields))
-                                    <td><center>{{ $availability->fba_shuttle_status }}</center></td>
+                                    <td>
+                                        <center>{{ $availability->fba_shuttle_status }}</center>
+                                    </td>
                                     @endif
                                     @if(in_array('available-status', $selectedFields))
-                                    <td><center>{{ $availability->fba_status }}</center></td>
+                                    <td>
+                                        <center>{{ $availability->fba_status }}</center>
+                                    </td>
                                     @endif
                                     @if(in_array('stock', $selectedFields))
-                                    <td><center>{{ $availability->fba_stock }}</center></td>
+                                    <td>
+                                        <center>{{ $availability->fba_stock }}</center>
+                                    </td>
                                     @endif
                                     @if(in_array('pax', $selectedFields))
-                                    <td><center>{{ $availability->fba_min_pax }}</center></td>
+                                    <td>
+                                        <center>{{ $availability->fba_min_pax }}</center>
+                                    </td>
                                     @endif
                                     @if(in_array('info', $selectedFields))
-                                    <td><center>{{$availability->fba_info}}</center></td>
+                                    <td>
+                                        <center>{{$availability->fba_info}}</center>
+                                    </td>
                                     @endif
                                 </tr>
                                 @endforeach
@@ -206,7 +248,7 @@
                     </div>
                 </div>
             </div>
-
+            <!-- end table -->
         </div>
         @include('admin.components.footer')
     </div>
@@ -214,26 +256,11 @@
 @endsection
 
 @section('script')
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-        // Sembunyikan semua field terlebih dahulu
-        $('.form-field').hide();
 
-        // Ambil data field yang dipilih dari localStorage
-        let selectedFields = JSON.parse(localStorage.getItem('selectedFields')) || [];
-
-        // Tampilkan field yang dipilih
-        selectedFields.forEach(function(fieldId) {
-            let $field = $(`#field-${fieldId}`);
-            if ($field.length) {
-                $field.show();
-            }
-        });
-    });
-</script>
-
-<script>
-    $(document).ready(function() {
+        // Fungsi untuk format input mata uang
         function formatCurrencyInput(selector) {
             $(selector).on('input', function() {
                 let value = $(this).val().replace(/\D/g, '');
@@ -242,17 +269,23 @@
             });
 
             $('form').on('submit', function() {
-                const rawValue = $(selector).val().replace(/\./g, '');
-                $(selector).val(rawValue);
+                $(selector).each(function() {
+                    let rawValue = $(this).val().replace(/\./g, '');
+                    $(this).val(rawValue);
+                });
             });
         }
 
         // Panggil fungsi untuk input yang diinginkan
-        formatCurrencyInput('#fba_adult_nett');
-        formatCurrencyInput('#fba_child_nett');
-        formatCurrencyInput('#fba_adult_publish');
-        formatCurrencyInput('#fba_child_publish');
-        formatCurrencyInput('#fba_discount');
+        @foreach($availabilities as $availability)
+        @if(in_array('price', $selectedFields))
+        formatCurrencyInput('#fba_adult_nett_{{ $availability->fba_id }}');
+        formatCurrencyInput('#fba_child_nett_{{ $availability->fba_id }}');
+        formatCurrencyInput('#fba_adult_publish_{{ $availability->fba_id }}');
+        formatCurrencyInput('#fba_child_publish_{{ $availability->fba_id }}');
+        formatCurrencyInput('#fba_discount_{{ $availability->fba_id }}');
+        @endif
+        @endforeach
     });
 </script>
 @endsection

@@ -115,7 +115,7 @@ Route::middleware([
         Route::get('/availability/add', [FastboatAvailabilityController::class, 'add'])->name('availability.add');
         Route::post('/availability/store', [FastboatAvailabilityController::class, 'store'])->name('availability.store');
         Route::get('/availability/edit', [FastboatAvailabilityController::class, 'edit'])->name('availability.edit');
-        Route::post('/availability/update', [FastboatAvailabilityController::class, 'update'])->name('availability.update');
+        Route::put('/availability/update', [FastboatAvailabilityController::class, 'update'])->name('availability.update');
         Route::delete('/availability/delete/{id}', [FastboatAvailabilityController::class, 'delete'])->name('availability.delete');
         Route::get('/availability/extend', [FastboatAvailabilityController::class, 'extend'])->name('availability.extend');
         Route::post('/availability/storeExtend', [FastboatAvailabilityController::class, 'storeExtend'])->name('availability.storeExtend');
