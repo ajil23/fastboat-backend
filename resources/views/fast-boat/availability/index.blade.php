@@ -272,7 +272,7 @@
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="shuttle-status">
-                                        <label for="shuttle-status-check">Shuttle Status</label>
+                                        <label for="shuttle-status">Shuttle Status</label>
                                     </div>
                                 </div>
     
@@ -286,7 +286,7 @@
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="info">
-                                        <label for="availability-info-check">Availability Info</label>
+                                        <label for="info">Availability Info</label>
                                     </div>
                                 </div>
     

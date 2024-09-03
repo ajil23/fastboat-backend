@@ -136,18 +136,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($availability as $item)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
                                 </tr>
-                                @endforeach
                             </tbody>
-                            {{-- {{$fastboat->links('pagination::bootstrap-5')}} --}}
                         </table>
                     </div>
                 </div>
