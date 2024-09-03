@@ -30,12 +30,14 @@ class FastboatAvailabilityController extends Controller
         return view('fast-boat.availability.index', compact('trip', 'fastboat', 'company', 'schedule', 'route', 'departure', 'arrival', 'deptTime'));
     }
 
-    public function fetchFastboat(Request $request) {
+    public function fetchFastboat(Request $request)
+    {
         $data = DataFastboat::where("fb_company", $request->cpn_id)->get(["fb_name", "fb_id"]);
         return response()->json(['fastboat' => $data]);
     }
 
-    public function fetchSchedule(Request $request) {
+    public function fetchSchedule(Request $request)
+    {
         $data = SchedulesSchedule::where("sch_company", $request->cpn_id)->get(["sch_name", "sch_id"]);
         return response()->json(['schedule' => $data]);
     }
@@ -275,96 +277,68 @@ class FastboatAvailabilityController extends Controller
 
     public function edit(Request $request)
     {
+        // Mengambil ID dari availability yang dipilih di halaman index
         $selectedIds = $request->input('select_availability', []);
-        // dd($selectedIds);
-        $availabilities = FastboatAvailability::all();
-        return view('fast-boat.availability.edit', compact('availabilities'));
+
+        // Mengambil data dari database berdasarkan ID yang dipilih
+        $availabilities = FastboatAvailability::whereIn('fba_id', $selectedIds)->get();
+
+        // Ambil fields yang dipilih dari request
+        $selectedFields = $request->input('selected_fields', []);
+
+        // Mengirim data ke view
+        return view('fast-boat.availability.edit', compact('availabilities', 'selectedFields'));
     }
-    
+
     public function update(Request $request)
     {
-        $availability = FastboatAvailability::find();
-        // Validasi input
-        $validated = $request->validate([
-            'types' => 'required|array',
-            'dates' => 'required|array',
-            'availabilities' => 'required|array',
-        ]);
-    
-        // Loop melalui setiap availability yang dipilih
-        foreach ($request->availabilities as $availabilityId) {
+        // Loop melalui setiap availability yang diupdate
+        foreach ($request->availabilities as $availabilityId => $data) {
             $availability = FastboatAvailability::findOrFail($availabilityId);
-    
-            // Update hanya field yang dipilih di update type
-            if (in_array('price', $request->types)) {
-                if ($request->has('fba_adult_nett')) {
-                    $availability->fba_adult_nett = $request->fba_adult_nett;
-                }
-                if ($request->has('fba_child_nett')) {
-                    $availability->fba_child_nett = $request->fba_child_nett;
-                }
-                if ($request->has('fba_adult_publish')) {
-                    $availability->fba_adult_publish = $request->fba_adult_publish;
-                }
-                if ($request->has('fba_child_publish')) {
-                    $availability->fba_child_publish = $request->fba_child_publish;
-                }
-                if ($request->has('fba_discount')) {
-                    $availability->fba_discount = $request->fba_discount;
-                }
+
+            // Update hanya field yang diinginkan
+            if (isset($data['fba_adult_nett'])) {
+                $availability->fba_adult_nett = $data['fba_adult_nett'];
             }
-    
-            if (in_array('stock', $request->types)) {
-                if ($request->has('fba_stock')) {
-                    $availability->fba_stock = $request->fba_stock;
-                }
+            if (isset($data['fba_child_nett'])) {
+                $availability->fba_child_nett = $data['fba_child_nett'];
             }
-    
-            if (in_array('pax', $request->types)) {
-                if ($request->has('fba_min_pax')) {
-                    $availability->fba_min_pax = $request->fba_min_pax;
-                }
+            if (isset($data['fba_adult_publish'])) {
+                $availability->fba_adult_publish = $data['fba_adult_publish'];
             }
-    
-            if (in_array('shuttle-status', $request->types)) {
-                if ($request->has('fba_shuttle_status')) {
-                    $availability->fba_shuttle_status = $request->fba_shuttle_status;
-                }
+            if (isset($data['fba_stock'])) {
+                $availability->fba_stock = $data['fba_stock'];
             }
-    
-            if (in_array('status', $request->types)) {
-                if ($request->has('fba_status')) {
-                    $availability->fba_status = $request->fba_status;
-                }
+            if (isset($data['fba_min_pax'])) {
+                $availability->fba_min_pax = $data['fba_min_pax'];
             }
-    
-            if (in_array('info', $request->types)) {
-                if ($request->has('fba_info')) {
-                    $availability->fba_info = $request->fba_info;
-                }
+            if (isset($data['fba_shuttle_status'])) {
+                $availability->fba_shuttle_status = $data['fba_shuttle_status'];
             }
-    
-            if (in_array('custom-time', $request->types)) {
-                if ($request->has('fba_dept_time')) {
-                    $availability->fba_dept_time = $request->fba_dept_time;
-                }
-                if ($request->has('fba_arriv_time')) {
-                    $availability->fba_arriv_time = $request->fba_arriv_time;
-                }
+            if (isset($data['fba_status'])) {
+                $availability->fba_status = $data['fba_status'];
             }
-    
+            if (isset($data['fba_info'])) {
+                $availability->fba_info = $data['fba_info'];
+            }
+            if (isset($data['fba_dept_time'])) {
+                $availability->fba_dept_time = $data['fba_dept_time'];
+            }
+            if (isset($data['fba_arriv_time'])) {
+                $availability->fba_arriv_time = $data['fba_arriv_time'];
+            }
+
             // Set field updated by
             $availability->fba_updated_by = auth()->id();
-    
+
             // Simpan perubahan
             $availability->save();
         }
-    
+
         // Tambahkan pesan toast sukses ke dalam session
         toast('Your data has been updated successfully!', 'success');
-    
+
         // Redirect ke halaman view
         return redirect()->route('availability.view');
     }
-    
 }

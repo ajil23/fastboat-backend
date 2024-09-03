@@ -125,67 +125,82 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Fast Boat</th>
+                                    @if(in_array('price', $selectedFields))
                                     <th colspan="3" class="text-center">Price</th>
+                                    @endif
+                                    @if(in_array('shuttle-status', $selectedFields))
                                     <th>
                                         <center>Shuttle</center>
                                     </th>
+                                    @endif
+                                    @if(in_array('available-status', $selectedFields))
                                     <th>
                                         <center>Status</center>
                                     </th>
+                                    @endif
+                                    @if(in_array('stock', $selectedFields))
                                     <th>
                                         <center>Stock</center>
                                     </th>
+                                    @endif
+                                    @if(in_array('pax', $selectedFields))
                                     <th>
                                         <center>Min Pax</center>
                                     </th>
-                                    <th>Info</th>
+                                    @endif
+                                    @if(in_array('info', $selectedFields))
+                                    <th><center>Info</center></th>
+                                    @endif
                                 </tr>
                                 <tr>
+                                    @if(in_array('price', $selectedFields))
                                     <th></th>
                                     <th></th>
                                     <th></th>
                                     <th>Nett</th>
                                     <th>Publish</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($availabilities as $key => $availability)
                                 <tr>
-                                    <td>1</td>
+                                    <td>{{$loop->iteration}}</td>
                                     <td>
-                                        Eka Jaya Fastboat<br />
-                                        Sanur - Senggigi (12.00)
+                                        {{ $availability->trip->fastboat->fb_name }}<br />
+                                        {{$availability->trip->departure->prt_name_en}} - {{$availability->trip->arrival->prt_name_en}} ({{ \Carbon\Carbon::parse($availability->trip->fbt_dept_time)->format('H:i') }})
                                     </td>
+                                    @if(in_array('price', $selectedFields))
                                     <td>
                                         <div>Adult :</div>
                                         <div>Child :</div>
                                     </td>
                                     <td>
-                                        <div>200.000</div>
-                                        <div>175.000</div>
+                                        <div>{{ number_format($availability->fba_adult_nett, 0, ',', '.') }}</div>
+                                        <div>{{ number_format($availability->fba_child_nett, 0, ',', '.') }}</div>
                                     </td>
                                     <td>
-                                        <div>250.000</div>
-                                        <div>225.000</div>
+                                        <div>{{ number_format($availability->fba_adult_publish, 0, ',', '.') }}</div>
+                                        <div>{{ number_format($availability->fba_child_publish, 0, ',', '.') }}</div>
                                     </td>
-                                    <td>
-                                        <center>Enable</center>
-                                    </td>
-                                    <td>
-                                        <center>Enable</center>
-                                    </td>
-                                    <td>
-                                        <center>300</center>
-                                    </td>
-                                    <td>
-                                        <center>1</center>
-                                    </td>
-                                    <td>-</td>
+                                    @endif
+                                    @if(in_array('shuttle-status', $selectedFields))
+                                    <td><center>{{ $availability->fba_shuttle_status }}</center></td>
+                                    @endif
+                                    @if(in_array('available-status', $selectedFields))
+                                    <td><center>{{ $availability->fba_status }}</center></td>
+                                    @endif
+                                    @if(in_array('stock', $selectedFields))
+                                    <td><center>{{ $availability->fba_stock }}</center></td>
+                                    @endif
+                                    @if(in_array('pax', $selectedFields))
+                                    <td><center>{{ $availability->fba_min_pax }}</center></td>
+                                    @endif
+                                    @if(in_array('info', $selectedFields))
+                                    <td><center>{{$availability->fba_info}}</center></td>
+                                    @endif
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
