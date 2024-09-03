@@ -120,27 +120,71 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
+                        <table class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
                             <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Fast Boat</th>
-                                    <th>Price</th>
-                                    <th>Shuttle</th>
-                                    <th>Status</th>
-                                    <th>Stock</th>
-                                    <th>Min Pax</th>
+                                    <th colspan="3" class="text-center">Price</th>
+                                    <th>
+                                        <center>Shuttle</center>
+                                    </th>
+                                    <th>
+                                        <center>Status</center>
+                                    </th>
+                                    <th>
+                                        <center>Stock</center>
+                                    </th>
+                                    <th>
+                                        <center>Min Pax</center>
+                                    </th>
                                     <th>Info</th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Nett</th>
+                                    <th>Publish</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>1</td>
+                                    <td>
+                                        Eka Jaya Fastboat<br />
+                                        Sanur - Senggigi (12.00)
+                                    </td>
+                                    <td>
+                                        <div>Adult :</div>
+                                        <div>Child :</div>
+                                    </td>
+                                    <td>
+                                        <div>200.000</div>
+                                        <div>175.000</div>
+                                    </td>
+                                    <td>
+                                        <div>250.000</div>
+                                        <div>225.000</div>
+                                    </td>
+                                    <td>
+                                        <center>Enable</center>
+                                    </td>
+                                    <td>
+                                        <center>Enable</center>
+                                    </td>
+                                    <td>
+                                        <center>300</center>
+                                    </td>
+                                    <td>
+                                        <center>1</center>
+                                    </td>
+                                    <td>-</td>
                                 </tr>
                             </tbody>
                         </table>
