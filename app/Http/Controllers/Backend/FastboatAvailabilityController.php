@@ -298,13 +298,13 @@ class FastboatAvailabilityController extends Controller
 
             // Update hanya field yang diinginkan
             if (isset($data['fba_adult_nett'])) {
-                $availability->fba_adult_nett = $data['fba_adult_nett'];
+                $availability->fba_adult_nett = str_replace('.', '', $data['fba_adult_nett']);
             }
             if (isset($data['fba_child_nett'])) {
-                $availability->fba_child_nett = $data['fba_child_nett'];
+                $availability->fba_child_nett = str_replace('.', '', $data['fba_child_nett']);
             }
             if (isset($data['fba_adult_publish'])) {
-                $availability->fba_adult_publish = $data['fba_adult_publish'];
+                $availability->fba_adult_publish = str_replace('.', '', $data['fba_adult_publish']);
             }
             if (isset($data['fba_stock'])) {
                 $availability->fba_stock = $data['fba_stock'];
