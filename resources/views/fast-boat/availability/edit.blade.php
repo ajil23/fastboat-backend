@@ -24,8 +24,8 @@
                                 <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         @if($availabilities->isNotEmpty() && !empty($selectedFields))
-                                        @foreach($selectedFields as $field)
                                         <input type="hidden" name="selected_availability_ids[]" value="{{ implode(',', $availabilities->pluck('fba_id')->toArray()) }}">
+
                                         <div class="row">
                                             @if(in_array('price', $selectedFields))
                                             <div class="col-lg-3 col-md-6">
@@ -52,8 +52,9 @@
                                                     <input type="text" id="fba_child_publish" name="fba_child_publish" placeholder="Enter Child Publish" class="form-control" value="{{ number_format($availabilities->first()->fba_child_publish, 0, ',', '.') }}">
                                                 </div>
                                             </div>
+                                            @endif
                                         </div>
-                                        @endif
+
                                         <div class="row">
                                             @if(in_array('price', $selectedFields))
                                             <div class="col-lg-3 col-md-6">
@@ -132,7 +133,6 @@
                                             </div>
                                         </div>
                                         @endif
-                                        @endforeach
                                         @else
                                         <p>No data selected for update.</p>
                                         @endif
@@ -261,36 +261,15 @@
 @endsection
 
 @section('script')
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
-
-        // Fungsi untuk format input mata uang
-        function formatCurrencyInput(selector) {
-            $(selector).on('input', function() {
-                let value = $(this).val().replace(/\D/g, '');
-                value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-                $(this).val(value);
-            });
-
-            $('form').on('submit', function() {
-                $(selector).each(function() {
-                    let rawValue = $(this).val().replace(/\./g, '');
-                    $(this).val(rawValue);
-                });
-            });
-        }
-
-        // Panggil fungsi untuk input yang diinginkan
-        @foreach($availabilities as $availability)
-        @if(in_array('price', $selectedFields))
-        formatCurrencyInput('#fba_adult_nett_{{ $availability->fba_id }}');
-        formatCurrencyInput('#fba_child_nett_{{ $availability->fba_id }}');
-        formatCurrencyInput('#fba_adult_publish_{{ $availability->fba_id }}');
-        formatCurrencyInput('#fba_child_publish_{{ $availability->fba_id }}');
-        formatCurrencyInput('#fba_discount_{{ $availability->fba_id }}');
-        @endif
-        @endforeach
+        // Format currency input fields
+        $('input[type="text"]').on('input', function() {
+            let value = $(this).val().replace(/\./g, '');
+            if ($.isNumeric(value)) {
+                $(this).val(new Intl.NumberFormat('id-ID').format(value));
+            }
+        });
     });
 </script>
 @endsection

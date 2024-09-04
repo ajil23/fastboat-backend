@@ -238,7 +238,7 @@
             </form>
         </div>
 
-        <form action="{{route('availability.edit')}}" method="get">
+        <form action="{{ route('availability.edit') }}" method="get">
             @csrf
             <div class="row">
                 <div class="col-xl-12">
@@ -249,51 +249,56 @@
                             </div>
                             <div class="row">
                                 <!-- Checkbox Options -->
+                                @php
+                                $selectedFields = session('last_search.selected_fields', []);
+                                @endphp
+
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
-                                        <input type="checkbox" class="form-check-input" id="price" name="selected_fields[]" value="price">
+                                        <input type="checkbox" class="form-check-input" id="price" name="selected_fields[]" value="price" {{ in_array('price', $selectedFields) ? 'checked' : '' }}>
                                         <label for="price">Price</label>
                                     </div>
                                 </div>
 
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
-                                        <input type="checkbox" class="form-check-input" id="stock" name="selected_fields[]" value="stock">
+                                        <input type="checkbox" class="form-check-input" id="stock" name="selected_fields[]" value="stock" {{ in_array('stock', $selectedFields) ? 'checked' : '' }}>
                                         <label for="stock">Stock</label>
                                     </div>
                                 </div>
 
+                                <!-- Add the other checkboxes in a similar manner -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
-                                        <input type="checkbox" class="form-check-input" id="pax" name="selected_fields[]" value="pax">
+                                        <input type="checkbox" class="form-check-input" id="pax" name="selected_fields[]" value="pax" {{ in_array('pax', $selectedFields) ? 'checked' : '' }}>
                                         <label for="pax">Min Pax</label>
                                     </div>
                                 </div>
 
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
-                                        <input type="checkbox" class="form-check-input" id="shuttle-status" name="selected_fields[]" value="shuttle-status">
+                                        <input type="checkbox" class="form-check-input" id="shuttle-status" name="selected_fields[]" value="shuttle-status" {{ in_array('shuttle-status', $selectedFields) ? 'checked' : '' }}>
                                         <label for="shuttle-status">Shuttle Status</label>
                                     </div>
                                 </div>
 
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
-                                        <input type="checkbox" class="form-check-input" id="available-status" name="selected_fields[]" value="available-status">
+                                        <input type="checkbox" class="form-check-input" id="available-status" name="selected_fields[]" value="available-status" {{ in_array('available-status', $selectedFields) ? 'checked' : '' }}>
                                         <label for="available-status">Available Status</label>
                                     </div>
                                 </div>
 
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
-                                        <input type="checkbox" class="form-check-input" id="info" name="selected_fields[]" value="info">
+                                        <input type="checkbox" class="form-check-input" id="info" name="selected_fields[]" value="info" {{ in_array('info', $selectedFields) ? 'checked' : '' }}>
                                         <label for="info">Availability Info</label>
                                     </div>
                                 </div>
 
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
-                                        <input type="checkbox" class="form-check-input" id="custom-time" name="selected_fields[]" value="custom-time">
+                                        <input type="checkbox" class="form-check-input" id="custom-time" name="selected_fields[]" value="custom-time" {{ in_array('custom-time', $selectedFields) ? 'checked' : '' }}>
                                         <label for="custom-time">Custom Dept & Arriv Time</label>
                                     </div>
                                 </div>
@@ -318,19 +323,17 @@
                                 </div>
 
                                 @php
-                                // Mendapatkan tanggal awal dan akhir dari data availability
+                                // Mendapatkan data availability dari session
                                 $availabilities = session('availabilities', collect());
+
                                 $firstDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->min('fba_date')) : \Carbon\Carbon::now();
                                 $lastDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->max('fba_date')) : \Carbon\Carbon::now();
 
-                                // Mendapatkan hari pertama dari tanggal awal (0 untuk Minggu, 6 untuk Sabtu)
                                 $startDayOfWeek = $firstDate->dayOfWeek;
                                 $currentDate = $firstDate->copy();
 
-                                // Hitung total minggu yang diperlukan dalam kalender
                                 $totalWeeks = ceil(($lastDate->diffInDays($firstDate) + $startDayOfWeek + 1) / 7);
 
-                                // Mengelompokkan data availability berdasarkan tanggal
                                 $availabilityByDate = $availabilities->groupBy(function ($item) {
                                 return \Carbon\Carbon::parse($item->fba_date)->format('Y-m-d');
                                 });
@@ -383,13 +386,13 @@
                                                     <div class="availability-entry">
                                                         <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->fba_id }}" />
                                                         @if ($item->fba_status == 'disable')
-                                                        <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}" class="text-danger">
+                                                        <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{ route('availability.show', $item->fba_id) }}" class="text-danger">
                                                             {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                             {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                             ({{ $item->fba_stock }})
                                                         </a>
                                                         @else
-                                                        <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{route('availability.show', $item->fba_id)}}">
+                                                        <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{ route('availability.show', $item->fba_id) }}">
                                                             {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                             {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                             ({{ $item->fba_stock }})
@@ -413,6 +416,9 @@
                                         </tbody>
                                         @endfor
                                         @else
+                                        <tr>
+                                            <td colspan="7" class="text-center">No data available</td>
+                                        </tr>
                                         @endif
                                 </table>
                             </div>
@@ -421,6 +427,7 @@
                 </div>
             </div>
         </form>
+
 
 
     </div>
