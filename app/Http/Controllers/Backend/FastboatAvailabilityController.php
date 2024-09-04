@@ -277,66 +277,83 @@ class FastboatAvailabilityController extends Controller
 
     public function edit(Request $request)
     {
-        // Mengambil ID dari availability yang dipilih di halaman index
-        $selectedIds = $request->input('select_availability', []);
-
-        // Mengambil data dari database berdasarkan ID yang dipilih
-        $availabilities = FastboatAvailability::whereIn('fba_id', $selectedIds)->get();
-
-        // Ambil fields yang dipilih dari request
+        // Dapatkan ID yang dipilih dari halaman sebelumnya
+        $selectedAvailabilityIds = $request->input('select_availability', []);
         $selectedFields = $request->input('selected_fields', []);
 
-        // Mengirim data ke view
+        // Cek apakah ada data yang diterima
+        if (empty($selectedAvailabilityIds) || empty($selectedFields)) {
+            return redirect()->back()->with('error', 'Please select at least one availability and one field.');
+        }
+
+        // Ambil semua data availability berdasarkan ID yang dipilih
+        $availabilities = FastboatAvailability::whereIn('fba_id', $selectedAvailabilityIds)->get();
+
+        // Kirim data ke view
         return view('fast-boat.availability.edit', compact('availabilities', 'selectedFields'));
     }
 
     public function update(Request $request)
     {
-        // Loop melalui setiap availability yang diupdate
-        foreach ($request->availabilities as $availabilityId => $data) {
-            $availability = FastboatAvailability::findOrFail($availabilityId);
+        // Ambil semua ID yang dipilih dari request
+        $selectedAvailabilityIds = explode(',', $request->input('selected_availability_ids')[0]);
 
-            // Update hanya field yang diinginkan
-            if (isset($data['fba_adult_nett'])) {
-                $availability->fba_adult_nett = str_replace('.', '', $data['fba_adult_nett']);
-            }
-            if (isset($data['fba_child_nett'])) {
-                $availability->fba_child_nett = str_replace('.', '', $data['fba_child_nett']);
-            }
-            if (isset($data['fba_adult_publish'])) {
-                $availability->fba_adult_publish = str_replace('.', '', $data['fba_adult_publish']);
-            }
-            if (isset($data['fba_stock'])) {
-                $availability->fba_stock = $data['fba_stock'];
-            }
-            if (isset($data['fba_min_pax'])) {
-                $availability->fba_min_pax = $data['fba_min_pax'];
-            }
-            if (isset($data['fba_shuttle_status'])) {
-                $availability->fba_shuttle_status = $data['fba_shuttle_status'];
-            }
-            if (isset($data['fba_status'])) {
-                $availability->fba_status = $data['fba_status'];
-            }
-            if (isset($data['fba_info'])) {
-                $availability->fba_info = $data['fba_info'];
-            }
-            if (isset($data['fba_dept_time'])) {
-                $availability->fba_dept_time = $data['fba_dept_time'];
-            }
-            if (isset($data['fba_arriv_time'])) {
-                $availability->fba_arriv_time = $data['fba_arriv_time'];
-            }
+        // Ambil data yang diinput dari form
+        $data = $request->except('selected_availability_ids');
 
-            // Set field updated by
-            $availability->fba_updated_by = auth()->id();
+        // Update setiap availability yang dipilih
+        foreach ($selectedAvailabilityIds as $availabilityId) {
+            $availability = FastboatAvailability::find($availabilityId);
 
-            // Simpan perubahan
-            $availability->save();
+            if ($availability) {
+                // Lakukan update pada setiap field yang diinputkan
+                if (isset($data['fba_adult_nett'])) {
+                    $availability->fba_adult_nett = str_replace('.', '', $data['fba_adult_nett']);
+                }
+                if (isset($data['fba_child_nett'])) {
+                    $availability->fba_child_nett = str_replace('.', '', $data['fba_child_nett']);
+                }
+                if (isset($data['fba_adult_publish'])) {
+                    $availability->fba_adult_publish = str_replace('.', '', $data['fba_adult_publish']);
+                }
+                if (isset($data['fba_child_publish'])) {
+                    $availability->fba_child_publish = str_replace('.', '', $data['fba_child_publish']);
+                }
+                if (isset($data['fba_discount'])) {
+                    $availability->fba_discount = str_replace('.', '', $data['fba_discount']);
+                }
+                if (isset($data['fba_stock'])) {
+                    $availability->fba_stock = $data['fba_stock'];
+                }
+                if (isset($data['fba_min_pax'])) {
+                    $availability->fba_min_pax = $data['fba_min_pax'];
+                }
+                if (isset($data['fba_shuttle_status'])) {
+                    $availability->fba_shuttle_status = $data['fba_shuttle_status'];
+                }
+                if (isset($data['fba_status'])) {
+                    $availability->fba_status = $data['fba_status'];
+                }
+                if (isset($data['fba_info'])) {
+                    $availability->fba_info = $data['fba_info'];
+                }
+                if (isset($data['fba_dept_time'])) {
+                    $availability->fba_dept_time = $data['fba_dept_time'];
+                }
+                if (isset($data['fba_arriv_time'])) {
+                    $availability->fba_arriv_time = $data['fba_arriv_time'];
+                }
+
+                // Set field updated_by
+                $availability->fba_updated_by = auth()->id();
+
+                // Simpan perubahan
+                $availability->save();
+            }
         }
 
         // Tambahkan pesan toast sukses ke dalam session
-        toast('Your data has been updated successfully!', 'success');
+        toast('All selected data have been updated successfully!', 'success');
 
         // Redirect ke halaman view
         return redirect()->route('availability.view');
