@@ -147,7 +147,6 @@
             var shuttleareaName = tr.find('.item').text();
             var shuttleareaId = tr.find('.shuttlearea-id').val();
             var islandId = tr.find('.island-id').val();
-            console.log(id, islandId);
             
             // Isi modal dengan data yang sesuai
             $('#editDataModal #sa_name_edit').val(shuttleareaName);
