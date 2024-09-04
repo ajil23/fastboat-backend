@@ -352,10 +352,13 @@ class FastboatAvailabilityController extends Controller
             }
         }
 
-        // Tambahkan pesan toast sukses ke dalam session
-        toast('All selected data have been updated successfully!', 'success');
+        // Ambil semua data yang sudah diupdate untuk dikirim kembali ke halaman index
+        $updatedAvailabilities = FastboatAvailability::whereIn('fba_id', $selectedAvailabilityIds)->get();
 
-        // Redirect ke halaman view
+        // Simpan data availabilities di session
+        session()->flash('availabilities', $updatedAvailabilities);
+
+        // Redirect ke halaman index dengan session yang menyimpan data terbaru
         return redirect()->route('availability.view');
     }
 }
