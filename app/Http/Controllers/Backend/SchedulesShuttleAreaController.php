@@ -51,6 +51,7 @@ class SchedulesShuttleAreaController extends Controller
         $shuttleareaData = SchedulesShuttleArea::find($id);
         $shuttleareaData -> sa_island = $request->sa_island;
         $shuttleareaData -> sa_name = $request->sa_name;
+        $shuttleareaData -> sa_updated_by = Auth()->id();
         $shuttleareaData -> update();
         toast('Your data as been edited!', 'success');
         return redirect()->route('shuttlearea.view');
