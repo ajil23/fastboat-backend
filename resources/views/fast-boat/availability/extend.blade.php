@@ -124,10 +124,10 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fba_stock">Stock*</label>
-                                                    <input type="number" id="fba_stock" name="fba_stock" placeholder="Enter Stock" class="form-control" required>
+                                                    <input type="number" id="fba_stock" name="fba_stock" placeholder="Enter Stock" class="form-control" required value="{{ old('fba_stock', 200) }}">
                                                 </div>
                                             </div>
                                         </div>
