@@ -139,24 +139,29 @@ class FastboatAvailabilityController extends Controller
         // Iterasi setiap tanggal dari awal hingga akhir
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             foreach ($tripIds as $tripId) {
-                $availabilityData = new FastboatAvailability();
-                $availabilityData->fba_trip_id = $tripId;
-                $availabilityData->fba_date = $date->format('Y-m-d');
-                $availabilityData->fba_dept_time = $request->fba_dept_time;
-                $availabilityData->fba_arriv_time = $request->fba_arriv_time;
-                $availabilityData->fba_adult_nett = $request->fba_adult_nett;
-                $availabilityData->fba_child_nett = $request->fba_child_nett;
-                $availabilityData->fba_adult_publish = $request->fba_adult_publish;
-                $availabilityData->fba_child_publish = $request->fba_child_publish;
-                $availabilityData->fba_discount = $request->fba_discount;
-                $availabilityData->fba_stock = $request->fba_stock;
-                $availabilityData->fba_min_pax = $request->fba_min_pax;
-                $availabilityData->fba_status = $request->fba_status;
-                $availabilityData->fba_shuttle_status = $request->fba_shuttle_status;
-                $availabilityData->fba_info = $request->fba_info;
-                $availabilityData->fba_created_by = auth()->id();
-                $availabilityData->fba_updated_by = auth()->id();
-                $availabilityData->save();
+                // Mencari atau membuat data baru berdasarkan trip_id dan fba_date
+                FastboatAvailability::updateOrCreate(
+                    [
+                        'fba_trip_id' => $tripId,       // Kondisi untuk mencari data
+                        'fba_date' => $date->format('Y-m-d')
+                    ],
+                    [
+                        'fba_dept_time' => $request->fba_dept_time,
+                        'fba_arriv_time' => $request->fba_arriv_time,
+                        'fba_adult_nett' => $request->fba_adult_nett,
+                        'fba_child_nett' => $request->fba_child_nett,
+                        'fba_adult_publish' => $request->fba_adult_publish,
+                        'fba_child_publish' => $request->fba_child_publish,
+                        'fba_discount' => $request->fba_discount,
+                        'fba_stock' => $request->fba_stock,
+                        'fba_min_pax' => $request->fba_min_pax,
+                        'fba_status' => $request->fba_status,
+                        'fba_shuttle_status' => $request->fba_shuttle_status,
+                        'fba_info' => $request->fba_info,
+                        'fba_created_by' => auth()->id(),
+                        'fba_updated_by' => auth()->id(),
+                    ]
+                );
             }
         }
 
