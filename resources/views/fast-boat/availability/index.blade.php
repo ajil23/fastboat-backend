@@ -415,7 +415,7 @@
                                                     <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->fba_id }}" />
                                                     @if ($item->fba_status == 'disable')
                                                     <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{ route('availability.show', $item->fba_id) }}" class="text-danger">
-                                                        {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                        {{ $item->trip->departure->prt_code }}-{{ $item->trip->arrival->prt_code }}
                                                         @if ($item->fba_dept_time)
                                                         {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }}
                                                         @else
@@ -425,7 +425,7 @@
                                                     </a>
                                                     @else
                                                     <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{ route('availability.show', $item->fba_id) }}">
-                                                        {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
+                                                        {{ $item->trip->departure->prt_code }}-{{ $item->trip->arrival->prt_code }}
                                                         @if ($item->fba_dept_time)
                                                         {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }}
                                                         @else
