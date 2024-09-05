@@ -205,7 +205,8 @@
                                 <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label">Date range</label>
-                                        <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range" value="{{ old('daterange', request('daterange')) }}">
+                                        <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range"
+                                            value="{{ old('daterange', request('daterange', date('d-m-Y'))) }}">
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
@@ -408,9 +409,9 @@
                                                         <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{ route('availability.show', $item->fba_id) }}" class="text-danger">
                                                             {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                             @if ($item->fba_dept_time)
-                                                                {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }}
+                                                            {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }}
                                                             @else
-                                                                {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
+                                                            {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                             @endif
                                                             ({{ $item->fba_stock }})
                                                         </a>
@@ -418,9 +419,9 @@
                                                         <a href="#" id="availabilityButton" data-bs-toggle="modal" data-bs-target="#availabilityModal" data-url="{{ route('availability.show', $item->fba_id) }}">
                                                             {{ $item->trip->departure->island->isd_code }}-{{ $item->trip->arrival->island->isd_code }}
                                                             @if ($item->fba_dept_time)
-                                                                {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }}
+                                                            {{ \Carbon\Carbon::parse($item->fba_dept_time)->format('H:i') }}
                                                             @else
-                                                                {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
+                                                            {{ \Carbon\Carbon::parse($item->trip->fbt_dept_time)->format('H:i') }}
                                                             @endif
                                                             ({{ $item->fba_stock }})
                                                         </a>
@@ -554,9 +555,10 @@
     flatpickr("#daterange", {
         mode: "range",
         dateFormat: "d-m-Y",
+        defaultDate: @json(explode(' to ', request('daterange', date('d-m-Y')))), // JSON encode to handle array for defaultDate
         disable: [
             function(date) {
-                return !(date.getDate() % 100);
+                return !(date.getDate() % 100); // Custom disabling logic (optional)
             }
         ]
     });
@@ -734,10 +736,10 @@
                 // Kondisi pengecekan untuk fba_dept_time dan fba_arrival_time
                 var deptTime = data.fba_dept_time ? data.fba_dept_time : data.trip.fbt_dept_time;
                 var arrivalTime = data.fba_arriv_time ? data.fba_arriv_time : data.trip.fbt_arrival_time;
-                
+
                 // Menampilkan waktu keberangkatan dan kedatangan yang sesuai
                 $('#time').text(deptTime.substring(0, 5) + ' - ' + arrivalTime.substring(0, 5));
-                
+
                 $('#min-pax').text(data.fba_min_pax);
                 $('#trip-info').text(data.trip.fbt_info_en);
                 $('#availability-info').text(data.fba_info);
