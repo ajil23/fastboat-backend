@@ -204,7 +204,13 @@
                                     <td>{{$loop->iteration}}</td>
                                     <td>
                                         {{ $availability->trip->fastboat->fb_name }}<br />
-                                        {{$availability->trip->departure->prt_name_en}} - {{$availability->trip->arrival->prt_name_en}} ({{ \Carbon\Carbon::parse($availability->trip->fbt_dept_time)->format('H:i') }})
+                                        {{$availability->trip->departure->prt_name_en}} - {{$availability->trip->arrival->prt_name_en}} (
+                                        @if ($availability->fba_dept_time)
+                                            {{ \Carbon\Carbon::parse($availability->fba_dept_time)->format('H:i') }}
+                                        @else
+                                            {{ \Carbon\Carbon::parse($availability->trip->fbt_dept_time)->format('H:i') }}
+                                        @endif
+                                        )
                                     </td>
                                     @if(in_array('price', $selectedFields))
                                     <td>
