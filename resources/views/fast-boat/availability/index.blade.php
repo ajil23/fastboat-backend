@@ -44,13 +44,19 @@
     }
 
     .company-name {
-        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
         margin-top: 10px;
         margin-bottom: 5px;
         font-size: 0.8rem;
     }
 
     .schedule-name {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin-left: 10px;
         margin-bottom: 3px;
         font-size: 0.85rem;
@@ -400,8 +406,8 @@
 
                                                     @foreach ($availabilityByDate[$dateString]->groupBy('trip.fastboat.company.cpn_name') as $companyName => $companyData)
                                                     @foreach ($companyData->groupBy('trip.schedule.sch_name') as $scheduleName => $scheduleData)
-                                                    <div class="company-name">{{ $companyName }} / {{ $scheduleName }}</div>
-
+                                                    <div class="company-name">{{ $companyName }}</div>
+                                                    <div class="schedule-name">{{ $scheduleName }}</div>
                                                     @foreach ($scheduleData as $item)
                                                     <div class="availability-entry">
                                                         <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->fba_id }}" />
@@ -504,6 +510,12 @@
                                 <td id="trip-status"></td>
                                 <td class="bold-text">Availability Status :</td>
                                 <td id="availability-status"></td>
+                            </tr>
+                            <tr>
+                                <td class="bold-text">Departure Port :</td>
+                                <td id="departure-port"></td>
+                                <td class="bold-text">Arrival Port :</td>
+                                <td id="arrival-port"></td>
                             </tr>
                             <tr>
                                 <td class="bold-text">Discount :</td>
@@ -752,6 +764,8 @@
                     $('#trip-status').text('disable');
                 }
                 $('#availability-status').text(data.fba_status);
+                $('#departure-port').text(data.trip.departure.prt_name_en);
+                $('#arrival-port').text(data.trip.arrival.prt_name_en);
                 // Format numerical values
                 function formatNumber(number) {
                     return Number(number).toLocaleString('id-ID'); // 'id-ID' for Indonesian locale, use 'en-US' for English locale
