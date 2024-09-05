@@ -131,7 +131,7 @@
                     </div>
                 </div>
             </div>
-            <form method="get" action="{{route('availability.search')}}">
+            <form method="get" action="{{ route('availability.view') }}">
                 @csrf
                 <div class="card">
                     <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
@@ -147,7 +147,6 @@
                             </div>
                         </div>
                     </a>
-
                     <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
                         <div class="p-4 border-top">
                             <div class="row">
@@ -157,7 +156,9 @@
                                         <select name="company" id="search-company">
                                             <option value="">Select Company</option>
                                             @foreach ($company as $item)
-                                            <option value="{{ $item->cpn_id }}" {{ old('company') == $item->cpn_id ? 'selected' : '' }}>{{ $item->cpn_name }}</option>
+                                            <option value="{{ $item->cpn_id }}" {{ old('company', request('company')) == $item->cpn_id ? 'selected' : '' }}>
+                                                {{ $item->cpn_name }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -167,6 +168,11 @@
                                         <label class="form-label">Fast Boat</label>
                                         <select class="form-control" name="fastboat" id="fastboat-search">
                                             <option value="">Select Fast Boat</option>
+                                            @foreach ($fastboat as $item)
+                                            <option value="{{ $item->fb_id }}" {{ old('fastboat', request('fastboat')) == $item->fb_id ? 'selected' : '' }}>
+                                                {{ $item->fb_name }}
+                                            </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -175,6 +181,11 @@
                                         <label class="form-label">Schedule</label>
                                         <select class="form-control" name="schedule" id="search-schedule">
                                             <option value="">Select Schedule</option>
+                                            @foreach ($schedule as $item)
+                                            <option value="{{ $item->sch_id }}" {{ old('schedule', request('schedule')) == $item->sch_id ? 'selected' : '' }}>
+                                                {{ $item->sch_name }}
+                                            </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -184,7 +195,9 @@
                                         <select name="route" id="search-route">
                                             <option value="">Select Route</option>
                                             @foreach ($route as $item)
-                                            <option value="{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}" {{ old('route') == $item->rt_dept_island . ' to ' . $item->rt_arrival_island ? 'selected' : '' }}>{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}</option>
+                                            <option value="{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}" {{ old('route', request('route')) == $item->rt_dept_island . ' to ' . $item->rt_arrival_island ? 'selected' : '' }}>
+                                                {{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -192,7 +205,7 @@
                                 <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label">Date range</label>
-                                        <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range" value="{{ old('daterange') }}">
+                                        <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range" value="{{ old('daterange', request('daterange')) }}">
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
@@ -201,7 +214,9 @@
                                         <select name="departure" id="search-departure">
                                             <option value="">Select Departure Port</option>
                                             @foreach ($departure as $item)
-                                            <option value="{{ $item->prt_name_en }}" {{ old('departure') == $item->prt_name_en ? 'selected' : '' }}>{{ $item->prt_name_en }}</option>
+                                            <option value="{{ $item->prt_name_en }}" {{ old('departure', request('departure')) == $item->prt_name_en ? 'selected' : '' }}>
+                                                {{ $item->prt_name_en }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -212,7 +227,9 @@
                                         <select name="arrival" id="search-arrival">
                                             <option value="">Select Arrival Port</option>
                                             @foreach ($arrival as $item)
-                                            <option value="{{ $item->prt_name_en }}" {{ old('arrival') == $item->prt_name_en ? 'selected' : '' }}>{{ $item->prt_name_en }}</option>
+                                            <option value="{{ $item->prt_name_en }}" {{ old('arrival', request('arrival')) == $item->prt_name_en ? 'selected' : '' }}>
+                                                {{ $item->prt_name_en }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -223,7 +240,9 @@
                                         <select name="dept_time" id="search-dept_time">
                                             <option value="">Select Dept time</option>
                                             @foreach ($deptTime as $item)
-                                            <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}" {{ old('dept_time') == date('H:i', strtotime($item->fbt_dept_time)) ? 'selected' : '' }}>{{ date('H:i', strtotime($item->fbt_dept_time)) }}</option>
+                                            <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}" {{ old('dept_time', request('dept_time')) == date('H:i', strtotime($item->fbt_dept_time)) ? 'selected' : '' }}>
+                                                {{ date('H:i', strtotime($item->fbt_dept_time)) }}
+                                            </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -250,9 +269,10 @@
                             <div class="row">
                                 <!-- Checkbox Options -->
                                 @php
-                                $selectedFields = session('last_search.selected_fields', []);
+                                $selectedFields = request()->get('selected_fields', []);
                                 @endphp
 
+                                <!-- Checkbox for Price -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="price" name="selected_fields[]" value="price" {{ in_array('price', $selectedFields) ? 'checked' : '' }}>
@@ -260,6 +280,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Checkbox for Stock -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="stock" name="selected_fields[]" value="stock" {{ in_array('stock', $selectedFields) ? 'checked' : '' }}>
@@ -267,7 +288,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Add the other checkboxes in a similar manner -->
+                                <!-- Checkbox for Min Pax -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="pax" name="selected_fields[]" value="pax" {{ in_array('pax', $selectedFields) ? 'checked' : '' }}>
@@ -275,6 +296,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Checkbox for Shuttle Status -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="shuttle-status" name="selected_fields[]" value="shuttle-status" {{ in_array('shuttle-status', $selectedFields) ? 'checked' : '' }}>
@@ -282,6 +304,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Checkbox for Available Status -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="available-status" name="selected_fields[]" value="available-status" {{ in_array('available-status', $selectedFields) ? 'checked' : '' }}>
@@ -289,6 +312,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Checkbox for Availability Info -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="info" name="selected_fields[]" value="info" {{ in_array('info', $selectedFields) ? 'checked' : '' }}>
@@ -296,6 +320,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Checkbox for Custom Dept & Arriv Time -->
                                 <div class="col-xl-3 col-lg-6">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="custom-time" name="selected_fields[]" value="custom-time" {{ in_array('custom-time', $selectedFields) ? 'checked' : '' }}>
@@ -323,9 +348,6 @@
                                 </div>
 
                                 @php
-                                // Mendapatkan data availability dari session
-                                $availabilities = session('availabilities', collect());
-
                                 $firstDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->min('fba_date')) : \Carbon\Carbon::now();
                                 $lastDate = $availabilities->isNotEmpty() ? \Carbon\Carbon::parse($availabilities->max('fba_date')) : \Carbon\Carbon::now();
 
@@ -353,15 +375,15 @@
                                     </thead>
 
                                     @if($availabilities->isNotEmpty())
+
                                     @for ($week = 0; $week < $totalWeeks; $week++)
                                         <tbody>
                                         <tr>
                                             @for ($day = 0; $day < 7; $day++)
                                                 @if ($week===0 && $day < $startDayOfWeek)
-                                                <!-- Kosongkan sel sebelum tanggal pertama -->
-                                                <td></td>
+                                                <td>
+                                                </td>
                                                 @elseif ($currentDate->gt($lastDate))
-                                                <!-- Kosongkan sel setelah tanggal terakhir -->
                                                 <td></td>
                                                 @else
                                                 @php
@@ -370,18 +392,15 @@
 
                                                 @if ($availabilityByDate->has($dateString))
                                                 <td class="{{ $currentDate->isSunday() ? 'sunday' : ($currentDate->isFriday() ? 'friday' : '') }}" style="{{ $currentDate->isLastOfMonth() ? 'border: 3px solid red' : '' }}">
-                                                    <!-- Tampilkan Tanggal dengan Checkbox -->
                                                     <div class="calendar-date">
                                                         <input type="checkbox" class="form-check-input select-day" name="select_date[]" value="{{ $dateString }}" />
                                                         <span>{{ $currentDate->format('d M Y') }}</span>
                                                     </div>
 
-                                                    <!-- Looping untuk setiap perusahaan dan schedule -->
                                                     @foreach ($availabilityByDate[$dateString]->groupBy('trip.fastboat.company.cpn_name') as $companyName => $companyData)
                                                     @foreach ($companyData->groupBy('trip.schedule.sch_name') as $scheduleName => $scheduleData)
                                                     <div class="company-name">{{ $companyName }} / {{ $scheduleName }}</div>
 
-                                                    <!-- Looping untuk setiap availability dalam schedule -->
                                                     @foreach ($scheduleData as $item)
                                                     <div class="availability-entry">
                                                         <input type="checkbox" class="form-check-input select-availability" name="select_availability[]" value="{{ $item->fba_id }}" />
@@ -427,8 +446,6 @@
                 </div>
             </div>
         </form>
-
-
 
     </div>
 
