@@ -485,45 +485,45 @@
                 <div class="table-responsive">
                     <table class="table table-bordered mb-4">
                         <tr>
-                            <td class="bold-text">Fast Boat :</td>
+                            <td class="bold-text">Fast Boat</td>
                             <td id="fastboat-name"></td>
-                            <td class="bold-text">Route :</td>
+                            <td class="bold-text">Route</td>
                             <td id="trip"></td>
                         </tr>
                         <tr>
-                            <td class="bold-text">Time :</td>
+                            <td class="bold-text">Time</td>
                             <td id="time"></td>
-                            <td class="bold-text">Min pax :</td>
+                            <td class="bold-text">Min pax</td>
                             <td id="min-pax"></td>
                         </tr>
                         <tr>
-                            <td class="bold-text">Trip Info :</td>
+                            <td class="bold-text">Trip Info</td>
                             <td id="trip-info"></td>
-                            <td class="bold-text">Availability info :</td>
+                            <td class="bold-text">Availability info</td>
                             <td id="availability-info"></td>
                         </tr>
                     </table>
                     <table class="table table-bordered mb-4">
                         <tr>
-                            <td class="bold-text">Available :</td>
+                            <td class="bold-text">Available</td>
                             <td id="available"></td>
-                            <td class="bold-text">Shuttle Status :</td>
+                            <td class="bold-text">Shuttle Status</td>
                             <td id="shuttle_status"></td>
                         </tr>
                         <tr>
-                            <td class="bold-text">Trip Status :</td>
+                            <td class="bold-text">Trip Status</td>
                             <td id="trip-status"></td>
-                            <td class="bold-text">Availability Status :</td>
+                            <td class="bold-text">Availability Status</td>
                             <td id="availability-status"></td>
                         </tr>
                         <tr>
-                            <td class="bold-text">Departure Port :</td>
+                            <td class="bold-text">Departure Port</td>
                             <td id="departure-port"></td>
-                            <td class="bold-text">Arrival Port :</td>
+                            <td class="bold-text">Arrival Port</td>
                             <td id="arrival-port"></td>
                         </tr>
                         <tr>
-                            <td class="bold-text">Discount :</td>
+                            <td class="bold-text">Discount</td>
                             <td colspan="3">Discount IDR <span id="discount"></span> for round trip with same fast boat</td>
                         </tr>
                     </table>
@@ -770,30 +770,30 @@
                 };
                 var formattedDate = date.toLocaleDateString('en-GB', options);
                 $('#trip-date').text(formattedDate);
-                $('#fastboat-name').text(data.trip.fastboat.fb_name);
-                $('#trip').text(data.trip.fbt_name);
+                $('#fastboat-name').text(': ' + data.trip.fastboat.fb_name);
+                $('#trip').text(': ' + data.trip.fbt_name);
 
                 // Kondisi pengecekan untuk fba_dept_time dan fba_arrival_time
                 var deptTime = data.fba_dept_time ? data.fba_dept_time : data.trip.fbt_dept_time;
                 var arrivalTime = data.fba_arriv_time ? data.fba_arriv_time : data.trip.fbt_arrival_time;
 
                 // Menampilkan waktu keberangkatan dan kedatangan yang sesuai
-                $('#time').text(deptTime.substring(0, 5) + ' - ' + arrivalTime.substring(0, 5));
+                $('#time').text(': ' + deptTime.substring(0, 5) + ' - ' + arrivalTime.substring(0, 5));
 
-                $('#min-pax').text(data.fba_min_pax);
-                $('#trip-info').text(data.trip.fbt_info_en);
-                $('#availability-info').text(data.fba_info);
-                $('#available').text(data.fba_stock);
-                $('#shuttle_status').text(data.fba_shuttle_status);
-                $('#trip-status').text(data.trip.fbt_status);
+                $('#min-pax').text(': ' + data.fba_min_pax);
+                $('#trip-info').text(': ' + data.trip.fbt_info_en);
+                $('#availability-info').text(': ' + data.fba_info);
+                $('#available').text(': ' + data.fba_stock);
+                $('#shuttle_status').text(': ' + data.fba_shuttle_status);
+                $('#trip-status').text(': ' + data.trip.fbt_status);
                 if (data.trip.fbt_status === 1) {
-                    $('#trip-status').text('enable');
+                    $('#trip-status').text(': ' + 'enable');
                 } else {
-                    $('#trip-status').text('disable');
+                    $('#trip-status').text(': ' + 'disable');
                 }
-                $('#availability-status').text(data.fba_status);
-                $('#departure-port').text(data.trip.departure.prt_name_en);
-                $('#arrival-port').text(data.trip.arrival.prt_name_en);
+                $('#availability-status').text(': ' + data.fba_status);
+                $('#departure-port').text(': ' + data.trip.departure.prt_name_en);
+                $('#arrival-port').text(': ' + data.trip.arrival.prt_name_en);
                 // Format numerical values
                 function formatNumber(number) {
                     return Number(number).toLocaleString('id-ID'); // 'id-ID' for Indonesian locale, use 'en-US' for English locale

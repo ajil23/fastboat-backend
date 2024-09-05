@@ -10,6 +10,7 @@ use App\Models\FastboatAvailability;
 use App\Models\MasterPort;
 use App\Models\SchedulesSchedule;
 use App\Models\SchedulesTrip;
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Termwind\Components\Dd;
@@ -243,6 +244,20 @@ class FastboatAvailabilityController extends Controller
 
     public function edit(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'select_availability' => 'required|array',
+            'selected_fields' => 'required|array',
+        ]);
+
+        // Cek apakah validasi gagal
+        if ($validator->fails()) {
+            // Menambahkan pesan toast ke dalam session
+            toast('Validation failed! Please check your input.', 'error');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
         // Dapatkan ID yang dipilih dari halaman sebelumnya
         $selectedAvailabilityIds = $request->input('select_availability', []);
         $selectedFields = $request->input('selected_fields', []);
