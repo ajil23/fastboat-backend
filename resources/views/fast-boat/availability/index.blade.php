@@ -722,7 +722,14 @@
                 $('#trip-date').text(formattedDate);
                 $('#fastboat-name').text(data.trip.fastboat.fb_name);
                 $('#trip').text(data.trip.fbt_name);
-                $('#time').text(data.trip.fbt_dept_time.substring(0, 5) + ' - ' + data.trip.fbt_arrival_time.substring(0, 5));
+
+                // Kondisi pengecekan untuk fba_dept_time dan fba_arrival_time
+                var deptTime = data.fba_dept_time ? data.fba_dept_time : data.trip.fbt_dept_time;
+                var arrivalTime = data.fba_arriv_time ? data.fba_arriv_time : data.trip.fbt_arrival_time;
+                
+                // Menampilkan waktu keberangkatan dan kedatangan yang sesuai
+                $('#time').text(deptTime.substring(0, 5) + ' - ' + arrivalTime.substring(0, 5));
+                
                 $('#min-pax').text(data.fba_min_pax);
                 $('#trip-info').text(data.trip.fbt_info_en);
                 $('#availability-info').text(data.fba_info);
