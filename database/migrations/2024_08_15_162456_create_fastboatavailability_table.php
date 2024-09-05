@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('fba_stock', 11)->nullable();
             $table->string('fba_status');
             $table->string('fba_shuttle_status');
-            $table->text('fba_info');
+            $table->text('fba_info')->nullable();
             $table->string('fba_min_pax', 11);
             $table->string('fba_created_by');
             $table->string('fba_updated_by');
