@@ -43,9 +43,9 @@
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                 <a class="dropdown-item" id="edit-btn"
-                                                                href="javascript:void(0)" data-id="{{ $item->py_id }}"
-                                                                data-payment-name="{{ $item->py_name }}"
-                                                                data-payment-value="{{ $item->py_value }}">Edit</a>
+                                                                    href="javascript:void(0)" data-id="{{ $item->py_id }}"
+                                                                    data-payment-name="{{ $item->py_name }}"
+                                                                    data-payment-value="{{ $item->py_value }}">Edit</a>
                                                                 <a class="dropdown-item" data-confirm-delete="true"
                                                                     href="{{ route('payment.delete', $item->py_id) }}">Delete</a>
                                                             </div>
@@ -75,8 +75,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <form action="{{ route('payment.store') }}" method="post">
-                    @csrf
-                    <div class="modal-body">
+                        @csrf
+                        <div class="modal-body">
                             <div class="mb-3">
                                 <label for="py_name" class="form-label">Name</label>
                                 <input type="text" class="form-control" id="py_name" name="py_name"
@@ -87,11 +87,11 @@
                                 <input type="text" class="form-control" id="py_value" name="py_value"
                                     placeholder="Enter Value" required>
                             </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-dark">Save</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-dark">Save</button>
+                        </div>
                     </form>
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
@@ -136,6 +136,7 @@
 
 @section('script')
     <script>
+        // Modal edit 
         document.addEventListener('DOMContentLoaded', function() {
             var editButtons = document.querySelectorAll('#edit-btn');
             editButtons.forEach(function(button) {
@@ -155,12 +156,5 @@
                 });
             });
         });
-
-
-        document.getElementById('py_name').addEventListener('input', function() {
-        const py_name = this.value;
-        const py_value = py_name.toLowerCase().replace(/ /g, '-');
-        document.getElementById('py_value').value = py_value;
-    });
     </script>
 @endsection
