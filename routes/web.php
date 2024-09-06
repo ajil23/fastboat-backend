@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Backend\BookingDataController;
+use App\Http\Controllers\Backend\BookingTrashController;
 use App\Http\Controllers\Backend\DataCompanyController;
 use App\Http\Controllers\Backend\DataFastboatController;
 use App\Http\Controllers\Backend\DataRouteController;
@@ -41,6 +43,24 @@ Route::middleware([
 ])->group(function () {
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+    Route::prefix('booking')->group(function () {
+        //booking-data routes
+        Route::get('/data', [BookingDataController::class, 'index'])->name('data.view');
+        Route::get('/data/add', [BookingDataController::class, 'add'])->name('data.add');
+        Route::post('/data/store', [BookingDataController::class, 'store'])->name('data.store');
+        Route::get('/data/edit/{id}', [BookingDataController::class, 'edit'])->name('data.edit');
+        Route::post('/data/update/{id}', [BookingDataController::class, 'update'])->name('data.update');
+        Route::delete('/data/delete/{id}', [BookingDataController::class, 'delete'])->name('data.delete');
+
+        //booking-trash route
+        Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
+        Route::get('/trash/add', [BookingTrashController::class, 'add'])->name('trash.add');
+        Route::post('/trash/store', [BookingTrashController::class, 'store'])->name('trash.store');
+        Route::get('/trash/edit/{id}', [BookingTrashController::class, 'edit'])->name('trash.edit');
+        Route::post('/trash/update/{id}', [BookingTrashController::class, 'update'])->name('trash.update');
+        Route::delete('/trash/delete/{id}', [BookingTrashController::class, 'delete'])->name('trash.delete');
+    });
+    
     Route::prefix('data')->group(function () {
         // company routes
         Route::get('/company', [DataCompanyController::class, 'index'])->name('company.view');
