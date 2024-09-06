@@ -208,6 +208,40 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_image1">Infant Name</label>
+                                                    <input id="fb_image1" name="fb_image1" type="text" placeholder="Enter Name Customer" class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_image1">Infant Age</label>
+                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
+                                                        <option value="">Select Age</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_image1">Infant Gender</label>
+                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
+                                                        <option value="">Select Gender</option>
+                                                        <option value="Woman">Woman</option>
+                                                        <option value="Man">Man</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fb_image1">Infant Nationality</label>
+                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
+                                                        <option value="">Select Nationality</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
