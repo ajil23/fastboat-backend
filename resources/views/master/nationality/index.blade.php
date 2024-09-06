@@ -12,7 +12,7 @@
                                     <div class="ms-auto">
                                         <div class="btn-toolbar float-end" role="toolbar">
                                             <button class="btn btn-dark w-100" data-bs-toggle="modal"
-                                                data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Payment</button>
+                                                data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Nationality</button>
                                         </div>
                                     </div>
                                 </div>
@@ -24,16 +24,16 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Name</th>
-                                                <th>Value</th>
+                                                <th>Code</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($payment as $item)
+                                            @foreach ($nationality as $item)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->py_name }}</td>
-                                                    <td>{{ $item->py_value }}</td>
+                                                    <td>{{ $item->nas_country }}</td>
+                                                    <td>{{ $item->nas_country_code }}</td>
                                                     <td>
                                                         <div class="dropstart">
                                                             <a class="text-muted dropdown-toggle font-size-18"
@@ -43,11 +43,11 @@
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                 <a class="dropdown-item" id="edit-btn"
-                                                                    href="javascript:void(0)" data-id="{{ $item->py_id }}"
-                                                                    data-payment-name="{{ $item->py_name }}"
-                                                                    data-payment-value="{{ $item->py_value }}">Edit</a>
+                                                                    href="javascript:void(0)" data-id="{{ $item->nas_id }}"
+                                                                    data-nationality-name="{{ $item->nas_country }}"
+                                                                    data-nationality-code="{{ $item->nas_country_code }}">Edit</a>
                                                                 <a class="dropdown-item" data-confirm-delete="true"
-                                                                    href="{{ route('payment.delete', $item->py_id) }}">Delete</a>
+                                                                    href="{{ route('nationality.delete', $item->nas_id) }}">Delete</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -71,20 +71,20 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addDataModalTitle">Create New Payment</h5>
+                        <h5 class="modal-title" id="addDataModalTitle">Create New Nationality</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('payment.store') }}" method="post">
+                    <form action="{{ route('nationality.store') }}" method="post">
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
-                                <label for="py_name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="py_name" name="py_name"
+                                <label for="nas_country" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="nas_country" name="nas_country"
                                     placeholder="Enter Name" required>
                             </div>
                             <div class="mb-3">
-                                <label for="py_value" class="form-label">Value</label>
-                                <input type="text" class="form-control" id="py_value" name="py_value"
+                                <label for="nas_country_code" class="form-label">Code</label>
+                                <input type="text" class="form-control" id="nas_country_code" name="nas_country_code"
                                     placeholder="Enter Value" required>
                             </div>
                         </div>
@@ -103,21 +103,21 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editDataModalTitle">Edit Payment</h5>
+                        <h5 class="modal-title" id="editDataModalTitle">Edit Nationality</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="editPaymentForm" action="" method="post">
+                        <form id="editNationalityForm" action="" method="post">
                             @csrf
                             @method('POST')
                             <div class="mb-3">
-                                <label for="edit_py_name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="edit_py_name" name="py_name"
+                                <label for="edit_nas_country" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="edit_nas_country" name="nas_country"
                                     placeholder="Enter Name" required>
                             </div>
                             <div class="mb-3">
-                                <label for="edit_py_value" class="form-label">Value</label>
-                                <input type="text" class="form-control" id="edit_py_value" name="py_value"
+                                <label for="edit_nas_country_code" class="form-label">Code</label>
+                                <input type="text" class="form-control" id="edit_nas_country_code" name="nas_country_code"
                                     placeholder="Enter Value" required>
                             </div>
                             <div class="modal-footer">
@@ -141,15 +141,15 @@
             var editButtons = document.querySelectorAll('#edit-btn');
             editButtons.forEach(function(button) {
                 button.addEventListener('click', function() {
-                    var paymentId = this.getAttribute('data-id');
-                    var paymentName = this.getAttribute('data-payment-name');
-                    var paymentValue = this.getAttribute('data-payment-value');
-                    var formAction = '{{ route('payment.update', ':id') }}';
-                    formAction = formAction.replace(':id', paymentId);
+                    var nationalityId = this.getAttribute('data-id');
+                    var nationalityName = this.getAttribute('data-nationality-name');
+                    var nationalityCode = this.getAttribute('data-nationality-code');
+                    var formAction = '{{ route('nationality.update', ':id') }}';
+                    formAction = formAction.replace(':id', nationalityId);
 
-                    document.getElementById('editPaymentForm').action = formAction;
-                    document.getElementById('edit_py_name').value = paymentName;
-                    document.getElementById('edit_py_value').value = paymentValue;
+                    document.getElementById('editNationalityForm').action = formAction;
+                    document.getElementById('edit_nas_country').value = nationalityName;
+                    document.getElementById('edit_nas_country_code').value = nationalityCode;
 
                     var editModal = new bootstrap.Modal(document.getElementById('editDataModal'));
                     editModal.show();

@@ -38,7 +38,7 @@ class MasterPaymentController extends Controller
         $paymentData->py_name = $request->py_name;
         $paymentData->py_value = $request->py_value;
         $paymentData->py_updated_by = Auth()->id();
-        $paymentData->save();
+        $paymentData->update();
         toast('Your data as been edited!', 'success');
         return redirect()->route('payment.view');
     }
