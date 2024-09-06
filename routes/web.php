@@ -5,6 +5,7 @@ use App\Http\Controllers\Backend\DataFastboatController;
 use App\Http\Controllers\Backend\DataRouteController;
 use App\Http\Controllers\Backend\FastboatAvailabilityController;
 use App\Http\Controllers\Backend\MasterIslandController;
+use App\Http\Controllers\Backend\MasterPaymentController;
 use App\Http\Controllers\Backend\MasterPortController;
 use App\Http\Controllers\Backend\SchedulesScheduleController;
 use App\Http\Controllers\Backend\SchedulesShuttleAreaController;
@@ -140,6 +141,12 @@ Route::middleware([
         Route::post('/port/update/{id}', [MasterPortController::class, 'update'])->name('port.update');
         Route::delete('/port/delete/{id}', [MasterPortController::class, 'delete'])->name('port.delete');
         Route::get('/port/{id}', [MasterPortController::class, 'show'])->name('port.show');
+
+        // master payment
+        Route::get('/payment', [MasterPaymentController::class, 'index'])->name('payment.view');
+        Route::post('/payment/store', [MasterPaymentController::class, 'store'])->name('payment.store');
+        Route::post('/payment/update/{id}', [MasterPaymentController::class, 'update'])->name('payment.update');
+        Route::delete('/payment/delete/{id}', [MasterPaymentController::class, 'delete'])->name('payment.delete');
     });
 
     Route::post('api/fetch-fastboat', [FastboatAvailabilityController::class, 'fetchFastboat']);
