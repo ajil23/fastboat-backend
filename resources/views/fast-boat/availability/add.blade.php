@@ -154,7 +154,7 @@
                                             <div class="col-lg-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fba_discount">Discount*</label>
-                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control" required>
+                                                    <input type="text" id="fba_discount" name="fba_discount" placeholder="Enter Discount Nominal" class="form-control" required value="{{ old('fba_discount', 0) }}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3">

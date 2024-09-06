@@ -41,7 +41,7 @@
                         <span class="menu-item" data-key="t-invoices">Booking Data</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="#" data-key="t-invoice-list">Fast Boat</a></li>
+                        <li><a href="{{route ('data.view')}}" data-key="t-invoice-list">Fast Boat</a></li>
                     </ul>
                 </li>
 
@@ -51,7 +51,7 @@
                         <span class="menu-item">Booking Trash</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="#">Fast Boat</a></li>
+                        <li><a href="{{route ('trash.view')}}">Fast Boat</a></li>
                     </ul>
                 </li>
 

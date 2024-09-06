@@ -12,7 +12,7 @@
                                 <h5 class="card-title">Booking Data Table</h5>
                                 <div class="ms-auto">
                                     <div class="btn-toolbar float-end" role="toolbar">
-                                        <a href="#" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Create New Company</a>
+                                        <a href="{{route('data.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i> Add</a>
                                     </div>
                                 </div>
                             </div>
