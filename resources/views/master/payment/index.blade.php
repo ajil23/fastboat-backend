@@ -156,5 +156,19 @@
                 });
             });
         });
+
+        // Auto fill value when add data
+        document.getElementById('py_name').addEventListener('input', function() {
+        const py_name = this.value;
+        const py_value = py_name.toLowerCase().replace(/ /g, '-');
+        document.getElementById('py_value').value = py_value;
+        });
+
+        // Auto fill value when edit data
+        document.getElementById('edit_py_name').addEventListener('input', function() {
+        const py_name = this.value;
+        const py_value = py_name.toLowerCase().replace(/ /g, '-');
+        document.getElementById('edit_py_value').value = py_value;
+        });
     </script>
 @endsection
