@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\DataFastboatController;
 use App\Http\Controllers\Backend\DataRouteController;
 use App\Http\Controllers\Backend\FastboatAvailabilityController;
 use App\Http\Controllers\Backend\MasterIslandController;
+use App\Http\Controllers\Backend\MasterNationalityController;
 use App\Http\Controllers\Backend\MasterPaymentController;
 use App\Http\Controllers\Backend\MasterPortController;
 use App\Http\Controllers\Backend\SchedulesScheduleController;
@@ -167,6 +168,12 @@ Route::middleware([
         Route::post('/payment/store', [MasterPaymentController::class, 'store'])->name('payment.store');
         Route::post('/payment/update/{id}', [MasterPaymentController::class, 'update'])->name('payment.update');
         Route::delete('/payment/delete/{id}', [MasterPaymentController::class, 'delete'])->name('payment.delete');
+
+        // master nationality
+        Route::get('/nationality', [MasterNationalityController::class, 'index'])->name('nationality.view');
+        Route::post('/nationality/store', [MasterNationalityController::class, 'store'])->name('nationality.store');
+        Route::post('/nationality/update/{id}', [MasterNationalityController::class, 'update'])->name('nationality.update');
+        Route::delete('/nationality/delete/{id}', [MasterNationalityController::class, 'delete'])->name('nationality.delete');
     });
 
     Route::post('api/fetch-fastboat', [FastboatAvailabilityController::class, 'fetchFastboat']);

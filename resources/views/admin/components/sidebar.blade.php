@@ -90,6 +90,20 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{route ('payment.view')}}">
+                        <i class="bx bx-credit-card icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-tables">Payment</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{route ('nationality.view')}}">
+                        <i class="bx bxs-flag-alt icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-tables">Nationality</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
         <!-- Sidebar -->
