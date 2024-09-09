@@ -261,56 +261,77 @@
                                 </a>
                                 <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Trip Date</label>
-                                                    <input type="date" class="form-control" id="fb_slug_en" name="fb_slug_en" required>
+                                        <!-- Form Pencarian -->
+                                        <form id="searchForm">
+                                            <div class="row">
+                                                <div class="col-sm-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="trip_date">Trip Date</label>
+                                                        <input type="date" class="form-control" id="trip_date" name="trip_date" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="departure_port">Departure Port</label>
+                                                        <select class="form-control" id="departure_port" name="departure_port" required>
+                                                            <option value="">Select Departure Port</option>
+                                                            @foreach ($trip as $item)
+                                                            <option value="{{ $item->departure->prt_name_en }}">
+                                                                {{ $item->departure->prt_name_en }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="arrival_port">Arrival Port</label>
+                                                        <select class="form-control" id="arrival_port" name="arrival_port" required>
+                                                            <option value="">Select Arrival Port</option>
+                                                            @foreach ($trip as $item)
+                                                            <option value="{{ $item->arrival->prt_name_en }}">
+                                                                {{ $item->arrival->prt_name_en }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Departure Port</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Departure Port</option>
-                                                    </select>
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fast_boat">Fast Boat</label>
+                                                        <select class="form-control" id="fast_boat" name="fast_boat" required>
+                                                            <option value="">Select Fast Boat</option>
+                                                            @foreach ($trip as $item)
+                                                            <option value="{{ $item->fastboat->fb_name }}">
+                                                                {{ $item->fastboat->fb_name }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="time_dept">Time Dept</label>
+                                                        <select class="form-control" id="time_dept" name="time_dept" required>
+                                                            <option value="">Select Time Dept</option>
+                                                            @foreach ($trip as $item)
+                                                            <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}">
+                                                                {{ date('H:i', strtotime($item->fbt_dept_time)) }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Arrival Port</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Arrival Port</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Fast Boat</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Fast Boat</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Time Dept</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Time Dept</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <br>
+                                        </form>
+                                        <!-- Hasil Pencarian -->
                                         <div class="table-responsive">
-                                            <h5 class="card-title">
-                                                <center>Booking Data Table<center>
-                                            </h5>
-                                            <table class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                            <h5 class="card-title"></h5>
+                                            <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
                                                 <thead>
-                                                    <tr>
+                                                    <tr class="table-light ">
                                                         <th>
                                                             <center>Publish Adult</center>
                                                         </th>
@@ -329,23 +350,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                    </tr>
+                                                    <!-- Hasil pencarian akan dimasukkan ke sini -->
                                                 </tbody>
                                             </table>
                                             <br>
@@ -407,6 +412,11 @@
                                                     <label class="form-label" for="fb_slug_en">Departure Port</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Departure Port</option>
+                                                        @foreach ($trip as $item)
+                                                        <option value="{{ $item->departure->prt_name_en }}" {{ old('trip', request('trip')) == $item->departure->prt_name_en ? 'selected' : '' }}>
+                                                            {{ $item->departure->prt_name_en }}
+                                                        </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -415,6 +425,11 @@
                                                     <label class="form-label" for="fb_slug_en">Arrival Port</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Arrival Port</option>
+                                                        @foreach ($trip as $item)
+                                                        <option value="{{ $item->arrival->prt_name_en }}" {{ old('trip', request('trip')) == $item->arrival->prt_name_en ? 'selected' : '' }}>
+                                                            {{ $item->arrival->prt_name_en }}
+                                                        </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -425,6 +440,11 @@
                                                     <label class="form-label" for="fb_slug_en">Fast Boat</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Fast Boat</option>
+                                                        @foreach ($trip as $item)
+                                                        <option value="{{ $item->fastboat->fb_name }}" {{ old('trip', request('trip')) == $item->fastboat->fb_name ? 'selected' : '' }}>
+                                                            {{ $item->fastboat->fb_name }}
+                                                        </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -433,6 +453,11 @@
                                                     <label class="form-label" for="fb_slug_en">Time Dept</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Time Dept</option>
+                                                        @foreach ($deptTime as $item)
+                                                        <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}" {{ old('dept_time', request('dept_time')) == date('H:i', strtotime($item->fbt_dept_time)) ? 'selected' : '' }}>
+                                                            {{ date('H:i', strtotime($item->fbt_dept_time)) }}
+                                                        </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -533,4 +558,55 @@
 
     @include('admin.components.footer')
 </div>
+@endsection
+
+@section('script')
+<script>
+    $(document).ready(function() {
+        // Fungsi untuk mengecek apakah semua field sudah diisi
+        function checkFormComplete() {
+            let tripDate = $('#trip_date').val();
+            let departurePort = $('#departure_port').val();
+            let arrivalPort = $('#arrival_port').val();
+            let fastBoat = $('#fast_boat').val();
+            let timeDept = $('#time_dept').val();
+
+            // Cek apakah semua field sudah diisi
+            if (tripDate && departurePort && arrivalPort && fastBoat && timeDept) {
+                performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept);
+            }
+        }
+
+        // Trigger ketika input berubah
+        $('#trip_date, #departure_port, #arrival_port, #fast_boat, #time_dept').on('change', function() {
+            checkFormComplete();
+        });
+
+        // Fungsi untuk melakukan pencarian
+        function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept) {
+            $.ajax({
+                url: '{{ route("data.search") }}', // Pastikan ini menghasilkan URL yang benar
+                method: 'GET',
+                data: {
+                    trip_date: tripDate, // Ini sekarang akan mencari di FastboatAvailability
+                    departure_port: departurePort,
+                    arrival_port: arrivalPort,
+                    fast_boat: fastBoat,
+                    time_dept: timeDept
+                },
+                success: function(response) {
+                    // Update tabel hasil pencarian
+                    $('#booking-data-table tbody').html(response.html);
+
+                    // Update card title dengan format (Nama Fastboat (Code Departure -> Code Arrival Time Dept))
+                    $('.card-title').html(response.card_title);
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText); // Debugging
+                    alert("Error: Unable to fetch data.");
+                }
+            });
+        }
+    });
+</script>
 @endsection
