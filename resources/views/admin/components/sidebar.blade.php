@@ -104,6 +104,13 @@
                     </a>
                 </li>
 
+                <li>
+                    <a href="{{route ('currency.view')}}">
+                        <i class="bx bxs-dollar-circle icon nav-icon"></i>
+                        <span class="menu-item" data-key="t-tables">Currency</span>
+                    </a>
+                </li>
+
             </ul>
         </div>
         <!-- Sidebar -->
