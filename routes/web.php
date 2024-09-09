@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\DataCompanyController;
 use App\Http\Controllers\Backend\DataFastboatController;
 use App\Http\Controllers\Backend\DataRouteController;
 use App\Http\Controllers\Backend\FastboatAvailabilityController;
+use App\Http\Controllers\Backend\MasterCurrencyController;
 use App\Http\Controllers\Backend\MasterIslandController;
 use App\Http\Controllers\Backend\MasterNationalityController;
 use App\Http\Controllers\Backend\MasterPaymentController;
@@ -174,6 +175,13 @@ Route::middleware([
         Route::post('/nationality/store', [MasterNationalityController::class, 'store'])->name('nationality.store');
         Route::post('/nationality/update/{id}', [MasterNationalityController::class, 'update'])->name('nationality.update');
         Route::delete('/nationality/delete/{id}', [MasterNationalityController::class, 'delete'])->name('nationality.delete');
+
+        // master currency
+        Route::get('/currency', [MasterCurrencyController::class, 'index'])->name('currency.view');
+        Route::post('/currency/store', [MasterCurrencyController::class, 'store'])->name('currency.store');
+        Route::post('/currency/update/{id}', [MasterCurrencyController::class, 'update'])->name('currency.update');
+        Route::delete('/currency/delete/{id}', [MasterCurrencyController::class, 'delete'])->name('currency.delete');
+        Route::get('/currency/status/{id}', [MasterCurrencyController::class, 'currencyStatus'])->name('currency.status');
     });
 
     Route::post('api/fetch-fastboat', [FastboatAvailabilityController::class, 'fetchFastboat']);
