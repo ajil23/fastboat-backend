@@ -53,6 +53,7 @@ Route::middleware([
         Route::get('/data/edit/{id}', [BookingDataController::class, 'edit'])->name('data.edit');
         Route::post('/data/update/{id}', [BookingDataController::class, 'update'])->name('data.update');
         Route::delete('/data/delete/{id}', [BookingDataController::class, 'delete'])->name('data.delete');
+        Route::get('/data/search', [BookingDataController::class, 'search'])->name('data.search');
 
         //booking-trash route
         Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
@@ -62,7 +63,7 @@ Route::middleware([
         Route::post('/trash/update/{id}', [BookingTrashController::class, 'update'])->name('trash.update');
         Route::delete('/trash/delete/{id}', [BookingTrashController::class, 'delete'])->name('trash.delete');
     });
-    
+
     Route::prefix('data')->group(function () {
         // company routes
         Route::get('/company', [DataCompanyController::class, 'index'])->name('company.view');
@@ -112,7 +113,7 @@ Route::middleware([
         Route::delete('/trip/delete/{id}', [SchedulesTripController::class, 'delete'])->name('trip.delete');
         Route::get('/trip/{id}', [SchedulesTripController::class, 'show'])->name('trip.show');
         Route::get('/trip/status/{id}', [SchedulesTripController::class, 'status'])->name('trip.status');
-        
+
         // shuttle area routes
         Route::get('/shuttlearea', [SchedulesShuttleAreaController::class, 'index'])->name('shuttlearea.view');
         Route::get('/shuttlearea/add', [SchedulesShuttleAreaController::class, 'add'])->name('shuttlearea.add');
@@ -120,7 +121,7 @@ Route::middleware([
         Route::get('/shuttlearea/edit/{id}', [SchedulesShuttleAreaController::class, 'edit'])->name('shuttlearea.edit');
         Route::post('/shuttlearea/update/{id}', [SchedulesShuttleAreaController::class, 'update'])->name('shuttlearea.update');
         Route::delete('/shuttlearea/delete/{id}', [SchedulesShuttleAreaController::class, 'delete'])->name('shuttlearea.delete');
-        
+
         // shuttle routes
         Route::get('/shuttle', [SchedulesShuttleController::class, 'index'])->name('shuttle.view');
         Route::get('/shuttle/add', [SchedulesShuttleController::class, 'add'])->name('shuttle.add');
@@ -132,7 +133,7 @@ Route::middleware([
         Route::post('/shuttle/delete-multiple', [SchedulesShuttleController::class, 'deleteMultiple'])->name('shuttle.deleteMultiple');
     });
 
-    Route::prefix('fast-boat')->group(function(){
+    Route::prefix('fast-boat')->group(function () {
         // fast-boat availability
         Route::get('/availability', [FastboatAvailabilityController::class, 'index'])->name('availability.view');
         Route::get('/availability/add', [FastboatAvailabilityController::class, 'add'])->name('availability.add');
@@ -186,5 +187,4 @@ Route::middleware([
 
     Route::post('api/fetch-fastboat', [FastboatAvailabilityController::class, 'fetchFastboat']);
     Route::post('api/fetch-schedule', [FastboatAvailabilityController::class, 'fetchSchedule']);
-
 });
