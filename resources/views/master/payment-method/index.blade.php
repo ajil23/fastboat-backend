@@ -8,11 +8,11 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-wrap align-items-center mb-2">
-                                    <h5 class="card-title">Payment Table</h5>
+                                    <h5 class="card-title">Payment Method Table</h5>
                                     <div class="ms-auto">
                                         <div class="btn-toolbar float-end" role="toolbar">
                                             <button class="btn btn-dark w-100" data-bs-toggle="modal"
-                                                data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Payment</button>
+                                                data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Payment Method</button>
                                         </div>
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                                                     data-payment-name="{{ $item->py_name }}"
                                                                     data-payment-value="{{ $item->py_value }}">Edit</a>
                                                                 <a class="dropdown-item" data-confirm-delete="true"
-                                                                    href="{{ route('payment.delete', $item->py_id) }}">Delete</a>
+                                                                    href="{{ route('payment-method.delete', $item->py_id) }}">Delete</a>
                                                             </div>
                                                         </div>
                                                     </td>
@@ -71,10 +71,10 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addDataModalTitle">Create New Payment</h5>
+                        <h5 class="modal-title" id="addDataModalTitle">Create New Payment Method</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form action="{{ route('payment.store') }}" method="post">
+                    <form action="{{ route('payment-method.store') }}" method="post">
                         @csrf
                         <div class="modal-body">
                             <div class="mb-3">
@@ -103,7 +103,7 @@
             <div class="modal-dialog modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="editDataModalTitle">Edit Payment</h5>
+                        <h5 class="modal-title" id="editDataModalTitle">Edit Payment Method</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -144,7 +144,7 @@
                     var paymentId = this.getAttribute('data-id');
                     var paymentName = this.getAttribute('data-payment-name');
                     var paymentValue = this.getAttribute('data-payment-value');
-                    var formAction = '{{ route('payment.update', ':id') }}';
+                    var formAction = '{{ route('payment-method.update', ':id') }}';
                     formAction = formAction.replace(':id', paymentId);
 
                     document.getElementById('editPaymentForm').action = formAction;

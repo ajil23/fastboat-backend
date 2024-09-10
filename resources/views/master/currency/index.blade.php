@@ -23,21 +23,18 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Name</th>
-                                                <th>Code</th>
+                                                <th>Name (code)</th>
                                                 <th>Rate</th>
                                                 <th>Status</th>
-                                                <th>Action</th>
+                                                <th>Updated by</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($currency as $item)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->cy_name }}</td>
-                                                    <td>{{ $item->cy_code }}</td>
+                                                    <td>{{ $item->cy_name }} ({{ $item->cy_code }}) </td>
                                                     <td>{{ number_format($item->cy_rate, 2, ',', '.') }}</td>
-
                                                     <td>
                                                         <a href="{{ route('currency.status', $item->cy_id) }}"
                                                             class="badge rounded-pill bg-{{ $item->cy_status ? 'success' : 'danger' }}"><i
@@ -45,24 +42,7 @@
                                                             {{ $item->cy_status ? 'Enable' : 'Disable' }}
                                                         </a>
                                                     </td>
-                                                    <td>
-                                                        <div class="dropstart">
-                                                            <a class="text-muted dropdown-toggle font-size-18"
-                                                                role="button" data-bs-toggle="dropdown"
-                                                                aria-haspopup="true">
-                                                                <i class="mdi mdi-dots-horizontal"></i>
-                                                            </a>
-                                                            <div class="dropdown-menu dropdown-menu-end">
-                                                                <a class="dropdown-item" id="edit-btn"
-                                                                    href="javascript:void(0)" data-id="{{ $item->cy_id }}"
-                                                                    data-currency-name="{{ $item->cy_name }}"
-                                                                    data-currency-code="{{ $item->cy_code }}"
-                                                                    data-currency-rate="{{ $item->cy_rate }}">Edit</a>
-                                                                <a class="dropdown-item" data-confirm-delete="true"
-                                                                    href="{{ route('currency.delete', $item->cy_id) }}">Delete</a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
+                                                    <td>{{ $item->cy_updated_by }} - ({{date('d/M/Y H:i', strtotime($item->updated_at))}}) </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -160,35 +140,35 @@
     <script>
         // Rate Format
         // Format number with dots as thousands separators and commas as decimal separator
-function formatNumber(value) {
-    let parts = value.split(',');
-    let integerPart = parts[0];
-    let decimalPart = parts.length > 1 ? parts[1] : '';
-    
-    integerPart = integerPart.replace(/\D/g, '');
-    integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    
-    if (decimalPart.length > 2) {
-        decimalPart = decimalPart.substring(0, 2); // Limit decimal places to 2
-    }
-    
-    return integerPart + (decimalPart ? ',' + decimalPart : '');
-}
+        function formatNumber(value) {
+            let parts = value.split(',');
+            let integerPart = parts[0];
+            let decimalPart = parts.length > 1 ? parts[1] : '';
 
-// Remove dots and commas for submission
-function unformatNumber(value) {
-    return value.replace(/\./g, '').replace(/,/g, '.');
-}
+            integerPart = integerPart.replace(/\D/g, '');
+            integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-// Example usage
-document.getElementById('cy_rate').addEventListener('input', function(e) {
-    e.target.value = formatNumber(e.target.value);
-});
+            if (decimalPart.length > 2) {
+                decimalPart = decimalPart.substring(0, 2); // Limit decimal places to 2
+            }
 
-document.querySelector('form').addEventListener('submit', function() {
-    const rateInput = document.getElementById('cy_rate');
-    rateInput.value = unformatNumber(rateInput.value);
-});
+            return integerPart + (decimalPart ? ',' + decimalPart : '');
+        }
+
+        // Remove dots and commas for submission
+        function unformatNumber(value) {
+            return value.replace(/\./g, '').replace(/,/g, '.');
+        }
+
+        // Example usage
+        document.getElementById('cy_rate').addEventListener('input', function(e) {
+            e.target.value = formatNumber(e.target.value);
+        });
+
+        document.querySelector('form').addEventListener('submit', function() {
+            const rateInput = document.getElementById('cy_rate');
+            rateInput.value = unformatNumber(rateInput.value);
+        });
 
 
         // Modal edit 

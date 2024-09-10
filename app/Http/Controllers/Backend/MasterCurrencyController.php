@@ -12,7 +12,7 @@ class MasterCurrencyController extends Controller
     public function index()
     {
         $currency = MasterCurrency::all();
-        $title = 'Delete Company Data!';
+        $title = 'Delete Currency Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         return view('master.currency.index', compact('currency'));

@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\MasterCurrencyController;
 use App\Http\Controllers\Backend\MasterIslandController;
 use App\Http\Controllers\Backend\MasterNationalityController;
 use App\Http\Controllers\Backend\MasterPaymentController;
+use App\Http\Controllers\Backend\MasterPaymentMethodController;
 use App\Http\Controllers\Backend\MasterPortController;
 use App\Http\Controllers\Backend\SchedulesScheduleController;
 use App\Http\Controllers\Backend\SchedulesShuttleAreaController;
@@ -166,10 +167,10 @@ Route::middleware([
         Route::get('/port/{id}', [MasterPortController::class, 'show'])->name('port.show');
 
         // master payment
-        Route::get('/payment', [MasterPaymentController::class, 'index'])->name('payment.view');
-        Route::post('/payment/store', [MasterPaymentController::class, 'store'])->name('payment.store');
-        Route::post('/payment/update/{id}', [MasterPaymentController::class, 'update'])->name('payment.update');
-        Route::delete('/payment/delete/{id}', [MasterPaymentController::class, 'delete'])->name('payment.delete');
+        Route::get('/payment-method', [MasterPaymentMethodController::class, 'index'])->name('payment-method.view');
+        Route::post('/payment-method/store', [MasterPaymentMethodController::class, 'store'])->name('payment-method.store');
+        Route::post('/payment-method/update/{id}', [MasterPaymentMethodController::class, 'update'])->name('payment-method.update');
+        Route::delete('/payment-method/delete/{id}', [MasterPaymentMethodController::class, 'delete'])->name('payment-method.delete');
 
         // master nationality
         Route::get('/nationality', [MasterNationalityController::class, 'index'])->name('nationality.view');
