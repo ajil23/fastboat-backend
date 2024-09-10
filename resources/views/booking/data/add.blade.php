@@ -267,13 +267,13 @@
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="trip_date">Trip Date</label>
-                                                        <input type="date" class="form-control" id="trip_date" name="trip_date" required>
+                                                        <input type="date" class="form-control" id="trip_date" name="trip_date">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="departure_port">Departure Port</label>
-                                                        <select class="form-control" id="departure_port" name="departure_port" required>
+                                                        <select class="form-control" id="departure_port" name="departure_port">
                                                             <option value="">Select Departure Port</option>
                                                             @foreach ($trip as $item)
                                                             <option value="{{ $item->departure->prt_name_en }}">
@@ -286,7 +286,7 @@
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="arrival_port">Arrival Port</label>
-                                                        <select class="form-control" id="arrival_port" name="arrival_port" required>
+                                                        <select class="form-control" id="arrival_port" name="arrival_port">
                                                             <option value="">Select Arrival Port</option>
                                                             @foreach ($trip as $item)
                                                             <option value="{{ $item->arrival->prt_name_en }}">
@@ -301,7 +301,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fast_boat">Fast Boat</label>
-                                                        <select class="form-control" id="fast_boat" name="fast_boat" required>
+                                                        <select class="form-control" id="fast_boat" name="fast_boat">
                                                             <option value="">Select Fast Boat</option>
                                                             @foreach ($trip as $item)
                                                             <option value="{{ $item->fastboat->fb_name }}">
@@ -314,7 +314,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="time_dept">Time Dept</label>
-                                                        <select class="form-control" id="time_dept" name="time_dept" required>
+                                                        <select class="form-control" id="time_dept" name="time_dept">
                                                             <option value="">Select Time Dept</option>
                                                             @foreach ($trip as $item)
                                                             <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}">
@@ -327,56 +327,59 @@
                                             </div>
                                         </form>
                                         <!-- Hasil Pencarian -->
-                                        <div class="table-responsive">
-                                            <h5 class="card-title"></h5>
-                                            <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
-                                                <thead>
-                                                    <tr class="table-light ">
-                                                        <th>
-                                                            <center>Publish Adult</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Publish Child</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Nett Adult</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Nett Child</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Discount</center>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- Hasil pencarian akan dimasukkan ke sini -->
-                                                </tbody>
-                                            </table>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">Adult Publish (IDR)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                        <div id="search-results" style="display: none;">
+                                            <div class="table-responsive">
+                                                <h5 class="card-title"></h5>
+                                                <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                                    <thead>
+                                                        <tr class="table-light ">
+                                                            <th>
+                                                                <center>Publish Adult</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Publish Child</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Nett Adult</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Nett Child</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Discount</center>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Hasil pencarian akan dimasukkan ke sini -->
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <!-- perhitungan -->
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="adult_publish">Adult Publish (IDR)</label>
+                                                            <input value="" class="form-control" id="adult_publish" name="adult_publish" disabled>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">Child Publish (IDR)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="child_publish">Child Publish (IDR)</label>
+                                                            <input value="" class="form-control" id="child_publish" name="child_publish" disabled>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">End Total (IDN)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="total_end">End Total (IDR)</label>
+                                                            <input value="" class="form-control" id="total_end" name="total_end" disabled>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-sm-3">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">End Total Currency (IDN)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="currency_end">End Total Currency (IDR)</label>
+                                                            <input value="" class="form-control" id="currency_end" name="currency_end" disabled>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -588,22 +591,34 @@
                 url: '{{ route("data.search") }}', // Pastikan ini menghasilkan URL yang benar
                 method: 'GET',
                 data: {
-                    trip_date: tripDate, // Ini sekarang akan mencari di FastboatAvailability
+                    trip_date: tripDate,
                     departure_port: departurePort,
                     arrival_port: arrivalPort,
                     fast_boat: fastBoat,
                     time_dept: timeDept
                 },
                 success: function(response) {
-                    // Update tabel hasil pencarian
-                    $('#booking-data-table tbody').html(response.html);
+                    // Jika ada hasil, tampilkan elemen pencarian
+                    if (response.html) {
+                        $('#booking-data-table tbody').html(response.html);
+                        $('.card-title').html(response.card_title);
 
-                    // Update card title dengan format (Nama Fastboat (Code Departure -> Code Arrival Time Dept))
-                    $('.card-title').html(response.card_title);
+                        // Update perhitungan (contoh nilai adult publish dan child publish)
+                        $('#adult_publish').val(response.adult_publish);
+                        $('#child_publish').val(response.child_publish);
+                        $('#total_end').val(response.total_end);
+                        $('#currency_end').val(response.currency_end);
+
+                        // Tampilkan hasil pencarian dan perhitungan
+                        $('#search-results').show();
+                    } else {
+                        $('#search-results').hide();
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText); // Debugging
                     alert("Error: Unable to fetch data.");
+                    $('#search-results').hide(); // Sembunyikan jika ada error
                 }
             });
         }

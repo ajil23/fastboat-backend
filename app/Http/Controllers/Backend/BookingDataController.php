@@ -44,9 +44,6 @@ class BookingDataController extends Controller
             $fastBoat = $request->input('fast_boat');
             $timeDept = $request->input('time_dept');
 
-            \Log::info('Trip date: ' . $tripDate);
-            \Log::info('Departure port: ' . $departurePort);
-
             // Cari trip berdasarkan departur dan arrival port di SchedulesTrip
             $trips = SchedulesTrip::whereHas('departure', function ($query) use ($departurePort) {
                 $query->where('prt_name_en', $departurePort);
@@ -72,9 +69,11 @@ class BookingDataController extends Controller
             // Buat HTML untuk tabel dan judul card-title
             $html = '';
             $cardTitle = '';
+            $adultPublishTotal = 0;
+            $childPublishTotal = 0;
 
             foreach ($availability as $avail) {
-                $trip = $avail->trip; // Mengakses relasi ke SchedulesTrip
+                $trip = $avail->trip;
 
                 // Buat card-title dengan format (Nama Fastboat (Code Departure -> Code Arrival Time Dept))
                 $cardTitle = '<center>' . $trip->fastboat->fb_name . ' (' .
@@ -89,15 +88,22 @@ class BookingDataController extends Controller
                 $html .= '<td><center>' . number_format($avail->fba_child_nett, 0, ',', '.') . '</center></td>';
                 $html .= '<td><center>' . number_format($avail->fba_discount, 0, ',', '.') . '</center></td>';
                 $html .= '</tr>';
+
+                // Update perhitungan
+                $adultPublishTotal += $avail->fba_adult_publish;
+                $childPublishTotal += $avail->fba_child_publish;
             }
 
-            // Return HTML dan card title
+            // Return HTML dan perhitungan
             return response()->json([
                 'html' => $html,
-                'card_title' => $cardTitle
+                'card_title' => $cardTitle,
+                'adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
+                'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
+                'total_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
+                'currency_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error fetching data: ' . $e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
