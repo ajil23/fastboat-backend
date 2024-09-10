@@ -10,12 +10,23 @@
                                 <div class="d-flex flex-wrap align-items-center mb-2">
                                     <h5 class="card-title">Currency Table</h5>
                                     <div class="ms-auto">
-                                        <div class="btn-toolbar float-end" role="toolbar">
-                                            <button class="btn btn-dark w-100" data-bs-toggle="modal"
-                                                data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Currency</button>
+                                        <div class="col text-end">
+                                            <button type="submit" class="btn btn-outline-dark waves-effect waves-light"
+                                                form="updateAllCurrenciesForm"><i class="mdi mdi-pencil"></i>Update</button>
+
+                                            <button class="btn btn-dark" data-bs-toggle="modal"
+                                                data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Add</button>
                                         </div>
                                     </div>
                                 </div>
+
+                                <form id="updateAllCurrenciesForm" action="{{ route('currency.editBulk') }}" method="POST">
+                                    @csrf
+                                    @foreach ($currency as $item)
+                                        <input type="hidden" name="currency_ids[]" value="{{ $item->cy_id }}">
+                                    @endforeach
+                                </form>
+
 
                                 <div class="table-responsive">
                                     <table
@@ -42,7 +53,9 @@
                                                             {{ $item->cy_status ? 'Enable' : 'Disable' }}
                                                         </a>
                                                     </td>
-                                                    <td>{{ $item->cy_updated_by }} - ({{date('d/M/Y H:i', strtotime($item->updated_at))}}) </td>
+                                                    <td>{{ $item->cy_updated_by }} -
+                                                        ({{ date('d/m/Y - H:i:s', strtotime($item->updated_at)) }})
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -79,11 +92,6 @@
                                 <input type="text" class="form-control" id="cy_code" name="cy_code"
                                     placeholder="Enter Value" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="cy_rate" class="form-label">Rate</label>
-                                <input type="text" class="form-control" id="cy_rate" name="cy_rate"
-                                    placeholder="Enter Value" required>
-                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
@@ -93,44 +101,6 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-
-        <!-- Editing data modal -->
-        <div class="modal fade" id="editDataModal" tabindex="-1" role="dialog" aria-labelledby="editDataModalTitle"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editDataModalTitle">Edit Currency</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="editCurrencyForm" action="" method="post">
-                            @csrf
-                            @method('POST')
-                            <div class="mb-3">
-                                <label for="edit_cy_name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="edit_cy_name" name="cy_name"
-                                    placeholder="Enter Name" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_cy_code" class="form-label">Code</label>
-                                <input type="text" class="form-control" id="edit_cy_code" name="cy_code"
-                                    placeholder="Enter Value" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit_cy_rate" class="form-label">Rate</label>
-                                <input type="text" class="form-control" id="edit_cy_rate" name="cy_rate"
-                                    placeholder="Enter Value" required>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-dark">Save</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
         @include('admin.components.footer')
     </div>
 @endsection
@@ -168,30 +138,6 @@
         document.querySelector('form').addEventListener('submit', function() {
             const rateInput = document.getElementById('cy_rate');
             rateInput.value = unformatNumber(rateInput.value);
-        });
-
-
-        // Modal edit 
-        document.addEventListener('DOMContentLoaded', function() {
-            var editButtons = document.querySelectorAll('#edit-btn');
-            editButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var currencyId = this.getAttribute('data-id');
-                    var currencyName = this.getAttribute('data-currency-name');
-                    var currencyCode = this.getAttribute('data-currency-code');
-                    var currencyRate = this.getAttribute('data-currency-rate');
-                    var formAction = '{{ route('currency.update', ':id') }}';
-                    formAction = formAction.replace(':id', currencyId);
-
-                    document.getElementById('editCurrencyForm').action = formAction;
-                    document.getElementById('edit_cy_name').value = currencyName;
-                    document.getElementById('edit_cy_code').value = currencyCode;
-                    document.getElementById('edit_cy_rate').value = currencyRate;
-
-                    var editModal = new bootstrap.Modal(document.getElementById('editDataModal'));
-                    editModal.show();
-                });
-            });
         });
     </script>
 @endsection
