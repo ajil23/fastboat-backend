@@ -275,9 +275,9 @@
                                                         <label class="form-label" for="departure_port">Departure Port</label>
                                                         <select class="form-control" id="departure_port" name="departure_port">
                                                             <option value="">Select Departure Port</option>
-                                                            @foreach ($trip as $item)
-                                                            <option value="{{ $item->departure->prt_name_en }}">
-                                                                {{ $item->departure->prt_name_en }}
+                                                            @foreach ($availability as $item)
+                                                            <option value="{{ $item->trip->departure->prt_name_en }}">
+                                                                {{ $item->trip->departure->prt_name_en }}
                                                             </option>
                                                             @endforeach
                                                         </select>
@@ -288,9 +288,9 @@
                                                         <label class="form-label" for="arrival_port">Arrival Port</label>
                                                         <select class="form-control" id="arrival_port" name="arrival_port">
                                                             <option value="">Select Arrival Port</option>
-                                                            @foreach ($trip as $item)
-                                                            <option value="{{ $item->arrival->prt_name_en }}">
-                                                                {{ $item->arrival->prt_name_en }}
+                                                            @foreach ($availability as $item)
+                                                            <option value="{{ $item->trip->arrival->prt_name_en }}">
+                                                                {{ $item->trip->arrival->prt_name_en }}
                                                             </option>
                                                             @endforeach
                                                         </select>
@@ -303,9 +303,9 @@
                                                         <label class="form-label" for="fast_boat">Fast Boat</label>
                                                         <select class="form-control" id="fast_boat" name="fast_boat">
                                                             <option value="">Select Fast Boat</option>
-                                                            @foreach ($trip as $item)
-                                                            <option value="{{ $item->fastboat->fb_name }}">
-                                                                {{ $item->fastboat->fb_name }}
+                                                            @foreach ($availability as $item)
+                                                            <option value="{{ $item->trip->fastboat->fb_name }}">
+                                                                {{ $item->trip->fastboat->fb_name }}
                                                             </option>
                                                             @endforeach
                                                         </select>
@@ -316,9 +316,13 @@
                                                         <label class="form-label" for="time_dept">Time Dept</label>
                                                         <select class="form-control" id="time_dept" name="time_dept">
                                                             <option value="">Select Time Dept</option>
-                                                            @foreach ($trip as $item)
-                                                            <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}">
-                                                                {{ date('H:i', strtotime($item->fbt_dept_time)) }}
+                                                            @foreach ($availability as $item)
+                                                            @php
+                                                            // Tentukan waktu keberangkatan dari availability atau trip
+                                                            $deptTime = $item->fba_dept_time ? $item->fba_dept_time : $item->trip->fbt_dept_time;
+                                                            @endphp
+                                                            <option value="{{ date('H:i', strtotime($deptTime)) }}">
+                                                                {{ date('H:i', strtotime($deptTime)) }}
                                                             </option>
                                                             @endforeach
                                                         </select>
@@ -415,9 +419,9 @@
                                                     <label class="form-label" for="fb_slug_en">Departure Port</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Departure Port</option>
-                                                        @foreach ($trip as $item)
-                                                        <option value="{{ $item->departure->prt_name_en }}" {{ old('trip', request('trip')) == $item->departure->prt_name_en ? 'selected' : '' }}>
-                                                            {{ $item->departure->prt_name_en }}
+                                                        @foreach ($availability as $item)
+                                                        <option value="{{ $item->trip->departure->prt_name_en }}" {{ old('availability', request('availability')) == $item->trip->departure->prt_name_en ? 'selected' : '' }}>
+                                                            {{ $item->trip->departure->prt_name_en }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -428,9 +432,9 @@
                                                     <label class="form-label" for="fb_slug_en">Arrival Port</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Arrival Port</option>
-                                                        @foreach ($trip as $item)
-                                                        <option value="{{ $item->arrival->prt_name_en }}" {{ old('trip', request('trip')) == $item->arrival->prt_name_en ? 'selected' : '' }}>
-                                                            {{ $item->arrival->prt_name_en }}
+                                                        @foreach ($availability as $item)
+                                                        <option value="{{ $item->trip->arrival->prt_name_en }}" {{ old('availability', request('availability')) == $item->trip->arrival->prt_name_en ? 'selected' : '' }}>
+                                                            {{ $item->trip->arrival->prt_name_en }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -443,9 +447,9 @@
                                                     <label class="form-label" for="fb_slug_en">Fast Boat</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Fast Boat</option>
-                                                        @foreach ($trip as $item)
-                                                        <option value="{{ $item->fastboat->fb_name }}" {{ old('trip', request('trip')) == $item->fastboat->fb_name ? 'selected' : '' }}>
-                                                            {{ $item->fastboat->fb_name }}
+                                                        @foreach ($availability as $item)
+                                                        <option value="{{ $item->trip->fastboat->fb_name }}" {{ old('availability', request('availability')) == $item->trip->fastboat->fb_name ? 'selected' : '' }}>
+                                                            {{ $item->trip->fastboat->fb_name }}
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -456,11 +460,7 @@
                                                     <label class="form-label" for="fb_slug_en">Time Dept</label>
                                                     <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
                                                         <option value="">Select Time Dept</option>
-                                                        @foreach ($deptTime as $item)
-                                                        <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}" {{ old('dept_time', request('dept_time')) == date('H:i', strtotime($item->fbt_dept_time)) ? 'selected' : '' }}>
-                                                            {{ date('H:i', strtotime($item->fbt_dept_time)) }}
-                                                        </option>
-                                                        @endforeach
+                                                       
                                                     </select>
                                                 </div>
                                             </div>
@@ -625,8 +625,18 @@
     });
 
     $(document).ready(function() {
-        // Ketika tanggal dipilih, ambil data untuk Departure Port
+        // Bersihkan dropdown ketika input berubah
+        function resetDropdowns() {
+            $('#departure_port').empty().append('<option value="">Select Departure Port</option>');
+            $('#arrival_port').empty().append('<option value="">Select Arrival Port</option>');
+            $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>');
+            $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
+        }
+
+        // Ketika tanggal dipilih, reset dropdown dan ambil data untuk Departure Port
         $('#trip_date').change(function() {
+            resetDropdowns(); // Reset semua dropdown saat tanggal berubah
+
             var tripDate = $(this).val();
 
             $.ajax({
@@ -645,8 +655,12 @@
             });
         });
 
-        // Ketika Departure Port dipilih, ambil data untuk Arrival Port
+        // Ketika Departure Port dipilih, reset dropdown dan ambil data untuk Arrival Port
         $('#departure_port').change(function() {
+            $('#arrival_port').empty().append('<option value="">Select Arrival Port</option>'); // Reset Arrival Port
+            $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>'); // Reset Fast Boat
+            $('#time_dept').empty().append('<option value="">Select Time Dept</option>'); // Reset Time Dept
+
             var tripDate = $('#trip_date').val();
             var departurePort = $(this).val();
 
@@ -667,8 +681,11 @@
             });
         });
 
-        // Ketika Arrival Port dipilih, ambil data untuk Fastboat
+        // Ketika Arrival Port dipilih, reset dropdown dan ambil data untuk Fast Boat
         $('#arrival_port').change(function() {
+            $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>'); // Reset Fast Boat
+            $('#time_dept').empty().append('<option value="">Select Time Dept</option>'); // Reset Time Dept
+
             var tripDate = $('#trip_date').val();
             var departurePort = $('#departure_port').val();
             var arrivalPort = $(this).val();
@@ -682,7 +699,7 @@
                     arrival_port: arrivalPort
                 },
                 success: function(response) {
-                    // Isi dropdown Fastboat berdasarkan response
+                    // Isi dropdown Fast Boat berdasarkan response
                     $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>');
                     $.each(response.fast_boats, function(index, boat) {
                         $('#fast_boat').append('<option value="' + boat + '">' + boat + '</option>');
@@ -691,8 +708,10 @@
             });
         });
 
-        // Ketika Fastboat dipilih, ambil data untuk Time Dept
+        // Ketika Fast Boat dipilih, ambil data untuk Time Dept
         $('#fast_boat').change(function() {
+            $('#time_dept').empty().append('<option value="">Select Time Dept</option>'); // Reset Time Dept
+
             var tripDate = $('#trip_date').val();
             var departurePort = $('#departure_port').val();
             var arrivalPort = $('#arrival_port').val();

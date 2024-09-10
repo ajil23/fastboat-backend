@@ -44,7 +44,7 @@ class BookingDataController extends Controller
             $fastBoat = $request->input('fast_boat');
             $timeDept = $request->input('time_dept');
 
-            // Pertama, cari trip berdasarkan FastboatAvailability
+            // Query untuk FastboatAvailability
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePort) {
                 $query->where('prt_name_en', $departurePort);
             })
@@ -56,19 +56,22 @@ class BookingDataController extends Controller
                 })
                 ->where('fba_date', $tripDate);
 
-            // Cek apakah timeDept di-filter
+            // Filter berdasarkan timeDept, jika ada
             if ($timeDept) {
-                $availabilityQuery->whereHas('trip', function ($query) use ($timeDept) {
-                    $query->where('fbt_dept_time', $timeDept);
+                $availabilityQuery->where(function ($query) use ($timeDept) {
+                    $query->where('fba_dept_time', $timeDept)
+                        ->orWhereHas('trip', function ($query) use ($timeDept) {
+                            $query->where('fbt_dept_time', $timeDept);
+                        });
                 });
             }
 
+            // Ambil data FastboatAvailability
             $availability = $availabilityQuery->get();
 
-            // Jika tidak ada data di FastboatAvailability berdasarkan timeDept, cari di SchedulesTrip
-            if ($availability->isEmpty() && $timeDept) {
-                // Cari trip berdasarkan data di SchedulesTrip
-                $trips = SchedulesTrip::whereHas('departure', function ($query) use ($departurePort) {
+            // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
+            if ($availability->isEmpty()) {
+                $tripQuery = SchedulesTrip::whereHas('departure', function ($query) use ($departurePort) {
                     $query->where('prt_name_en', $departurePort);
                 })
                     ->whereHas('arrival', function ($query) use ($arrivalPort) {
@@ -78,22 +81,29 @@ class BookingDataController extends Controller
                         $query->where('fb_name', $fastBoat);
                     })
                     ->where('fbt_dept_time', $timeDept)
-                    ->get();
+                    ->whereDate('fbt_trip_date', $tripDate);
 
-                // Jika trip ditemukan, cari availability berdasarkan trip_id
-                if (!$trips->isEmpty()) {
-                    $availability = FastboatAvailability::whereIn('fba_trip_id', $trips->pluck('fbt_id'))
-                        ->where('fba_date', $tripDate)
-                        ->get();
+                $trips = $tripQuery->get();
+
+                if ($trips->isEmpty()) {
+                    return response()->json(['message' => 'No availability found'], 404);
                 }
+
+                // Jika availability tidak ada, gunakan data dari trip
+                $availability = $trips->map(function ($trip) {
+                    return (object)[
+                        'fba_adult_publish' => null,
+                        'fba_child_publish' => null,
+                        'fba_adult_nett' => null,
+                        'fba_child_nett' => null,
+                        'fba_discount' => null,
+                        'fba_dept_time' => null,
+                        'trip' => $trip,
+                    ];
+                });
             }
 
-            // Jika tidak ada data di availability dan trip
-            if ($availability->isEmpty()) {
-                return response()->json(['message' => 'No availability found'], 404);
-            }
-
-            // Buat HTML untuk tabel dan judul card-title
+            // Buat HTML dan perhitungan
             $html = '';
             $cardTitle = '';
             $adultPublishTotal = 0;
@@ -102,33 +112,36 @@ class BookingDataController extends Controller
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
 
+                // Tentukan waktu keberangkatan (prioritas fba_dept_time jika ada, jika tidak ada gunakan fbt_dept_time dari trip)
+                $deptTime = $avail->fba_dept_time ?? $trip->fbt_dept_time;
+
                 // Buat card-title dengan format (Nama Fastboat (Code Departure -> Code Arrival Time Dept))
                 $cardTitle = '<center>' . $trip->fastboat->fb_name . ' (' .
                     $trip->departure->prt_code . ' -> ' .
                     $trip->arrival->prt_code . ' ' .
-                    date('H:i', strtotime($trip->fbt_dept_time)) . ')' . '</center>';
+                    date('H:i', strtotime($deptTime)) . ')' . '</center>';
 
                 $html .= '<tr>';
-                $html .= '<td><center>' . number_format($avail->fba_adult_publish, 0, ',', '.') . '</center></td>';
-                $html .= '<td><center>' . number_format($avail->fba_child_publish, 0, ',', '.') . '</center></td>';
-                $html .= '<td><center>' . number_format($avail->fba_adult_nett, 0, ',', '.') . '</center></td>';
-                $html .= '<td><center>' . number_format($avail->fba_child_nett, 0, ',', '.') . '</center></td>';
-                $html .= '<td><center>' . number_format($avail->fba_discount, 0, ',', '.') . '</center></td>';
+                $html .= '<td><center>' . number_format($avail->fba_adult_publish ?? 0, 0, ',', '.') . '</center></td>';
+                $html .= '<td><center>' . number_format($avail->fba_child_publish ?? 0, 0, ',', '.') . '</center></td>';
+                $html .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
+                $html .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
+                $html .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
                 $html .= '</tr>';
 
-                // Update perhitungan
-                $adultPublishTotal += $avail->fba_adult_publish;
-                $childPublishTotal += $avail->fba_child_publish;
+                // Update perhitungan total
+                $adultPublishTotal += $avail->fba_adult_publish ?? 0;
+                $childPublishTotal += $avail->fba_child_publish ?? 0;
             }
 
-            // Return HTML dan perhitungan
+            // Return hasil HTML dan perhitungan
             return response()->json([
                 'html' => $html,
                 'card_title' => $cardTitle,
                 'adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
                 'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
                 'total_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
-                'currency_end' => 'IDN'
+                'currency_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -143,36 +156,28 @@ class BookingDataController extends Controller
             $departurePort = $request->input('departure_port');
             $arrivalPort = $request->input('arrival_port');
             $fastBoat = $request->input('fast_boat');
-            $timeDept = $request->input('time_dept');
 
-            // Langkah 1: Filter berdasarkan tanggal
+            // Filter berdasarkan tanggal
             $query = FastboatAvailability::where('fba_date', $tripDate);
 
-            // Langkah 2: Filter berdasarkan departure port jika ada
+            // Filter berdasarkan departure port
             if ($departurePort) {
                 $query->whereHas('trip.departure', function ($q) use ($departurePort) {
                     $q->where('prt_name_en', $departurePort);
                 });
             }
 
-            // Langkah 3: Filter berdasarkan arrival port jika ada
+            // Filter berdasarkan arrival port
             if ($arrivalPort) {
                 $query->whereHas('trip.arrival', function ($q) use ($arrivalPort) {
                     $q->where('prt_name_en', $arrivalPort);
                 });
             }
 
-            // Langkah 4: Filter berdasarkan fastboat jika ada
+            // Filter berdasarkan fastboat
             if ($fastBoat) {
                 $query->whereHas('trip.fastboat', function ($q) use ($fastBoat) {
                     $q->where('fb_name', $fastBoat);
-                });
-            }
-
-            // Langkah 5: Filter berdasarkan timeDept jika ada
-            if ($timeDept) {
-                $query->whereHas('trip', function ($q) use ($timeDept) {
-                    $q->where('fbt_dept_time', $timeDept);
                 });
             }
 
@@ -202,8 +207,10 @@ class BookingDataController extends Controller
                     $fastBoats[] = $trip->fastboat->fb_name;
                 }
 
-                // Mengumpulkan timeDept dan hanya menampilkan jam dan menit
-                $formattedTimeDept = date('H:i', strtotime($trip->fbt_dept_time));
+                // Mengumpulkan waktu keberangkatan
+                $deptTime = $availability->fba_dept_time ?? $trip->fbt_dept_time;
+                $formattedTimeDept = date('H:i', strtotime($deptTime));
+
                 if (!in_array($formattedTimeDept, $timeDepts)) {
                     $timeDepts[] = $formattedTimeDept;
                 }
