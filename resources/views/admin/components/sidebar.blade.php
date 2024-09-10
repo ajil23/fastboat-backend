@@ -91,9 +91,9 @@
                 </li>
 
                 <li>
-                    <a href="{{route ('payment.view')}}">
+                    <a href="{{route ('payment-method.view')}}">
                         <i class="bx bx-credit-card icon nav-icon"></i>
-                        <span class="menu-item" data-key="t-tables">Payment</span>
+                        <span class="menu-item" data-key="t-tables">Payment Method</span>
                     </a>
                 </li>
 

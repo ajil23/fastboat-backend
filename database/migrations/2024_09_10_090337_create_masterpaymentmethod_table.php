@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('masterpayment', function (Blueprint $table) {
+        Schema::create('masterpaymentmethod', function (Blueprint $table) {
             $table->id('py_id');
             $table->string('py_name');
             $table->string('py_value');
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('masterpayment');
+        Schema::dropIfExists('masterpaymentmethod');
     }
 };

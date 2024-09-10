@@ -3,17 +3,17 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\MasterPayment;
+use App\Models\MasterPaymentMethod;
 use Illuminate\Http\Request;
 
-class MasterPaymentController extends Controller
+class MasterPaymentMethodController extends Controller
 {
     public function index(){
-        $payment = MasterPayment::all();
-        $title = 'Delete Island Data!';
+        $payment = MasterPaymentMethod::all();
+        $title = 'Delete Payment Methode Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        return view('master.payment.index', compact('payment'));
+        return view('master.payment-method.index', compact('payment'));
     }
 
     public function store(Request $request){
@@ -24,29 +24,29 @@ class MasterPaymentController extends Controller
         ]);
 
         // Handle insert data to database
-        $paymentData = new MasterPayment();
+        $paymentData = new MasterPaymentMethod();
         $paymentData->py_name = $request->py_name;
         $paymentData->py_value = $request->py_value;
         $paymentData->py_updated_by = Auth()->id();
         $paymentData->save();
         toast('Your data as been submited!', 'success');
-        return redirect()->route('payment.view');
+        return redirect()->route('payment-method.view');
     }
 
     public function update(Request $request, $py_id){
-        $paymentData = MasterPayment::find($py_id);
+        $paymentData = MasterPaymentMethod::find($py_id);
         $paymentData->py_name = $request->py_name;
         $paymentData->py_value = $request->py_value;
         $paymentData->py_updated_by = Auth()->id();
         $paymentData->update();
         toast('Your data as been edited!', 'success');
-        return redirect()->route('payment.view');
+        return redirect()->route('payment-method.view');
     }
 
     public function delete($py_id){
-        $paymentDelete = MasterPayment::find($py_id);
+        $paymentDelete = MasterPaymentMethod::find($py_id);
         $paymentDelete->delete();
         toast('Your data as been deleted!','success');
-        return redirect()->route('payment.view');
+        return redirect()->route('payment-method.view');
     }
 }
