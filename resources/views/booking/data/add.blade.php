@@ -376,13 +376,13 @@
                                                     <div class="col-sm-3">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="total_end">End Total (IDR)</label>
-                                                            <input value="" class="form-control" id="total_end" name="total_end" disabled>
+                                                            <input value="" class="form-control" id="total_end" name="total_end" style="background-color:lightgray" disabled>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="currency_end">End Total Currency (IDR)</label>
-                                                            <input value="" class="form-control" id="currency_end" name="currency_end" disabled>
+                                                            <input value="" class="form-control" id="currency_end" name="currency_end" style="background-color:lightgray" disabled>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -527,13 +527,13 @@
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fb_slug_en">End Total (IDN)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en"  style="background-color:lightgray"  disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fb_slug_en">End Total Currency (IDN)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en"  style="background-color:lightgray"  disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -638,7 +638,7 @@
             resetDropdowns(); // Reset semua dropdown saat tanggal berubah
 
             var tripDate = $(this).val();
-
+           
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
@@ -716,7 +716,7 @@
             var departurePort = $('#departure_port').val();
             var arrivalPort = $('#arrival_port').val();
             var fastBoat = $(this).val();
-
+            
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
