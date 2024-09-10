@@ -188,4 +188,6 @@ Route::middleware([
 
     Route::post('api/fetch-fastboat', [FastboatAvailabilityController::class, 'fetchFastboat']);
     Route::post('api/fetch-schedule', [FastboatAvailabilityController::class, 'fetchSchedule']);
+
+    Route::get('/getFilteredData', [BookingDataController::class, 'getFilteredData']);
 });
