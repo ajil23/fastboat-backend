@@ -23,7 +23,6 @@ class MasterCurrencyController extends Controller
         // Validasi inputan
         $validator = Validator::make($request->all(), [
             'cy_name' => 'required|string|max:255',
-            'cy_rate' => 'required|numeric|between:0,999999.99999999',
             'cy_code' => 'required|string|max:3',
         ]);
 
@@ -40,17 +39,44 @@ class MasterCurrencyController extends Controller
         $currencyData = new MasterCurrency();
         $currencyData->cy_name = $request->cy_name;
         $currencyData->cy_code = $request->cy_code;
-        $currencyData->cy_rate = $request->cy_rate;
         $currencyData->cy_updated_by = Auth()->user()->name;
         $currencyData->save();
         toast('Your data as been submited!', 'success');
         return redirect()->route('currency.view');
     }
 
+    public function editBulk(Request $request)
+    {
+        // Ambil semua ID currency yang dikirim
+        $currencyIds = $request->input('currency_ids');
+
+        // Ambil semua data currency berdasarkan ID
+        $currencies = MasterCurrency::whereIn('cy_id', $currencyIds)->get();
+
+        // Arahkan ke halaman edit dengan data currency yang dipilih
+        return view('master.currency.edit', compact('currencies'));
+    }
+
+    public function updateBulk(Request $request)
+    {
+        $currencyData = $request->except('_token');
+
+        foreach ($currencyData['cy_name'] as $cy_id => $cy_name) {
+            MasterCurrency::where('cy_id', $cy_id)->update([
+                'cy_rate' => str_replace(',', '.', str_replace('.', '', $currencyData['cy_rate'][$cy_id])),
+                'cy_updated_by' => auth()->user()->name, // Atau logic untuk mengambil user saat ini
+            ]);
+        }
+
+        toast('Your data as been submited!', 'success');
+        return redirect()->route('currency.view');
+    }
+
+
     // Menangani update data
     public function update(Request $request, $cy_id)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'cy_name' => 'string|max:255',
             'cy_code' => 'string|max:3',
             'cy_rate' => 'numeric|between:0,999999.99999999',
