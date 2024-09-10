@@ -623,5 +623,99 @@
             });
         }
     });
+
+    $(document).ready(function() {
+        // Ketika tanggal dipilih, ambil data untuk Departure Port
+        $('#trip_date').change(function() {
+            var tripDate = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredData',
+                method: 'GET',
+                data: {
+                    trip_date: tripDate
+                },
+                success: function(response) {
+                    // Isi dropdown Departure Port berdasarkan response
+                    $('#departure_port').empty().append('<option value="">Select Departure Port</option>');
+                    $.each(response.departure_ports, function(index, port) {
+                        $('#departure_port').append('<option value="' + port + '">' + port + '</option>');
+                    });
+                }
+            });
+        });
+
+        // Ketika Departure Port dipilih, ambil data untuk Arrival Port
+        $('#departure_port').change(function() {
+            var tripDate = $('#trip_date').val();
+            var departurePort = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredData',
+                method: 'GET',
+                data: {
+                    trip_date: tripDate,
+                    departure_port: departurePort
+                },
+                success: function(response) {
+                    // Isi dropdown Arrival Port berdasarkan response
+                    $('#arrival_port').empty().append('<option value="">Select Arrival Port</option>');
+                    $.each(response.arrival_ports, function(index, port) {
+                        $('#arrival_port').append('<option value="' + port + '">' + port + '</option>');
+                    });
+                }
+            });
+        });
+
+        // Ketika Arrival Port dipilih, ambil data untuk Fastboat
+        $('#arrival_port').change(function() {
+            var tripDate = $('#trip_date').val();
+            var departurePort = $('#departure_port').val();
+            var arrivalPort = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredData',
+                method: 'GET',
+                data: {
+                    trip_date: tripDate,
+                    departure_port: departurePort,
+                    arrival_port: arrivalPort
+                },
+                success: function(response) {
+                    // Isi dropdown Fastboat berdasarkan response
+                    $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>');
+                    $.each(response.fast_boats, function(index, boat) {
+                        $('#fast_boat').append('<option value="' + boat + '">' + boat + '</option>');
+                    });
+                }
+            });
+        });
+
+        // Ketika Fastboat dipilih, ambil data untuk Time Dept
+        $('#fast_boat').change(function() {
+            var tripDate = $('#trip_date').val();
+            var departurePort = $('#departure_port').val();
+            var arrivalPort = $('#arrival_port').val();
+            var fastBoat = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredData',
+                method: 'GET',
+                data: {
+                    trip_date: tripDate,
+                    departure_port: departurePort,
+                    arrival_port: arrivalPort,
+                    fast_boat: fastBoat
+                },
+                success: function(response) {
+                    // Isi dropdown Time Dept berdasarkan response
+                    $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
+                    $.each(response.time_depts, function(index, time) {
+                        $('#time_dept').append('<option value="' + time + '">' + time + '</option>');
+                    });
+                }
+            });
+        });
+    });
 </script>
 @endsection
