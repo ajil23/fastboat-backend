@@ -55,6 +55,7 @@ Route::middleware([
         Route::post('/data/update/{id}', [BookingDataController::class, 'update'])->name('data.update');
         Route::delete('/data/delete/{id}', [BookingDataController::class, 'delete'])->name('data.delete');
         Route::get('/data/search', [BookingDataController::class, 'search'])->name('data.search');
+        Route::get('/data/searchReturn', [BookingDataController::class, 'searchReturn'])->name('data.searchReturn');
 
         //booking-trash route
         Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
@@ -191,4 +192,5 @@ Route::middleware([
     Route::post('api/fetch-schedule', [FastboatAvailabilityController::class, 'fetchSchedule']);
 
     Route::get('/getFilteredData', [BookingDataController::class, 'getFilteredData']);
+    Route::get('/getFilteredDataReturn', [BookingDataController::class, 'getFilteredDataReturn']);
 });
