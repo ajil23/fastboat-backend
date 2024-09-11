@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('cy_id');
             $table->string('cy_code', 3);
             $table->string('cy_name');
-            $table->decimal('cy_rate', 10, 2)->unsigned()->default(0);
+            $table->integer('cy_rate')->unsigned()->default(0);
             $table->integer('cy_status')->default(1);
             $table->string('cy_updated_by');
             $table->timestamps();

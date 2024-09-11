@@ -46,13 +46,15 @@ class MasterCurrencyController extends Controller
         return redirect()->route('currency.view');
     }
 
-    public function updateKurs()
+    public function updateKurs($actor = null)
     {
         $currencies = MasterCurrency::all(); // Mengambil semua data kurs dari database
-        $actor = auth()->user()->username; // Mengambil username dari sesi pengguna yang login
+        if (!$actor) {
+            $actor = auth()->check() ? auth()->user()->name : 'Cronjob';
+        }
 
         foreach ($currencies as $currency) {
-            // Mengambil data kurs dari API x-rates
+            // Mengambil data kurs dari scraping x-rates
             $response = Http::get("http://www.x-rates.com/calculator/", [
                 'from' => $currency->cy_code,
                 'to' => 'IDR',
@@ -72,35 +74,30 @@ class MasterCurrencyController extends Controller
                 $percentage = round($kurs_round * 8.8 / 100, 0, PHP_ROUND_HALF_UP);
                 $kurs_plus = $kurs_round - $percentage; // Mengurangi kurs 8.8%
 
-                // Update nilai kurs jika kurs_asli lebih dari 0, jika tidak gunakan kurs sebelumnya
-                if ($kurs_asli > 0) {
-                    $currency->update([
-                        'cy_rate' => $kurs_plus,
-                        'cy_updated_by' => $actor
-                    ]);
-                } else {
-                    $currency->update([
-                        'cy_rate' => $kurs_before,
-                        'cy_updated_by' => $actor
-                    ]);
-                }
-            } else {
-                // Jika API gagal, tangani sesuai kebutuhan
-                toast('Failed to fetch data', 'failed');
+                // Tentukan nilai kurs yang akan diupdate
+                $newRate = $kurs_asli > 0 ? $kurs_plus : $kurs_before;
 
-                return redirect()->route('admin.kurs');
+                // Update model
+                $currency->cy_rate = $newRate;
+                $currency->cy_updated_by = $actor;
+                $currency->save(); // Simpan perubahan ke database
+            } else {
+                // Jika scraping gagal, tangani sesuai kebutuhan
+                toast('Failed to fetch data', 'failed');
+                return redirect()->route('currency.view');
             }
         }
 
         // Menampilkan pesan sukses atau gagal berdasarkan apakah ada baris yang diperbarui
         if ($currencies->isNotEmpty()) {
-            toast('Successfully updated data! Please check your data.', 'success');
+            toast('Successfully updated data!', 'success');
         } else {
             toast('Failed to update data! Please check your data.', 'failed');
         }
 
         return redirect()->route('currency.view');
     }
+
 
     // Menangani hapus data
     public function delete($cy_id)
