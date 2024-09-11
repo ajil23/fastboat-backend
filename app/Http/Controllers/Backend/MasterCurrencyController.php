@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\MasterCurrency;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,55 +49,61 @@ class MasterCurrencyController extends Controller
 
     public function updateKurs($actor = null)
     {
-        $currencies = MasterCurrency::all(); // Mengambil semua data kurs dari database
         if (!$actor) {
             $actor = auth()->check() ? auth()->user()->name : 'Cronjob';
         }
 
-        foreach ($currencies as $currency) {
-            // Mengambil data kurs dari scraping x-rates
-            $response = Http::get("http://www.x-rates.com/calculator/", [
-                'from' => $currency->cy_code,
-                'to' => 'IDR',
-                'amount' => 1
-            ]);
+        MasterCurrency::chunk(100, function ($currencies) use ($actor) {
+            $dataToUpdate = [];
 
-            if ($response->successful()) {
-                $htmlContent = $response->body();
-                // Memproses HTML yang didapat dari x-rates
-                $exp = explode('<span class="ccOutputRslt">', $htmlContent);
-                $exp = explode('<span class="ccOutputTrail">', $exp[1]);
-                $exp = explode('.', $exp[0]);
+            $tableName = (new MasterCurrency)->getTable();
+            // $ids = implode(',', array_column($dataToUpdate, 'cy_id'));
+            $casesRate = '';
+            $casesUpdatedBy = '';
+            $casesUpdatedAt = '';
+            $id = array();
+            // dd($currencies);
+            foreach ($currencies as $currency) {
+                // Proses pengambilan kurs dan update data seperti sebelumnya
+                $response = Http::get("http://www.x-rates.com/calculator/", [
+                    'from' => $currency->cy_code,
+                    'to' => 'IDR',
+                    'amount' => 1
+                ]);
 
-                $kurs_before = $currency->cry_rate;
-                $kurs_asli = str_replace(',', '', $exp[0]);
-                $kurs_round = round($kurs_asli, 0, PHP_ROUND_HALF_UP); // Membulatkan kurs
-                $percentage = round($kurs_round * 8.8 / 100, 0, PHP_ROUND_HALF_UP);
-                $kurs_plus = $kurs_round - $percentage; // Mengurangi kurs 8.8%
+                if ($response->successful()) {
+                    $htmlContent = $response->body();
+                    $exp = explode('<span class="ccOutputRslt">', $htmlContent);
+                    $exp = explode('<span class="ccOutputTrail">', $exp[1]);
+                    $exp = explode('.', $exp[0]);
 
-                // Tentukan nilai kurs yang akan diupdate
-                $newRate = $kurs_asli > 0 ? $kurs_plus : $kurs_before;
+                    $kurs_before = $currency->cy_rate;
+                    $kurs_asli = str_replace(',', '', $exp[0]);
+                    $kurs_round = round($kurs_asli, 0, PHP_ROUND_HALF_UP);
+                    $percentage = round($kurs_round * 8.8 / 100, 0, PHP_ROUND_HALF_UP);
+                    $kurs_plus = $kurs_round - $percentage;
 
-                // Update model
-                $currency->cy_rate = $newRate;
-                $currency->cy_updated_by = $actor;
-                $currency->save(); // Simpan perubahan ke database
-            } else {
-                // Jika scraping gagal, tangani sesuai kebutuhan
-                toast('Failed to fetch data', 'failed');
-                return redirect()->route('currency.view');
+                    $newRate = $kurs_asli > 0 ? $kurs_plus : $kurs_before;
+
+                    $casesRate .= "WHEN {$currency->cy_id} THEN '{$newRate}' ";
+                    $casesUpdatedBy .= "WHEN {$currency->cy_id} THEN '{$actor}' ";
+                    $casesUpdatedAt .= "WHEN {$currency->cy_id} THEN NOW() ";
+                    $id[] = $currency->cy_id;
+                }
             }
-        }
+            $ids = implode(',', $id);
+            $updateQuery = "UPDATE {$tableName} 
+                            SET cy_rate = CASE cy_id {$casesRate} END, 
+                                cy_updated_by = CASE cy_id {$casesUpdatedBy} END, 
+                                updated_at = CASE cy_id {$casesUpdatedAt} END
+                            WHERE cy_id IN ({$ids})";
+            DB::statement($updateQuery);
+        });
 
-        // Menampilkan pesan sukses atau gagal berdasarkan apakah ada baris yang diperbarui
-        if ($currencies->isNotEmpty()) {
-            toast('Successfully updated data!', 'success');
-        } else {
-            toast('Failed to update data! Please check your data.', 'failed');
-        }
-
+        toast('Successfully updated data!', 'success');
         return redirect()->route('currency.view');
     }
+
 
 
     // Menangani hapus data

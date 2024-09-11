@@ -28,7 +28,7 @@ class UpdateKursCommand extends Command
     {
         $controller = new MasterCurrencyController();
         // Memanggil updateKurs dengan actor 'cronjob'
-        $controller->updateKurs('cronjob');
+        $controller->updateKurs('Cronjob');
         $this->info('Currency rates updated successfully by cronjob.');
         return 0;
     }
