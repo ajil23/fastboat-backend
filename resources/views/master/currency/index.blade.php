@@ -11,23 +11,17 @@
                                     <h5 class="card-title">Currency Table</h5>
                                     <div class="ms-auto">
                                         <div class="col text-end">
-                                            <button type="submit" class="btn btn-outline-dark waves-effect waves-light"
-                                                form="updateAllCurrenciesForm"><i class="mdi mdi-pencil"></i>Update</button>
-
+                                            <form action="{{ route('currency.updateKurs') }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-outline-dark waves-effect waves-light">
+                                                    <i class="mdi mdi-pencil"></i> Update
+                                                </button>
+                                            </form>
                                             <button class="btn btn-dark" data-bs-toggle="modal"
                                                 data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Add</button>
                                         </div>
                                     </div>
                                 </div>
-
-                                <form id="updateAllCurrenciesForm" action="{{ route('currency.editBulk') }}" method="POST">
-                                    @csrf
-                                    @foreach ($currency as $item)
-                                        <input type="hidden" name="currency_ids[]" value="{{ $item->cy_id }}">
-                                    @endforeach
-                                </form>
-
-
                                 <div class="table-responsive">
                                     <table
                                         class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
