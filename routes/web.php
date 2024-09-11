@@ -181,8 +181,7 @@ Route::middleware([
         // master currency
         Route::get('/currency', [MasterCurrencyController::class, 'index'])->name('currency.view');
         Route::post('/currency/store', [MasterCurrencyController::class, 'store'])->name('currency.store');
-        Route::post('/currency/edit-bulk', [MasterCurrencyController::class, 'editBulk'])->name('currency.editBulk');
-        Route::post('/currency/update-bulk', [MasterCurrencyController::class, 'updateBulk'])->name('currency.updateBulk');
+        Route::post('/currency/updateKurs', [MasterCurrencyController::class, 'updateKurs'])->name('currency.updateKurs');
         Route::delete('/currency/delete/{id}', [MasterCurrencyController::class, 'delete'])->name('currency.delete');
         Route::get('/currency/status/{id}', [MasterCurrencyController::class, 'currencyStatus'])->name('currency.status');
     });

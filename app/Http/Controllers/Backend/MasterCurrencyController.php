@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\MasterCurrency;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class MasterCurrencyController extends Controller
@@ -45,59 +46,59 @@ class MasterCurrencyController extends Controller
         return redirect()->route('currency.view');
     }
 
-    public function editBulk(Request $request)
+    public function updateKurs()
     {
-        // Ambil semua ID currency yang dikirim
-        $currencyIds = $request->input('currency_ids');
+        $currencies = MasterCurrency::all(); // Mengambil semua data kurs dari database
+        $actor = auth()->user()->username; // Mengambil username dari sesi pengguna yang login
 
-        // Ambil semua data currency berdasarkan ID
-        $currencies = MasterCurrency::whereIn('cy_id', $currencyIds)->get();
-
-        // Arahkan ke halaman edit dengan data currency yang dipilih
-        return view('master.currency.edit', compact('currencies'));
-    }
-
-    public function updateBulk(Request $request)
-    {
-        $currencyData = $request->except('_token');
-
-        foreach ($currencyData['cy_name'] as $cy_id => $cy_name) {
-            MasterCurrency::where('cy_id', $cy_id)->update([
-                'cy_rate' => str_replace(',', '.', str_replace('.', '', $currencyData['cy_rate'][$cy_id])),
-                'cy_updated_by' => auth()->user()->name, // Atau logic untuk mengambil user saat ini
+        foreach ($currencies as $currency) {
+            // Mengambil data kurs dari API x-rates
+            $response = Http::get("http://www.x-rates.com/calculator/", [
+                'from' => $currency->cy_code,
+                'to' => 'IDR',
+                'amount' => 1
             ]);
+
+            if ($response->successful()) {
+                $htmlContent = $response->body();
+                // Memproses HTML yang didapat dari x-rates
+                $exp = explode('<span class="ccOutputRslt">', $htmlContent);
+                $exp = explode('<span class="ccOutputTrail">', $exp[1]);
+                $exp = explode('.', $exp[0]);
+
+                $kurs_before = $currency->cry_rate;
+                $kurs_asli = str_replace(',', '', $exp[0]);
+                $kurs_round = round($kurs_asli, 0, PHP_ROUND_HALF_UP); // Membulatkan kurs
+                $percentage = round($kurs_round * 8.8 / 100, 0, PHP_ROUND_HALF_UP);
+                $kurs_plus = $kurs_round - $percentage; // Mengurangi kurs 8.8%
+
+                // Update nilai kurs jika kurs_asli lebih dari 0, jika tidak gunakan kurs sebelumnya
+                if ($kurs_asli > 0) {
+                    $currency->update([
+                        'cy_rate' => $kurs_plus,
+                        'cy_updated_by' => $actor
+                    ]);
+                } else {
+                    $currency->update([
+                        'cy_rate' => $kurs_before,
+                        'cy_updated_by' => $actor
+                    ]);
+                }
+            } else {
+                // Jika API gagal, tangani sesuai kebutuhan
+                toast('Failed to fetch data', 'failed');
+
+                return redirect()->route('admin.kurs');
+            }
         }
 
-        toast('Your data as been submited!', 'success');
-        return redirect()->route('currency.view');
-    }
-
-
-    // Menangani update data
-    public function update(Request $request, $cy_id)
-    {
-        $validator = Validator::make($request->all(), [
-            'cy_name' => 'string|max:255',
-            'cy_code' => 'string|max:3',
-            'cy_rate' => 'numeric|between:0,999999.99999999',
-        ]);
-
-        // Cek apakah validasi gagal
-        if ($validator->fails()) {
-            // Menambahkan pesan toast ke dalam session
-            toast('Validation failed! Please check your input.', 'error');
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+        // Menampilkan pesan sukses atau gagal berdasarkan apakah ada baris yang diperbarui
+        if ($currencies->isNotEmpty()) {
+            toast('Successfully updated data! Please check your data.', 'success');
+        } else {
+            toast('Failed to update data! Please check your data.', 'failed');
         }
 
-        $currencyUpdate = MasterCurrency::find($cy_id);
-        $currencyUpdate->cy_name = $request->cy_name;
-        $currencyUpdate->cy_code = $request->cy_code;
-        $currencyUpdate->cy_rate = $request->cy_rate;
-        $currencyUpdate->cy_updated_by = Auth()->user()->name;
-        $currencyUpdate->update();
-        toast('Your data as been submited!', 'success');
         return redirect()->route('currency.view');
     }
 
