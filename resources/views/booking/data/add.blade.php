@@ -10,20 +10,17 @@
                     <div class="col-lg-12">
                         <div id="addproduct-accordion" class="custom-accordion">
                             <div class="card">
-                                <a href="#addproduct-productinfo-collapse" class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
+                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <h5 class="font-size-16 mb-1">Payment</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
-                                            <div class="flex-shrink-0">
-                                                <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>
-                                <div id="addproduct-productinfo-collapse" class="collapse show" data-bs-parent="#addproduct-accordion">
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
                                             <div class="col-md-3">
@@ -105,20 +102,17 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <a href="#addproduct-img-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-img-collapse">
+                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <h5 class="font-size-16 mb-1">Customer</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
-                                            <div class="flex-shrink-0">
-                                                <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>
-                                <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <div class="row">
                                             <div class="col-lg-4">
@@ -246,20 +240,17 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <a href="#addproduct-metadata-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-metadata-collapse">
+                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <h5 class="font-size-16 mb-1">Trip Depart</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
-                                            <div class="flex-shrink-0">
-                                                <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>
-                                <div id="addproduct-metadata-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <!-- Form Pencarian -->
                                         <form id="searchForm">
@@ -336,7 +327,7 @@
                                                 <h5 class="card-title"></h5>
                                                 <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
                                                     <thead>
-                                                        <tr class="table-light ">
+                                                        <tr class="table-light">
                                                             <th>
                                                                 <center>Publish Adult</center>
                                                             </th>
@@ -392,148 +383,141 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <a href="#addproduct-return-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-return-collapse">
+                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <h5 class="font-size-16 mb-1">Trip Return</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
-                                            <div class="flex-shrink-0">
-                                                <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
-                                            </div>
                                         </div>
                                     </div>
                                 </a>
-                                <div id="addproduct-return-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
-                                        <div class="row">
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Trip Date</label>
-                                                    <input type="date" class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Departure Port</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Departure Port</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->departure->prt_name_en }}" {{ old('availability', request('availability')) == $item->trip->departure->prt_name_en ? 'selected' : '' }}>
-                                                            {{ $item->trip->departure->prt_name_en }}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Arrival Port</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Arrival Port</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->arrival->prt_name_en }}" {{ old('availability', request('availability')) == $item->trip->arrival->prt_name_en ? 'selected' : '' }}>
-                                                            {{ $item->trip->arrival->prt_name_en }}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Fast Boat</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Fast Boat</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->fastboat->fb_name }}" {{ old('availability', request('availability')) == $item->trip->fastboat->fb_name ? 'selected' : '' }}>
-                                                            {{ $item->trip->fastboat->fb_name }}
-                                                        </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_slug_en">Time Dept</label>
-                                                    <select data-trigger class="form-control" id="fb_slug_en" name="fb_slug_en" required>
-                                                        <option value="">Select Time Dept</option>
-                                                       
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <br>
-                                        <div class="table-responsive">
-                                            <h5 class="card-title">
-                                                <center>Booking Data Table<center>
-                                            </h5>
-                                            <table class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
-                                                <thead>
-                                                    <tr>
-                                                        <th>
-                                                            <center>Publish Adult</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Publish Child</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Nett Adult</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Nett Child</center>
-                                                        </th>
-                                                        <th>
-                                                            <center>Discount</center>
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                        <td>
-                                                            <center>#</center>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                            <br>
+                                        <!-- Form Pencarian -->
+                                        <form id="searchForm">
                                             <div class="row">
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">Adult Publish (IDR)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                                        <label class="form-label" for="trip_return_date">Trip Date</label>
+                                                        <input type="date" class="form-control" id="trip_return_date" name="trip_return_date">
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">Child Publish (IDR)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en" disabled>
+                                                        <label class="form-label" for="departure_return_port">Departure Port</label>
+                                                        <select class="form-control" id="departure_return_port" name="departure_return_port">
+                                                            <option value="">Select Departure Port</option>
+                                                            @foreach ($availability as $item)
+                                                            <option value="{{ $item->trip->departure->prt_name_en }}">
+                                                                {{ $item->trip->departure->prt_name_en }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">End Total (IDN)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en"  style="background-color:lightgray"  disabled>
+                                                        <label class="form-label" for="arrival_return_port">Arrival Port</label>
+                                                        <select class="form-control" id="arrival_return_port" name="arrival_return_port">
+                                                            <option value="">Select Arrival Port</option>
+                                                            @foreach ($availability as $item)
+                                                            <option value="{{ $item->trip->arrival->prt_name_en }}">
+                                                                {{ $item->trip->arrival->prt_name_en }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-3">
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-sm-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fb_slug_en">End Total Currency (IDN)</label>
-                                                        <input value="350.000" class="form-control" id="fb_slug_en" name="fb_slug_en"  style="background-color:lightgray"  disabled>
+                                                        <label class="form-label" for="fast_boat_return">Fast Boat</label>
+                                                        <select class="form-control" id="fast_boat_return" name="fast_boat_return">
+                                                            <option value="">Select Fast Boat</option>
+                                                            @foreach ($availability as $item)
+                                                            <option value="{{ $item->trip->fastboat->fb_name }}">
+                                                                {{ $item->trip->fastboat->fb_name }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="time_dept_return">Time Dept</label>
+                                                        <select class="form-control" id="time_dept_return" name="time_dept_return">
+                                                            <option value="">Select Time Dept</option>
+                                                            @foreach ($availability as $item)
+                                                            @php
+                                                            // Tentukan waktu keberangkatan dari availability atau trip
+                                                            $deptTime = $item->fba_dept_time ? $item->fba_dept_time : $item->trip->fbt_dept_time;
+                                                            @endphp
+                                                            <option value="{{ date('H:i', strtotime($deptTime)) }}">
+                                                                {{ date('H:i', strtotime($deptTime)) }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!-- Hasil Pencarian -->
+                                        <div id="search-results-return" style="display: none;">
+                                            <div class="table-responsive">
+                                                <h5 class="card-title-return"></h5>
+                                                <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th>
+                                                                <center>Publish Adult</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Publish Child</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Nett Adult</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Nett Child</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Discount</center>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Hasil pencarian akan dimasukkan ke sini -->
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <!-- perhitungan -->
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="adult_return_publish">Adult Publish (IDR)</label>
+                                                            <input value="" class="form-control" id="adult_return_publish" name="adult_return_publish" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="child_return_publish">Child Publish (IDR)</label>
+                                                            <input value="" class="form-control" id="child_return_publish" name="child_return_publish" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="total_return_end">End Total (IDR)</label>
+                                                            <input value="" class="form-control" id="total_return_end" name="total_return_end" style="background-color:lightgray" disabled>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="currency_return_end">End Total Currency (IDR)</label>
+                                                            <input value="" class="form-control" id="currency_return_end" name="currency_return_end" style="background-color:lightgray" disabled>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -638,7 +622,7 @@
             resetDropdowns(); // Reset semua dropdown saat tanggal berubah
 
             var tripDate = $(this).val();
-           
+
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
@@ -716,7 +700,7 @@
             var departurePort = $('#departure_port').val();
             var arrivalPort = $('#arrival_port').val();
             var fastBoat = $(this).val();
-            
+
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
@@ -731,6 +715,180 @@
                     $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
                     $.each(response.time_depts, function(index, time) {
                         $('#time_dept').append('<option value="' + time + '">' + time + '</option>');
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        // Fungsi untuk mengecek apakah semua field sudah diisi
+        function checkFormComplete() {
+            let tripDateReturn = $('#trip_return_date').val();
+            let departurePortReturn = $('#departure_return_port').val();
+            let arrivalPortReturn = $('#arrival_return_port').val();
+            let fastBoatReturn = $('#fast_boat_return').val();
+            let timeDeptReturn = $('#time_dept_return').val();
+
+            // Cek apakah semua field sudah diisi
+            if (tripDateReturn && departurePortReturn && arrivalPortReturn && fastBoatReturn && timeDeptReturn) {
+                performSearch(tripDateReturn, departurePortReturn, arrivalPortReturn, fastBoatReturn, timeDeptReturn);
+            }
+        }
+
+        // Trigger ketika input berubah
+        $('#trip_return_date, #departure_return_port, #arrival_return_port, #fast_boat_return, #time_dept_return').on('change', function() {
+            checkFormComplete();
+        });
+
+        // Fungsi untuk melakukan pencarian
+        function performSearch(tripDateReturn, departurePortReturn, arrivalPortReturn, fastBoatReturn, timeDeptReturn) {
+            $.ajax({
+                url: '{{ route("data.searchReturn") }}', // Pastikan ini menghasilkan URL yang benar
+                method: 'GET',
+                data: {
+                    trip_return_date: tripDateReturn,
+                    departure_return_port: departurePortReturn,
+                    arrival_return_port: arrivalPortReturn,
+                    fast_boat_return: fastBoatReturn,
+                    time_dept_return: timeDeptReturn
+                },
+                success: function(response) {
+                    // Jika ada hasil, tampilkan elemen pencarian
+                    if (response.htmlReturn) {
+                        $('#booking-data-table tbody').html(response.htmlReturn);
+                        $('.card-title-return').html(response.card_return_title);
+
+                        // Update perhitungan (contoh nilai adult publish dan child publish)
+                        $('#adult_return_publish').val(response.adult_return_publish);
+                        $('#child_return_publish').val(response.child_return_publish);
+                        $('#total_return_end').val(response.total_return_end);
+                        $('#currency_return_end').val(response.currency_return_end);
+
+                        // Tampilkan hasil pencarian dan perhitungan
+                        $('#search-results-return').show();
+                    } else {
+                        $('#search-results-return').hide();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseText); // Debugging
+                    alert("Error: Unable to fetch data.");
+                    $('#search-results-return').hide(); // Sembunyikan jika ada error
+                }
+            });
+        }
+    });
+
+    $(document).ready(function() {
+        // Bersihkan dropdown ketika input berubah
+        function resetDropdowns() {
+            $('#departure_return_port').empty().append('<option value="">Select Departure Port</option>');
+            $('#arrival_return_port').empty().append('<option value="">Select Arrival Port</option>');
+            $('#fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
+            $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
+        }
+
+        // Ketika tanggal dipilih, reset dropdown dan ambil data untuk Departure Port
+        $('#trip_return_date').change(function() {
+            resetDropdowns(); // Reset semua dropdown saat tanggal berubah
+
+            var tripDateReturn = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredDataReturn',
+                method: 'GET',
+                data: {
+                    trip_return_date: tripDateReturn
+                },
+                success: function(response) {
+                    // Isi dropdown Departure Port berdasarkan response
+                    $('#departure_return_port').empty().append('<option value="">Select Departure Port</option>');
+                    $.each(response.departure_return_ports, function(index, port) {
+                        $('#departure_return_port').append('<option value="' + port + '">' + port + '</option>');
+                    });
+                }
+            });
+        });
+
+        // Ketika Departure Port dipilih, reset dropdown dan ambil data untuk Arrival Port
+        $('#departure_return_port').change(function() {
+            $('#arrival_return_port').empty().append('<option value="">Select Arrival Port</option>'); // Reset Arrival Port
+            $('#fast_boat_return').empty().append('<option value="">Select Fast Boat</option>'); // Reset Fast Boat
+            $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>'); // Reset Time Dept
+
+            var tripDateReturn = $('#trip_return_date').val();
+            var departurePortReturn = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredDataReturn',
+                method: 'GET',
+                data: {
+                    trip_return_date: tripDateReturn,
+                    departure_return_port: departurePortReturn
+                },
+                success: function(response) {
+                    // Isi dropdown Arrival Port berdasarkan response
+                    $('#arrival_return_port').empty().append('<option value="">Select Arrival Port</option>');
+                    $.each(response.arrival_return_ports, function(index, port) {
+                        $('#arrival_return_port').append('<option value="' + port + '">' + port + '</option>');
+                    });
+                }
+            });
+        });
+
+        // Ketika Arrival Port dipilih, reset dropdown dan ambil data untuk Fast Boat
+        $('#arrival_return_port').change(function() {
+            $('#fast_boat_return').empty().append('<option value="">Select Fast Boat</option>'); // Reset Fast Boat
+            $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>'); // Reset Time Dept
+
+            var tripDateReturn = $('#trip_return_date').val();
+            var departurePortReturn = $('#departure_return_port').val();
+            var arrivalPortReturn = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredDataReturn',
+                method: 'GET',
+                data: {
+                    trip_return_date: tripDateReturn,
+                    departure_return_port: departurePortReturn,
+                    arrival_return_port: arrivalPortReturn
+                },
+                success: function(response) {
+                    // Isi dropdown Fast Boat berdasarkan response
+                    $('#fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
+                    $.each(response.fast_boats_return, function(index, boat) {
+                        $('#fast_boat_return').append('<option value="' + boat + '">' + boat + '</option>');
+                    });
+                }
+            });
+        });
+
+        // Ketika Fast Boat dipilih, ambil data untuk Time Dept
+        $('#fast_boat_return').change(function() {
+            $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>'); // Reset Time Dept
+
+            var tripDateReturn = $('#trip_return_date').val();
+            var departurePortReturn = $('#departure_return_port').val();
+            var arrivalPortReturn = $('#arrival_return_port').val();
+            var fastBoatReturn = $(this).val();
+
+            $.ajax({
+                url: '/getFilteredDataReturn',
+                method: 'GET',
+                data: {
+                    trip_return_date: tripDateReturn,
+                    departure_return_port: departurePortReturn,
+                    arrival_return_port: arrivalPortReturn,
+                    fast_boat_return: fastBoatReturn
+                },
+                success: function(response) {
+                    // Isi dropdown Time Dept berdasarkan response
+                    $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
+                    $.each(response.time_depts_return, function(index, time) {
+                        $('#time_dept_return').append('<option value="' + time + '">' + time + '</option>');
                     });
                 }
             });

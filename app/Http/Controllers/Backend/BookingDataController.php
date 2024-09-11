@@ -227,4 +227,198 @@ class BookingDataController extends Controller
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
+
+    public function searchReturn(Request $request)
+    {
+        try {
+            // Ambil data dari request
+            $tripDateReturn = $request->input('trip_return_date');
+            $departurePortReturn = $request->input('departure_return_port');
+            $arrivalPortReturn = $request->input('arrival_return_port');
+            $fastBoatReturn = $request->input('fast_boat_return');
+            $timeDeptReturn = $request->input('time_dept_return');
+
+            // Query untuk FastboatAvailability
+            $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePortReturn) {
+                $query->where('prt_name_en', $departurePortReturn);
+            })
+                ->whereHas('trip.arrival', function ($query) use ($arrivalPortReturn) {
+                    $query->where('prt_name_en', $arrivalPortReturn);
+                })
+                ->whereHas('trip.fastboat', function ($query) use ($fastBoatReturn) {
+                    $query->where('fb_name', $fastBoatReturn);
+                })
+                ->where('fba_date', $tripDateReturn);
+
+            // Filter berdasarkan timeDept, jika ada
+            if ($timeDeptReturn) {
+                $availabilityQuery->where(function ($query) use ($timeDeptReturn) {
+                    $query->where('fba_dept_time', $timeDeptReturn)
+                        ->orWhereHas('trip', function ($query) use ($timeDeptReturn) {
+                            $query->where('fbt_dept_time', $timeDeptReturn);
+                        });
+                });
+            }
+
+            // Ambil data FastboatAvailability
+            $availability = $availabilityQuery->get();
+
+            // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
+            if ($availability->isEmpty()) {
+                $tripQuery = SchedulesTrip::whereHas('departure', function ($query) use ($departurePortReturn) {
+                    $query->where('prt_name_en', $departurePortReturn);
+                })
+                    ->whereHas('arrival', function ($query) use ($arrivalPortReturn) {
+                        $query->where('prt_name_en', $arrivalPortReturn);
+                    })
+                    ->whereHas('fastboat', function ($query) use ($fastBoatReturn) {
+                        $query->where('fb_name', $fastBoatReturn);
+                    })
+                    ->where('fbt_dept_time', $timeDeptReturn)
+                    ->whereDate('fbt_trip_date', $tripDateReturn);
+
+                $trips = $tripQuery->get();
+
+                if ($trips->isEmpty()) {
+                    return response()->json(['message' => 'No availability found'], 404);
+                }
+
+                // Jika availability tidak ada, gunakan data dari trip
+                $availability = $trips->map(function ($trip) {
+                    return (object)[
+                        'fba_adult_publish' => null,
+                        'fba_child_publish' => null,
+                        'fba_adult_nett' => null,
+                        'fba_child_nett' => null,
+                        'fba_discount' => null,
+                        'fba_dept_time' => null,
+                        'trip' => $trip,
+                    ];
+                });
+            }
+
+            // Buat HTML dan perhitungan
+            $htmlReturn = '';
+            $cardTitleReturn = '';
+            $adultPublishTotalReturn = 0;
+            $childPublishTotalReturn = 0;
+
+            foreach ($availability as $avail) {
+                $trip = $avail->trip;
+
+                // Tentukan waktu keberangkatan (prioritas fba_dept_time jika ada, jika tidak ada gunakan fbt_dept_time dari trip)
+                $deptTimeReturn = $avail->fba_dept_time ?? $trip->fbt_dept_time;
+
+                // Buat card-title dengan format (Nama Fastboat (Code Departure -> Code Arrival Time Dept))
+                $cardTitleReturn = '<center>' . $trip->fastboat->fb_name . ' (' .
+                    $trip->departure->prt_code . ' -> ' .
+                    $trip->arrival->prt_code . ' ' .
+                    date('H:i', strtotime($deptTimeReturn)) . ')' . '</center>';
+
+                $htmlReturn .= '<tr>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_publish ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_publish ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '</tr>';
+
+                // Update perhitungan total
+                $adultPublishTotalReturn += $avail->fba_adult_publish ?? 0;
+                $childPublishTotalReturn += $avail->fba_child_publish ?? 0;
+            }
+
+            // Return hasil HTML dan perhitungan
+            return response()->json([
+                'htmlReturn' => $htmlReturn,
+                'card_return_title' => $cardTitleReturn,
+                'adult_return_publish' => number_format($adultPublishTotalReturn, 0, ',', '.'),
+                'child_return_publish' => number_format($childPublishTotalReturn, 0, ',', '.'),
+                'total_return_end' => number_format($adultPublishTotalReturn + $childPublishTotalReturn, 0, ',', '.'),
+                'currency_return_end' => number_format($adultPublishTotalReturn + $childPublishTotalReturn, 0, ',', '.'),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+    }
+
+    public function getFilteredDataReturn(Request $request)
+    {
+        try {
+            // Ambil data dari request
+            $tripDateReturn = $request->input('trip_return_date');
+            $departurePortReturn = $request->input('departure_return_port');
+            $arrivalPortReturn = $request->input('arrival_return_port');
+            $fastBoatReturn = $request->input('fast_boat_return');
+
+            // Filter berdasarkan tanggal
+            $query = FastboatAvailability::where('fba_date', $tripDateReturn);
+
+            // Filter berdasarkan departure port
+            if ($departurePortReturn) {
+                $query->whereHas('trip.departure', function ($q) use ($departurePortReturn) {
+                    $q->where('prt_name_en', $departurePortReturn);
+                });
+            }
+
+            // Filter berdasarkan arrival port
+            if ($arrivalPortReturn) {
+                $query->whereHas('trip.arrival', function ($q) use ($arrivalPortReturn) {
+                    $q->where('prt_name_en', $arrivalPortReturn);
+                });
+            }
+
+            // Filter berdasarkan fastboat
+            if ($fastBoatReturn) {
+                $query->whereHas('trip.fastboat', function ($q) use ($fastBoatReturn) {
+                    $q->where('fb_name', $fastBoatReturn);
+                });
+            }
+
+            $availabilities = $query->get();
+
+            // Format data untuk dropdown
+            $departurePortsReturn = [];
+            $arrivalPortsReturn = [];
+            $fastBoatsReturn = [];
+            $timeDeptsReturn = [];
+
+            foreach ($availabilities as $availability) {
+                $trip = $availability->trip;
+
+                // Mengumpulkan departure port
+                if (!in_array($trip->departure->prt_name_en, $departurePortsReturn)) {
+                    $departurePortsReturn[] = $trip->departure->prt_name_en;
+                }
+
+                // Mengumpulkan arrival port
+                if (!in_array($trip->arrival->prt_name_en, $arrivalPortsReturn)) {
+                    $arrivalPortsReturn[] = $trip->arrival->prt_name_en;
+                }
+
+                // Mengumpulkan fastboat
+                if (!in_array($trip->fastboat->fb_name, $fastBoatsReturn)) {
+                    $fastBoatsReturn[] = $trip->fastboat->fb_name;
+                }
+
+                // Mengumpulkan waktu keberangkatan
+                $deptTimeReturn = $availability->fba_dept_time ?? $trip->fbt_dept_time;
+                $formattedTimeDeptReturn = date('H:i', strtotime($deptTimeReturn));
+
+                if (!in_array($formattedTimeDeptReturn, $timeDeptsReturn)) {
+                    $timeDeptsReturn[] = $formattedTimeDeptReturn;
+                }
+            }
+
+            // Return data untuk setiap dropdown
+            return response()->json([
+                'departure_return_ports' => $departurePortsReturn,
+                'arrival_return_ports' => $arrivalPortsReturn,
+                'fast_boats_return' => $fastBoatsReturn,
+                'time_depts_return' => $timeDeptsReturn,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Internal Server Error'], 500);
+        }
+    }
 }
