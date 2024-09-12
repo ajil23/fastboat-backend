@@ -20,7 +20,7 @@ class FastboatAvailabilityController extends Controller
     // this function is for view all data from fastboat table
     public function index(Request $request)
     {
-        $company = DataCompany::get(["cpn_name", "cpn_id"]);
+        $company = DataCompany::orderBy('cpn_name', 'asc')->get(["cpn_name", "cpn_id"]);
         $fastboat = DataFastboat::all();
         $schedule = SchedulesSchedule::all();
         $route = DataRoute::all();

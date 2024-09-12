@@ -108,14 +108,11 @@ class BookingDataController extends Controller
             $cardTitle = '';
             $adultPublishTotal = 0;
             $childPublishTotal = 0;
+            $discountPerPerson = 0;
 
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
-
-                // Tentukan waktu keberangkatan (prioritas fba_dept_time jika ada, jika tidak ada gunakan fbt_dept_time dari trip)
                 $deptTime = $avail->fba_dept_time ?? $trip->fbt_dept_time;
-
-                // Buat card-title dengan format (Nama Fastboat (Code Departure -> Code Arrival Time Dept))
                 $cardTitle = '<center>' . $trip->fastboat->fb_name . ' (' .
                     $trip->departure->prt_code . ' -> ' .
                     $trip->arrival->prt_code . ' ' .
@@ -129,17 +126,19 @@ class BookingDataController extends Controller
                 $html .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
                 $html .= '</tr>';
 
-                // Update perhitungan total
                 $adultPublishTotal += $avail->fba_adult_publish ?? 0;
                 $childPublishTotal += $avail->fba_child_publish ?? 0;
+
+                // Update total diskon per orang
+                $discountPerPerson = $avail->fba_discount ?? 0;
             }
 
-            // Return hasil HTML dan perhitungan
             return response()->json([
                 'html' => $html,
                 'card_title' => $cardTitle,
                 'adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
                 'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
+                'discount' => number_format($discountPerPerson, 0, ',', '.'),  // Kirim diskon per orang
                 'total_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
                 'currency_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
             ]);
