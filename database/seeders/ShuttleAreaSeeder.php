@@ -13,17 +13,17 @@ class ShuttleAreaSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('schedulesshuttlearea')->insert([
+        DB::table('fastboatshuttlearea')->insert([
             'sa_island' => 1,
             'sa_name' => 'Denpasar',
             'sa_updated_by' => 1,
         ]);
-        DB::table('schedulesshuttlearea')->insert([
+        DB::table('fastboatshuttlearea')->insert([
             'sa_island' => 1,
             'sa_name' => 'Kuta',
             'sa_updated_by' => 1,
         ]);
-        DB::table('schedulesshuttlearea')->insert([
+        DB::table('fastboatshuttlearea')->insert([
             'sa_island' => 1,
             'sa_name' => 'Jimbaran',
             'sa_updated_by' => 1,

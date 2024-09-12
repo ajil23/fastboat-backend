@@ -7,7 +7,7 @@ use App\Models\DataFastboat;
 use App\Models\DataRoute;
 use App\Models\FastboatAvailability;
 use App\Models\MasterPort;
-use App\Models\SchedulesTrip;
+use App\Models\FastboatTrip;
 use Illuminate\Http\Request;
 
 class BookingDataController extends Controller
@@ -19,12 +19,12 @@ class BookingDataController extends Controller
 
     public function add()
     {
-        $trip = SchedulesTrip::all();
+        $trip = FastboatTrip::all();
         $fastboat = DataFastboat::all();
         $departure = MasterPort::all();
         $arrival = MasterPort::all();
         $route = DataRoute::all();
-        $deptTime = SchedulesTrip::all();
+        $deptTime = FastboatTrip::all();
         $availability = FastboatAvailability::all();
         return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability'));
     }
@@ -71,7 +71,7 @@ class BookingDataController extends Controller
 
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
-                $tripQuery = SchedulesTrip::whereHas('departure', function ($query) use ($departurePort) {
+                $tripQuery = FastboatTrip::whereHas('departure', function ($query) use ($departurePort) {
                     $query->where('prt_name_en', $departurePort);
                 })
                     ->whereHas('arrival', function ($query) use ($arrivalPort) {
@@ -264,7 +264,7 @@ class BookingDataController extends Controller
 
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
-                $tripQuery = SchedulesTrip::whereHas('departure', function ($query) use ($departurePortReturn) {
+                $tripQuery = FastboatTrip::whereHas('departure', function ($query) use ($departurePortReturn) {
                     $query->where('prt_name_en', $departurePortReturn);
                 })
                     ->whereHas('arrival', function ($query) use ($arrivalPortReturn) {

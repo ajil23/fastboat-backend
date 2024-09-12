@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('fastboatavailability', function (Blueprint $table) {
             $table->id('fba_id');
             $table->unsignedBigInteger('fba_trip_id');
-            $table->foreign('fba_trip_id')->references('fbt_id')->on('schedulestrip')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('fba_trip_id')->references('fbt_id')->on('fastboattrip')->onDelete('cascade')->onUpdate('cascade');
             $table->string('fba_date');
             $table->time('fba_dept_time')->nullable();
             $table->time('fba_arriv_time')->nullable();

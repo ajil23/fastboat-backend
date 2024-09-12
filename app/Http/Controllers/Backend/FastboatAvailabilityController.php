@@ -8,8 +8,8 @@ use App\Models\DataFastboat;
 use App\Models\DataRoute;
 use App\Models\FastboatAvailability;
 use App\Models\MasterPort;
-use App\Models\SchedulesSchedule;
-use App\Models\SchedulesTrip;
+use App\Models\FastboatSchedule;
+use App\Models\FastboatTrip;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -22,11 +22,11 @@ class FastboatAvailabilityController extends Controller
     {
         $company = DataCompany::orderBy('cpn_name', 'asc')->get(["cpn_name", "cpn_id"]);
         $fastboat = DataFastboat::all();
-        $schedule = SchedulesSchedule::all();
+        $schedule = FastboatSchedule::all();
         $route = DataRoute::all();
         $departure = MasterPort::all();
         $arrival = MasterPort::all();
-        $deptTime = SchedulesTrip::all();
+        $deptTime = FastboatTrip::all();
 
         $query = FastboatAvailability::query();
 
@@ -114,13 +114,13 @@ class FastboatAvailabilityController extends Controller
 
     public function fetchSchedule(Request $request)
     {
-        $data = SchedulesSchedule::where("sch_company", $request->cpn_id)->get(["sch_name", "sch_id"]);
+        $data = FastboatSchedule::where("sch_company", $request->cpn_id)->get(["sch_name", "sch_id"]);
         return response()->json(['schedule' => $data]);
     }
 
     public function add()
     {
-        $trip = SchedulesTrip::all();
+        $trip = FastboatTrip::all();
         return view('fast-boat.availability.add', compact('trip'));
     }
 
@@ -177,7 +177,7 @@ class FastboatAvailabilityController extends Controller
 
         // Mengambil data availability berdasarkan trip ID yang dipilih
         $availability = FastboatAvailability::all();
-        $trip = SchedulesTrip::all();
+        $trip = FastboatTrip::all();
 
         return view('fast-boat.availability.extend', compact('availability', 'trip'));
     }
