@@ -13,7 +13,7 @@ class FastboatAvailability extends Model
     protected $fillable = ['fba_trip_id', 'fba_date', 'fba_dept_time', 'fba_arriv_time', 'fba_adult_nett', 'fba_child_nett', 'fba_adult_publish', 'fba_child_publish', 'fba_discount', 'fba_stock', 'fba_status', 'fba_shuttle_status', 'fba_min_pax', 'fba_created_by', 'fba_updated_by'];
 
     public function trip(){
-        return $this->belongsTo(SchedulesTrip::class,'fba_trip_id','fbt_id');
+        return $this->belongsTo(FastboatTrip::class,'fba_trip_id','fbt_id');
     }
     public function departure(){
         return $this->belongsTo(MasterPort::class);
@@ -28,13 +28,13 @@ class FastboatAvailability extends Model
         return $this->belongsTo(DataCompany::class);
     }
     public function schedule(){
-        return $this->belongsTo(SchedulesSchedule::class);
+        return $this->belongsTo(FastboatSchedule::class);
     }
     public function route(){
         return $this->belongsTo(DataRoute::class);
     }
     public function deptTime(){
-        return $this->belongsTo(SchedulesTrip::class);
+        return $this->belongsTo(FastboatTrip::class);
     }
     public function island(){
         return $this->belongsTo(MasterIsland::class);

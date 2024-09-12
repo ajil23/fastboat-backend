@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedulesschedule', function (Blueprint $table) {
+        Schema::create('fastboatschedule', function (Blueprint $table) {
             $table->id('sch_id');
-            $table->unsignedBigInteger('sch_company'); 
+            $table->unsignedBigInteger('sch_company');
             $table->foreign('sch_company')->references('cpn_id')->on('datacompany')->onDelete('cascade')->onUpdate('cascade');
             $table->string('sch_name');
             $table->string('sch_updated_by');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedulesschedule');
+        Schema::dropIfExists('fastboatschedule');
     }
 };

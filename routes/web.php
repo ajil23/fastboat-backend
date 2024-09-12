@@ -6,16 +6,15 @@ use App\Http\Controllers\Backend\DataCompanyController;
 use App\Http\Controllers\Backend\DataFastboatController;
 use App\Http\Controllers\Backend\DataRouteController;
 use App\Http\Controllers\Backend\FastboatAvailabilityController;
+use App\Http\Controllers\Backend\FastboatScheduleController;
+use App\Http\Controllers\Backend\FastboatShuttleAreaController;
+use App\Http\Controllers\Backend\FastboatShuttleController;
+use App\Http\Controllers\Backend\FastboatTripController;
 use App\Http\Controllers\Backend\MasterCurrencyController;
 use App\Http\Controllers\Backend\MasterIslandController;
 use App\Http\Controllers\Backend\MasterNationalityController;
-use App\Http\Controllers\Backend\MasterPaymentController;
 use App\Http\Controllers\Backend\MasterPaymentMethodController;
 use App\Http\Controllers\Backend\MasterPortController;
-use App\Http\Controllers\Backend\SchedulesScheduleController;
-use App\Http\Controllers\Backend\SchedulesShuttleAreaController;
-use App\Http\Controllers\Backend\SchedulesShuttleController;
-use App\Http\Controllers\Backend\SchedulesTripController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -97,44 +96,6 @@ Route::middleware([
         Route::delete('/route/delete/{id}', [DataRouteController::class, 'delete'])->name('route.delete');
     });
 
-    Route::prefix('schedules')->group(function () {
-        // schedule routes
-        Route::get('/schedule', [SchedulesScheduleController::class, 'index'])->name('schedule.view');
-        Route::get('/schedule/add', [SchedulesScheduleController::class, 'add'])->name('schedule.add');
-        Route::post('/schedule/store', [SchedulesScheduleController::class, 'store'])->name('schedule.store');
-        Route::get('/schedule/edit/{id}', [SchedulesScheduleController::class, 'edit'])->name('schedule.edit');
-        Route::post('/schedule/update/{id}', [SchedulesScheduleController::class, 'update'])->name('schedule.update');
-        Route::delete('/schedule/delete/{id}', [SchedulesScheduleController::class, 'delete'])->name('schedule.delete');
-
-        // trip routes
-        Route::get('/trip', [SchedulesTripController::class, 'index'])->name('trip.view');
-        Route::get('/trip/add', [SchedulesTripController::class, 'add'])->name('trip.add');
-        Route::post('/trip/store', [SchedulesTripController::class, 'store'])->name('trip.store');
-        Route::get('/trip/edit/{id}', [SchedulesTripController::class, 'edit'])->name('trip.edit');
-        Route::post('/trip/update/{id}', [SchedulesTripController::class, 'update'])->name('trip.update');
-        Route::delete('/trip/delete/{id}', [SchedulesTripController::class, 'delete'])->name('trip.delete');
-        Route::get('/trip/{id}', [SchedulesTripController::class, 'show'])->name('trip.show');
-        Route::get('/trip/status/{id}', [SchedulesTripController::class, 'status'])->name('trip.status');
-
-        // shuttle area routes
-        Route::get('/shuttlearea', [SchedulesShuttleAreaController::class, 'index'])->name('shuttlearea.view');
-        Route::get('/shuttlearea/add', [SchedulesShuttleAreaController::class, 'add'])->name('shuttlearea.add');
-        Route::post('/shuttlearea/store', [SchedulesShuttleAreaController::class, 'store'])->name('shuttlearea.store');
-        Route::get('/shuttlearea/edit/{id}', [SchedulesShuttleAreaController::class, 'edit'])->name('shuttlearea.edit');
-        Route::post('/shuttlearea/update/{id}', [SchedulesShuttleAreaController::class, 'update'])->name('shuttlearea.update');
-        Route::delete('/shuttlearea/delete/{id}', [SchedulesShuttleAreaController::class, 'delete'])->name('shuttlearea.delete');
-
-        // shuttle routes
-        Route::get('/shuttle', [SchedulesShuttleController::class, 'index'])->name('shuttle.view');
-        Route::get('/shuttle/add', [SchedulesShuttleController::class, 'add'])->name('shuttle.add');
-        Route::post('/shuttle/store', [SchedulesShuttleController::class, 'store'])->name('shuttle.store');
-        Route::get('/shuttle/edit/{id}', [SchedulesShuttleController::class, 'edit'])->name('shuttle.edit');
-        Route::post('/shuttle/update/{id}', [SchedulesShuttleController::class, 'update'])->name('shuttle.update');
-        Route::post('/shuttle/multiple', [SchedulesShuttleController::class, 'multiple'])->name('shuttle.multiple');
-        Route::post('/shuttle/search', [SchedulesShuttleController::class, 'search'])->name('shuttle.search');
-        Route::post('/shuttle/delete-multiple', [SchedulesShuttleController::class, 'deleteMultiple'])->name('shuttle.deleteMultiple');
-    });
-
     Route::prefix('fast-boat')->group(function () {
         // fast-boat availability
         Route::get('/availability', [FastboatAvailabilityController::class, 'index'])->name('availability.view');
@@ -146,6 +107,42 @@ Route::middleware([
         Route::get('/availability/extend', [FastboatAvailabilityController::class, 'extend'])->name('availability.extend');
         Route::post('/availability/storeExtend', [FastboatAvailabilityController::class, 'storeExtend'])->name('availability.storeExtend');
         Route::get('/availability/{id}', [FastboatAvailabilityController::class, 'show'])->name('availability.show');
+
+        // schedule routes
+        Route::get('/schedule', [FastboatScheduleController::class, 'index'])->name('schedule.view');
+        Route::get('/schedule/add', [FastboatScheduleController::class, 'add'])->name('schedule.add');
+        Route::post('/schedule/store', [FastboatScheduleController::class, 'store'])->name('schedule.store');
+        Route::get('/schedule/edit/{id}', [FastboatScheduleController::class, 'edit'])->name('schedule.edit');
+        Route::post('/schedule/update/{id}', [FastboatScheduleController::class, 'update'])->name('schedule.update');
+        Route::delete('/schedule/delete/{id}', [FastboatScheduleController::class, 'delete'])->name('schedule.delete');
+
+        // trip routes
+        Route::get('/trip', [FastboatTripController::class, 'index'])->name('trip.view');
+        Route::get('/trip/add', [FastboatTripController::class, 'add'])->name('trip.add');
+        Route::post('/trip/store', [FastboatTripController::class, 'store'])->name('trip.store');
+        Route::get('/trip/edit/{id}', [FastboatTripController::class, 'edit'])->name('trip.edit');
+        Route::post('/trip/update/{id}', [FastboatTripController::class, 'update'])->name('trip.update');
+        Route::delete('/trip/delete/{id}', [FastboatTripController::class, 'delete'])->name('trip.delete');
+        Route::get('/trip/{id}', [FastboatTripController::class, 'show'])->name('trip.show');
+        Route::get('/trip/status/{id}', [FastboatTripController::class, 'status'])->name('trip.status');
+
+        // shuttle area routes
+        Route::get('/shuttlearea', [FastboatShuttleAreaController::class, 'index'])->name('shuttlearea.view');
+        Route::get('/shuttlearea/add', [FastboatShuttleAreaController::class, 'add'])->name('shuttlearea.add');
+        Route::post('/shuttlearea/store', [FastboatShuttleAreaController::class, 'store'])->name('shuttlearea.store');
+        Route::get('/shuttlearea/edit/{id}', [FastboatShuttleAreaController::class, 'edit'])->name('shuttlearea.edit');
+        Route::post('/shuttlearea/update/{id}', [FastboatShuttleAreaController::class, 'update'])->name('shuttlearea.update');
+        Route::delete('/shuttlearea/delete/{id}', [FastboatShuttleAreaController::class, 'delete'])->name('shuttlearea.delete');
+
+        // shuttle routes
+        Route::get('/shuttle', [FastboatShuttleController::class, 'index'])->name('shuttle.view');
+        Route::get('/shuttle/add', [FastboatShuttleController::class, 'add'])->name('shuttle.add');
+        Route::post('/shuttle/store', [FastboatShuttleController::class, 'store'])->name('shuttle.store');
+        Route::get('/shuttle/edit/{id}', [FastboatShuttleController::class, 'edit'])->name('shuttle.edit');
+        Route::post('/shuttle/update/{id}', [FastboatShuttleController::class, 'update'])->name('shuttle.update');
+        Route::post('/shuttle/multiple', [FastboatShuttleController::class, 'multiple'])->name('shuttle.multiple');
+        Route::post('/shuttle/search', [FastboatShuttleController::class, 'search'])->name('shuttle.search');
+        Route::post('/shuttle/delete-multiple', [FastboatShuttleController::class, 'deleteMultiple'])->name('shuttle.deleteMultiple');
     });
 
     Route::prefix('master')->group(function () {

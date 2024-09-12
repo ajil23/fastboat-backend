@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SchedulesSchedule extends Model
+class FastboatSchedule extends Model
 {
     use HasFactory;
-    protected $table = "schedulesschedule";
+    protected $table = "fastboatschedule";
     protected $primaryKey = 'sch_id';
     protected $fillable = ['sch_id', 'fb_company', 'sch_name'];
 
@@ -23,7 +23,6 @@ class SchedulesSchedule extends Model
 
     public function shuttle()
     {
-        return $this->hasMany(SchedulesSchedule::class);
+        return $this->hasMany(FastboatSchedule::class);
     }
-
 }

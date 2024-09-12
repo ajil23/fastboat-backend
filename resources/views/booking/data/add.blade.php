@@ -754,7 +754,7 @@
                         $('#adult_return_publish').val(response.adult_return_publish);
                         $('#child_return_publish').val(response.child_return_publish);
                         $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
-                        $('#currency_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
+                        $('#currency_return_end').val('IDR ' + totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
 
                         // Tampilkan hasil pencarian dan perhitungan
                         $('#search-results-return').show();

@@ -13,22 +13,22 @@ class ScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('schedulesschedule')->insert([
+        DB::table('fastboatschedule')->insert([
             'sch_company' => 48,
             'sch_name' => 'Aman Dia FB 1',
             'sch_updated_by' => 1,
         ]);
-        DB::table('schedulesschedule')->insert([
+        DB::table('fastboatschedule')->insert([
             'sch_company' => 48,
             'sch_name' => 'Aman Dia FB 2',
             'sch_updated_by' => 1,
         ]);
-        DB::table('schedulesschedule')->insert([
+        DB::table('fastboatschedule')->insert([
             'sch_company' => 8,
             'sch_name' => 'Eka Jaya FB 1',
             'sch_updated_by' => 1,
         ]);
-        DB::table('schedulesschedule')->insert([
+        DB::table('fastboatschedule')->insert([
             'sch_company' => 8,
             'sch_name' => 'Eka Jaya FB 2',
             'sch_updated_by' => 1,

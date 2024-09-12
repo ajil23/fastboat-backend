@@ -4,32 +4,32 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataCompany;
-use App\Models\SchedulesShuttle;
-use App\Models\SchedulesShuttleArea;
-use App\Models\SchedulesTrip;
+use App\Models\FastboatShuttle;
+use App\Models\FastboatShuttleArea;
+use App\Models\FastboatTrip;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class SchedulesShuttleController extends Controller
+class FastboatShuttleController extends Controller
 {
     // this function is for view all data from shuttlearea table
     public function index(){
-        $shuttleData = SchedulesShuttle::with(['trip.schedule.company'])->orderBy('s_trip', 'asc')->orderBy('s_start', 'asc')->get();
-        $trip = SchedulesTrip::with(['departure.arrival']);
-        $area = SchedulesShuttleArea::all();
+        $shuttleData = FastboatShuttle::with(['trip.schedule.company'])->orderBy('s_trip', 'asc')->orderBy('s_start', 'asc')->get();
+        $trip = FastboatTrip::with(['departure.arrival']);
+        $area = FastboatShuttleArea::all();
         $company = DataCompany::all();
         $title = 'Delete Shuttle Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        return view('schedules.shuttle.index', compact('shuttleData', 'trip', 'area', 'company'));
+        return view('fast-boat.shuttle.index', compact('shuttleData', 'trip', 'area', 'company'));
     }
 
     public function add()
     {
-        $trip = SchedulesTrip::whereIn('fbt_shuttle_option', ['pickup', 'dropoff'])->get();
-        $area = SchedulesShuttleArea::all();
+        $trip = FastboatTrip::whereIn('fbt_shuttle_option', ['pickup', 'dropoff'])->get();
+        $area = FastboatShuttleArea::all();
         $company = DataCompany::orderBy('cpn_name', 'asc')->get();
-        return view('schedules.shuttle.add', compact('trip', 'area', 'company'));
+        return view('fast-boat.shuttle.add', compact('trip', 'area', 'company'));
     }
 
     public function store(Request $request)
@@ -67,7 +67,7 @@ class SchedulesShuttleController extends Controller
                 $s_meeting_point = $request->s_meeting_point[$areaIndex] ?? 'not_set';
 
                 // Cek apakah data sudah ada di database
-                $existingData = SchedulesShuttle::where([
+                $existingData = FastboatShuttle::where([
                     ['s_trip', $trip],
                     ['s_area', $area],
                 ])->first();
@@ -84,7 +84,7 @@ class SchedulesShuttleController extends Controller
                     ]);
                 } else {
                     // Buat data baru
-                    $shuttleData = new SchedulesShuttle();
+                    $shuttleData = new FastboatShuttle();
                     $shuttleData->s_trip = $trip;
                     $shuttleData->s_area = $area;
                     $shuttleData->s_start = $s_start;
@@ -110,7 +110,7 @@ class SchedulesShuttleController extends Controller
         $s_meeting_point = $request->input('s_meeting_point', null);
     
         foreach ($selectedIds as $id) {
-            $shuttleData = SchedulesShuttle::find($id);
+            $shuttleData = FastboatShuttle::find($id);
             if ($shuttleData) {
                 if (!is_null($s_start)) {
                     $shuttleData->s_start = $s_start;
@@ -133,7 +133,7 @@ class SchedulesShuttleController extends Controller
     public function deleteMultiple(Request $request)
     {
         $selectedIds = explode(',', $request->input('selected_ids', ''));
-        SchedulesShuttle::whereIn('s_id', $selectedIds)->delete();
+        FastboatShuttle::whereIn('s_id', $selectedIds)->delete();
         toast('Your data as been deleted!', 'success');
         return redirect()->route('shuttle.view');
     }

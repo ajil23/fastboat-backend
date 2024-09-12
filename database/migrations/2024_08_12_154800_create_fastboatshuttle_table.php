@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedulesshuttle', function (Blueprint $table) {
+        Schema::create('fastboatshuttle', function (Blueprint $table) {
             $table->id('s_id');
             $table->unsignedBigInteger('s_trip');
-            $table->foreign('s_trip')->references('fbt_id')->on('schedulestrip')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('s_trip')->references('fbt_id')->on('fastboattrip')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('s_area');
-            $table->foreign('s_area')->references('sa_id')->on('schedulesshuttlearea')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('s_area')->references('sa_id')->on('fastboatshuttlearea')->onDelete('cascade')->onUpdate('cascade');
             $table->string('s_start', 10)->nullable();
             $table->string('s_end', 10)->nullable();
             $table->string('s_meeting_point', 100)->nullable();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedulesshuttle');
+        Schema::dropIfExists('fastboatshuttle');
     }
 };

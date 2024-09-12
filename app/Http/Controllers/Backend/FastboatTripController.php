@@ -5,33 +5,31 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\DataFastboat;
 use App\Models\DataRoute;
+use App\Models\FastboatSchedule;
+use App\Models\FastboatTrip;
 use App\Models\MasterPort;
-use App\Models\ScheduleShuttle;
-use App\Models\SchedulesSchedule;
-use App\Models\SchedulesTrip;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class SchedulesTripController extends Controller
+class FastboatTripController extends Controller
 {
     // this function is for view all data from trip table
     public function index()
     {
-        $trip = SchedulesTrip::all();
+        $trip = FastboatTrip::all();
         $title = 'Delete Fastboat Trip!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
-        return view('schedules.trip.index', compact('trip'));
+        return view('fast-boat.trip.index', compact('trip'));
     }
 
     public function add()
     {
         $route = DataRoute::all();
         $fastboat = DataFastboat::all();
-        $schedule = SchedulesSchedule::all();
+        $schedule = FastboatSchedule::all();
         $departure = MasterPort::all();
         $arrival = MasterPort::all();
-        return view('schedules.trip.add', compact('route', 'fastboat', 'schedule', 'departure', 'arrival'));
+        return view('fast-boat.trip.add', compact('route', 'fastboat', 'schedule', 'departure', 'arrival'));
     }
 
     public function store(Request $request)
@@ -57,7 +55,7 @@ class SchedulesTripController extends Controller
        $fbtfastboat = DataFastboat::findOrFail($fbt_fastboat_id);
 
         // Handle insert data to database
-        $tripData = new SchedulesTrip();
+        $tripData = new FastboatTrip();
         $tripData->fbt_name = $fbtfastboat ->fb_name. ' for '.$fbtrip ->rt_dept_island .' to '. $fbtrip->rt_arrival_island;
         $tripData->fbt_route = $request->fbt_route;
         $tripData->fbt_fastboat = $request->fbt_fastboat;
@@ -81,20 +79,20 @@ class SchedulesTripController extends Controller
     // this function will get the $id of the selected data and then view the fast boat edit form
     public function edit($id)
     {
-        $tripEdit = SchedulesTrip::find($id);
+        $tripEdit = FastboatTrip::find($id);
         $route = DataRoute::all();
         $fastboat = DataFastboat::all();
-        $schedule = SchedulesSchedule::all();
+        $schedule = FastboatSchedule::all();
         $departure = MasterPort::all();
         $arrival = MasterPort::all();
-        return view('schedules.trip.edit', compact('tripEdit', 'route', 'fastboat', 'schedule', 'departure', 'arrival'));
+        return view('fast-boat.trip.edit', compact('tripEdit', 'route', 'fastboat', 'schedule', 'departure', 'arrival'));
     }
 
 
     // this function will get the $id of the selected data and request data from input in fast boat edit from
     public function update(Request$request, $id) 
     {
-        $tripData = SchedulesTrip::find($id);
+        $tripData = FastboatTrip::find($id);
         $tripData->fbt_name = $request->fbt_name;
         $tripData->fbt_route = $request->fbt_route;
         $tripData->fbt_fastboat = $request->fbt_fastboat;
@@ -118,7 +116,7 @@ class SchedulesTripController extends Controller
     // this function will get the $id of selected data and do delete operation
     public function delete($id)
     {
-        $tripData = SchedulesTrip::find($id);
+        $tripData = FastboatTrip::find($id);
         $tripData->delete();
         toast('Your data as been deleted!', 'success');
         return redirect()->route('trip.view');
@@ -127,7 +125,7 @@ class SchedulesTripController extends Controller
     // this function will get $id of selected data and view it in modal
     public function show($id)
     {
-        $tripData = SchedulesTrip::with(['route', 'fastboat', 'schedule', 'departure', 'arrival'])->findOrFail($id);
+        $tripData = FastboatTrip::with(['route', 'fastboat', 'schedule', 'departure', 'arrival'])->findOrFail($id);
         // Format waktu tanpa detik
         $tripData->fbt_dept_time = \Carbon\Carbon::parse($tripData->fbt_dept_time)->format('H:i');
         $tripData->fbt_time_limit = \Carbon\Carbon::parse($tripData->fbt_time_limit)->format('H:i');
@@ -140,7 +138,7 @@ class SchedulesTripController extends Controller
     // this function will get $id of selected data and change the status
     public function status($id)
     {
-        $tripData = SchedulesTrip::find($id);
+        $tripData = FastboatTrip::find($id);
 
         if ($tripData) {
             if ($tripData->fbt_status) {

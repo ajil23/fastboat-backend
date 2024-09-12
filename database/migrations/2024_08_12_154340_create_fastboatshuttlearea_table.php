@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedulesshuttlearea', function (Blueprint $table) {
+        Schema::create('fastboatshuttlearea', function (Blueprint $table) {
             $table->id('sa_id');
             $table->unsignedBigInteger('sa_island');
             $table->foreign('sa_island')->references('isd_id')->on('masterisland')->onDelete('cascade')->onUpdate('cascade');
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedulesshuttlearea');
+        Schema::dropIfExists('fastboatshuttlearea');
     }
 };
