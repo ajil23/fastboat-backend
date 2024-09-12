@@ -301,6 +301,7 @@ class BookingDataController extends Controller
             $cardTitleReturn = '';
             $adultPublishTotalReturn = 0;
             $childPublishTotalReturn = 0;
+            $discountPerPersonReturn = 0;
 
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
@@ -325,6 +326,9 @@ class BookingDataController extends Controller
                 // Update perhitungan total
                 $adultPublishTotalReturn += $avail->fba_adult_publish ?? 0;
                 $childPublishTotalReturn += $avail->fba_child_publish ?? 0;
+
+                // Update total diskon per orang
+                $discountPerPersonReturn = $avail->fba_discount ?? 0;
             }
 
             // Return hasil HTML dan perhitungan
@@ -333,6 +337,7 @@ class BookingDataController extends Controller
                 'card_return_title' => $cardTitleReturn,
                 'adult_return_publish' => number_format($adultPublishTotalReturn, 0, ',', '.'),
                 'child_return_publish' => number_format($childPublishTotalReturn, 0, ',', '.'),
+                'discount_return' => number_format($discountPerPersonReturn, 0, ',', '.'),  // Kirim diskon per orang
                 'total_return_end' => number_format($adultPublishTotalReturn + $childPublishTotalReturn, 0, ',', '.'),
                 'currency_return_end' => number_format($adultPublishTotalReturn + $childPublishTotalReturn, 0, ',', '.'),
             ]);
