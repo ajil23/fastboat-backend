@@ -39,7 +39,7 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $item->cy_name }} ({{ $item->cy_code }}) </td>
-                                                    <td>{{ number_format($item->cy_rate, 2, ',', '.') }}</td>
+                                                    <td><b>{{ number_format($item->cy_rate, 2, ',', '.') }}</b></td>
                                                     <td>
                                                         <a href="{{ route('currency.status', $item->cy_id) }}"
                                                             class="badge rounded-pill bg-{{ $item->cy_status ? 'success' : 'danger' }}"><i
@@ -54,6 +54,8 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <br>
+                                    {{ $currency->links('pagination::bootstrap-4') }}
                                 </div>
                             </div>
                         </div>
