@@ -727,11 +727,34 @@
                         $('#booking-data-table tbody').html(response.htmlReturn);
                         $('.card-title-return').html(response.card_return_title);
 
+                        // Update harga per unit
+                        let adultPublishPriceReturn = parseInt(response.adult_return_publish.replace(/\./g, '')) || 0;
+                        let childPublishPriceReturn = parseInt(response.child_return_publish.replace(/\./g, '')) || 0;
+                        let discountPerPersonReturn = parseInt(response.discount_return.replace(/\./g, '')) || 0; // Diskon per orang
+
+                        // Hitung total berdasarkan jumlah pelanggan
+                        let adultCount = parseInt($('#adult_count').val()) || 1; // Default 1 dewasa
+                        let childCount = parseInt($('#child_count').val()) || 0;
+
+                        // Kalkulasi total diskon
+                        let totalDiscountReturn = (adultCount + childCount) * discountPerPersonReturn;
+
+                        // Kalkulasi total harga sebelum diskon
+                        let totalPriceBeforeDiscountReturn = (adultPublishPriceReturn * adultCount) + (childPublishPriceReturn * childCount);
+
+                        // Kurangi total dengan diskon
+                        let totalPriceAfterDiscountReturn = totalPriceBeforeDiscountReturn - totalDiscountReturn;
+
+                        // Pastikan total harga tidak negatif
+                        if (totalPriceAfterDiscountReturn < 0) {
+                            totalPriceAfterDiscountReturn = 0;
+                        }
+
                         // Update perhitungan (contoh nilai adult publish dan child publish)
                         $('#adult_return_publish').val(response.adult_return_publish);
                         $('#child_return_publish').val(response.child_return_publish);
-                        $('#total_return_end').val(response.total_return_end);
-                        $('#currency_return_end').val(response.currency_return_end);
+                        $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
+                        $('#currency_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
 
                         // Tampilkan hasil pencarian dan perhitungan
                         $('#search-results-return').show();
@@ -745,6 +768,16 @@
                 }
             });
         }
+
+        // Ketika jumlah orang dewasa atau anak-anak diubah, sembunyikan hasil pencarian dan minta pencarian ulang
+        $('#adult_count, #child_count').on('change', function() {
+            // Sembunyikan hasil pencarian
+            $('#search-results-return').hide();
+
+            // Reset nilai total harga
+            $('#total_return_end').val('');
+            $('#currency_return_end').val('');
+        });
     });
 
     $(document).ready(function() {
