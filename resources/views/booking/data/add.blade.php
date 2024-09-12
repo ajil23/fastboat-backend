@@ -1,6 +1,17 @@
 @extends('admin.admin_master')
 @section('admin')
 
+<style>
+    .custom-border-color {
+        border-color: lightgray;
+        /* Ganti dengan warna yang diinginkan */
+    }
+
+    .custom-border-top-color {
+        border-top-color: black;
+    }
+</style>
+
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
@@ -9,7 +20,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div id="addproduct-accordion" class="custom-accordion">
-                            <div class="card">
+                            <div class="card custom-border-color">
                                 <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
@@ -51,7 +62,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="fb_name">Currency</label>
                                                     <select id="fb_name" name="fb_name" data-trigger class="form-control" required>
@@ -67,41 +78,59 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Payment Method</label>
-                                                    <select id="fb_name" name="fb_name" data-trigger="" class="form-control" required>
+                                                    <label class="form-label" for="payment_method">Payment Method</label>
+                                                    <select id="payment_method" name="payment_method" class="form-control" required>
                                                         <option value="">Select Payment Method</option>
+                                                        <option value="paypal">Paypal</option>
+                                                        <option value="midtrans">Midtrans</option>
+                                                        <option value="bank_transfer">Bank Transfer</option>
+                                                        <option value="pak_anang">Pak Anang</option>
+                                                        <option value="pay_on_port">Pay on Port (collect)</option>
+                                                        <option value="cash">Cash</option>
+                                                        <option value="agent">Agent</option>
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4" hidden>
+                                            <!-- paypal -->
+                                            <div class="col-md-3 transaction-id" id="paypal_transaction_id" style="display: none;">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Transaction ID</label>
-                                                    <input id="fb_name" name="fb_name" placeholder="Type Paypal Transaction ID" type="text" class="form-control">
+                                                    <label class="form-label" for="paypal_tid">Transaction ID</label>
+                                                    <input id="paypal_tid" name="paypal_tid" placeholder="Type Paypal Transaction ID" type="text" class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4" hidden>
+                                            <!-- midtrans -->
+                                            <div class="col-md-3 transaction-id" id="midtrans_transaction_id" style="display: none;">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Transaction ID</label>
-                                                    <input id="fb_name" name="fb_name" placeholder="Type Midtrans Transaction ID" type="text" class="form-control">
+                                                    <label class="form-label" for="midtrans_tid">Transaction ID</label>
+                                                    <input id="midtrans_tid" name="midtrans_tid" placeholder="Type Midtrans Transaction ID" type="text" class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4" hidden>
+                                            <!-- bank transfer -->
+                                            <div class="col-md-3 transaction-id" id="bank_transfer_transaction_id" style="display: none;">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Transaction ID</label>
-                                                    <input id="fb_name" name="fb_name" placeholder="Type Bank Transaction ID" type="text" class="form-control">
+                                                    <label class="form-label" for="bank_transfer_tid">Transaction ID</label>
+                                                    <input id="bank_transfer_tid" name="bank_transfer_tid" placeholder="Type Bank Transaction ID" type="text" class="form-control">
                                                 </div>
                                             </div>
-                                            <div class="col-md-4" hidden>
+                                            <!-- cash -->
+                                            <div class="col-md-3 transaction-id" id="cash_transaction_id" style="display: none;">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Transaction ID</label>
-                                                    <input id="fb_name" name="fb_name" placeholder="Agen Transaction ID" type="text" class="form-control">
+                                                    <label class="form-label" for="cash_tid">Transaction ID</label>
+                                                    <input id="cash_tid" name="cash_tid" placeholder="Type Recipient" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                                            <!-- agent -->
+                                            <div class="col-md-3 transaction-id" id="agent_transaction_id" style="display: none;">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="agent_tid">Transaction ID</label>
+                                                    <input id="agent_tid" name="agent_tid" placeholder="Agen Transaction ID" type="text" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card custom-border-color">
                                 <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
@@ -117,129 +146,33 @@
                                         <div class="row">
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Adult</label>
-                                                    <input id="fb_image1" name="fb_image1" type="number" class="form-control" value="{{ old('', 1) }}" required>
+                                                    <label class="form-label" for="adult_count">Adult</label>
+                                                    <input id="adult_count" name="adult_count" type="number" class="form-control" value="1" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Child</label>
-                                                    <input id="fb_image1" name="fb_image1" type="number" class="form-control" value="{{ old('', 0) }}" required>
+                                                    <label class="form-label" for="child_count">Child</label>
+                                                    <input id="child_count" name="child_count" type="number" class="form-control" value="0" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Infant</label>
-                                                    <input id="fb_image1" name="fb_image1" type="number" class="form-control" value="{{ old('', 0) }}" required>
+                                                    <label class="form-label" for="infant_count">Infant</label>
+                                                    <input id="infant_count" name="infant_count" type="number" class="form-control" value="0" required>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Adult Name</label>
-                                                    <input id="fb_image1" name="fb_image1" type="text" placeholder="Enter Name Customer" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Adult Age</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Age</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Adult Gender</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Gender</option>
-                                                        <option value="Woman">Woman</option>
-                                                        <option value="Man">Man</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Adult Nationality</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Nationality</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Child Name</label>
-                                                    <input id="fb_image1" name="fb_image1" type="text" placeholder="Enter Name Customer" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Child Age</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Age</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Child Gender</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Gender</option>
-                                                        <option value="Woman">Woman</option>
-                                                        <option value="Man">Man</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Child Nationality</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Nationality</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Infant Name</label>
-                                                    <input id="fb_image1" name="fb_image1" type="text" placeholder="Enter Name Customer" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Infant Age</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Age</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Infant Gender</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Gender</option>
-                                                        <option value="Woman">Woman</option>
-                                                        <option value="Man">Man</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-3">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fb_image1">Infant Nationality</label>
-                                                    <select id="fb_image1" name="fb_image1" type="number" class="form-control">
-                                                        <option value="">Select Nationality</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <!-- Placeholder for Adult Information -->
+                                        <div id="adult_info"></div>
+                                        <!-- Placeholder for Child Information -->
+                                        <div id="child_info"></div>
+                                        <!-- Placeholder for Infant Information -->
+                                        <div id="infant_info"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card custom-border-color">
                                 <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
@@ -321,59 +254,61 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <!-- Hasil Pencarian -->
-                                        <div id="search-results" style="display: none;">
-                                            <div class="table-responsive">
-                                                <h5 class="card-title"></h5>
-                                                <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
-                                                    <thead>
-                                                        <tr class="table-light">
-                                                            <th>
-                                                                <center>Publish Adult</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Publish Child</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Nett Adult</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Nett Child</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Discount</center>
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Hasil pencarian akan dimasukkan ke sini -->
-                                                    </tbody>
-                                                </table>
-                                                <br>
-                                                <!-- perhitungan -->
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="adult_publish">Adult Publish (IDR)</label>
-                                                            <input value="" class="form-control" id="adult_publish" name="adult_publish" disabled>
+                                        <div class="p-4 border-top custom-border-top-color">
+                                            <!-- Hasil Pencarian -->
+                                            <div id="search-results" style="display: none;">
+                                                <div class="table-responsive">
+                                                    <h5 class="card-title"></h5>
+                                                    <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th>
+                                                                    <center>Publish Adult</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Publish Child</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Nett Adult</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Nett Child</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Discount</center>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- Hasil pencarian akan dimasukkan ke sini -->
+                                                        </tbody>
+                                                    </table>
+                                                    <br>
+                                                    <!-- perhitungan -->
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="adult_publish">Adult Publish (IDR)</label>
+                                                                <input value="" class="form-control" id="adult_publish" name="adult_publish" disabled>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="child_publish">Child Publish (IDR)</label>
-                                                            <input value="" class="form-control" id="child_publish" name="child_publish" disabled>
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="child_publish">Child Publish (IDR)</label>
+                                                                <input value="" class="form-control" id="child_publish" name="child_publish" disabled>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="total_end">End Total (IDR)</label>
-                                                            <input value="" class="form-control" id="total_end" name="total_end" style="background-color:lightgray" disabled>
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="total_end">End Total (IDR)</label>
+                                                                <input value="" class="form-control" id="total_end" name="total_end" style="background-color:lightgray" disabled>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="currency_end">End Total Currency (IDR)</label>
-                                                            <input value="" class="form-control" id="currency_end" name="currency_end" style="background-color:lightgray" disabled>
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="currency_end">End Total Currency (IDR)</label>
+                                                                <input value="" class="form-control" id="currency_end" name="currency_end" style="background-color:lightgray" disabled>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -382,7 +317,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card">
+                            <div class="card custom-border-color">
                                 <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
@@ -564,7 +499,7 @@
             }
         }
 
-        // Trigger ketika input berubah
+        // Trigger ketika input field berubah (pencarian ulang)
         $('#trip_date, #departure_port, #arrival_port, #fast_boat, #time_dept').on('change', function() {
             checkFormComplete();
         });
@@ -582,16 +517,38 @@
                     time_dept: timeDept
                 },
                 success: function(response) {
-                    // Jika ada hasil, tampilkan elemen pencarian
                     if (response.html) {
                         $('#booking-data-table tbody').html(response.html);
                         $('.card-title').html(response.card_title);
 
-                        // Update perhitungan (contoh nilai adult publish dan child publish)
+                        // Update harga per unit
+                        let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g, '')) || 0;
+                        let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) || 0;
+                        let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0; // Diskon per orang
+
+                        // Hitung total berdasarkan jumlah pelanggan
+                        let adultCount = parseInt($('#adult_count').val()) || 1; // Default 1 dewasa
+                        let childCount = parseInt($('#child_count').val()) || 0;
+
+                        // Kalkulasi total diskon
+                        let totalDiscount = (adultCount + childCount) * discountPerPerson;
+
+                        // Kalkulasi total harga sebelum diskon
+                        let totalPriceBeforeDiscount = (adultPublishPrice * adultCount) + (childPublishPrice * childCount);
+
+                        // Kurangi total dengan diskon
+                        let totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
+
+                        // Pastikan total harga tidak negatif
+                        if (totalPriceAfterDiscount < 0) {
+                            totalPriceAfterDiscount = 0;
+                        }
+
+                        // Tampilkan total harga dan informasi terkait
                         $('#adult_publish').val(response.adult_publish);
                         $('#child_publish').val(response.child_publish);
-                        $('#total_end').val(response.total_end);
-                        $('#currency_end').val(response.currency_end);
+                        $('#total_end').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
+                        $('#currency_end').val('IDR ' + totalPriceAfterDiscount.toLocaleString('id-ID'));
 
                         // Tampilkan hasil pencarian dan perhitungan
                         $('#search-results').show();
@@ -600,12 +557,21 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    console.log(xhr.responseText); // Debugging
-                    alert("Error: Unable to fetch data.");
-                    $('#search-results').hide(); // Sembunyikan jika ada error
+                    console.log(xhr.responseText);
+                    $('#search-results').hide();
                 }
             });
         }
+
+        // Ketika jumlah orang dewasa atau anak-anak diubah, sembunyikan hasil pencarian dan minta pencarian ulang
+        $('#adult_count, #child_count').on('change', function() {
+            // Sembunyikan hasil pencarian
+            $('#search-results').hide();
+
+            // Reset nilai total harga
+            $('#total_end').val('');
+            $('#currency_end').val('');
+        });
     });
 
     $(document).ready(function() {
@@ -775,7 +741,6 @@
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText); // Debugging
-                    alert("Error: Unable to fetch data.");
                     $('#search-results-return').hide(); // Sembunyikan jika ada error
                 }
             });
@@ -893,6 +858,169 @@
                 }
             });
         });
+    });
+</script>
+
+<script>
+    $('#payment_method').on('change', function() {
+        // Sembunyikan semua Transaction ID
+        $('.transaction-id').hide();
+
+        // Dapatkan nilai yang dipilih
+        var selectedMethod = $(this).val();
+
+        // Tampilkan Transaction ID berdasarkan pilihan
+        if (selectedMethod === 'paypal') {
+            $('#paypal_transaction_id').show();
+        } else if (selectedMethod === 'midtrans') {
+            $('#midtrans_transaction_id').show();
+        } else if (selectedMethod === 'bank_transfer') {
+            $('#bank_transfer_transaction_id').show();
+        } else if (selectedMethod === 'cash') {
+            $('#cash_transaction_id').show();
+        } else if (selectedMethod === 'agent') {
+            $('#agent_transaction_id').show();
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        function updateInfo() {
+            // Clear all current info
+            $('#adult_info, #child_info, #infant_info').empty();
+
+            // Get values of each count
+            var adultCount = parseInt($('#adult_count').val()) || 1;
+            var childCount = parseInt($('#child_count').val()) || 0;
+            var infantCount = parseInt($('#infant_count').val()) || 0;
+
+            // Create Adult Info
+            for (var i = 1; i <= adultCount; i++) {
+                $('#adult_info').append(`
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
+                            <input id="adult_name_${i}" name="adult_name_${i}" type="text" placeholder="Enter Name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="adult_age_${i}">Adult ${i} Age</label>
+                            <select id="adult_age_${i}" name="adult_age_${i}" class="form-control">
+                                <option value="">Select Age</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
+                            <select id="adult_gender_${i}" name="adult_gender_${i}" class="form-control">
+                                <option value="">Select Gender</option>
+                                <option value="Woman">Woman</option>
+                                <option value="Man">Man</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
+                            <select id="adult_nationality_${i}" name="adult_nationality_${i}" class="form-control">
+                                <option value="">Select Nationality</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `);
+            }
+
+            // Create Child Info
+            for (var i = 1; i <= childCount; i++) {
+                $('#child_info').append(`
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
+                            <input id="child_name_${i}" name="child_name_${i}" type="text" placeholder="Enter Name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="child_age_${i}">Child ${i} Age</label>
+                            <select id="child_age_${i}" name="child_age_${i}" class="form-control">
+                                <option value="">Select Age</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
+                            <select id="child_gender_${i}" name="child_gender_${i}" class="form-control">
+                                <option value="">Select Gender</option>
+                                <option value="Woman">Woman</option>
+                                <option value="Man">Man</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
+                            <select id="child_nationality_${i}" name="child_nationality_${i}" class="form-control">
+                                <option value="">Select Nationality</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `);
+            }
+
+            // Create Infant Info
+            for (var i = 1; i <= infantCount; i++) {
+                $('#infant_info').append(`
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
+                            <input id="infant_name_${i}" name="infant_name_${i}" type="text" placeholder="Enter Name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="infant_age_${i}">Infant ${i} Age</label>
+                            <select id="infant_age_${i}" name="infant_age_${i}" class="form-control">
+                                <option value="">Select Age</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
+                            <select id="infant_gender_${i}" name="infant_gender_${i}" class="form-control">
+                                <option value="">Select Gender</option>
+                                <option value="Woman">Woman</option>
+                                <option value="Man">Man</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="mb-3">
+                            <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
+                            <select id="infant_nationality_${i}" name="infant_nationality_${i}" class="form-control">
+                                <option value="">Select Nationality</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `);
+            }
+        }
+
+        // Call updateInfo whenever values change
+        $('#adult_count, #child_count, #infant_count').on('input', updateInfo);
+
+        // Initialize info on page load
+        updateInfo();
     });
 </script>
 @endsection
