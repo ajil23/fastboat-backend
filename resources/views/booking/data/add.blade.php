@@ -318,16 +318,19 @@
                                 </div>
                             </div>
                             <div class="card custom-border-color">
-                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
+                                <div class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                     <div class="p-4">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <h5 class="font-size-16 mb-1">Trip Return</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
+                                            <div class="form-check form-switch" style="display: flex; align-items: center;justify-content: center;">
+                                                <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" name="switch"/>
+                                            </div>
                                         </div>
                                     </div>
-                                </a>
+                                </div>
                                 <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <!-- Form Pencarian -->
@@ -336,13 +339,13 @@
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="trip_return_date">Trip Date</label>
-                                                        <input type="date" class="form-control" id="trip_return_date" name="trip_return_date">
+                                                        <input type="date" class="form-control" id="trip_return_date" name="trip_return_date" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="departure_return_port">Departure Port</label>
-                                                        <select class="form-control" id="departure_return_port" name="departure_return_port">
+                                                        <select class="form-control" id="departure_return_port" name="departure_return_port" disabled>
                                                             <option value="">Select Departure Port</option>
                                                             @foreach ($availability as $item)
                                                             <option value="{{ $item->trip->departure->prt_name_en }}">
@@ -355,7 +358,7 @@
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="arrival_return_port">Arrival Port</label>
-                                                        <select class="form-control" id="arrival_return_port" name="arrival_return_port">
+                                                        <select class="form-control" id="arrival_return_port" name="arrival_return_port" disabled>
                                                             <option value="">Select Arrival Port</option>
                                                             @foreach ($availability as $item)
                                                             <option value="{{ $item->trip->arrival->prt_name_en }}">
@@ -370,7 +373,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fast_boat_return">Fast Boat</label>
-                                                        <select class="form-control" id="fast_boat_return" name="fast_boat_return">
+                                                        <select class="form-control" id="fast_boat_return" name="fast_boat_return" disabled>
                                                             <option value="">Select Fast Boat</option>
                                                             @foreach ($availability as $item)
                                                             <option value="{{ $item->trip->fastboat->fb_name }}">
@@ -383,7 +386,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="time_dept_return">Time Dept</label>
-                                                        <select class="form-control" id="time_dept_return" name="time_dept_return">
+                                                        <select class="form-control" id="time_dept_return" name="time_dept_return" disabled>
                                                             <option value="">Select Time Dept</option>
                                                             @foreach ($availability as $item)
                                                             @php
@@ -457,6 +460,31 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card custom-border-color">
+                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
+                                    <div class="p-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <h5 class="font-size-16 mb-1">Other</h5>
+                                                <p class="text-muted text-truncate mb-0">If there are certain conditions, please add notes</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
+                                    <div class="p-4 border-top">
+                                        <!-- Form Pencarian -->
+                                        <form id="note">
+                                            <div class="row">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="trip_return_date">Note</label>
+                                                    <textarea class="form-control" name="" id=""></textarea>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -690,6 +718,15 @@
 
 <script>
     $(document).ready(function() {
+        $('#switch').on('change', function(){
+           var inputs = $('#fast_boat_return, #time_dept_return, #trip_return_date, #departure_return_port, #arrival_return_port');
+
+           if ($(this).is(':checked')){
+            inputs.removeAttr('disabled');
+           } else {
+            inputs.attr('disabled', 'disabled');
+           }
+        });
         // Fungsi untuk mengecek apakah semua field sudah diisi
         function checkFormComplete() {
             let tripDateReturn = $('#trip_return_date').val();
