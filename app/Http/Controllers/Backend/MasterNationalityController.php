@@ -10,7 +10,7 @@ class MasterNationalityController extends Controller
 {
     public function index()
     {
-        $nationality = MasterNationality::all();
+        $nationality = MasterNationality::paginate(25);
         $title = 'Delete Nationality Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);

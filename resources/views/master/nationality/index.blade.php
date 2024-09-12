@@ -8,11 +8,12 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex flex-wrap align-items-center mb-2">
-                                    <h5 class="card-title">Payment Table</h5>
+                                    <h5 class="card-title">Nationality Table</h5>
                                     <div class="ms-auto">
                                         <div class="btn-toolbar float-end" role="toolbar">
                                             <button class="btn btn-dark w-100" data-bs-toggle="modal"
-                                                data-bs-target="#addDataModal"><i class="mdi mdi-plus"></i>Nationality</button>
+                                                data-bs-target="#addDataModal"><i
+                                                    class="mdi mdi-plus"></i>Nationality</button>
                                         </div>
                                     </div>
                                 </div>
@@ -55,6 +56,8 @@
                                             @endforeach
                                         </tbody>
                                     </table>
+                                    <br>
+                                    {{ $nationality->links('pagination::bootstrap-4') }}
                                 </div>
                             </div>
                         </div>
@@ -117,8 +120,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="edit_nas_country_code" class="form-label">Code</label>
-                                <input type="text" class="form-control" id="edit_nas_country_code" name="nas_country_code"
-                                    placeholder="Enter Value" required>
+                                <input type="text" class="form-control" id="edit_nas_country_code"
+                                    name="nas_country_code" placeholder="Enter Value" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
