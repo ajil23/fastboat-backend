@@ -8,31 +8,34 @@ use App\Models\DataFastboat;
 use DOMDocument;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+
 
 class DataFastboatController extends Controller
 {
-    // this function is for view all data from fastboat table
+    // Menampilkan halaman utama untuk menu fast-boat
     public function index()
     {
-        $fastboat = DataFastboat::all();
-        $title = 'Delete Fast-boat Data!';
-        $text = "Are you sure you want to delete?";
-        confirmDelete($title, $text);
+        $fastboat = DataFastboat::all();                // Mengambil seluruh data fast-boat dari database
+        $title = 'Delete Fast-boat Data!';              // Title pada modal konfirmasi hapus data
+        $text = "Are you sure you want to delete?";     // Teks pada modal konfirmasi hapus data
+        confirmDelete($title, $text);                   
         return view('data.fastboat.index', compact('fastboat'));
     }
 
-    // this function is for view form to add fastboat data
+    // Menampilkan halaman tambah data
     public function add()
     {
+        // Mengambil seluruh data company secara ascending berdasarkan nama nya & dengan tipe fast-boat
         $company = DataCompany::orderBy('cpn_name', 'asc')->having('cpn_type', 'fast_boat')->get();
         return view('data.fastboat.add', compact('company'));
     }
 
-    // this function will request data from input in fast boat add form
+    // Menangani proses menyimpan data ke database
     public function store(Request $request)
     {
-        // Handle the request data validation
-        $request->validate([
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
             'fb_name' => 'required',
             'fb_company' => 'required',
             'fb_image1' => 'required|image|mimes:jpeg,jpg,png|max:5120',
@@ -47,7 +50,16 @@ class DataFastboatController extends Controller
             'fb_content_idn' => 'required',
         ]);
 
-        // Handle insert data to database
+        // Cek apakah validasi gagal
+        if ($validator->fails()) {
+            // Menambahkan pesan toast ke dalam session
+            toast('Validation failed! Please check your input.', 'error');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Menyimpan semua request ke dalam database
         $fastboatData = new DataFastboat();
         $fastboatData->fb_name = $request->fb_name;
         $fastboatData->fb_company = $request->fb_company;
@@ -63,7 +75,7 @@ class DataFastboatController extends Controller
         $fastboatData->fb_term_condition_idn = $request->fb_term_condition_idn;
         $fastboatData->fb_updated_by = Auth()->id();
 
-        // handle image store
+        // Penanganan simpan gambar
         if ($request->hasFile('fb_image1')) {
             $fbimg1 = $request->file('fb_image1')->store('fb_image1');
             $fastboatData->fb_image1 = $fbimg1;
@@ -89,7 +101,7 @@ class DataFastboatController extends Controller
             $fastboatData->fb_image6 = $fbimg6;
         }
 
-        // summernote
+        // Penanganan menyimpan inputan summernote
         $content = $request->fb_content_en;
 
         $dom = new DOMDocument();
@@ -113,20 +125,21 @@ class DataFastboatController extends Controller
         return redirect()->route('fast-boat.view');
     }
 
-    // this function will get the $id of the selected data and then view the fast boat edit form
-    public function edit($id)
+    // Menampilkan halaman edit data fast-boat
+    public function edit($fb_id)
     {
-        $company = DataCompany::all();
-        $fastboatEdit = DataFastboat::find($id);
+        $company = DataCompany::all();              // Menampilkan seluruh data company
+        $fastboatEdit = DataFastboat::find($fb_id);   // Mengambil id dari data yang di pilih
+
+        // Menggunakan compact untuk mengirimkan variabel ke halaman edit data
         return view('data.fastboat.edit', compact('fastboatEdit', 'company'));
     }
 
     // this function will get the $id of the selected data and request data from input in fast boat edit from
-    public function update(Request $request, $id)
+    public function update(Request $request, $fb_id)
     {
-
         // Handle insert data to database
-        $fastboatData = DataFastboat::find($id);
+        $fastboatData = DataFastboat::find($fb_id);
         $fastboatData->fb_name = $request->fb_name;
         $fastboatData->fb_company = $request->fb_company;
         $fastboatData->fb_keywords = $request->fb_keywords;
@@ -171,27 +184,28 @@ class DataFastboatController extends Controller
         return redirect()->route('fast-boat.view');
     }
 
-    // this function will get the $id of selected data and do delete operation
-    public function delete($id)
+    // Menjalankan operasi hapus data
+    public function delete($fb_id)
     {
-        $fastboatData = DataFastboat::find($id);
-        $fastboatData->delete();
+        $fastboatData = DataFastboat::find($fb_id);        // Mengambil id dari data yang di pilih
+        $fastboatData->delete();                       // Perintah untuk menghapus data
         toast('Your data as been deleted!', 'success');
         return redirect()->route('fast-boat.view');
     }
 
-    // this function will get $id of selected data and view it in modal
-    public function show($id)
+    // Menampilkan modal detail data fast-boat
+    public function show($fb_id)
     {
-        $fastboatData = DataFastboat::with(['company'])->findOrFail($id);
+        $fastboatData = DataFastboat::with(['company'])->findOrFail($fb_id); // Mengambil seluruh data fast-boat beserta company nya
         return response()->json($fastboatData);
     }
 
-    // this function will get $id of selected data and change the status
-    public function status($id)
+    // Menangani perubahan status 
+    public function status($fb_id)
     {
-        $fastboatData = DataFastboat::find($id);
+        $fastboatData = DataFastboat::find($fb_id);    // Mengambil id dari data yang di pilih
 
+        // Proses pengubahan status
         if ($fastboatData) {
             if ($fastboatData->fb_status) {
                 $fastboatData->fb_status = 0;

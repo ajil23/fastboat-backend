@@ -11,15 +11,17 @@ use Illuminate\Support\Facades\Validator;
 
 class MasterCurrencyController extends Controller
 {
+    // Menampilkan halaman utama menu currency
     public function index()
     {
-        $currency = MasterCurrency::paginate(15);
+        $currency = MasterCurrency::paginate(15);   // Mengambil seluruh data currency dengan paginasi 15 data
         $title = 'Delete Currency Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         return view('master.currency.index', compact('currency'));
     }
 
+    // Menangani proses tambah data
     public function store(Request $request)
     {
         // Validasi inputan
@@ -47,8 +49,10 @@ class MasterCurrencyController extends Controller
         return redirect()->route('currency.view');
     }
 
+    // Menangani proses update rate 
     public function updateKurs($actor = null)
     {
+        // Menentukan actor update rate
         if (!$actor) {
             $actor = auth()->check() ? auth()->user()->name : 'Cronjob';
         }
@@ -57,14 +61,12 @@ class MasterCurrencyController extends Controller
             $dataToUpdate = [];
 
             $tableName = (new MasterCurrency)->getTable();
-            // $ids = implode(',', array_column($dataToUpdate, 'cy_id'));
             $casesRate = '';
             $casesUpdatedBy = '';
             $casesUpdatedAt = '';
             $id = array();
-            // dd($currencies);
             foreach ($currencies as $currency) {
-                // Proses pengambilan kurs dan update data seperti sebelumnya
+                // Proses pengambilan rate dan update data
                 $response = Http::get("http://www.x-rates.com/calculator/", [
                     'from' => $currency->cy_code,
                     'to' => 'IDR',
@@ -119,10 +121,12 @@ class MasterCurrencyController extends Controller
         return redirect()->route('currency.view');
     }
 
+    // Mengani perubahan status dari currency
     public function currencyStatus($id)
     {
-        $currencyData = MasterCurrency::find($id);
+        $currencyData = MasterCurrency::find($id);  // Mencari id dari data yang di pilih
 
+        // Proses perubahan status
         if ($currencyData) {
             if ($currencyData->cy_status) {
                 $currencyData->cy_status = 0;

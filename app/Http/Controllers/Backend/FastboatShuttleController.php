@@ -12,26 +12,31 @@ use Illuminate\Support\Facades\Validator;
 
 class FastboatShuttleController extends Controller
 {
-    // this function is for view all data from shuttlearea table
+    // Menampilkan halaman utama untuk menu shuttle
     public function index(){
+        // Mengambil seluruh data shuttle dengan trip, schedule, dan company 
+        // Mengurutkan secara ascending berdasarkan s_trip
         $shuttleData = FastboatShuttle::with(['trip.schedule.company'])->orderBy('s_trip', 'asc')->orderBy('s_start', 'asc')->get();
-        $trip = FastboatTrip::with(['departure.arrival']);
-        $area = FastboatShuttleArea::all();
-        $company = DataCompany::all();
+        $trip = FastboatTrip::with(['departure.arrival']);  // Mengambil seluruh data trip
+        $area = FastboatShuttleArea::all();                 // Mengambil seluruh data shuttle area
+        $company = DataCompany::all();                      // Mengambil seluruh data company
         $title = 'Delete Shuttle Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         return view('fast-boat.shuttle.index', compact('shuttleData', 'trip', 'area', 'company'));
     }
 
+    // Menampilkan halaman tambah data
     public function add()
     {
+        // Menampilkan data trip yang memiliki shuttle option (pickup / dropoff)
         $trip = FastboatTrip::whereIn('fbt_shuttle_option', ['pickup', 'dropoff'])->get();
         $area = FastboatShuttleArea::all();
         $company = DataCompany::orderBy('cpn_name', 'asc')->get();
         return view('fast-boat.shuttle.add', compact('trip', 'area', 'company'));
     }
 
+    // Menangani proses simpan data ke dalam database
     public function store(Request $request)
     {
         // Validasi inputan
@@ -101,7 +106,7 @@ class FastboatShuttleController extends Controller
         return redirect()->route('shuttle.view');
     }
 
-
+    // Menangani update data dengan multiple select
     public function multiple(Request $request)
     {
         $selectedIds = $request->input('selected_ids', []);
@@ -121,7 +126,7 @@ class FastboatShuttleController extends Controller
                 if (!is_null($s_meeting_point)) {
                     $shuttleData->s_meeting_point = $s_meeting_point;
                 }
-                $shuttleData->save();
+                $shuttleData->update();   // Update data
             }
         }
     
@@ -129,7 +134,7 @@ class FastboatShuttleController extends Controller
     }
     
     
-    // this function will get the $id of selected data and do delete operation
+    // Menangani hapus data dengan multiple select
     public function deleteMultiple(Request $request)
     {
         $selectedIds = explode(',', $request->input('selected_ids', ''));

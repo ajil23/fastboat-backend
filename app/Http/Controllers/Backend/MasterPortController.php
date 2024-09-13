@@ -7,34 +7,35 @@ use App\Models\MasterIsland;
 use App\Models\MasterPort;
 use DOMDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MasterPortController extends Controller
 {
-    // this function is for view all data from port table
+    // Menampilkan halaman utama dari menu port
     public function index()
     {
-        $port = MasterPort::orderBy('prt_name_en', 'asc')->paginate(15);
-        $island = MasterIsland::all();
+        // Mengambil seluruh data port dengan urutan ascending berdasarkan nama & paginasi data sebanyak 15
+        $port = MasterPort::orderBy('prt_name_en', 'asc')->paginate(15);    
+        $island = MasterIsland::all();  // Mengambil seluruh data island
         $title = 'Delete Port Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         return view('master.port.index', compact('port', 'island'));
     }
 
-    // this function is for view form to add port data
+    //Menampilkan halaman tambah data port
     public function add()
     {
-        $island = MasterIsland::all();
+        $island = MasterIsland::all();  // Mengambil seluruh data island
         return view('master.port.add', compact('island'));
     }
 
-    // this function will request data from input in port add form
+    // Menangani proses tambah data
     public function store(Request $request)
     {
-
-        // Handle the request data validation
-        $request->validate([
-            'prt_name_en' => 'required|max:100',
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
+           'prt_name_en' => 'required|max:100',
             'prt_name_idn' => 'required|max:100',
             'prt_code' => 'required|max:100',
             'prt_slug_en' => 'required',
@@ -52,7 +53,16 @@ class MasterPortController extends Controller
             'prt_content_idn' => 'required',
         ]);
 
-        // Handle insert data to database
+        // Cek apakah validasi gagal
+        if ($validator->fails()) {
+            // Menambahkan pesan toast ke dalam session
+            toast('Validation failed! Please check your input.', 'error');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Proses menambahkan data ke dalam database
         $portData = new MasterPort();
         $portData->prt_name_en = $request->prt_name_en;
         $portData->prt_name_idn = $request->prt_name_idn;
@@ -68,6 +78,8 @@ class MasterPortController extends Controller
         $portData->prt_content_en = $request->prt_content_en;
         $portData->prt_content_idn = $request->prt_content_idn;
         $portData->prt_updated_by = Auth()->id();
+
+        // Penanganan simpan gambar
         if ($request->hasFile('prt_image1')) {
             $portImage = $request->file('prt_image1')->store('prt_image1');
             $portData->prt_image1 = $portImage;
@@ -93,7 +105,7 @@ class MasterPortController extends Controller
             $portData->prt_image6 = $portImage;
         }
 
-        // summernote
+        // Penanganan simpan summernote
         $content = $request->prt_content_en;
 
         $dom = new DOMDocument();
@@ -111,25 +123,24 @@ class MasterPortController extends Controller
         }
         $content = $dom->saveHTML();
 
-        $portData->save();
+        $portData->save();  // Simpan data
         toast('Your data as been submited!', 'success');
         return redirect()->route('port.view');
     }
 
-    // this function will get the $id of the selected data and then view the port edit form
-    public function edit($id)
+    // Menampilkan halaman edit data
+    public function edit($prt_id)
     {
-        $portEdit = MasterPort::find($id);
-        $island = MasterIsland::all();
+        $portEdit = MasterPort::find($prt_id);  // Mengambil id dari data yang dipilih
+        $island = MasterIsland::all();          // Mengambil seluruh data island
         return view('master.port.edit', compact('portEdit', 'island'));
     }
 
-    // this function will get the $id of the selected data and request data from input in port edit from
+    // Menangani proses update data
     public function update(Request $request, $id)
     {
-
-        // Handle update data to database
-        $portData = MasterPort::find($id);
+        // Proses merubah data dari database
+        $portData = MasterPort::find($id);  //Mengambil id dari data yang dipilih
         $portData->prt_name_en = $request->prt_name_en;
         $portData->prt_name_idn = $request->prt_name_idn;
         $portData->prt_island = $request->prt_island;
@@ -144,6 +155,8 @@ class MasterPortController extends Controller
         $portData->prt_content_en = $request->prt_content_en;
         $portData->prt_content_idn = $request->prt_content_idn;
         $portData->prt_updated_by = Auth()->id();
+
+        // Penanganan simpan gambar
         if ($request->hasFile('prt_image1')) {
             $portImage = $request->file('prt_image1')->store('prt_image1');
             $portData->prt_image1 = $portImage;
@@ -168,24 +181,25 @@ class MasterPortController extends Controller
             $portImage = $request->file('prt_image6')->store('prt_image6');
             $portData->prt_image6 = $portImage;
         }
-        $portData->save();
+        $portData->update();    // Simpan data yang telah di update
         toast('Your data as been edited!', 'success');
         return redirect()->route('port.view');
     }
 
-    // this function will get the $id of selected data and do delete operation
-    public function delete($id)
+    // Menangani proses hapus data
+    public function delete($prt_id)
     {
-        $portDelete = MasterPort::find($id);
-        $portDelete->delete();
+        $portDelete = MasterPort::find($prt_id);    // Mengambil id dari data yang dipilih
+        $portDelete->delete();                      // Menjalankan proses hapus data
         toast('Your data as been deleted!', 'success');
         return redirect()->route('port.view');
     }
 
-    // this function will get $id of selected data and view it in modal
+    // Menampilkan modal
     public function show($id)
     {
-        $portData = MasterPort::with(['island'])->find($id);
+        // Mengambil data sesuai dengan yang dipilih serta mengambil data island nya
+        $portData = MasterPort::with(['island'])->find($id);   
         return response()->json($portData);
     }
 }

@@ -6,15 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\DataCompany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class DataCompanyController extends Controller
 {
-    // Menampilkan data company serta title dan text pada modal konfirmasi hapus data
+    // Menampilkan halaman utama menu company
     public function index()
     {
+        // Mengambil seluruh data company di urutkan secara ascending berdasarkan nama & melakukan paginasi 15 data
         $company = DataCompany::orderBy('cpn_name', 'asc')->paginate(15);
-        $title = 'Delete Company Data!';
-        $text = "Are you sure you want to delete?";
+        $title = 'Delete Company Data!';                // Title pada modal konfirmasi hapus data
+        $text = "Are you sure you want to delete?";     // Teks pada modal konfirmasi hapus data
         confirmDelete($title, $text);
         return view('data.company.index', compact('company'));
     }
@@ -28,8 +30,8 @@ class DataCompanyController extends Controller
     // Menangani proses tambah data
     public function store(Request $request)
     {
-        // Validasi data inputan
-        $request->validate([
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
             'cpn_name' => 'required',
             'cpn_email' => 'required',
             'cpn_phone' => 'required|numeric',
@@ -38,6 +40,16 @@ class DataCompanyController extends Controller
             'cpn_address' => 'required',
             'cpn_type' => 'required',
         ]);
+
+        // Cek apakah validasi gagal
+        if ($validator->fails()) {
+            // Menambahkan pesan toast ke dalam session
+            toast('Validation failed! Please check your input.', 'error');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
 
         // Menyimpan ke dalam database
         $companyData = new DataCompany();
@@ -63,10 +75,10 @@ class DataCompanyController extends Controller
     }
 
     // Menampilkan halaman edit data
-    public function edit($id)
+    public function edit($cpn_id)
     {
         // Mengambil id data yang di edit
-        $companyEdit = DataCompany::find($id);
+        $companyEdit = DataCompany::find($cpn_id);
 
         // Mengambil info logo dari data yang di pilih
         $logoInfo = $companyEdit->cpn_logo;
@@ -74,10 +86,10 @@ class DataCompanyController extends Controller
     }
 
     // Menangani proses edit data
-    public function update(Request $request, $id)
+    public function update(Request $request, $cpn_id)
     {
-        // Mengedit data
-        $companyData = DataCompany::find($id);
+        // Menyimpan data inputan
+        $companyData = DataCompany::find($cpn_id);      // Mengambil id dari data yang di pilih
         $companyData->cpn_name = $request->cpn_name;
         $companyData->cpn_email = $request->cpn_email;
         $companyData->cpn_phone = $request->cpn_phone;
@@ -94,17 +106,16 @@ class DataCompanyController extends Controller
             $companyData->cpn_logo = $companyLogo;
         }
 
-        // Menyimpan hasil update
-        $companyData->update();
+        $companyData->update();     // Menyimpan hasil update
         toast('Your data as been edited!', 'success');
         return redirect()->route('company.view');
     }
 
     // Menangani hapus data
-    public function delete($id)
+    public function delete($cpn_id)
     {
         // Mengambil id dari data yang di pilih
-        $companyDelete = DataCompany::find($id);
+        $companyDelete = DataCompany::find($cpn_id);
 
         // Melakukan penghapusan data
         $companyDelete->delete();
@@ -113,19 +124,19 @@ class DataCompanyController extends Controller
     }
 
     // Menampilkan detail data
-    public function show($id)
+    public function show($cpn_id)
     {
         // Mencari id dari data yang di pilih
-        $companyData = DataCompany::find($id);
+        $companyData = DataCompany::find($cpn_id);
 
         // Mengembalikan value dari data yang di pilih dalam bentuk json
         return response()->json($companyData);
     }
 
     // Menangani perubahan email status
-    public function emailStatus($id)
+    public function emailStatus($cpn_id)
     {
-        $companyData = DataCompany::find($id);
+        $companyData = DataCompany::find($cpn_id);
 
         if ($companyData) {
             if ($companyData->cpn_email_status) {
@@ -139,9 +150,9 @@ class DataCompanyController extends Controller
     }
 
     // Menangani perubahan company status
-    public function companyStatus($id)
+    public function companyStatus($cpn_id)
     {
-        $companyData = DataCompany::find($id);
+        $companyData = DataCompany::find($cpn_id);
 
         if ($companyData) {
             if ($companyData->cpn_status) {

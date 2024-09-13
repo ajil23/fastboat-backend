@@ -6,28 +6,31 @@ use App\Http\Controllers\Controller;
 use App\Models\MasterIsland;
 use DOMDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class MasterIslandController extends Controller
 {
-    // this function is for view all data from island table
-    public function index () {
-        $island = MasterIsland::all();
+    // Menampilkan halaman utama dari menu island
+    public function index()
+    {
+        $island = MasterIsland::all();  // Mengambil seluruh data island
         $title = 'Delete Island Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
         return view('master.island.index', compact('island'));
     }
 
-    // this function is for view form to add island data
-    public function add () {
+    // Menampilkan halaman tambah data
+    public function add()
+    {
         return view('master.island.add');
     }
 
-    // this function will request data from input in island add form
-    public function store (Request $request) {
-        
-        // Handle the request data validation
-        $request->validate([
+    // Menangani proses tambah data
+    public function store(Request $request)
+    {
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
             'isd_name' => 'required|max:100',
             'isd_code' => 'required|max:100',
             'isd_slug_en' => 'required',
@@ -45,7 +48,16 @@ class MasterIslandController extends Controller
             'isd_content_idn' => 'required',
         ]);
 
-        // Handle insert data to database
+        // Cek apakah validasi gagal
+        if ($validator->fails()) {
+            // Menambahkan pesan toast ke dalam session
+            toast('Validation failed! Please check your input.', 'error');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // Menyimpan inputan ke dalam databas
         $islandData = new MasterIsland();
         $islandData->isd_name = $request->isd_name;
         $islandData->isd_code = $request->isd_code;
@@ -58,6 +70,8 @@ class MasterIslandController extends Controller
         $islandData->isd_content_en = $request->isd_content_en;
         $islandData->isd_content_idn = $request->isd_content_idn;
         $islandData->isd_updated_by = Auth()->id();
+
+        // Menangani simpan gambar
         if ($request->hasFile('isd_image1')) {
             $islandImage = $request->file('isd_image1')->store('isd_image1');
             $islandData->isd_image1 = $islandImage;
@@ -83,41 +97,42 @@ class MasterIslandController extends Controller
             $islandData->isd_image6 = $islandImage;
         }
 
-        // summernote
+        // Menangani simpan summernote
         $content_en = $request->isd_content_en;
 
         $dom = new DOMDocument();
-        $dom->loadHTML($content_en,9);
+        $dom->loadHTML($content_en, 9);
 
         $image = $dom->getElementsByTagName('img');
 
         foreach ($image as $key => $img) {
-            $data = base64_decode(explode(',',explode(';',$img->getAttribute('src'))[1])[1]);
-            $image_name = "/upload/" . time(). $key.'.png';
-            file_put_contents(public_path().$image_name,$data);
+            $data = base64_decode(explode(',', explode(';', $img->getAttribute('src'))[1])[1]);
+            $image_name = "/upload/" . time() . $key . '.png';
+            file_put_contents(public_path() . $image_name, $data);
 
             $img->removeAttribute('src');
-            $img->setAttribute('src',$image_name);
+            $img->setAttribute('src', $image_name);
         }
         $content_en = $dom->saveHTML();
-        
 
-        $islandData->save();
-        toast('Your data as been submited!','success');
+
+        $islandData->save();    // Simpan data
+        toast('Your data as been submited!', 'success');
         return redirect()->route('island.view');
     }
 
-    // this function will get the $id of the selected data and then view the island edit form
-    public function edit ($id) {
-        $islandEdit = MasterIsland::find($id);
-        return view ('master.island.edit', compact('islandEdit'));
+    // Menampilkan halaman edit data
+    public function edit($isd_id)
+    {
+        $islandEdit = MasterIsland::find($isd_id);  // Menambil id dari data yang dipilih
+        return view('master.island.edit', compact('islandEdit'));
     }
 
-    // this function will get the $id of the selected data and request data from input in island edit from
-    public function update (Request $request, $id) {
-
-         // Handle update data to database
-        $islandData = MasterIsland::find($id);
+    // Menangani proses update data
+    public function update(Request $request, $isd_id)
+    {
+        // Menyimpan inputan ke dalam database
+        $islandData = MasterIsland::find($isd_id);  // Mengambil id dari data yang dipilih
         $islandData->isd_name = $request->isd_name;
         $islandData->isd_code = $request->isd_code;
         $islandData->isd_slug_en = $request->isd_slug_en;
@@ -129,6 +144,8 @@ class MasterIslandController extends Controller
         $islandData->isd_content_en = $request->isd_content_en;
         $islandData->isd_content_idn = $request->isd_content_idn;
         $islandData->isd_updated_by = Auth()->id();
+
+        // Menangani simpan gambar
         if ($request->hasFile('isd_image1')) {
             $islandImage = $request->file('isd_image1')->store('isd_image1');
             $islandData->isd_image1 = $islandImage;
@@ -153,22 +170,24 @@ class MasterIslandController extends Controller
             $islandImage = $request->file('isd_image6')->store('isd_image6');
             $islandData->isd_image6 = $islandImage;
         }
-        $islandData->save();
-         toast('Your data as been edited!','success');
-         return redirect()->route('island.view');
-    }
-    
-    // this function will get the $id of selected data and do delete operation
-    public function delete($id){
-        $islandDelete = MasterIsland::find($id);
-        $islandDelete->delete();
-        toast('Your data as been deleted!','success');
+        $islandData->update();  // Update data
+        toast('Your data as been edited!', 'success');
         return redirect()->route('island.view');
     }
 
-    // this function will get $id of selected data and view it in modal
-    public function show($id){
-        $islandData = MasterIsland::find($id);
+    // Menangani proses hapus data
+    public function delete($isd_id)
+    {
+        $islandDelete = MasterIsland::find($isd_id);    // Menngambil id dari data yang dipilih
+        $islandDelete->delete();                    // Menghapus data
+        toast('Your data as been deleted!', 'success');
+        return redirect()->route('island.view');
+    }
+
+    // Menangani menampilkan modal
+    public function show($isd_id)
+    {
+        $islandData = MasterIsland::find($isd_id);  // Mengambil id dari data yang dipilih
         return response()->json($islandData);
     }
 }
