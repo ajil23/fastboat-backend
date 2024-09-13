@@ -9,10 +9,11 @@ use App\Models\FastboatSchedule;
 use App\Models\FastboatTrip;
 use App\Models\MasterPort;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FastboatTripController extends Controller
 {
-    // this function is for view all data from trip table
+    // Menampilkan halaman utama menu fast-boat trip
     public function index()
     {
         $trip = FastboatTrip::all();                // Mengambil seluruh data yang ada pada tabel fast-boat.
@@ -38,8 +39,8 @@ class FastboatTripController extends Controller
     // Menangani proses tambah data ke database
     public function store(Request $request)
     {
-        // Melakukan validasi inputan 
-        $request->validate([
+        // Validasi inputan
+        $validator = Validator::make($request->all(), [
             'fbt_route' => 'required',
             'fbt_fastboat' => 'required',
             'fbt_schedule' => 'required',
@@ -50,17 +51,27 @@ class FastboatTripController extends Controller
             'fbt_arrival_time' => 'required',
         ]);
 
-       // Get route & schedule id
-       $fbt_route_id = $request->fbt_route;
-       $fbt_fastboat_id = $request->fbt_fastboat;
+        // Cek apakah validasi gagal
+        if ($validator->fails()) {
+            // Menambahkan pesan toast ke dalam session
+            toast('Validation failed! Please check your input.', 'error');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
-       // Mencari route & schedule id
-       $fbtrip = DataRoute::findOrFail($fbt_route_id);
-       $fbtfastboat = DataFastboat::findOrFail($fbt_fastboat_id);
+
+        // Get route & schedule id
+        $fbt_route_id = $request->fbt_route;
+        $fbt_fastboat_id = $request->fbt_fastboat;
+
+        // Mencari route & schedule id
+        $fbtrip = DataRoute::findOrFail($fbt_route_id);
+        $fbtfastboat = DataFastboat::findOrFail($fbt_fastboat_id);
 
         // Mengirim data ke database
         $tripData = new FastboatTrip();
-        $tripData->fbt_name = $fbtfastboat ->fb_name. ' for '.$fbtrip ->rt_dept_island .' to '. $fbtrip->rt_arrival_island;
+        $tripData->fbt_name = $fbtfastboat->fb_name . ' for ' . $fbtrip->rt_dept_island . ' to ' . $fbtrip->rt_arrival_island;
         $tripData->fbt_route = $request->fbt_route;
         $tripData->fbt_fastboat = $request->fbt_fastboat;
         $tripData->fbt_schedule = $request->fbt_schedule;
@@ -96,9 +107,9 @@ class FastboatTripController extends Controller
 
 
     // Menangani proses update data ke database
-    public function update(Request$request, $id) 
+    public function update(Request $request, $fbt_id)
     {
-        $tripData = FastboatTrip::find($id);
+        $tripData = FastboatTrip::find($fbt_id);        // Mengambil id dari data yang di pilih
         $tripData->fbt_name = $request->fbt_name;
         $tripData->fbt_route = $request->fbt_route;
         $tripData->fbt_fastboat = $request->fbt_fastboat;
@@ -120,18 +131,18 @@ class FastboatTripController extends Controller
     }
 
     // Melakukan operasi hapus data
-    public function delete($id)
+    public function delete($fbt_id)
     {
-        $tripData = FastboatTrip::find($id);
+        $tripData = FastboatTrip::find($fbt_id);
         $tripData->delete();
         toast('Your data as been deleted!', 'success');
         return redirect()->route('trip.view');
     }
 
     // Menampilkan data ke dalam modal
-    public function show($id)
+    public function show($fbt_id)
     {
-        $tripData = FastboatTrip::with(['route', 'fastboat', 'schedule', 'departure', 'arrival'])->findOrFail($id);
+        $tripData = FastboatTrip::with(['route', 'fastboat', 'schedule', 'departure', 'arrival'])->findOrFail($fbt_id);
         // Format waktu tanpa detik
         $tripData->fbt_dept_time = \Carbon\Carbon::parse($tripData->fbt_dept_time)->format('H:i');
         $tripData->fbt_time_limit = \Carbon\Carbon::parse($tripData->fbt_time_limit)->format('H:i');
@@ -142,9 +153,9 @@ class FastboatTripController extends Controller
 
 
     // Menangani perubahan status trip 
-    public function status($id)
+    public function status($fbt_id)
     {
-        $tripData = FastboatTrip::find($id);
+        $tripData = FastboatTrip::find($fbt_id);
 
         if ($tripData) {
             if ($tripData->fbt_status) {
@@ -158,9 +169,9 @@ class FastboatTripController extends Controller
     }
 
     // Menangani perbuahan status rekomendasi trip
-    public function recommend($id)
+    public function recommend($fbt_id)
     {
-        $tripData = FastboatTrip::find($id);
+        $tripData = FastboatTrip::find($fbt_id);
 
         if ($tripData) {
             if ($tripData->fbt_recom) {
