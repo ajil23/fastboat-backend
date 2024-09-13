@@ -29,6 +29,7 @@
                                             <th>No</th>
                                             <th>Name</th>
                                             <th>Status</th>
+                                            <th>Recommend</th>
                                             <th>Route</th>
                                             <th>Fast Boat</th>
                                             <th>Schedule</th>
@@ -45,6 +46,11 @@
                                             <td>
                                                 <a href="{{route('trip.status', $item->fbt_id)}}" class="badge rounded-pill bg-{{$item->fbt_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fbt_status ? 'check-decagram' : 'alert-decagram'}}"></i>
                                                     {{$item->fbt_status ? 'Enable' : 'Disable'}}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="{{route('trip.recommend', $item->fbt_id)}}" class="badge rounded-pill bg-{{$item->fbt_recom ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fbt_recom ? 'check-decagram' : 'alert-decagram'}}"></i>
+                                                    {{$item->fbt_recom ? 'Enable' : 'Disable'}}
                                                 </a>
                                             </td>
                                             <td class="search-item" data-id="{{$item->rt_id}}">{{$item->route->rt_dept_island}} to {{$item->route->rt_arrival_island}}</td>
