@@ -139,7 +139,7 @@
                                                     <input class="form-check-input" type="radio" id="pickup" name="fbt_shuttle_option" value="pickup">
                                                     <label for="pickup">Pick up</label>
                                                     <input class="form-check-input" type="radio" id="dropoff" name="fbt_shuttle_option" value="drop">
-                                                    <label for="drop">Drop Off</label>
+                                                    <label for="dropoff">Drop Off</label>
                                                 </div>
                                             </div>
                                         </div>

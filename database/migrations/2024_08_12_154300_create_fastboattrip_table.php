@@ -33,6 +33,7 @@ return new class extends Migration
             $table->text('fbt_info_idn')->nullable();
             $table->string('fbt_shuttle_type')->nullable();
             $table->string('fbt_shuttle_option')->nullable();
+            $table->integer('fbt_recom')->default(0);
             $table->string('fbt_updated_by');
             $table->timestamps();
         });

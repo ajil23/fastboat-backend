@@ -125,6 +125,7 @@ Route::middleware([
         Route::delete('/trip/delete/{id}', [FastboatTripController::class, 'delete'])->name('trip.delete');
         Route::get('/trip/{id}', [FastboatTripController::class, 'show'])->name('trip.show');
         Route::get('/trip/status/{id}', [FastboatTripController::class, 'status'])->name('trip.status');
+        Route::get('/trip/recommend/{id}', [FastboatTripController::class, 'recommend'])->name('trip.recommend');
 
         // shuttle area routes
         Route::get('/shuttlearea', [FastboatShuttleAreaController::class, 'index'])->name('shuttlearea.view');

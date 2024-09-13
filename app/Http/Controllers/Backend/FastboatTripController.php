@@ -15,26 +15,30 @@ class FastboatTripController extends Controller
     // this function is for view all data from trip table
     public function index()
     {
-        $trip = FastboatTrip::all();
-        $title = 'Delete Fastboat Trip!';
-        $text = "Are you sure you want to delete?";
-        confirmDelete($title, $text);
+        $trip = FastboatTrip::all();                // Mengambil seluruh data yang ada pada tabel fast-boat.
+        $title = 'Delete Fastboat Trip!';           // Title untuk modal konfirmasi hapus data.
+        $text = "Are you sure you want to delete?"; // Text untuk modal konfirmasi hapus data.
+        confirmDelete($title, $text);               // Inisiasi modal konfirmasi hapus data.
+
+        // Tambahkan data-confirm-delete="true" agar modal dapat muncul.
         return view('fast-boat.trip.index', compact('trip'));
     }
 
+    // Menampilkan halaman tambah data trip
     public function add()
     {
-        $route = DataRoute::all();
-        $fastboat = DataFastboat::all();
-        $schedule = FastboatSchedule::all();
-        $departure = MasterPort::all();
-        $arrival = MasterPort::all();
+        $route = DataRoute::all();              // Mengambil seluruh data pada tabel route
+        $fastboat = DataFastboat::all();        // Mengambil seluruh data pada tabel fast-boat
+        $schedule = FastboatSchedule::all();    // Mengambil seluruh data pada tabel schedule
+        $departure = MasterPort::all();         // Mengambil seluruh data pada tabel port sebagai opsi departure port
+        $arrival = MasterPort::all();           // Mengambil seluruh data pada tabel port sebagai opsi arrival port
         return view('fast-boat.trip.add', compact('route', 'fastboat', 'schedule', 'departure', 'arrival'));
     }
 
+    // Menangani proses tambah data ke database
     public function store(Request $request)
     {
-        // Handle the request data validation
+        // Melakukan validasi inputan 
         $request->validate([
             'fbt_route' => 'required',
             'fbt_fastboat' => 'required',
@@ -50,11 +54,11 @@ class FastboatTripController extends Controller
        $fbt_route_id = $request->fbt_route;
        $fbt_fastboat_id = $request->fbt_fastboat;
 
-       // Find route & schedule id
+       // Mencari route & schedule id
        $fbtrip = DataRoute::findOrFail($fbt_route_id);
        $fbtfastboat = DataFastboat::findOrFail($fbt_fastboat_id);
 
-        // Handle insert data to database
+        // Mengirim data ke database
         $tripData = new FastboatTrip();
         $tripData->fbt_name = $fbtfastboat ->fb_name. ' for '.$fbtrip ->rt_dept_island .' to '. $fbtrip->rt_arrival_island;
         $tripData->fbt_route = $request->fbt_route;
@@ -76,20 +80,22 @@ class FastboatTripController extends Controller
         return redirect()->route('trip.view');
     }
 
-    // this function will get the $id of the selected data and then view the fast boat edit form
+    // Menampilkan halaman edit data trip
     public function edit($id)
     {
-        $tripEdit = FastboatTrip::find($id);
-        $route = DataRoute::all();
-        $fastboat = DataFastboat::all();
-        $schedule = FastboatSchedule::all();
-        $departure = MasterPort::all();
-        $arrival = MasterPort::all();
+        $tripEdit = FastboatTrip::find($id);    // Mengambil id dari data yang dipilih
+        $route = DataRoute::all();              // Mengambil seluruh data pada tabel route
+        $fastboat = DataFastboat::all();        // Mengambil seluruh data pada tabel fast-boat
+        $schedule = FastboatSchedule::all();    // Mengambil seluruh data pada tabel schedule
+        $departure = MasterPort::all();         // Mengambil seluruh data pada tabel port sebagai opsi departure port
+        $arrival = MasterPort::all();           // Mengambil seluruh data pada tabel port sebagai opsi arrival port
+
+        // Penggunaan compact untuk dapat mengirimkan seluruh variabel di atas ke halaman edit data trip
         return view('fast-boat.trip.edit', compact('tripEdit', 'route', 'fastboat', 'schedule', 'departure', 'arrival'));
     }
 
 
-    // this function will get the $id of the selected data and request data from input in fast boat edit from
+    // Menangani proses update data ke database
     public function update(Request$request, $id) 
     {
         $tripData = FastboatTrip::find($id);
@@ -113,7 +119,7 @@ class FastboatTripController extends Controller
         return redirect()->route('trip.view');
     }
 
-    // this function will get the $id of selected data and do delete operation
+    // Melakukan operasi hapus data
     public function delete($id)
     {
         $tripData = FastboatTrip::find($id);
@@ -122,7 +128,7 @@ class FastboatTripController extends Controller
         return redirect()->route('trip.view');
     }
 
-    // this function will get $id of selected data and view it in modal
+    // Menampilkan data ke dalam modal
     public function show($id)
     {
         $tripData = FastboatTrip::with(['route', 'fastboat', 'schedule', 'departure', 'arrival'])->findOrFail($id);
@@ -135,7 +141,7 @@ class FastboatTripController extends Controller
     }
 
 
-    // this function will get $id of selected data and change the status
+    // Menangani perubahan status trip 
     public function status($id)
     {
         $tripData = FastboatTrip::find($id);
@@ -145,6 +151,22 @@ class FastboatTripController extends Controller
                 $tripData->fbt_status = 0;
             } else {
                 $tripData->fbt_status = 1;
+            }
+            $tripData->save();
+        }
+        return back();
+    }
+
+    // Menangani perbuahan status rekomendasi trip
+    public function recommend($id)
+    {
+        $tripData = FastboatTrip::find($id);
+
+        if ($tripData) {
+            if ($tripData->fbt_recom) {
+                $tripData->fbt_recom = 0;
+            } else {
+                $tripData->fbt_recom = 1;
             }
             $tripData->save();
         }
