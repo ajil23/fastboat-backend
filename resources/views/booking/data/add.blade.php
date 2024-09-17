@@ -326,7 +326,7 @@
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                             </div>
                                             <div class="form-check form-switch" style="display: flex; align-items: center;justify-content: center;">
-                                                <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" name="switch"/>
+                                                <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" name="switch" />
                                             </div>
                                         </div>
                                     </div>
@@ -527,82 +527,94 @@
             }
         }
 
+        // Fungsi untuk menghapus hasil pencarian
+        function resetSearchResults() {
+            $('#booking-data-table tbody').empty(); // Hapus data di tabel
+            $('.card-title').empty(); // Hapus judul kartu
+            $('#adult_publish').val(''); // Reset harga dewasa
+            $('#child_publish').val(''); // Reset harga anak
+            $('#total_end').val(''); // Reset total harga
+            $('#currency_end').val(''); // Reset format mata uang
+            $('#search-results').hide(); // Sembunyikan hasil pencarian
+        }
+
         // Trigger ketika input field berubah (pencarian ulang)
         $('#trip_date, #departure_port, #arrival_port, #fast_boat, #time_dept').on('change', function() {
-            checkFormComplete();
+            resetSearchResults(); // Sembunyikan hasil pencarian sebelum pencarian ulang
+            checkFormComplete(); // Cek dan lakukan pencarian jika semua field terisi
         });
 
         // Fungsi untuk melakukan pencarian
         function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept) {
+            let adultCount = $('#adult_count').val() || 1; // Default 1 dewasa
+            let childCount = $('#child_count').val() || 0;
+
             $.ajax({
-                url: '{{ route("data.search") }}', // Pastikan ini menghasilkan URL yang benar
+                url: '{{ route("data.search") }}',
                 method: 'GET',
                 data: {
                     trip_date: tripDate,
                     departure_port: departurePort,
                     arrival_port: arrivalPort,
                     fast_boat: fastBoat,
-                    time_dept: timeDept
+                    time_dept: timeDept,
+                    adult_count: adultCount,
+                    child_count: childCount
                 },
                 success: function(response) {
                     if (response.html) {
+                        // Hasil baru ditemukan, tampilkan tabel hasil
                         $('#booking-data-table tbody').html(response.html);
                         $('.card-title').html(response.card_title);
 
-                        // Update harga per unit
                         let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g, '')) || 0;
                         let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) || 0;
-                        let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0; // Diskon per orang
+                        let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
 
-                        // Hitung total berdasarkan jumlah pelanggan
-                        let adultCount = parseInt($('#adult_count').val()) || 1; // Default 1 dewasa
+                        let adultCount = parseInt($('#adult_count').val()) || 1;
                         let childCount = parseInt($('#child_count').val()) || 0;
 
-                        // Kalkulasi total diskon
                         let totalDiscount = (adultCount + childCount) * discountPerPerson;
-
-                        // Kalkulasi total harga sebelum diskon
                         let totalPriceBeforeDiscount = (adultPublishPrice * adultCount) + (childPublishPrice * childCount);
-
-                        // Kurangi total dengan diskon
                         let totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
 
-                        // Pastikan total harga tidak negatif
                         if (totalPriceAfterDiscount < 0) {
                             totalPriceAfterDiscount = 0;
                         }
 
-                        // Tampilkan total harga dan informasi terkait
                         $('#adult_publish').val(response.adult_publish);
                         $('#child_publish').val(response.child_publish);
                         $('#total_end').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
                         $('#currency_end').val('IDR ' + totalPriceAfterDiscount.toLocaleString('id-ID'));
 
-                        // Tampilkan hasil pencarian dan perhitungan
+                        // Tampilkan hasil pencarian baru
                         $('#search-results').show();
                     } else {
-                        $('#search-results').hide();
+                        // Jika tidak ada hasil, sembunyikan hasil
+                        resetSearchResults();
                     }
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
-                    $('#search-results').hide();
                 }
             });
         }
 
         // Ketika jumlah orang dewasa atau anak-anak diubah, sembunyikan hasil pencarian dan minta pencarian ulang
         $('#adult_count, #child_count').on('change', function() {
-            // Sembunyikan hasil pencarian
-            $('#search-results').hide();
-
-            // Reset nilai total harga
-            $('#total_end').val('');
-            $('#currency_end').val('');
+            resetSearchResults(); // Sembunyikan hasil pencarian
         });
-    });
 
-    $(document).ready(function() {
+        // Fungsi untuk mendapatkan jumlah customer
+        function getCustomerCount() {
+            var adultCount = $('#adult_count').val() || 1;
+            var childCount = $('#child_count').val() || 0;
+            return {
+                adult_count: adultCount,
+                child_count: childCount
+            };
+        }
+
         // Bersihkan dropdown ketika input berubah
         function resetDropdowns() {
             $('#departure_port').empty().append('<option value="">Select Departure Port</option>');
@@ -613,18 +625,19 @@
 
         // Ketika tanggal dipilih, reset dropdown dan ambil data untuk Departure Port
         $('#trip_date').change(function() {
-            resetDropdowns(); // Reset semua dropdown saat tanggal berubah
+            resetSearchResults(); // Sembunyikan hasil pencarian saat tanggal berubah
+            resetDropdowns(); // Reset dropdown
 
             var tripDate = $(this).val();
+            var customerCount = getCustomerCount(); // Ambil jumlah customer
 
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
-                data: {
+                data: $.extend({
                     trip_date: tripDate
-                },
+                }, customerCount),
                 success: function(response) {
-                    // Isi dropdown Departure Port berdasarkan response
                     $('#departure_port').empty().append('<option value="">Select Departure Port</option>');
                     $.each(response.departure_ports, function(index, port) {
                         $('#departure_port').append('<option value="' + port + '">' + port + '</option>');
@@ -641,14 +654,15 @@
 
             var tripDate = $('#trip_date').val();
             var departurePort = $(this).val();
+            var customerCount = getCustomerCount(); // Ambil jumlah customer
 
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
-                data: {
+                data: $.extend({
                     trip_date: tripDate,
                     departure_port: departurePort
-                },
+                }, customerCount),
                 success: function(response) {
                     // Isi dropdown Arrival Port berdasarkan response
                     $('#arrival_port').empty().append('<option value="">Select Arrival Port</option>');
@@ -667,15 +681,16 @@
             var tripDate = $('#trip_date').val();
             var departurePort = $('#departure_port').val();
             var arrivalPort = $(this).val();
+            var customerCount = getCustomerCount(); // Ambil jumlah customer
 
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
-                data: {
+                data: $.extend({
                     trip_date: tripDate,
                     departure_port: departurePort,
                     arrival_port: arrivalPort
-                },
+                }, customerCount),
                 success: function(response) {
                     // Isi dropdown Fast Boat berdasarkan response
                     $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>');
@@ -694,16 +709,17 @@
             var departurePort = $('#departure_port').val();
             var arrivalPort = $('#arrival_port').val();
             var fastBoat = $(this).val();
+            var customerCount = getCustomerCount(); // Ambil jumlah customer
 
             $.ajax({
                 url: '/getFilteredData',
                 method: 'GET',
-                data: {
+                data: $.extend({
                     trip_date: tripDate,
                     departure_port: departurePort,
                     arrival_port: arrivalPort,
                     fast_boat: fastBoat
-                },
+                }, customerCount),
                 success: function(response) {
                     // Isi dropdown Time Dept berdasarkan response
                     $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
@@ -718,14 +734,14 @@
 
 <script>
     $(document).ready(function() {
-        $('#switch').on('change', function(){
-           var inputs = $('#fast_boat_return, #time_dept_return, #trip_return_date, #departure_return_port, #arrival_return_port');
+        $('#switch').on('change', function() {
+            var inputs = $('#fast_boat_return, #time_dept_return, #trip_return_date, #departure_return_port, #arrival_return_port');
 
-           if ($(this).is(':checked')){
-            inputs.removeAttr('disabled');
-           } else {
-            inputs.attr('disabled', 'disabled');
-           }
+            if ($(this).is(':checked')) {
+                inputs.removeAttr('disabled');
+            } else {
+                inputs.attr('disabled', 'disabled');
+            }
         });
         // Fungsi untuk mengecek apakah semua field sudah diisi
         function checkFormComplete() {
