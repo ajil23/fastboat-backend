@@ -20,11 +20,18 @@
                             <div class="table-responsive">
                                 <table class="table table-striped table-centered align-middle table-nowrap mb-0 table-check">
                                     <thead>
-                                        <div class="search-box">
-                                            <div class="position-relative">
-                                                <input type="search" name="search" class="form-control rounded bg-light border-0" placeholder="Search by Name" id="search-input"><i class="bx bx-search search-icon"></i>
-                                            </div>
-                                        </div>
+                                        <tr>
+                                            <th colspan="10" class="p-0">
+                                                <div class="d-flex justify-content-between align-items-center p-2">
+                                                    <div class="search-box w-100">
+                                                        <div class="position-relative">
+                                                            <input type="search" name="search" class="form-control rounded bg-light border-0 w-100" placeholder="Search by Name" id="search-input">
+                                                            <i class="bx bx-search search-icon" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                        </tr>
                                         <tr>
                                             <th>No</th>
                                             <th>Name</th>
