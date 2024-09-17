@@ -54,9 +54,12 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Nationality</label>
-                                                    <select id="fb_name" name="fb_name" data-trigger class="form-control" required>
+                                                    <label class="form-label" for="nationality">Nationality</label>
+                                                    <select id="nationality" name="nationality" required>
                                                         <option value="">Select Nationality</option>
+                                                        @foreach ($nationality as $item)
+                                                            <option value="{{$item->nas_id}}">{{$item->nas_country}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -64,9 +67,12 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Currency</label>
-                                                    <select id="fb_name" name="fb_name" data-trigger class="form-control" required>
+                                                    <label class="form-label" for="currency">Currency</label>
+                                                    <select id="currency" name="currency" required>
                                                         <option value="">Select Currency</option>
+                                                        @foreach ($currency as $item)
+                                                            <option value="{{$item->cy_id}}">{{$item->cy_name}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -512,6 +518,11 @@
 
 @section('script')
 <script>
+    // Tom select 
+    new TomSelect("#nationality");
+    new TomSelect("#currency");
+
+    // Pencarian trip
     $(document).ready(function() {
         // Fungsi untuk mengecek apakah semua field sudah diisi
         function checkFormComplete() {

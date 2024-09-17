@@ -8,6 +8,9 @@ use App\Models\DataRoute;
 use App\Models\FastboatAvailability;
 use App\Models\MasterPort;
 use App\Models\FastboatTrip;
+use App\Models\MasterCurrency;
+use App\Models\MasterNationality;
+
 use Illuminate\Http\Request;
 
 class BookingDataController extends Controller
@@ -26,7 +29,9 @@ class BookingDataController extends Controller
         $route = DataRoute::all();
         $deptTime = FastboatTrip::all();
         $availability = FastboatAvailability::all();
-        return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability'));
+        $currency = MasterCurrency::all();
+        $nationality = MasterNationality::all();
+        return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability', 'currency', 'nationality'));
     }
 
     public function store()
