@@ -881,6 +881,7 @@
         });
     </script>
 
+    {{-- Return --}}
     <script>
         $(document).ready(function() {
             $('#switch').on('change', function() {
@@ -916,7 +917,7 @@
                     checkFormComplete();
                 });
 
-            // Fungsi untuk melakukan pencarian
+            // Fungsi untuk melakukan pencarian return
             function performSearch(tripDateReturn, departurePortReturn, arrivalPortReturn, fastBoatReturn,
                 timeDeptReturn) {
                 $.ajax({
@@ -964,13 +965,32 @@
                                 totalPriceAfterDiscountReturn = 0;
                             }
 
+                            // Ambil data dari dropdown currency
+                            let selectedOption = $('#currency').find('option:selected');
+                            let rate = parseFloat(selectedOption.data('rate')) ||
+                                1; // Default ke 1 jika rate tidak ditemukan
+                            let currencyCode = selectedOption.data('code') ||
+                                'IDR'; // Default ke IDR jika kode tidak ditemukan
+
+                            // Lakukan konversi harga ke mata uang yang dipilih
+                            let convertedTotalReturn = totalPriceAfterDiscountReturn / rate;
+                            let formattedTotalReturn = convertedTotalReturn.toLocaleString('id-ID', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
+
                             // Update perhitungan (contoh nilai adult publish dan child publish)
                             $('#adult_return_publish').val(response.adult_return_publish);
                             $('#child_return_publish').val(response.child_return_publish);
                             $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString(
                                 'id-ID'));
-                            $('#currency_return_end').val('IDR ' + totalPriceAfterDiscountReturn
-                                .toLocaleString('id-ID'));
+
+                            // Set nilai pada kolom currency_return_end
+                            $('#currency_return_end').val(currencyCode + ' ' + formattedTotalReturn);
+
+                            // Perbarui label untuk kolom currency_return_end
+                            $('label[for="currency_return_end"]').text('End Total Currency (' +
+                                currencyCode + ')');
 
                             // Tampilkan hasil pencarian dan perhitungan
                             $('#search-results-return').show();
@@ -984,6 +1004,7 @@
                     }
                 });
             }
+
 
             // Ketika jumlah orang dewasa atau anak-anak diubah, sembunyikan hasil pencarian dan minta pencarian ulang
             $('#adult_count, #child_count').on('change', function() {
