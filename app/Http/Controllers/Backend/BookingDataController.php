@@ -43,8 +43,13 @@ class BookingDataController extends Controller
             $arrivalPort = $request->input('arrival_port');
             $fastBoat = $request->input('fast_boat');
             $timeDept = $request->input('time_dept');
+            $adultCount = $request->input('adult_count', 1); // Default 1 dewasa
+            $childCount = $request->input('child_count', 0); // Default 0 anak-anak
 
-            // Query untuk FastboatAvailability
+            // Total customer
+            $totalCustomer = $adultCount + $childCount;
+
+            // Query untuk FastboatAvailability dengan pengecekan stok
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePort) {
                 $query->where('prt_name_en', $departurePort);
             })
@@ -54,7 +59,9 @@ class BookingDataController extends Controller
                 ->whereHas('trip.fastboat', function ($query) use ($fastBoat) {
                     $query->where('fb_name', $fastBoat);
                 })
-                ->where('fba_date', $tripDate);
+                ->where('fba_date', $tripDate)
+                // Pengecekan stok harus lebih besar dari total customer
+                ->where('fba_stock', '>', $totalCustomer);
 
             // Filter berdasarkan timeDept, jika ada
             if ($timeDept) {
@@ -129,7 +136,6 @@ class BookingDataController extends Controller
                 $adultPublishTotal += $avail->fba_adult_publish ?? 0;
                 $childPublishTotal += $avail->fba_child_publish ?? 0;
 
-                // Update total diskon per orang
                 $discountPerPerson = $avail->fba_discount ?? 0;
             }
 
@@ -138,9 +144,7 @@ class BookingDataController extends Controller
                 'card_title' => $cardTitle,
                 'adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
                 'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
-                'discount' => number_format($discountPerPerson, 0, ',', '.'),  // Kirim diskon per orang
-                'total_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
-                'currency_end' => number_format($adultPublishTotal + $childPublishTotal, 0, ',', '.'),
+                'discount' => number_format($discountPerPerson, 0, ',', '.'),
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -155,9 +159,16 @@ class BookingDataController extends Controller
             $departurePort = $request->input('departure_port');
             $arrivalPort = $request->input('arrival_port');
             $fastBoat = $request->input('fast_boat');
+            $adultCount = $request->input('adult_count', 1); // Default 1 dewasa
+            $childCount = $request->input('child_count', 0); // Default 0 anak-anak
+
+            // Hitung total customer (dewasa + anak-anak)
+            $totalCustomer = $adultCount + $childCount;
 
             // Filter berdasarkan tanggal
-            $query = FastboatAvailability::where('fba_date', $tripDate);
+            $query = FastboatAvailability::where('fba_date', $tripDate)
+                // Tambahkan filter stok harus lebih dari total customer
+                ->where('fba_stock', '>', $totalCustomer);
 
             // Filter berdasarkan departure port
             if ($departurePort) {
