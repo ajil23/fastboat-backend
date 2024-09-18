@@ -1166,8 +1166,11 @@
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
-                            <select id="adult_nationality_${i}" name="adult_nationality_${i}" class="nationality-select">
+                            <select id="adult_nationality_${i}" name="adult_nationality_${i}" class="form-control">
                                 <option value="">Select Nationality</option>
+                                @foreach ($nationality as $item)
+                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -1206,8 +1209,11 @@
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
-                            <select id="child_nationality_${i}" name="child_nationality_${i}" class="nationality-select">
+                            <select id="child_nationality_${i}" name="child_nationality_${i}" class="form-control">
                                 <option value="">Select Nationality</option>
+                                @foreach ($nationality as $item)
+                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -1246,19 +1252,16 @@
                     <div class="col-lg-3">
                         <div class="mb-3">
                             <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
-                            <select id="infant_nationality_${i}" name="infant_nationality_${i}" class="nationality-select">
+                            <select id="infant_nationality_${i}" name="infant_nationality_${i}" class="form-control">
                                 <option value="">Select Nationality</option>
+                                @foreach ($nationality as $item)
+                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
             `);
-                }
-                    
-                // Initialize Tom Select on all newly created select elements with class 'nationality-select'
-                $('.nationality-select').each(function() {
-                    new TomSelect(this);
-                });
             }
         }
 
