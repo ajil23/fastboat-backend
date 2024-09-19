@@ -184,21 +184,21 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="adult_count">Adult</label>
                                                     <input id="adult_count" name="adult_count" type="number"
-                                                        class="form-control" value="1" required>
+                                                        class="form-control" value="1" min="1" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="child_count">Child</label>
                                                     <input id="child_count" name="child_count" type="number"
-                                                        class="form-control" value="0" required>
+                                                        class="form-control" value="0"  min="0" required>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="infant_count">Infant</label>
                                                     <input id="infant_count" name="infant_count" type="number"
-                                                        class="form-control" value="0" required>
+                                                        class="form-control" value="0"  min="0" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,6 +219,10 @@
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <h5 class="font-size-16 mb-1">Trip Depart</h5>
                                                 <p class="text-muted text-truncate mb-0">Fill all information below</p>
+                                            </div>
+                                            <div class="reset-button"
+                                                style="display: flex; align-items: center;justify-content: center;">
+                                                <button class="btn btn-secondary btn-sm" id="reset-button">Reset</button>
                                             </div>
                                         </div>
                                     </div>
@@ -615,29 +619,49 @@
     // Pencarian trip
     $(document).ready(function() {
         // Fungsi untuk mengecek apakah semua field sudah diisi
-        function checkFormComplete() {
-            let tripDate = $('#trip_date').val();
-            let departurePort = $('#departure_port').val();
-            let arrivalPort = $('#arrival_port').val();
-            let fastBoat = $('#fast_boat').val();
-            let timeDept = $('#time_dept').val();
+         function resetSearchResults() {
+        $('#booking-data-table tbody').empty(); // Hapus data di tabel
+        $('.card-title').empty(); // Hapus judul kartu
+        $('#adult_publish').val(''); // Reset harga dewasa
+        $('#child_publish').val(''); // Reset harga anak
+        $('#total_end').val(''); // Reset total harga
+        $('#currency_end').val(''); // Reset format mata uang
+        $('#search-results').hide(); // Sembunyikan hasil pencarian
+    }
 
-            // Cek apakah semua field sudah diisi
-            if (tripDate && departurePort && arrivalPort && fastBoat && timeDept) {
-                performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept);
-            }
-        }
+    // Fungsi untuk menghapus nilai dari dropdown dan input form
+    function resetFormFields() {
+        $('#trip_date').val(''); // Reset tanggal perjalanan
+        $('#departure_port').empty().append('<option value="">Select Departure Port</option>');
+        $('#arrival_port').empty().append('<option value="">Select Arrival Port</option>');
+        $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>');
+        $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
+        $('#adult_count').val('1'); // Reset nilai default dewasa
+        $('#child_count').val('0'); // Reset nilai default anak-anak
+    }
 
-        // Fungsi untuk menghapus hasil pencarian
-        function resetSearchResults() {
-            $('#booking-data-table tbody').empty(); // Hapus data di tabel
-            $('.card-title').empty(); // Hapus judul kartu
-            $('#adult_publish').val(''); // Reset harga dewasa
-            $('#child_publish').val(''); // Reset harga anak
-            $('#total_end').val(''); // Reset total harga
-            $('#currency_end').val(''); // Reset format mata uang
-            $('#search-results').hide(); // Sembunyikan hasil pencarian
+    // Event handler untuk tombol reset
+    $('#reset-button').on('click', function() {
+        resetSearchResults(); // Hapus hasil pencarian
+        resetFormFields(); // Reset semua field form
+    });
+
+    // Fungsi untuk mengecek apakah semua field sudah diisi
+    function checkFormComplete() {
+        let tripDate = $('#trip_date').val();
+        let departurePort = $('#departure_port').val();
+        let arrivalPort = $('#arrival_port').val();
+        let fastBoat = $('#fast_boat').val();
+        let timeDept = $('#time_dept').val();
+
+        // Cek apakah semua field sudah diisi
+        if (tripDate && departurePort && arrivalPort && fastBoat && timeDept) {
+            performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept);
+        } else {
+            $('#search-results').hide(); // Sembunyikan hasil pencarian jika form tidak lengkap
         }
+    }
+
 
         // Trigger ketika input field berubah (pencarian ulang)
         $('#trip_date, #departure_port, #arrival_port, #fast_boat, #time_dept').on('change', function() {
