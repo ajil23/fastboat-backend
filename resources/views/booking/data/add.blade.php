@@ -78,7 +78,7 @@
                                                         <option value="{{ $item->cy_id }}"
                                                             data-rate="{{ $item->cy_rate }}"
                                                             data-code="{{ $item->cy_code }}">
-                                                            {{ $item->cy_name }}
+                                                            {{ $item->cy_name }} ({{ $item->cy_code }})
                                                         </option>
                                                         @endforeach
                                                     </select>
@@ -632,15 +632,7 @@
             let arrivalPort = $('#arrival_port').val();
             let fastBoat = $('#fast_boat').val();
             let timeDept = $('#time_dept').val();
-
-            console.log('Form inputs:', {
-                tripDate: tripDate,
-                departurePort: departurePort,
-                arrivalPort: arrivalPort,
-                fastBoat: fastBoat,
-                timeDept: timeDept
-            });
-
+            
             // Cek apakah semua field sudah diisi
             if (tripDate && departurePort && arrivalPort && fastBoat && timeDept) {
                 performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept);
@@ -746,7 +738,9 @@
                         });
 
                         // Set nilai pada kolom currency_end
-                        $('#currency_end').val(currencyCode + ' ' + formattedTotal);
+                        $('#currency_end').val(formattedTotal);
+
+                        console.log('Formatted Total:', formattedTotal);
 
                         // Perbarui label sesuai dengan mata uang yang dipilih
                         updateCurrencyLabel();
@@ -1029,7 +1023,7 @@
                         $('#adult_return_publish').val(response.adult_return_publish);
                         $('#child_return_publish').val(response.child_return_publish);
                         $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
-                        $('#currency_return_end').val(currencyCode + ' ' + formattedTotalReturn);
+                        $('#currency_return_end').val(formattedTotalReturn);
                         $('label[for="currency_return_end"]').text('End Total Currency (' + currencyCode + ')');
                         $('#search-results-return').show();
                     } else {
