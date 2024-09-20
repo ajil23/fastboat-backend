@@ -670,19 +670,46 @@
             checkFormComplete(); // Cek dan lakukan pencarian jika semua field terisi
         });
 
-        // Fungsi untuk melakukan pencarian
-        function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept) {
-            // Hitung total berdasarkan jumlah pelanggan
-            let adultCount = $('#adult_count').val() || 1; // Default 1 dewasa
-            let childCount = $('#child_count').val() || 0;
+        // Fungsi untuk memperbarui label sesuai mata uang yang dipilih
+        function updateCurrencyLabel() {
+            let selectedOption = $('#currency').find('option:selected');
+            let currencyCode = selectedOption.data('code') || 'IDR'; // Ambil kode mata uang atau default ke IDR
+            // Ubah teks label
+            $('label[for="currency_end"]').text('End Total Currency (' + currencyCode + ')');
+        }
 
-            // Fungsi untuk memperbarui label sesuai mata uang yang dipilih
-            function updateCurrencyLabel() {
-                let selectedOption = $('#currency').find('option:selected');
-                let currencyCode = selectedOption.data('code') || 'IDR'; // Ambil kode mata uang atau default ke IDR
-                // Ubah teks label
-                $('label[for="currency_end"]').text('End Total Currency (' + currencyCode + ')');
-            }
+        // Fungsi untuk menghitung ulang total berdasarkan currency yang dipilih
+        function updateCurrencyTotal() {
+            // Ambil nilai total sebelum diskon dari #total_end
+            let totalPriceAfterDiscount = parseInt($('#total_end').val().replace(/\./g, '')) || 0;
+
+            // Ambil nilai rate dan kode mata uang yang dipilih dari dropdown
+            let selectedOption = $('#currency').find('option:selected');
+            let rate = parseFloat(selectedOption.data('rate')) || 1; // Default ke 1 jika rate tidak ditemukan
+            let currencyCode = selectedOption.data('code') || 'IDR'; // Default ke IDR jika kode tidak ditemukan
+
+            // Lakukan konversi jika rate tidak sama dengan 1
+            let convertedTotal = totalPriceAfterDiscount / rate;
+
+            // Format hasil konversi
+            let formattedTotal = convertedTotal.toLocaleString('id-ID', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            // Set nilai pada kolom currency_end
+            $('#currency_end').val(formattedTotal);
+            console.log('Formatted Total:', formattedTotal);
+
+            // Perbarui label sesuai dengan mata uang yang dipilih
+            updateCurrencyLabel();
+        }
+
+        // Fungsi untuk melakukan pencarian
+        function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept, adultCount = null, childCount = null) {
+            // Ambil jumlah adultCount dan childCount dari parameter jika tidak null, atau dari input jika null
+            adultCount = adultCount !== null ? adultCount : $('#adult_count').val() || 1; // Default 1 dewasa
+            childCount = childCount !== null ? childCount : $('#child_count').val() || 0;
 
             $.ajax({
                 url: "{{ route('data.search') }}",
@@ -698,7 +725,7 @@
                 },
                 success: function(response) {
                     if (response.html) {
-                        // Hasil baru ditemukan, tampilkan tabel hasil
+                        // Tampilkan tabel hasil tanpa mereset
                         $('#booking-data-table tbody').html(response.html);
                         $('.card-title').html(response.card_title);
 
@@ -706,13 +733,16 @@
                         let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) || 0;
                         let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
 
-                        let adultCount = parseInt($('#adult_count').val()) || 1;
-                        let childCount = parseInt($('#child_count').val()) || 0;
+                        // Perhitungan total diskon hanya untuk orang dewasa (adultCount), bukan total customer
+                        let totalDiscount = adultCount * discountPerPerson;
 
-                        let totalDiscount = (adultCount + childCount) * discountPerPerson;
+                        // Total harga sebelum diskon
                         let totalPriceBeforeDiscount = (adultPublishPrice * adultCount) + (childPublishPrice * childCount);
+
+                        // Total harga setelah diskon
                         let totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
 
+                        // Pastikan total tidak negatif
                         if (totalPriceAfterDiscount < 0) {
                             totalPriceAfterDiscount = 0;
                         }
@@ -721,27 +751,8 @@
                         $('#child_publish').val(response.child_publish);
                         $('#total_end').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
 
-                        // Ambil nilai rate dan kode mata uang yang dipilih dari dropdown
-                        let selectedOption = $('#currency').find('option:selected');
-                        let rate = parseFloat(selectedOption.data('rate')) || 1; // Default ke 1 jika rate tidak ditemukan
-                        let currencyCode = selectedOption.data('code') || 'IDR'; // Default ke IDR jika kode tidak ditemukan
-
-                        // Lakukan konversi jika rate tidak sama dengan 1
-                        let convertedTotal = totalPriceAfterDiscount / rate;
-
-                        // Format hasil konversi
-                        let formattedTotal = convertedTotal.toLocaleString('id-ID', {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        });
-
-                        // Set nilai pada kolom currency_end
-                        $('#currency_end').val(formattedTotal);
-
-                        console.log('Formatted Total:', formattedTotal);
-
-                        // Perbarui label sesuai dengan mata uang yang dipilih
-                        updateCurrencyLabel();
+                        // Update nilai currency_end berdasarkan currency yang dipilih
+                        updateCurrencyTotal(); // Menghitung nilai currency setelah pencarian
 
                         // Tampilkan hasil pencarian baru
                         $('#search-results').show();
@@ -757,11 +768,24 @@
             });
         }
 
-        // Ketika jumlah orang dewasa atau anak-anak diubah, sembunyikan hasil pencarian dan minta pencarian ulang
+        // Ketika jumlah orang dewasa atau anak-anak diubah, lakukan pencarian ulang tanpa reset hasil
         $('#adult_count, #child_count').on('change', function() {
-            $('#trip_date').val('');
-            resetSearchResults(); // Sembunyikan hasil pencarian
-            resetDropdowns(); // Bersihkan dropdown
+            let tripDate = $('#trip_date').val();
+            let departurePort = $('#departure_port').val();
+            let arrivalPort = $('#arrival_port').val();
+            let fastBoat = $('#fast_boat').val();
+            let timeDept = $('#time_dept').val();
+
+            let adultCount = $('#adult_count').val() || 1;
+            let childCount = $('#child_count').val() || 0;
+
+            // Lakukan pencarian ulang dengan nilai terbaru
+            performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept, adultCount, childCount);
+        });
+
+        // Event listener untuk dropdown currency agar saat diganti, currency_end otomatis diperbarui
+        $('#currency').on('change', function() {
+            updateCurrencyTotal(); // Mengupdate currency setiap kali dropdown diubah
         });
 
         // Fungsi untuk mendapatkan jumlah customer
@@ -774,19 +798,9 @@
             };
         }
 
-        // Bersihkan dropdown ketika input berubah
-        function resetDropdowns() {
-            $('#departure_port').empty().append('<option value="">Select Departure Port</option>');
-            $('#arrival_port').empty().append('<option value="">Select Arrival Port</option>');
-            $('#fast_boat').empty().append('<option value="">Select Fast Boat</option>');
-            $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
-        }
-
-
         // Ketika tanggal dipilih, reset dropdown dan ambil data untuk Departure Port
         $('#trip_date').change(function() {
             resetSearchResults(); // Sembunyikan hasil pencarian saat tanggal berubah
-            resetDropdowns(); // Reset dropdown
 
             var tripDate = $(this).val();
             var customerCount = getCustomerCount(); // Ambil jumlah customer
