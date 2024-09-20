@@ -29,7 +29,7 @@ class BookingDataController extends Controller
         $route = DataRoute::all();
         $deptTime = FastboatTrip::all();
         $availability = FastboatAvailability::all();
-        $currency = MasterCurrency::all();
+        $currency = MasterCurrency::where('cy_status', '1')->get();
         $nationality = MasterNationality::all();
         return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability', 'currency', 'nationality'));
     }
