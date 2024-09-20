@@ -86,18 +86,21 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Payment Status</label>
-                                                    <input id="fb_name" name="fb_name"
-                                                        placeholder="Enter Payment Status" type="text"
-                                                        class="form-control" required>
+                                                    <label class="form-label">Payment Status</label><br>
+                                                    <label>
+                                                        <input type="radio" name="payment_status" value="paid" id="paid"> Paid
+                                                    </label>
+                                                    <label>
+                                                        <input type="radio" name="payment_status" value="unpaid" id="unpaid"> Unpaid
+                                                    </label>
                                                 </div>
                                             </div>
+
+                                            <!-- Payment Method -->
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="payment_method">Payment
-                                                        Method</label>
-                                                    <select id="payment_method" name="payment_method"
-                                                        class="form-control" required>
+                                                    <label class="form-label" for="payment_method">Payment Method</label>
+                                                    <select id="payment_method" name="payment_method" class="form-control" disabled required>
                                                         <option value="">Select Payment Method</option>
                                                         <option value="paypal">Paypal</option>
                                                         <option value="midtrans">Midtrans</option>
@@ -109,56 +112,51 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <!-- paypal -->
-                                            <div class="col-md-3 transaction-id" id="paypal_transaction_id"
-                                                style="display: none;">
+
+                                            <!-- Paypal Transaction ID -->
+                                            <div class="col-md-3 transaction-id" id="paypal_transaction_id" style="display: none;">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="paypal_tid">Transaction ID</label>
-                                                    <input id="paypal_tid" name="paypal_tid"
-                                                        placeholder="Type Paypal Transaction ID" type="text"
-                                                        class="form-control">
+                                                    <input id="paypal_tid" name="paypal_tid" placeholder="Type Paypal Transaction ID" type="text" class="form-control">
                                                 </div>
                                             </div>
-                                            <!-- midtrans -->
-                                            <div class="col-md-3 transaction-id" id="midtrans_transaction_id"
-                                                style="display: none;">
+
+                                            <!-- Midtrans Transaction ID -->
+                                            <div class="col-md-3 transaction-id" id="midtrans_transaction_id" style="display: none;">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="midtrans_tid">Transaction
-                                                        ID</label>
-                                                    <input id="midtrans_tid" name="midtrans_tid"
-                                                        placeholder="Type Midtrans Transaction ID" type="text"
-                                                        class="form-control">
+                                                    <label class="form-label" for="midtrans_tid">Transaction ID</label>
+                                                    <input id="midtrans_tid" name="midtrans_tid" placeholder="Type Midtrans Transaction ID" type="text" class="form-control">
                                                 </div>
                                             </div>
-                                            <!-- bank transfer -->
-                                            <div class="col-md-3 transaction-id" id="bank_transfer_transaction_id"
-                                                style="display: none;">
+
+                                            <!-- Bank Transfer Transaction ID -->
+                                            <div class="col-md-3 transaction-id" id="bank_transfer_transaction_id" style="display: none;">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="bank_transfer_tid">Transaction
-                                                        ID</label>
-                                                    <input id="bank_transfer_tid" name="bank_transfer_tid"
-                                                        placeholder="Type Bank Transaction ID" type="text"
-                                                        class="form-control">
+                                                    <label class="form-label" for="bank_transfer_tid">Transaction ID</label>
+                                                    <input id="bank_transfer_tid" name="bank_transfer_tid" placeholder="Type Bank Transaction ID" type="text" class="form-control">
                                                 </div>
                                             </div>
-                                            <!-- cash -->
-                                            <div class="col-md-3 transaction-id" id="cash_transaction_id"
-                                                style="display: none;">
+
+                                            <!-- Cash Transaction ID -->
+                                            <div class="col-md-3 transaction-id" id="cash_transaction_id" style="display: none;">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="cash_tid">Transaction ID</label>
-                                                    <input id="cash_tid" name="cash_tid"
-                                                        placeholder="Type Recipient" type="text"
-                                                        class="form-control">
+                                                    <input id="cash_tid" name="cash_tid" placeholder="Type Recipient" type="text" class="form-control">
                                                 </div>
                                             </div>
-                                            <!-- agent -->
-                                            <div class="col-md-3 transaction-id" id="agent_transaction_id"
-                                                style="display: none;">
+
+                                            <!-- Agent Transaction ID -->
+                                            <div class="col-md-3 transaction-id" id="agent_transaction_id" style="display: none;">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="agent_tid">Transaction ID</label>
-                                                    <input id="agent_tid" name="agent_tid"
-                                                        placeholder="Agen Transaction ID" type="text"
-                                                        class="form-control">
+                                                    <label class="form-label" for="agent_tid">Agent</label>
+                                                    <select id="agent_tid" name="agent_tid" class="form-control">
+                                                        <option value="">Select Agent</option>
+                                                        <option value="Agen A">Agen A</option>
+                                                        <option value="Agen B">Agen B</option>
+                                                        <option value="Agen C">Agen C</option>
+                                                        <option value="Agen D">Agen D</option>
+                                                        <option value="Agen E">Agen E</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -632,7 +630,7 @@
             let arrivalPort = $('#arrival_port').val();
             let fastBoat = $('#fast_boat').val();
             let timeDept = $('#time_dept').val();
-            
+
             // Cek apakah semua field sudah diisi
             if (tripDate && departurePort && arrivalPort && fastBoat && timeDept) {
                 performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept);
@@ -1354,6 +1352,66 @@
 
         // Initialize info on page load
         updateInfo();
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paidRadio = document.getElementById('paid');
+        const unpaidRadio = document.getElementById('unpaid');
+        const paymentMethod = document.getElementById('payment_method');
+        const transactionIds = document.querySelectorAll('.transaction-id'); // All Transaction ID elements
+
+        // Function untuk menonaktifkan input Payment Method dan sembunyikan semua Transaction ID
+        function disablePaymentFields() {
+            paymentMethod.disabled = true;
+            paymentMethod.value = "";
+            transactionIds.forEach(function(element) {
+                element.style.display = 'none';
+                element.querySelector('input, select').value = ''; // Reset field value
+            });
+        }
+
+        // Function untuk mengaktifkan input Payment Method
+        function enablePaymentFields() {
+            paymentMethod.disabled = false;
+        }
+
+        // Event listener untuk radio button Paid
+        paidRadio.addEventListener('change', function() {
+            if (this.checked) {
+                enablePaymentFields(); // Aktifkan Payment Method
+            }
+        });
+
+        // Event listener untuk radio button Unpaid
+        unpaidRadio.addEventListener('change', function() {
+            if (this.checked) {
+                disablePaymentFields(); // Nonaktifkan Payment Method dan Transaction IDs
+            }
+        });
+
+        // Event listener untuk Payment Method
+        paymentMethod.addEventListener('change', function() {
+            // Sembunyikan semua Transaction ID
+            transactionIds.forEach(function(element) {
+                element.style.display = 'none';
+                element.querySelector('input, select').value = ''; // Reset field value
+            });
+
+            // Tampilkan Transaction ID berdasarkan Payment Method yang dipilih
+            const selectedMethod = this.value;
+            if (selectedMethod) {
+                document.getElementById(selectedMethod + '_transaction_id').style.display = 'block';
+            }
+        });
+
+        // Pada saat halaman di-load, cek apakah Paid atau Unpaid yang dipilih
+        if (paidRadio.checked) {
+            enablePaymentFields();
+        } else if (unpaidRadio.checked) {
+            disablePaymentFields();
+        }
     });
 </script>
 @endsection
