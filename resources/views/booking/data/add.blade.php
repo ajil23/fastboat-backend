@@ -1244,8 +1244,8 @@
                             <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
                             <select id="adult_gender_${i}" name="adult_gender_${i}" class="form-control">
                                 <option value="">Select Gender</option>
-                                <option value="Woman">Woman</option>
-                                <option value="Man">Man</option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
                             </select>
                         </div>
                     </div>
@@ -1287,8 +1287,8 @@
                             <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
                             <select id="child_gender_${i}" name="child_gender_${i}" class="form-control">
                                 <option value="">Select Gender</option>
-                                <option value="Woman">Woman</option>
-                                <option value="Man">Man</option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
                             </select>
                         </div>
                     </div>
@@ -1330,8 +1330,8 @@
                             <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
                             <select id="infant_gender_${i}" name="infant_gender_${i}" class="form-control">
                                 <option value="">Select Gender</option>
-                                <option value="Woman">Woman</option>
-                                <option value="Man">Man</option>
+                                <option value="Female">Female</option>
+                                <option value="Male">Male</option>
                             </select>
                         </div>
                     </div>
