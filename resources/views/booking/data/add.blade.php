@@ -106,13 +106,9 @@
                                                     <select id="payment_method" name="payment_method"
                                                         class="form-control" disabled required>
                                                         <option value="">Select Payment Method</option>
-                                                        <option value="paypal">Paypal</option>
-                                                        <option value="midtrans">Midtrans</option>
-                                                        <option value="bank_transfer">Bank Transfer</option>
-                                                        <option value="pak_anang">Pak Anang</option>
-                                                        <option value="pay_on_port">Pay on Port (collect)</option>
-                                                        <option value="cash">Cash</option>
-                                                        <option value="agent">Agent</option>
+                                                        @foreach ($payment_method as $item)
+                                                        <option value="{{$item->py_value}}">{{$item->py_name}}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>

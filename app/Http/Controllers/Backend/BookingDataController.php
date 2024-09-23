@@ -10,7 +10,7 @@ use App\Models\MasterPort;
 use App\Models\FastboatTrip;
 use App\Models\MasterCurrency;
 use App\Models\MasterNationality;
-
+use App\Models\MasterPaymentMethod;
 use Illuminate\Http\Request;
 
 class BookingDataController extends Controller
@@ -31,7 +31,8 @@ class BookingDataController extends Controller
         $availability = FastboatAvailability::all();
         $currency = MasterCurrency::where('cy_status', '1')->get();
         $nationality = MasterNationality::all();
-        return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability', 'currency', 'nationality'));
+        $payment_method = MasterPaymentMethod::all();
+        return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability', 'currency', 'nationality', 'payment_method'));
     }
 
     public function store()
