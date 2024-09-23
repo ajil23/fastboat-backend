@@ -1119,7 +1119,7 @@
         }
 
         // Event listener untuk memulai pencarian saat semua input telah terisi
-        $('#trip_return_date, #departure_return_port, #arrival_return_port, #fast_boat_return, #time_dept_return').on('change keyup', function() {
+        $('#trip_return_date, #departure_return_port, #arrival_return_port, #fast_boat_return, #time_dept_return').on('change keyup input click', function() {
             let tripDateReturn = $('#trip_return_date').val();
             let departurePortReturn = $('#departure_return_port').val();
             let arrivalPortReturn = $('#arrival_return_port').val();
@@ -1133,7 +1133,7 @@
 
 
         // Ketika jumlah dewasa atau anak diubah, lakukan pencarian ulang tanpa reset hasil
-        $('#adult_count, #child_count').on('change', function() {
+        $('#adult_count, #child_count').on('input', function() {
             let tripDateReturn = $('#trip_return_date').val();
             let departurePortReturn = $('#departure_return_port').val();
             let arrivalPortReturn = $('#arrival_return_port').val();
@@ -1239,7 +1239,7 @@
                 }, customerCount),
                 success: function(response) {
                     $('#fast_boat_return').empty().append(
-                        '<option value="">Select Time Dept</option>');
+                        '<option value="">Select Fast Boat</option>');
                     $.each(response.fast_boats_return, function(index, boat) {
                         $('#fast_boat_return').append('<option value="' + boat +
                             '">' + boat + '</option>');
@@ -1306,6 +1306,22 @@
 <script>
     $(document).ready(function() {
         function updateInfo() {
+            // Simpan nilai yang sudah diisi sebelumnya
+            var previousAdultValues = {};
+            $('#adult_info input, #adult_info select').each(function() {
+                previousAdultValues[$(this).attr('id')] = $(this).val();
+            });
+
+            var previousChildValues = {};
+            $('#child_info input, #child_info select').each(function() {
+                previousChildValues[$(this).attr('id')] = $(this).val();
+            });
+
+            var previousInfantValues = {};
+            $('#infant_info input, #infant_info select').each(function() {
+                previousInfantValues[$(this).attr('id')] = $(this).val();
+            });
+
             // Clear all current info
             $('#adult_info, #child_info, #infant_info').empty();
 
@@ -1317,45 +1333,44 @@
             // Create Adult Info
             for (var i = 1; i <= adultCount; i++) {
                 $('#adult_info').append(`
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
-                            <input id="adult_name_${i}" name="adult_name_${i}" type="text" placeholder="Enter Name" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="adult_age_${i}">Adult ${i} Age</label>
-                            <select id="adult_age_${i}" name="adult_age_${i}" class="form-control">
-                                <option value="">Select Age</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
-                            <select id="adult_gender_${i}" name="adult_gender_${i}" class="form-control">
-                                <option value="">Select Gender</option>
-                                <option value="Female">Female</option>
-                                <option value="Male">Male</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
-                            <select id="adult_nationality_${i}" name="adult_nationality_${i}" class="nationality-select">
-                                <option value="">Select Nationality</option>
-                                @foreach ($nationality as $item)
-                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
+                        <input id="adult_name_${i}" name="adult_name_${i}" type="text" placeholder="Enter Name" class="form-control">
                     </div>
                 </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="adult_age_${i}">Adult ${i} Age</label>
+                        <select id="adult_age_${i}" name="adult_age_${i}" class="form-control">
+                            <option value="">Select Age</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
+                        <select id="adult_gender_${i}" name="adult_gender_${i}" class="form-control">
+                            <option value="">Select Gender</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
+                        <select id="adult_nationality_${i}" name="adult_nationality_${i}" class="nationality-select">
+                            <option value="">Select Nationality</option>
+                            @foreach ($nationality as $item)
+                            <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
             `);
-                // Logika untuk menambahkan opsi umur secara otomatis
                 var ageSelect = $(`#adult_age_${i}`);
                 for (var age = 13; age <= 49; age++) {
                     ageSelect.append(`<option value="${age}">${age}</option>`);
@@ -1366,47 +1381,46 @@
             // Create Child Info
             for (var i = 1; i <= childCount; i++) {
                 $('#child_info').append(`
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
-                            <input id="child_name_${i}" name="child_name_${i}" type="text" placeholder="Enter Name" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="child_age_${i}">Child ${i} Age</label>
-                            <select id="child_age_${i}" name="child_age_${i}" class="form-control">
-                                <option value="">Select Age</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
-                            <select id="child_gender_${i}" name="child_gender_${i}" class="form-control">
-                                <option value="">Select Gender</option>
-                                <option value="Female">Female</option>
-                                <option value="Male">Male</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
-                            <select id="child_nationality_${i}" name="child_nationality_${i}" class="nationality-select">
-                                <option value="">Select Nationality</option>
-                                @foreach ($nationality as $item)
-                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
+                        <input id="child_name_${i}" name="child_name_${i}" type="text" placeholder="Enter Name" class="form-control">
                     </div>
                 </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="child_age_${i}">Child ${i} Age</label>
+                        <select id="child_age_${i}" name="child_age_${i}" class="form-control">
+                            <option value="">Select Age</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
+                        <select id="child_gender_${i}" name="child_gender_${i}" class="form-control">
+                            <option value="">Select Gender</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
+                        <select id="child_nationality_${i}" name="child_nationality_${i}" class="nationality-select">
+                            <option value="">Select Nationality</option>
+                            @foreach ($nationality as $item)
+                            <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
             `);
-                // Logika untuk menambahkan opsi umur secara otomatis
                 var ageSelect = $(`#child_age_${i}`);
-                for (var age = 3; age <= 12; age++) { // Misalnya untuk bayi, umur maksimal 5 tahun
+                for (var age = 3; age <= 12; age++) {
                     ageSelect.append(`<option value="${age}">${age}</option>`);
                 }
             }
@@ -1414,50 +1428,61 @@
             // Create Infant Info
             for (var i = 1; i <= infantCount; i++) {
                 $('#infant_info').append(`
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
-                            <input id="infant_name_${i}" name="infant_name_${i}" type="text" placeholder="Enter Name" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="infant_age_${i}">Infant ${i} Age</label>
-                            <select id="infant_age_${i}" name="infant_age_${i}" class="form-control">
-                                <option value="">Select Age</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
-                            <select id="infant_gender_${i}" name="infant_gender_${i}" class="form-control">
-                                <option value="">Select Gender</option>
-                                <option value="Female">Female</option>
-                                <option value="Male">Male</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="mb-3">
-                            <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
-                            <select id="infant_nationality_${i}" name="infant_nationality_${i}" class="nationality-select">
-                                <option value="">Select Nationality</option>
-                                @foreach ($nationality as $item)
-                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
+                        <input id="infant_name_${i}" name="infant_name_${i}" type="text" placeholder="Enter Name" class="form-control">
                     </div>
                 </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="infant_age_${i}">Infant ${i} Age</label>
+                        <select id="infant_age_${i}" name="infant_age_${i}" class="form-control">
+                            <option value="">Select Age</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
+                        <select id="infant_gender_${i}" name="infant_gender_${i}" class="form-control">
+                            <option value="">Select Gender</option>
+                            <option value="Female">Female</option>
+                            <option value="Male">Male</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
+                        <select id="infant_nationality_${i}" name="infant_nationality_${i}" class="nationality-select">
+                            <option value="">Select Nationality</option>
+                            @foreach ($nationality as $item)
+                            <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
             `);
-                // Logika untuk menambahkan opsi umur secara otomatis
                 var ageSelect = $(`#infant_age_${i}`);
-                for (var age = 0; age <= 2; age++) { // Misalnya untuk bayi, umur maksimal 5 tahun
+                for (var age = 0; age <= 2; age++) {
                     ageSelect.append(`<option value="${age}">${age}</option>`);
                 }
             }
+
+            // Kembalikan nilai yang disimpan ke input dan select
+            $.each(previousAdultValues, function(id, value) {
+                $('#' + id).val(value);
+            });
+            $.each(previousChildValues, function(id, value) {
+                $('#' + id).val(value);
+            });
+            $.each(previousInfantValues, function(id, value) {
+                $('#' + id).val(value);
+            });
+
             // Initialize Tom Select on all newly created select elements with class 'nationality-select'
             $('.nationality-select').each(function() {
                 new TomSelect(this);
@@ -1474,67 +1499,66 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-    const paidRadio = document.getElementById('paid');
-    const unpaidRadio = document.getElementById('unpaid');
-    const paymentMethod = document.getElementById('payment_method');
-    const paymentMethodLabel = document.querySelector('label[for="payment_method"]'); // Menangkap label
-    const transactionIds = document.querySelectorAll('.transaction-id'); // All Transaction ID elements
+        const paidRadio = document.getElementById('paid');
+        const unpaidRadio = document.getElementById('unpaid');
+        const paymentMethod = document.getElementById('payment_method');
+        const paymentMethodLabel = document.querySelector('label[for="payment_method"]'); // Menangkap label
+        const transactionIds = document.querySelectorAll('.transaction-id'); // All Transaction ID elements
 
-    // Function untuk menonaktifkan input Payment Method dan sembunyikan semua Transaction ID
-    function disablePaymentFields() {
-        paymentMethod.style.display = 'none'; // Sembunyikan Payment Method
-        paymentMethod.disabled = true;
-        paymentMethod.value = "";
-        paymentMethodLabel.style.display = 'none'; // Sembunyikan label Payment Method
-        transactionIds.forEach(function(element) {
-            element.style.display = 'none';
-            element.querySelector('input, select').value = ''; // Reset field value
-        });
-    }
-
-    // Function untuk mengaktifkan input Payment Method
-    function enablePaymentFields() {
-        paymentMethod.style.display = 'block'; // Tampilkan Payment Method
-        paymentMethod.disabled = false;
-        paymentMethodLabel.style.display = 'block'; // Tampilkan label Payment Method
-    }
-
-    // Event listener untuk radio button Paid
-    paidRadio.addEventListener('change', function() {
-        if (this.checked) {
-            enablePaymentFields(); // Aktifkan Payment Method
+        // Function untuk menonaktifkan input Payment Method dan sembunyikan semua Transaction ID
+        function disablePaymentFields() {
+            paymentMethod.style.display = 'none'; // Sembunyikan Payment Method
+            paymentMethod.disabled = true;
+            paymentMethod.value = "";
+            paymentMethodLabel.style.display = 'none'; // Sembunyikan label Payment Method
+            transactionIds.forEach(function(element) {
+                element.style.display = 'none';
+                element.querySelector('input, select').value = ''; // Reset field value
+            });
         }
-    });
 
-    // Event listener untuk radio button Unpaid
-    unpaidRadio.addEventListener('change', function() {
-        if (this.checked) {
-            disablePaymentFields(); // Nonaktifkan Payment Method dan Transaction IDs
+        // Function untuk mengaktifkan input Payment Method
+        function enablePaymentFields() {
+            paymentMethod.style.display = 'block'; // Tampilkan Payment Method
+            paymentMethod.disabled = false;
+            paymentMethodLabel.style.display = 'block'; // Tampilkan label Payment Method
         }
-    });
 
-    // Event listener untuk Payment Method
-    paymentMethod.addEventListener('change', function() {
-        // Sembunyikan semua Transaction ID
-        transactionIds.forEach(function(element) {
-            element.style.display = 'none';
-            element.querySelector('input, select').value = ''; // Reset field value
+        // Event listener untuk radio button Paid
+        paidRadio.addEventListener('change', function() {
+            if (this.checked) {
+                enablePaymentFields(); // Aktifkan Payment Method
+            }
         });
 
-        // Tampilkan Transaction ID berdasarkan Payment Method yang dipilih
-        const selectedMethod = this.value;
-        if (selectedMethod) {
-            document.getElementById(selectedMethod + '_transaction_id').style.display = 'block';
+        // Event listener untuk radio button Unpaid
+        unpaidRadio.addEventListener('change', function() {
+            if (this.checked) {
+                disablePaymentFields(); // Nonaktifkan Payment Method dan Transaction IDs
+            }
+        });
+
+        // Event listener untuk Payment Method
+        paymentMethod.addEventListener('change', function() {
+            // Sembunyikan semua Transaction ID
+            transactionIds.forEach(function(element) {
+                element.style.display = 'none';
+                element.querySelector('input, select').value = ''; // Reset field value
+            });
+
+            // Tampilkan Transaction ID berdasarkan Payment Method yang dipilih
+            const selectedMethod = this.value;
+            if (selectedMethod) {
+                document.getElementById(selectedMethod + '_transaction_id').style.display = 'block';
+            }
+        });
+
+        // Pada saat halaman di-load, cek apakah Paid atau Unpaid yang dipilih
+        if (paidRadio.checked) {
+            enablePaymentFields();
+        } else if (unpaidRadio.checked) {
+            disablePaymentFields();
         }
     });
-
-    // Pada saat halaman di-load, cek apakah Paid atau Unpaid yang dipilih
-    if (paidRadio.checked) {
-        enablePaymentFields();
-    } else if (unpaidRadio.checked) {
-        disablePaymentFields();
-    }
-});
-
 </script>
 @endsection
