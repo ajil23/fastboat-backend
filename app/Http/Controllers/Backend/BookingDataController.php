@@ -93,7 +93,8 @@ class BookingDataController extends Controller
                         $query->where('fb_name', $fastBoat);
                     })
                     ->where('fbt_dept_time', $timeDept)
-                    ->whereDate('fbt_trip_date', $tripDate);
+                    ->whereDate('fbt_trip_date', $tripDate)
+                    ->where('fbt_stock', '>', $totalCustomer); // Asumsikan ada field fbt_stock
 
                 $trips = $tripQuery->get();
 
@@ -198,6 +199,16 @@ class BookingDataController extends Controller
 
             $availabilities = $query->get();
 
+            // Jika tidak ada availability, tidak perlu melanjutkan
+            if ($availabilities->isEmpty()) {
+                return response()->json([
+                    'departure_ports' => [],
+                    'arrival_ports' => [],
+                    'fast_boats' => [],
+                    'time_depts' => [],
+                ]);
+            }
+
             // Format data untuk dropdown
             $departurePorts = [];
             $arrivalPorts = [];
@@ -246,30 +257,19 @@ class BookingDataController extends Controller
     public function searchReturn(Request $request)
     {
         try {
-            // Ambil data dari request dengan validasi sederhana
-            $validated = $request->validate([
-                'trip_return_date' => 'required|date',
-                'departure_return_port' => 'required|string',
-                'arrival_return_port' => 'required|string',
-                'fast_boat_return' => 'required|string',
-                'time_dept_return' => 'required|string',
-                'adult_count' => 'integer|min:1',
-                'child_count' => 'integer|min:0',
-            ]);
-
-            // Assign variabel dengan fallback default
-            $tripDateReturn = $validated['trip_return_date'];
-            $departurePortReturn = $validated['departure_return_port'];
-            $arrivalPortReturn = $validated['arrival_return_port'];
-            $fastBoatReturn = $validated['fast_boat_return'];
-            $timeDeptReturn = $validated['time_dept_return'];
-            $adultCountReturn = $request->input('adult_count', 1);
-            $childCountReturn = $request->input('child_count', 0);
+            // Ambil data dari request
+            $tripDateReturn = $request->input('trip_return_date');
+            $departurePortReturn = $request->input('departure_return_port');
+            $arrivalPortReturn = $request->input('arrival_return_port');
+            $fastBoatReturn = $request->input('fast_boat_return');
+            $timeDeptReturn = $request->input('time_dept_return');
+            $adultCountReturn = $request->input('adult_count', 1); // Default 1 dewasa
+            $childCountReturn = $request->input('child_count', 0); // Default 0 anak-anak
 
             // Total customer
             $totalCustomerReturn = $adultCountReturn + $childCountReturn;
 
-            // Query untuk FastboatAvailability dengan semua filter yang diperlukan
+            // Query untuk FastboatAvailability dengan pengecekan stok
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePortReturn) {
                 $query->where('prt_name_en', $departurePortReturn);
             })
@@ -308,7 +308,7 @@ class BookingDataController extends Controller
                     })
                     ->where('fbt_dept_time', $timeDeptReturn)
                     ->whereDate('fbt_trip_date', $tripDateReturn)
-                    ->where('fbt_stock', '>', $totalCustomerReturn); // Asumsikan ada field fbt_stock
+                    ->where('fbt_stock', '>', $totalCustomerReturn);
 
                 $trips = $tripQuery->get();
 
@@ -319,12 +319,12 @@ class BookingDataController extends Controller
                 // Jika availability tidak ada, gunakan data dari trip
                 $availability = $trips->map(function ($trip) {
                     return (object)[
-                        'fba_adult_publish' => 0,
-                        'fba_child_publish' => 0,
-                        'fba_adult_nett' => 0,
-                        'fba_child_nett' => 0,
-                        'fba_discount' => 0,
-                        'fba_dept_time' => $trip->fbt_dept_time,
+                        'fba_adult_publish' => null,
+                        'fba_child_publish' => null,
+                        'fba_adult_nett' => null,
+                        'fba_child_nett' => null,
+                        'fba_discount' => null,
+                        'fba_dept_time' => null,
                         'trip' => $trip,
                     ];
                 });
@@ -340,31 +340,26 @@ class BookingDataController extends Controller
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
 
-                // Tentukan waktu keberangkatan (prioritas fba_dept_time jika ada, jika tidak ada gunakan fbt_dept_time dari trip)
+                // Tentukan waktu keberangkatan
                 $deptTimeReturn = $avail->fba_dept_time ?? $trip->fbt_dept_time;
 
-                // Buat card-title dengan format (Nama Fastboat (Code Departure -> Code Arrival Time Dept))
-                $cardTitleReturn = '<center>' . htmlspecialchars($trip->fastboat->fb_name, ENT_QUOTES, 'UTF-8') . ' (' .
-                    htmlspecialchars($trip->departure->prt_code, ENT_QUOTES, 'UTF-8') . ' -> ' .
-                    htmlspecialchars($trip->arrival->prt_code, ENT_QUOTES, 'UTF-8') . ' ' .
+                // Buat card-title
+                $cardTitleReturn = '<center>' . $trip->fastboat->fb_name . ' (' .
+                    $trip->departure->prt_code . ' -> ' .
+                    $trip->arrival->prt_code . ' ' .
                     date('H:i', strtotime($deptTimeReturn)) . ')</center>';
 
                 $htmlReturn .= '<tr>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_publish, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_publish, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_nett, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_nett, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_discount, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_publish ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_publish ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
                 $htmlReturn .= '</tr>';
 
-                // Update perhitungan total
-                $adultPublishTotalReturn += $avail->fba_adult_publish;
-                $childPublishTotalReturn += $avail->fba_child_publish;
-
-                // Update total diskon per orang (ambil diskon dari availability pertama)
-                if ($discountPerPersonReturn === 0) {
-                    $discountPerPersonReturn = $avail->fba_discount;
-                }
+                $adultPublishTotalReturn += $avail->fba_adult_publish ?? 0;
+                $childPublishTotalReturn += $avail->fba_child_publish ?? 0;
+                $discountPerPersonReturn = $avail->fba_discount ?? 0;
             }
 
             // Return hasil HTML dan perhitungan
@@ -375,10 +370,7 @@ class BookingDataController extends Controller
                 'child_return_publish' => number_format($childPublishTotalReturn, 0, ',', '.'),
                 'discount_return' => number_format($discountPerPersonReturn, 0, ',', '.'),
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['message' => 'Invalid input', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            // Log error untuk debugging
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
@@ -386,18 +378,8 @@ class BookingDataController extends Controller
     public function getFilteredDataReturn(Request $request)
     {
         try {
-            // Ambil data dari request dengan validasi sederhana
-            $validated = $request->validate([
-                'trip_return_date' => 'required|date',
-                'departure_return_port' => 'sometimes|string',
-                'arrival_return_port' => 'sometimes|string',
-                'fast_boat_return' => 'sometimes|string',
-                'adult_count' => 'integer|min:1',
-                'child_count' => 'integer|min:0',
-            ]);
-
             // Assign variabel dengan fallback default
-            $tripDateReturn = $validated['trip_return_date'];
+            $tripDateReturn = $request['trip_return_date'];
             $departurePortReturn = $request->input('departure_return_port');
             $arrivalPortReturn = $request->input('arrival_return_port');
             $fastBoatReturn = $request->input('fast_boat_return');
@@ -484,8 +466,6 @@ class BookingDataController extends Controller
                 'fast_boats_return' => $fastBoatsReturn,
                 'time_depts_return' => $timeDeptsReturn,
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['message' => 'Invalid input', 'errors' => $e->errors()], 422);
         } catch (\Exception $e) {
             // Log error untuk debugging
             return response()->json(['message' => 'Internal Server Error'], 500);
