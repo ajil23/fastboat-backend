@@ -570,26 +570,16 @@
                                 </div>
                             </div>
                             <div class="card custom-border-color">
-                                <a class="text-body" data-bs-toggle="collapse" aria-expanded="true"
-                                    aria-controls="addproduct-productinfo-collapse">
-                                    <div class="p-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Other</h5>
-                                                <p class="text-muted text-truncate mb-0">If there are certain
-                                                    conditions, please add notes</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </a>
                                 <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <!-- Form Pencarian -->
                                         <form id="note">
                                             <div class="row">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="trip_return_date">Note</label>
-                                                    <textarea class="form-control" name="" id=""></textarea>
+                                                    <label class="form-label font-size-16 mb-1" for="trip_return_date">Note</label>
+                                                    <p class="text-muted text-truncate mb-0">If there are certain
+                                                    conditions, please add notes</p>
+                                                    <textarea style="border-color: lightgray;" class="form-control" name="" id=""></textarea>
                                                 </div>
                                             </div>
                                         </form>
@@ -788,7 +778,7 @@
         }
 
         // Ketika jumlah orang dewasa atau anak-anak diubah, lakukan pencarian ulang tanpa reset hasil
-        $('#adult_count, #child_count').on('change', function() {
+        $('#adult_count, #child_count').on('input', function() {
             let tripDate = $('#trip_date').val();
             let departurePort = $('#departure_port').val();
             let arrivalPort = $('#arrival_port').val();
