@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ShuttleAreaSeeder::class);
         $this->call(CurrencySeeder::class);
         $this->call(NationalitySeeder::class);
+        $this->call(PaymentMethodSeeder::class);
     }
 }
