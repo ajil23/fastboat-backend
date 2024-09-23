@@ -73,7 +73,7 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="currency">Currency</label>
                                                     <select id="currency" name="currency" required>
-                                                        <option value="">Select Currency</option>
+                                                        <option value="10" data-rate="1" data-code="IDR">Indonesia Rupiah (IDR)</option>
                                                         @foreach ($currency as $item)
                                                         <option value="{{ $item->cy_id }}"
                                                             data-rate="{{ $item->cy_rate }}"
@@ -93,7 +93,7 @@
                                                     </label>
                                                     <label>
                                                         <input type="radio" name="payment_status" value="unpaid"
-                                                            id="unpaid"> Unpaid
+                                                            id="unpaid" checked="checked"> Unpaid
                                                     </label>
                                                 </div>
                                             </div>
@@ -1474,61 +1474,67 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const paidRadio = document.getElementById('paid');
-        const unpaidRadio = document.getElementById('unpaid');
-        const paymentMethod = document.getElementById('payment_method');
-        const transactionIds = document.querySelectorAll('.transaction-id'); // All Transaction ID elements
+    const paidRadio = document.getElementById('paid');
+    const unpaidRadio = document.getElementById('unpaid');
+    const paymentMethod = document.getElementById('payment_method');
+    const paymentMethodLabel = document.querySelector('label[for="payment_method"]'); // Menangkap label
+    const transactionIds = document.querySelectorAll('.transaction-id'); // All Transaction ID elements
 
-        // Function untuk menonaktifkan input Payment Method dan sembunyikan semua Transaction ID
-        function disablePaymentFields() {
-            paymentMethod.disabled = true;
-            paymentMethod.value = "";
-            transactionIds.forEach(function(element) {
-                element.style.display = 'none';
-                element.querySelector('input, select').value = ''; // Reset field value
-            });
-        }
-
-        // Function untuk mengaktifkan input Payment Method
-        function enablePaymentFields() {
-            paymentMethod.disabled = false;
-        }
-
-        // Event listener untuk radio button Paid
-        paidRadio.addEventListener('change', function() {
-            if (this.checked) {
-                enablePaymentFields(); // Aktifkan Payment Method
-            }
+    // Function untuk menonaktifkan input Payment Method dan sembunyikan semua Transaction ID
+    function disablePaymentFields() {
+        paymentMethod.style.display = 'none'; // Sembunyikan Payment Method
+        paymentMethod.disabled = true;
+        paymentMethod.value = "";
+        paymentMethodLabel.style.display = 'none'; // Sembunyikan label Payment Method
+        transactionIds.forEach(function(element) {
+            element.style.display = 'none';
+            element.querySelector('input, select').value = ''; // Reset field value
         });
+    }
 
-        // Event listener untuk radio button Unpaid
-        unpaidRadio.addEventListener('change', function() {
-            if (this.checked) {
-                disablePaymentFields(); // Nonaktifkan Payment Method dan Transaction IDs
-            }
-        });
+    // Function untuk mengaktifkan input Payment Method
+    function enablePaymentFields() {
+        paymentMethod.style.display = 'block'; // Tampilkan Payment Method
+        paymentMethod.disabled = false;
+        paymentMethodLabel.style.display = 'block'; // Tampilkan label Payment Method
+    }
 
-        // Event listener untuk Payment Method
-        paymentMethod.addEventListener('change', function() {
-            // Sembunyikan semua Transaction ID
-            transactionIds.forEach(function(element) {
-                element.style.display = 'none';
-                element.querySelector('input, select').value = ''; // Reset field value
-            });
-
-            // Tampilkan Transaction ID berdasarkan Payment Method yang dipilih
-            const selectedMethod = this.value;
-            if (selectedMethod) {
-                document.getElementById(selectedMethod + '_transaction_id').style.display = 'block';
-            }
-        });
-
-        // Pada saat halaman di-load, cek apakah Paid atau Unpaid yang dipilih
-        if (paidRadio.checked) {
-            enablePaymentFields();
-        } else if (unpaidRadio.checked) {
-            disablePaymentFields();
+    // Event listener untuk radio button Paid
+    paidRadio.addEventListener('change', function() {
+        if (this.checked) {
+            enablePaymentFields(); // Aktifkan Payment Method
         }
     });
+
+    // Event listener untuk radio button Unpaid
+    unpaidRadio.addEventListener('change', function() {
+        if (this.checked) {
+            disablePaymentFields(); // Nonaktifkan Payment Method dan Transaction IDs
+        }
+    });
+
+    // Event listener untuk Payment Method
+    paymentMethod.addEventListener('change', function() {
+        // Sembunyikan semua Transaction ID
+        transactionIds.forEach(function(element) {
+            element.style.display = 'none';
+            element.querySelector('input, select').value = ''; // Reset field value
+        });
+
+        // Tampilkan Transaction ID berdasarkan Payment Method yang dipilih
+        const selectedMethod = this.value;
+        if (selectedMethod) {
+            document.getElementById(selectedMethod + '_transaction_id').style.display = 'block';
+        }
+    });
+
+    // Pada saat halaman di-load, cek apakah Paid atau Unpaid yang dipilih
+    if (paidRadio.checked) {
+        enablePaymentFields();
+    } else if (unpaidRadio.checked) {
+        disablePaymentFields();
+    }
+});
+
 </script>
 @endsection
