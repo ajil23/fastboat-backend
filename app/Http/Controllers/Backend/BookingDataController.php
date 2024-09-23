@@ -378,13 +378,13 @@ class BookingDataController extends Controller
     public function getFilteredDataReturn(Request $request)
     {
         try {
-            // Assign variabel dengan fallback default
-            $tripDateReturn = $request['trip_return_date'];
+            // Ambil data dari request
+            $tripDateReturn = $request->input('trip_return_date');
             $departurePortReturn = $request->input('departure_return_port');
             $arrivalPortReturn = $request->input('arrival_return_port');
             $fastBoatReturn = $request->input('fast_boat_return');
-            $adultCountReturn = $request->input('adult_count', 1);
-            $childCountReturn = $request->input('child_count', 0);
+            $adultCountReturn = $request->input('adult_count', 1); // Default 1 dewasa
+            $childCountReturn = $request->input('child_count', 0); // Default 0 anak-anak
 
             // Hitung total customer (dewasa + anak-anak)
             $totalCustomerReturn = $adultCountReturn + $childCountReturn;
@@ -414,10 +414,10 @@ class BookingDataController extends Controller
                 });
             }
 
-            $availabilities = $query->get();
+            $availabilitiesReturn = $query->get();
 
             // Jika tidak ada availability, tidak perlu melanjutkan
-            if ($availabilities->isEmpty()) {
+            if ($availabilitiesReturn->isEmpty()) {
                 return response()->json([
                     'departure_return_ports' => [],
                     'arrival_return_ports' => [],
@@ -432,7 +432,7 @@ class BookingDataController extends Controller
             $fastBoatsReturn = [];
             $timeDeptsReturn = [];
 
-            foreach ($availabilities as $availability) {
+            foreach ($availabilitiesReturn as $availability) {
                 $trip = $availability->trip;
 
                 // Mengumpulkan departure port
@@ -467,7 +467,6 @@ class BookingDataController extends Controller
                 'time_depts_return' => $timeDeptsReturn,
             ]);
         } catch (\Exception $e) {
-            // Log error untuk debugging
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
