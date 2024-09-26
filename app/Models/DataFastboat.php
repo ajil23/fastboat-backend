@@ -18,7 +18,7 @@ class DataFastboat extends Model
     }
 
     public function scheduleTrips()
-{
-    return $this->hasMany(FastboatTrip::class, 'fbt_fastboat', 'fb_id');
-}
+    {
+        return $this->hasMany(FastboatTrip::class, 'fbt_fastboat', 'fb_id');
+    }
 }
