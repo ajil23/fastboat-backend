@@ -1315,13 +1315,13 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
-                        <input id="adult_name_${i}" name="adult_name_${i}" type="text" placeholder="Enter Name" class="form-control">
+                        <input id="adult_name_${i}" name="adult_name_[]" type="text" placeholder="Enter Name" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="adult_age_${i}">Adult ${i} Age</label>
-                        <select id="adult_age_${i}" name="adult_age_${i}" class="form-control">
+                        <select id="adult_age_${i}" name="adult_age_[]" class="form-control">
                             <option value="">Select Age</option>
                         </select>
                     </div>
@@ -1329,7 +1329,7 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
-                        <select id="adult_gender_${i}" name="adult_gender_${i}" class="form-control">
+                        <select id="adult_gender_${i}" name="adult_gender_[]" class="form-control">
                             <option value="">Select Gender</option>
                             <option value="Female">Female</option>
                             <option value="Male">Male</option>
@@ -1339,7 +1339,7 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
-                        <select id="adult_nationality_${i}" name="adult_nationality_${i}" class="nationality-select">
+                        <select id="adult_nationality_${i}" name="adult_nationality_[]" class="nationality-select">
                             <option value="">Select Nationality</option>
                             @foreach ($nationality as $item)
                             <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
@@ -1363,13 +1363,13 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
-                        <input id="child_name_${i}" name="child_name_${i}" type="text" placeholder="Enter Name" class="form-control">
+                        <input id="child_name_${i}" name="child_name_[]" type="text" placeholder="Enter Name" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="child_age_${i}">Child ${i} Age</label>
-                        <select id="child_age_${i}" name="child_age_${i}" class="form-control">
+                        <select id="child_age_${i}" name="child_age_[]" class="form-control">
                             <option value="">Select Age</option>
                         </select>
                     </div>
@@ -1377,7 +1377,7 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
-                        <select id="child_gender_${i}" name="child_gender_${i}" class="form-control">
+                        <select id="child_gender_${i}" name="child_gender_[]" class="form-control">
                             <option value="">Select Gender</option>
                             <option value="Female">Female</option>
                             <option value="Male">Male</option>
@@ -1387,7 +1387,7 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
-                        <select id="child_nationality_${i}" name="child_nationality_${i}" class="nationality-select">
+                        <select id="child_nationality_${i}" name="child_nationality_[]" class="nationality-select">
                             <option value="">Select Nationality</option>
                             @foreach ($nationality as $item)
                             <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
@@ -1410,13 +1410,13 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
-                        <input id="infant_name_${i}" name="infant_name_${i}" type="text" placeholder="Enter Name" class="form-control">
+                        <input id="infant_name_${i}" name="infant_name_[]" type="text" placeholder="Enter Name" class="form-control">
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="infant_age_${i}">Infant ${i} Age</label>
-                        <select id="infant_age_${i}" name="infant_age_${i}" class="form-control">
+                        <select id="infant_age_${i}" name="infant_age_[]" class="form-control">
                             <option value="">Select Age</option>
                         </select>
                     </div>
@@ -1424,7 +1424,7 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
-                        <select id="infant_gender_${i}" name="infant_gender_${i}" class="form-control">
+                        <select id="infant_gender_${i}" name="infant_gender_[]" class="form-control">
                             <option value="">Select Gender</option>
                             <option value="Female">Female</option>
                             <option value="Male">Male</option>
@@ -1434,7 +1434,7 @@
                 <div class="col-lg-3">
                     <div class="mb-3">
                         <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
-                        <select id="infant_nationality_${i}" name="infant_nationality_${i}" class="nationality-select">
+                        <select id="infant_nationality_${i}" name="infant_nationality_[]" class="nationality-select">
                             <option value="">Select Nationality</option>
                             @foreach ($nationality as $item)
                             <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
