@@ -36,29 +36,29 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Name</label>
-                                                    <input id="fb_name" name="fb_name" placeholder="Enter Name"
-                                                        type="text" class="form-control" required>
+                                                    <label class="form-label" for="ctc_name">Name</label>
+                                                    <input id="ctc_name" name="ctc_name" placeholder="Enter Name"
+                                                        type="text" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Email</label>
-                                                    <input id="fb_name" name="fb_name" placeholder="Enter Email"
-                                                        type="text" class="form-control" required>
+                                                    <label class="form-label" for="ctc_email">Email</label>
+                                                    <input id="ctc_email" name="ctc_email" placeholder="Enter Email"
+                                                        type="email" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fb_name">Phone</label>
-                                                    <input id="fb_name" name="fb_name" placeholder="Enter Phone"
-                                                        type="text" class="form-control" required>
+                                                    <label class="form-label" for="ctc_phone">Phone</label>
+                                                    <input id="ctc_phone" name="ctc_phone" placeholder="Enter Phone"
+                                                        type="text" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="nationality">Nationality</label>
-                                                    <select id="nationality" name="nationality" required>
+                                                    <label class="form-label" for="ctc_nationality">Nationality</label>
+                                                    <select id="ctc_nationality" name="ctc_nationality">
                                                         <option value="">Select Nationality</option>
                                                         @foreach ($nationality as $item)
                                                         <option value="{{ $item->nas_id }}">{{ $item->nas_country }}
@@ -72,7 +72,7 @@
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="currency">Currency</label>
-                                                    <select id="currency" name="currency" required>
+                                                    <select id="currency" name="currency">
                                                         <option value="10" data-rate="1" data-code="IDR">Indonesia Rupiah (IDR)</option>
                                                         @foreach ($currency as $item)
                                                         <option value="{{ $item->cy_id }}"
@@ -104,7 +104,7 @@
                                                     <label class="form-label" for="payment_method">Payment
                                                         Method</label>
                                                     <select id="payment_method" name="payment_method"
-                                                        class="form-control" disabled required>
+                                                        class="form-control" disabled>
                                                         <option value="">Select Payment Method</option>
                                                         @foreach ($payment_method as $item)
                                                         <option value="{{$item->py_value}}">{{$item->py_name}}</option>
@@ -197,21 +197,21 @@
                                                 <div class="mb-3">
                                                     <label class="form-label" for="adult_count">Adult</label>
                                                     <input id="adult_count" name="adult_count" type="number"
-                                                        class="form-control" value="1" min="1" required>
+                                                        class="form-control" value="1" min="1">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="child_count">Child</label>
                                                     <input id="child_count" name="child_count" type="number"
-                                                        class="form-control" value="0" min="0" required>
+                                                        class="form-control" value="0" min="0">
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="infant_count">Infant</label>
                                                     <input id="infant_count" name="infant_count" type="number"
-                                                        class="form-control" value="0" min="0" required>
+                                                        class="form-control" value="0" min="0">
                                                 </div>
                                             </div>
                                         </div>
@@ -239,84 +239,82 @@
                                 <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                     <div class="p-4 border-top">
                                         <!-- Form Pencarian -->
-                                        <form id="searchForm">
-                                            <div class="row">
-                                                <div class="col-sm-4">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="trip_date">Trip Date</label>
-                                                        <input type="date" class="form-control" id="trip_date"
-                                                            name="trip_date">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="departure_port">Departure
-                                                            Port</label>
-                                                        <select class="form-control" id="departure_port"
-                                                            name="departure_port">
-                                                            <option value="">Select Departure Port</option>
-                                                            @foreach ($availability as $item)
-                                                            <option
-                                                                value="{{ $item->trip->departure->prt_name_en }}">
-                                                                {{ $item->trip->departure->prt_name_en }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="arrival_port">Arrival
-                                                            Port</label>
-                                                        <select class="form-control" id="arrival_port"
-                                                            name="arrival_port">
-                                                            <option value="">Select Arrival Port</option>
-                                                            @foreach ($availability as $item)
-                                                            <option
-                                                                value="{{ $item->trip->arrival->prt_name_en }}">
-                                                                {{ $item->trip->arrival->prt_name_en }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                        <div class="row" id="searchForm">
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="trip_date">Trip Date</label>
+                                                    <input type="date" class="form-control" id="trip_date"
+                                                        name="trip_date">
                                                 </div>
                                             </div>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fast_boat">Fast Boat</label>
-                                                        <select class="form-control" id="fast_boat" name="fast_boat">
-                                                            <option value="">Select Fast Boat</option>
-                                                            @foreach ($availability as $item)
-                                                            <option value="{{ $item->trip->fastboat->fb_name }}">
-                                                                {{ $item->trip->fastboat->fb_name }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="time_dept">Time Dept</label>
-                                                        <select class="form-control" id="time_dept" name="time_dept">
-                                                            <option value="">Select Time Dept</option>
-                                                            @foreach ($availability as $item)
-                                                            @php
-                                                            // Tentukan waktu keberangkatan dari availability atau trip
-                                                            $deptTime = $item->fba_dept_time
-                                                            ? $item->fba_dept_time
-                                                            : $item->trip->fbt_dept_time;
-                                                            @endphp
-                                                            <option
-                                                                value="{{ date('H:i', strtotime($deptTime)) }}">
-                                                                {{ date('H:i', strtotime($deptTime)) }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="departure_port">Departure
+                                                        Port</label>
+                                                    <select class="form-control" id="departure_port"
+                                                        name="departure_port">
+                                                        <option value="">Select Departure Port</option>
+                                                        @foreach ($availability as $item)
+                                                        <option
+                                                            value="{{ $item->trip->departure->prt_name_en }}">
+                                                            {{ $item->trip->departure->prt_name_en }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
-                                        </form>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="arrival_port">Arrival
+                                                        Port</label>
+                                                    <select class="form-control" id="arrival_port"
+                                                        name="arrival_port">
+                                                        <option value="">Select Arrival Port</option>
+                                                        @foreach ($availability as $item)
+                                                        <option
+                                                            value="{{ $item->trip->arrival->prt_name_en }}">
+                                                            {{ $item->trip->arrival->prt_name_en }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fast_boat">Fast Boat</label>
+                                                    <select class="form-control" id="fast_boat" name="fast_boat">
+                                                        <option value="">Select Fast Boat</option>
+                                                        @foreach ($availability as $item)
+                                                        <option value="{{ $item->trip->fastboat->fb_name }}">
+                                                            {{ $item->trip->fastboat->fb_name }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="time_dept">Time Dept</label>
+                                                    <select class="form-control" id="time_dept" name="time_dept">
+                                                        <option value="">Select Time Dept</option>
+                                                        @foreach ($availability as $item)
+                                                        @php
+                                                        // Tentukan waktu keberangkatan dari availability atau trip
+                                                        $deptTime = $item->fba_dept_time
+                                                        ? $item->fba_dept_time
+                                                        : $item->trip->fbt_dept_time;
+                                                        @endphp
+                                                        <option
+                                                            value="{{ date('H:i', strtotime($deptTime)) }}">
+                                                            {{ date('H:i', strtotime($deptTime)) }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="p-4 border-top custom-border-top-color">
                                             <!-- Hasil Pencarian -->
                                             <div id="search-results" style="display: none;">
@@ -390,30 +388,28 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card custom-border-color">
-                                <div class="text-body" data-bs-toggle="collapse" aria-expanded="true"
-                                    aria-controls="addproduct-productinfo-collapse">
-                                    <div class="p-4">
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-grow-1 overflow-hidden">
-                                                <h5 class="font-size-16 mb-1">Trip Return</h5>
-                                                <p class="text-muted text-truncate mb-0">Fill all information below</p>
-                                            </div>
-                                            <div class="form-check form-switch"
-                                                style="display: flex; align-items: center;justify-content: center;">
-                                                <input class="form-check-input"
-                                                    style="width: 3rem; height: 1.75rem; border-radius: 1rem;"
-                                                    type="checkbox" id="switch" name="switch" />
+                                <div class="card custom-border-color">
+                                    <div class="text-body" data-bs-toggle="collapse" aria-expanded="true"
+                                        aria-controls="addproduct-productinfo-collapse">
+                                        <div class="p-4">
+                                            <div class="d-flex align-items-center">
+                                                <div class="flex-grow-1 overflow-hidden">
+                                                    <h5 class="font-size-16 mb-1">Trip Return</h5>
+                                                    <p class="text-muted text-truncate mb-0">Fill all information below</p>
+                                                </div>
+                                                <div class="form-check form-switch"
+                                                    style="display: flex; align-items: center;justify-content: center;">
+                                                    <input class="form-check-input"
+                                                        style="width: 3rem; height: 1.75rem; border-radius: 1rem;"
+                                                        type="checkbox" id="switch" name="switch" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
-                                    <div class="p-4 border-top">
-                                        <!-- Form Pencarian -->
-                                        <form id="searchForm">
-                                            <div class="row">
+                                    <div class="collapse show" data-bs-parent="#addproduct-accordion">
+                                        <div class="p-4 border-top">
+                                            <!-- Form Pencarian -->
+                                            <div class="row" id="searchForm">
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="trip_return_date">Trip
@@ -494,73 +490,73 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </form>
-                                        <!-- Hasil Pencarian -->
-                                        <div id="search-results-return" style="display: none;">
-                                            <div class="table-responsive">
-                                                <h5 class="card-title-return"></h5>
-                                                <table id="booking-data-table-return"
-                                                    class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
-                                                    <thead>
-                                                        <tr class="table-light">
-                                                            <th>
-                                                                <center>Publish Adult</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Publish Child</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Nett Adult</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Nett Child</center>
-                                                            </th>
-                                                            <th>
-                                                                <center>Discount</center>
-                                                            </th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <!-- Hasil pencarian akan dimasukkan ke sini -->
-                                                    </tbody>
-                                                </table>
-                                                <br>
-                                                <!-- perhitungan -->
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="adult_return_publish">Adult
-                                                                Publish (IDR)</label>
-                                                            <input value="" class="form-control"
-                                                                id="adult_return_publish" name="adult_return_publish"
-                                                                disabled>
+                                            <!-- Hasil Pencarian -->
+                                            <div id="search-results-return" style="display: none;">
+                                                <div class="table-responsive">
+                                                    <h5 class="card-title-return"></h5>
+                                                    <table id="booking-data-table-return"
+                                                        class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                                        <thead>
+                                                            <tr class="table-light">
+                                                                <th>
+                                                                    <center>Publish Adult</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Publish Child</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Nett Adult</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Nett Child</center>
+                                                                </th>
+                                                                <th>
+                                                                    <center>Discount</center>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <!-- Hasil pencarian akan dimasukkan ke sini -->
+                                                        </tbody>
+                                                    </table>
+                                                    <br>
+                                                    <!-- perhitungan -->
+                                                    <div class="row">
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="adult_return_publish">Adult
+                                                                    Publish (IDR)</label>
+                                                                <input value="" class="form-control"
+                                                                    id="adult_return_publish" name="adult_return_publish"
+                                                                    disabled>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="child_return_publish">Child
-                                                                Publish (IDR)</label>
-                                                            <input value="" class="form-control"
-                                                                id="child_return_publish" name="child_return_publish"
-                                                                disabled>
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="child_return_publish">Child
+                                                                    Publish (IDR)</label>
+                                                                <input value="" class="form-control"
+                                                                    id="child_return_publish" name="child_return_publish"
+                                                                    disabled>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="total_return_end">End Total
-                                                                (IDR)</label>
-                                                            <input value="" class="form-control"
-                                                                id="total_return_end" name="total_return_end"
-                                                                style="background-color:lightgray" disabled>
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="total_return_end">End Total
+                                                                    (IDR)</label>
+                                                                <input value="" class="form-control"
+                                                                    id="total_return_end" name="total_return_end"
+                                                                    style="background-color:lightgray" disabled>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="currency_return_end">End
-                                                                Total Currency (IDR)</label>
-                                                            <input value="" class="form-control"
-                                                                id="currency_return_end" name="currency_return_end"
-                                                                style="background-color:lightgray" disabled>
+                                                        <div class="col-sm-3">
+                                                            <div class="mb-3">
+                                                                <label class="form-label" for="currency_return_end">End
+                                                                    Total Currency (IDR)</label>
+                                                                <input value="" class="form-control"
+                                                                    id="currency_return_end" name="currency_return_end"
+                                                                    style="background-color:lightgray" disabled>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -568,21 +564,18 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card custom-border-color">
-                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
-                                    <div class="p-4 border-top">
-                                        <!-- Form Pencarian -->
-                                        <form id="note">
-                                            <div class="row">
+                                <div class="card custom-border-color">
+                                    <div class="collapse show" data-bs-parent="#addproduct-accordion">
+                                        <div class="p-4 border-top">
+                                            <div class="row" id="note">
                                                 <div class="mb-3">
-                                                    <label class="form-label font-size-16 mb-1" for="trip_return_date">Note</label>
+                                                    <label class="form-label font-size-16 mb-1" for="ctc_note">Note</label>
                                                     <p class="text-muted text-truncate mb-0">If there are certain
-                                                    conditions, please add notes</p>
-                                                    <textarea style="border-color: lightgray;" class="form-control" name="" id=""></textarea>
+                                                        conditions, please add notes</p>
+                                                    <textarea style="border-color: lightgray;" class="form-control" name="ctc_note" id="ctc_note"></textarea>
                                                 </div>
                                             </div>
-                                        </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -592,8 +585,7 @@
                 {{-- Button --}}
                 <div class="row mb-4">
                     <div class="col text-end">
-                        <button type="button" onclick="history.back()" class="btn btn-outline-dark"><i
-                                class="bx bx-x me-1"></i> Cancel</button>
+                        <button type="button" onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
                         <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save </button>
                     </div> <!-- end col -->
                 </div> <!-- end row-->
@@ -612,7 +604,7 @@
 @section('script')
 <script>
     // Tom select 
-    new TomSelect("#nationality");
+    new TomSelect("#ctc_nationality");
     new TomSelect("#currency");
 
     // Pencarian trip
