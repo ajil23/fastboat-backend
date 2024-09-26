@@ -14,6 +14,7 @@ use App\Models\MasterNationality;
 use App\Models\MasterPaymentMethod;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookingDataController extends Controller
 {
@@ -77,32 +78,110 @@ class BookingDataController extends Controller
 
     public function store(Request $request)
     {
-        // Mendapatkan IP address
-        $ipAddress = $request->ip(); // IP Publik pengguna
+        DB::beginTransaction();  // Memulai transaksi database
 
-        // Jika berada di belakang proxy, coba ambil IP dari X-Forwarded-For
-        if ($request->server('HTTP_X_FORWARDED_FOR')) {
-            $ipAddress = $request->server('HTTP_X_FORWARDED_FOR');
-        } else {
-            $ipAddress = $request->ip();
+        try {
+
+            dd($request);
+            
+            // Mendapatkan IP address
+            $ipAddress = $request->ip(); // IP Publik pengguna
+
+            // Jika berada di belakang proxy, coba ambil IP dari X-Forwarded-For
+            if ($request->server('HTTP_X_FORWARDED_FOR')) {
+                $ipAddress = $request->server('HTTP_X_FORWARDED_FOR');
+            } else {
+                $ipAddress = $request->ip();
+            }
+
+            // Simpan data kontak utama
+            $contactData = new Contact();
+            $contactData->ctc_order_id = $this->generateOrderId();
+            $contactData->ctc_name = $request->ctc_name;
+            $contactData->ctc_email = $request->ctc_email;
+            $contactData->ctc_phone = $request->ctc_phone;
+            $contactData->ctc_nationality = $request->ctc_nationality;
+            $contactData->ctc_note = $request->ctc_note;
+            $contactData->ctc_booking_date = Carbon::now()->toDateString();  // Mengambil tanggal saat ini
+            $contactData->ctc_booking_time = Carbon::now()->toTimeString();
+            $contactData->ctc_ip_address = $ipAddress;
+            $contactData->ctc_browser = $request->header('User-Agent');
+            $contactData->ctc_updated_by = Auth()->id();
+            $contactData->ctc_created_by = Auth()->id();
+            $contactData->save();
+
+            // Ambil input data dewasa
+            $adults = $request->input('adult_name');
+            $adultAges = $request->input('adult_age');
+            $adultGenders = $request->input('adult_gender');
+            $adultNationalities = $request->input('adult_nationality');
+
+            // Ambil input data anak-anak
+            $children = $request->input('child_name');
+            $childAges = $request->input('child_age');
+            $childGenders = $request->input('child_gender');
+            $childNationalities = $request->input('child_nationality');
+
+            // Ambil input data bayi
+            $infants = $request->input('infant_name');
+            $infantAges = $request->input('infant_age');
+            $infantGenders = $request->input('infant_gender');
+            $infantNationalities = $request->input('infant_nationality');
+
+            // Simpan data dewasa (Adult)
+            foreach ($adults as $index => $adultName) {
+                Adult::create([
+                    'name' => $adultName,
+                    'age' => $adultAges[$index],
+                    'gender' => $adultGenders[$index],
+                    'nationality' => $adultNationalities[$index],
+                    'contact_id' => $contactData->id, // Referensi ke kontak utama
+                ]);
+            }
+
+            // Simpan data anak-anak (Child), hanya jika data tersedia
+            if ($children) {
+                foreach ($children as $index => $childName) {
+                    if ($childName) { // Pastikan ada input nama anak
+                        Child::create([
+                            'name' => $childName,
+                            'age' => $childAges[$index],
+                            'gender' => $childGenders[$index],
+                            'nationality' => $childNationalities[$index],
+                            'contact_id' => $contactData->id, // Referensi ke kontak utama
+                        ]);
+                    }
+                }
+            }
+
+            // Simpan data bayi (Infant), hanya jika data tersedia
+            if ($infants) {
+                foreach ($infants as $index => $infantName) {
+                    if ($infantName) { // Pastikan ada input nama bayi
+                        Infant::create([
+                            'name' => $infantName,
+                            'age' => $infantAges[$index],
+                            'gender' => $infantGenders[$index],
+                            'nationality' => $infantNationalities[$index],
+                            'contact_id' => $contactData->id, // Referensi ke kontak utama
+                        ]);
+                    }
+                }
+            }
+
+            // Commit transaksi jika semua proses berhasil
+            DB::commit();
+
+            return redirect()->route('data.view')->with('success', 'Data berhasil disimpan');
+        } catch (\Exception $e) {
+            // Rollback semua perubahan jika terjadi error
+            DB::rollBack();
+
+            // Lakukan logging atau beri tahu pengguna bahwa terjadi kesalahan
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat menyimpan data: ' . $e->getMessage());
         }
-        $contactData = new Contact();
-        $contactData->ctc_order_id = $this->generateOrderId();
-        $contactData->ctc_name = $request->ctc_name;
-        $contactData->ctc_email = $request->ctc_email;
-        $contactData->ctc_phone = $request->ctc_phone;
-        $contactData->ctc_nationality = $request->ctc_nationality;
-        $contactData->ctc_note = $request->ctc_note;
-        $contactData->ctc_booking_date = Carbon::now()->toDateString();  // Mengambil tanggal saat ini
-        $contactData->ctc_booking_time = Carbon::now()->toTimeString();
-        $contactData->ctc_ip_address = $ipAddress;
-        $contactData->ctc_browser = $request->header('User-Agent');
-        $contactData->ctc_updated_by = Auth()->id();
-        $contactData->ctc_created_by = Auth()->id();
-        dd($contactData);
-
-        return redirect()->route('data.view');
     }
+
 
     public function search(Request $request)
     {
