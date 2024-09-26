@@ -388,7 +388,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card custom-border-color">
+                            </div>
+                            <div class="card custom-border-color">
                                     <div class="text-body" data-bs-toggle="collapse" aria-expanded="true"
                                         aria-controls="addproduct-productinfo-collapse">
                                         <div class="p-4">
@@ -563,8 +564,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card custom-border-color">
+                            </div>
+                            <div class="card custom-border-color">
                                     <div class="collapse show" data-bs-parent="#addproduct-accordion">
                                         <div class="p-4 border-top">
                                             <div class="row" id="note">
@@ -578,7 +579,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
