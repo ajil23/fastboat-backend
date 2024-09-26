@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Contact;
 use App\Models\DataFastboat;
 use App\Models\DataRoute;
 use App\Models\FastboatAvailability;
@@ -11,6 +12,7 @@ use App\Models\FastboatTrip;
 use App\Models\MasterCurrency;
 use App\Models\MasterNationality;
 use App\Models\MasterPaymentMethod;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BookingDataController extends Controller
@@ -32,11 +34,73 @@ class BookingDataController extends Controller
         $currency = MasterCurrency::where('cy_status', '1')->get();
         $nationality = MasterNationality::all();
         $payment_method = MasterPaymentMethod::all();
-        return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability', 'currency', 'nationality', 'payment_method'));
+        $contact = Contact::all();
+        return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability', 'currency', 'nationality', 'payment_method', 'contact'));
     }
 
-    public function store()
+    function generateOrderId()
     {
+        // Ambil order terakhir dari database, jika ada
+        $lastOrder = Contact::orderBy('ctc_id', 'desc')->first();
+
+        if (!$lastOrder) {
+            // Jika belum ada order, mulai dengan "AAAAA"
+            return 'AAAAA';
+        }
+
+        // Ambil order_id terakhir
+        $lastOrderId = $lastOrder->ctc_order_id;
+
+        // Konversi order_id menjadi array karakter
+        $characters = str_split($lastOrderId);
+
+        // Loop dari belakang untuk increment karakter terakhir
+        for ($i = count($characters) - 1; $i >= 0; $i--) {
+            if ($characters[$i] == 'Z') {
+                // Jika karakter terakhir adalah Z, ubah jadi A
+                $characters[$i] = 'A';
+            } else {
+                // Jika bukan Z, tambahkan 1 ke karakter tersebut
+                $characters[$i] = chr(ord($characters[$i]) + 1);
+                break;
+            }
+        }
+
+        // Jika semua karakter adalah 'Z', tambahkan satu karakter lagi
+        if (implode('', $characters) == str_repeat('A', count($characters))) {
+            array_unshift($characters, 'A');
+        }
+
+        // Gabungkan karakter menjadi string lagi
+        return implode('', $characters);
+    }
+
+    public function store(Request $request)
+    {
+        // Mendapatkan IP address
+        $ipAddress = $request->ip(); // IP Publik pengguna
+
+        // Jika berada di belakang proxy, coba ambil IP dari X-Forwarded-For
+        if ($request->server('HTTP_X_FORWARDED_FOR')) {
+            $ipAddress = $request->server('HTTP_X_FORWARDED_FOR');
+        } else {
+            $ipAddress = $request->ip();
+        }
+        $contactData = new Contact();
+        $contactData->ctc_order_id = $this->generateOrderId();
+        $contactData->ctc_name = $request->ctc_name;
+        $contactData->ctc_email = $request->ctc_email;
+        $contactData->ctc_phone = $request->ctc_phone;
+        $contactData->ctc_nationality = $request->ctc_nationality;
+        $contactData->ctc_note = $request->ctc_note;
+        $contactData->ctc_booking_date = Carbon::now()->toDateString();  // Mengambil tanggal saat ini
+        $contactData->ctc_booking_time = Carbon::now()->toTimeString();
+        $contactData->ctc_ip_address = $ipAddress;
+        $contactData->ctc_browser = $request->header('User-Agent');
+        $contactData->ctc_updated_by = Auth()->id();
+        $contactData->ctc_created_by = Auth()->id();
+        dd($contactData);
+
         return redirect()->route('data.view');
     }
 

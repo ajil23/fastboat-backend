@@ -18,7 +18,7 @@ class FastboatSchedule extends Model
 
     public function trip()
     {
-        return $this->hasMany(SchedulesTrip::class);
+        return $this->hasMany(FastboatTrip::class);
     }
 
     public function shuttle()

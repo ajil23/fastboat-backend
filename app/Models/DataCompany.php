@@ -14,6 +14,6 @@ class DataCompany extends Model
 
     public function schedules()
     {
-        return $this->hasMany(SchedulesSchedule::class);
+        return $this->hasMany(FastboatSchedule::class);
     }
 }

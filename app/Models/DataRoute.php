@@ -14,7 +14,7 @@ class DataRoute extends Model
 
     public function trip()
     {
-        return $this->hasMany(SchedulesTrip::class);
+        return $this->hasMany(FastboatTrip::class);
     }
 
 }
