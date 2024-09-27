@@ -13,8 +13,8 @@ class FastboatCheckingPointController extends Controller
 {
     public function index(){
         $checking = FastboatCheckingPoint::all();  // Mengambil seluruh data checking point
-        $company = DataCompany::all();
-        $departure = MasterPort::all();
+        $company = DataCompany::orderBy('cpn_name', 'asc')->having('cpn_type', 'fast_boat')->get();
+        $departure = MasterPort::orderBy('prt_name_en', 'asc')->get();
         $title = 'Delete Checking Point Data!';
         $text = "Are you sure you want to delete?";
         confirmDelete($title, $text);
