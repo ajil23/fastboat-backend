@@ -179,6 +179,11 @@
 
 @section('script')
     <script>
+        new TomSelect("#fcp_company");
+        new TomSelect("#fcp_dept");
+        new TomSelect("#edit_fcp_company", {});
+        new TomSelect("#edit_fcp_dept", {});
+
         // Modal edit 
         document.addEventListener('DOMContentLoaded', function() {
             var editButtons = document.querySelectorAll('#edit-btn');
@@ -189,25 +194,32 @@
                     var pointDeparture = this.getAttribute('data-point-departure');
                     var pointAddress = this.getAttribute('data-point-address');
                     var pointMaps = this.getAttribute('data-point-maps');
+
                     var formAction = '{{ route('checking.update', ':id') }}';
                     formAction = formAction.replace(':id', pointId);
 
+                    // Update form action
                     document.getElementById('editChekingPointForm').action = formAction;
-                    document.getElementById('edit_fcp_company').value = pointCompany;
-                    document.getElementById('edit_fcp_dept').value = pointDeparture;
+
+                    // Menggunakan Tom Select untuk pointCompany
+                    var selectCompanyInstance = document.getElementById('edit_fcp_company')
+                        .tomselect;
+                    selectCompanyInstance.setValue(pointCompany);
+
+                    // Menggunakan Tom Select untuk pointDeparture
+                    var selectDepartureInstance = document.getElementById('edit_fcp_dept')
+                        .tomselect;
+                    selectDepartureInstance.setValue(pointDeparture);
+
+                    // Mengatur value untuk alamat dan maps tanpa Tom Select
                     document.getElementById('edit_fcp_address').value = pointAddress;
                     document.getElementById('edit_fcp_maps').value = pointMaps;
 
+                    // Menampilkan modal untuk mengedit data
                     var editModal = new bootstrap.Modal(document.getElementById('editDataModal'));
                     editModal.show();
                 });
             });
         });
-
-        // Tom select
-        new TomSelect("#fcp_company");
-        new TomSelect("#fcp_dept");
-        new TomSelect("#edit_fcp_company");
-        new TomSelect("#edit_fcp_dept");
     </script>
 @endsection

@@ -49,7 +49,9 @@
                                         @foreach ($trip as $item)
                                         <tr id="baris-{{$item->fbt_id}}" class="search">
                                             <td>{{$loop->iteration}}</td>
-                                            <td class="search-item"  data-id="{{$item->fbt_id}}">{{$item->fbt_name}}</td>
+                                            <td class="search-item"  data-id="{{$item->fbt_id}}">
+                                                {{ Str::limit($item->fbt_name, 10) }}
+                                            </td>
                                             <td>
                                                 <a href="{{route('trip.status', $item->fbt_id)}}" class="badge rounded-pill bg-{{$item->fbt_status ? 'success' : 'danger'}}"><i class="mdi mdi-{{$item->fbt_status ? 'check-decagram' : 'alert-decagram'}}"></i>
                                                     {{$item->fbt_status ? 'Enable' : 'Disable'}}
