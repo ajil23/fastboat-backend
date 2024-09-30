@@ -1,0 +1,55 @@
+public function updateKurs($actor = null)
+    {
+        // Menentukan actor update rate
+        if (!$actor) {
+            $actor = auth()->check() ? auth()->user()->name : 'Cronjob';
+        }
+
+        MasterCurrency::chunk(100, function ($currencies) use ($actor) {
+            $dataToUpdate = [];
+
+            $tableName = (new MasterCurrency)->getTable();
+            $casesRate = '';
+            $casesUpdatedBy = '';
+            $casesUpdatedAt = '';
+            $id = array();
+            foreach ($currencies as $currency) {
+                // Proses pengambilan rate dan update data
+                $response = Http::get("http://www.x-rates.com/calculator/", [
+                    'from' => $currency->cy_code,
+                    'to' => 'IDR',
+                    'amount' => 1
+                ]);
+
+                if ($response->successful()) {
+                    $htmlContent = $response->body();
+                    $exp = explode('<span class="ccOutputRslt">', $htmlContent);
+                    $exp = explode('<span class="ccOutputTrail">', $exp[1]);
+                    $exp = explode('.', $exp[0]);
+
+                    $kurs_before = $currency->cy_rate;
+                    $kurs_asli = str_replace(',', '', $exp[0]);
+                    $kurs_round = round($kurs_asli, 0, PHP_ROUND_HALF_UP);
+                    $percentage = round($kurs_round * 8.8 / 100, 0, PHP_ROUND_HALF_UP);
+                    $kurs_plus = $kurs_round - $percentage;
+
+                    $newRate = $kurs_asli > 0 ? $kurs_plus : $kurs_before;
+
+                    $casesRate .= "WHEN {$currency->cy_id} THEN '{$newRate}' ";
+                    $casesUpdatedBy .= "WHEN {$currency->cy_id} THEN '{$actor}' ";
+                    $casesUpdatedAt .= "WHEN {$currency->cy_id} THEN NOW() ";
+                    $id[] = $currency->cy_id;
+                }
+            }
+            $ids = implode(',', $id);
+            $updateQuery = "UPDATE {$tableName} 
+                            SET cy_rate = CASE cy_id {$casesRate} END, 
+                                cy_updated_by = CASE cy_id {$casesUpdatedBy} END, 
+                                updated_at = CASE cy_id {$casesUpdatedAt} END
+                            WHERE cy_id IN ({$ids})";
+            DB::statement($updateQuery);
+        });
+
+        toast('Successfully updated data!', 'success');
+        return redirect()->route('currency.view');
+    }
