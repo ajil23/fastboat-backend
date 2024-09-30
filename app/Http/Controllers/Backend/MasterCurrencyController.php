@@ -57,14 +57,15 @@ class MasterCurrencyController extends Controller
             $actor = auth()->check() ? auth()->user()->name : 'Cronjob';
         }
 
-        MasterCurrency::chunk(100, function ($currencies) use ($actor) {
+        // Mengambil hanya mata uang dengan status aktif (cy_status = 1)
+        MasterCurrency::where('cy_status', 1)->chunk(100, function ($currencies) use ($actor) {
             $dataToUpdate = [];
 
             $tableName = (new MasterCurrency)->getTable();
             $casesRate = '';
             $casesUpdatedBy = '';
             $casesUpdatedAt = '';
-            $id = array();
+            $id = [];
             foreach ($currencies as $currency) {
                 // Proses pengambilan rate dan update data
                 $response = Http::get("http://www.x-rates.com/calculator/", [
@@ -93,20 +94,21 @@ class MasterCurrencyController extends Controller
                     $id[] = $currency->cy_id;
                 }
             }
-            $ids = implode(',', $id);
-            $updateQuery = "UPDATE {$tableName} 
+
+            if (!empty($id)) { // Pastikan ada ID yang akan di-update
+                $ids = implode(',', $id);
+                $updateQuery = "UPDATE {$tableName} 
                             SET cy_rate = CASE cy_id {$casesRate} END, 
                                 cy_updated_by = CASE cy_id {$casesUpdatedBy} END, 
                                 updated_at = CASE cy_id {$casesUpdatedAt} END
                             WHERE cy_id IN ({$ids})";
-            DB::statement($updateQuery);
+                DB::statement($updateQuery);
+            }
         });
 
         toast('Successfully updated data!', 'success');
         return redirect()->route('currency.view');
     }
-
-
 
     // Menangani hapus data
     public function delete($cy_id)
