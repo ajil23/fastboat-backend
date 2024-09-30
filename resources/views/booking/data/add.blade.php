@@ -319,9 +319,11 @@
                                             <!-- Hasil Pencarian -->
                                             <div id="search-results" style="display: none;">
                                                 <div class="table-responsive">
+                                                    <div id="shuttle-checkbox" class="shuttle-checkbox">
+                                                        <!-- Checkbox akan ditambahkan secara dinamis oleh JavaScript -->
+                                                    </div>
                                                     <h5 class="card-title"></h5>
-                                                    <table id="booking-data-table"
-                                                        class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                                    <table id="booking-data-table" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
                                                         <thead>
                                                             <tr class="table-light">
                                                                 <th>
@@ -350,36 +352,26 @@
                                                     <div class="row">
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="adult_publish">Adult
-                                                                    Publish (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="adult_publish" name="adult_publish" disabled>
+                                                                <label class="form-label" for="adult_publish">Adult Publish (IDR)</label>
+                                                                <input value="" class="form-control" id="adult_publish" name="adult_publish" oninput="calculateTotal()">
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="child_publish">Child
-                                                                    Publish (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="child_publish" name="child_publish" disabled>
+                                                                <label class="form-label" for="child_publish">Child Publish (IDR)</label>
+                                                                <input value="" class="form-control" id="child_publish" name="child_publish" oninput="calculateTotal()">
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="total_end">End Total
-                                                                    (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="total_end" name="total_end"
-                                                                    style="background-color:lightgray" disabled>
+                                                                <label class="form-label" for="total_end">End Total (IDR)</label>
+                                                                <input value="" class="form-control" id="total_end" name="total_end" style="background-color:lightgray" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="currency_end">End Total
-                                                                    Currency (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="currency_end" name="currency_end"
-                                                                    style="background-color:lightgray" disabled>
+                                                                <label class="form-label" for="currency_end">End Total Currency (IDR)</label>
+                                                                <input value="" class="form-control" id="currency_end" name="currency_end" style="background-color:lightgray" readonly>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -390,195 +382,183 @@
                                 </div>
                             </div>
                             <div class="card custom-border-color">
-                                    <div class="text-body" data-bs-toggle="collapse" aria-expanded="true"
-                                        aria-controls="addproduct-productinfo-collapse">
-                                        <div class="p-4">
-                                            <div class="d-flex align-items-center">
-                                                <div class="flex-grow-1 overflow-hidden">
-                                                    <h5 class="font-size-16 mb-1">Trip Return</h5>
-                                                    <p class="text-muted text-truncate mb-0">Fill all information below</p>
-                                                </div>
-                                                <div class="form-check form-switch"
-                                                    style="display: flex; align-items: center;justify-content: center;">
-                                                    <input class="form-check-input"
-                                                        style="width: 3rem; height: 1.75rem; border-radius: 1rem;"
-                                                        type="checkbox" id="switch" name="switch" />
-                                                </div>
+                                <div class="text-body" data-bs-toggle="collapse" aria-expanded="true"
+                                    aria-controls="addproduct-productinfo-collapse">
+                                    <div class="p-4">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-grow-1 overflow-hidden">
+                                                <h5 class="font-size-16 mb-1">Trip Return</h5>
+                                                <p class="text-muted text-truncate mb-0">Fill all information below</p>
+                                            </div>
+                                            <div class="form-check form-switch"
+                                                style="display: flex; align-items: center;justify-content: center;">
+                                                <input class="form-check-input"
+                                                    style="width: 3rem; height: 1.75rem; border-radius: 1rem;"
+                                                    type="checkbox" id="switch" name="switch" />
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="collapse show" data-bs-parent="#addproduct-accordion">
-                                        <div class="p-4 border-top">
-                                            <!-- Form Pencarian -->
-                                            <div class="row" id="searchForm">
-                                                <div class="col-sm-4">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="trip_return_date">Trip
-                                                            Date</label>
-                                                        <input type="date" class="form-control"
-                                                            id="trip_return_date" name="trip_return_date" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="mb-3">
-                                                        <label class="form-label"
-                                                            for="departure_return_port">Departure Port</label>
-                                                        <select class="form-control" id="departure_return_port"
-                                                            name="departure_return_port" disabled>
-                                                            <option value="">Select Departure Port</option>
-                                                            @foreach ($availability as $item)
-                                                            <option
-                                                                value="{{ $item->trip->departure->prt_name_en }}">
-                                                                {{ $item->trip->departure->prt_name_en }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="arrival_return_port">Arrival
-                                                            Port</label>
-                                                        <select class="form-control" id="arrival_return_port"
-                                                            name="arrival_return_port" disabled>
-                                                            <option value="">Select Arrival Port</option>
-                                                            @foreach ($availability as $item)
-                                                            <option
-                                                                value="{{ $item->trip->arrival->prt_name_en }}">
-                                                                {{ $item->trip->arrival->prt_name_en }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="fast_boat_return">Fast
-                                                            Boat</label>
-                                                        <select class="form-control" id="fast_boat_return"
-                                                            name="fast_boat_return" disabled>
-                                                            <option value="">Select Fast Boat</option>
-                                                            @foreach ($availability as $item)
-                                                            <option value="{{ $item->trip->fastboat->fb_name }}">
-                                                                {{ $item->trip->fastboat->fb_name }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-6">
-                                                    <div class="mb-3">
-                                                        <label class="form-label" for="time_dept_return">Time
-                                                            Dept</label>
-                                                        <select class="form-control" id="time_dept_return"
-                                                            name="time_dept_return" disabled>
-                                                            <option value="">Select Time Dept</option>
-                                                            @foreach ($availability as $item)
-                                                            @php
-                                                            // Tentukan waktu keberangkatan dari availability atau trip
-                                                            $deptTime = $item->fba_dept_time
-                                                            ? $item->fba_dept_time
-                                                            : $item->trip->fbt_dept_time;
-                                                            @endphp
-                                                            <option
-                                                                value="{{ date('H:i', strtotime($deptTime)) }}">
-                                                                {{ date('H:i', strtotime($deptTime)) }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Hasil Pencarian -->
-                                            <div id="search-results-return" style="display: none;">
-                                                <div class="table-responsive">
-                                                    <h5 class="card-title-return"></h5>
-                                                    <table id="booking-data-table-return"
-                                                        class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
-                                                        <thead>
-                                                            <tr class="table-light">
-                                                                <th>
-                                                                    <center>Publish Adult</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Publish Child</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Nett Adult</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Nett Child</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Discount</center>
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <!-- Hasil pencarian akan dimasukkan ke sini -->
-                                                        </tbody>
-                                                    </table>
-                                                    <br>
-                                                    <!-- perhitungan -->
-                                                    <div class="row">
-                                                        <div class="col-sm-3">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="adult_return_publish">Adult
-                                                                    Publish (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="adult_return_publish" name="adult_return_publish"
-                                                                    disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="child_return_publish">Child
-                                                                    Publish (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="child_return_publish" name="child_return_publish"
-                                                                    disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="total_return_end">End Total
-                                                                    (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="total_return_end" name="total_return_end"
-                                                                    style="background-color:lightgray" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-sm-3">
-                                                            <div class="mb-3">
-                                                                <label class="form-label" for="currency_return_end">End
-                                                                    Total Currency (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="currency_return_end" name="currency_return_end"
-                                                                    style="background-color:lightgray" disabled>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="card custom-border-color">
-                                    <div class="collapse show" data-bs-parent="#addproduct-accordion">
-                                        <div class="p-4 border-top">
-                                            <div class="row" id="note">
+                                </div>
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
+                                    <div class="p-4 border-top">
+                                        <!-- Form Pencarian -->
+                                        <div class="row" id="searchForm">
+                                            <div class="col-sm-4">
                                                 <div class="mb-3">
-                                                    <label class="form-label font-size-16 mb-1" for="ctc_note">Note</label>
-                                                    <p class="text-muted text-truncate mb-0">If there are certain
-                                                        conditions, please add notes</p>
-                                                    <textarea style="border-color: lightgray;" class="form-control" name="ctc_note" id="ctc_note"></textarea>
+                                                    <label class="form-label" for="trip_return_date">Trip
+                                                        Date</label>
+                                                    <input type="date" class="form-control"
+                                                        id="trip_return_date" name="trip_return_date" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label"
+                                                        for="departure_return_port">Departure Port</label>
+                                                    <select class="form-control" id="departure_return_port"
+                                                        name="departure_return_port" disabled>
+                                                        <option value="">Select Departure Port</option>
+                                                        @foreach ($availability as $item)
+                                                        <option
+                                                            value="{{ $item->trip->departure->prt_name_en }}">
+                                                            {{ $item->trip->departure->prt_name_en }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="arrival_return_port">Arrival
+                                                        Port</label>
+                                                    <select class="form-control" id="arrival_return_port"
+                                                        name="arrival_return_port" disabled>
+                                                        <option value="">Select Arrival Port</option>
+                                                        @foreach ($availability as $item)
+                                                        <option
+                                                            value="{{ $item->trip->arrival->prt_name_en }}">
+                                                            {{ $item->trip->arrival->prt_name_en }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="fast_boat_return">Fast
+                                                        Boat</label>
+                                                    <select class="form-control" id="fast_boat_return"
+                                                        name="fast_boat_return" disabled>
+                                                        <option value="">Select Fast Boat</option>
+                                                        @foreach ($availability as $item)
+                                                        <option value="{{ $item->trip->fastboat->fb_name }}">
+                                                            {{ $item->trip->fastboat->fb_name }}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="time_dept_return">Time
+                                                        Dept</label>
+                                                    <select class="form-control" id="time_dept_return"
+                                                        name="time_dept_return" disabled>
+                                                        <option value="">Select Time Dept</option>
+                                                        @foreach ($availability as $item)
+                                                        @php
+                                                        // Tentukan waktu keberangkatan dari availability atau trip
+                                                        $deptTime = $item->fba_dept_time
+                                                        ? $item->fba_dept_time
+                                                        : $item->trip->fbt_dept_time;
+                                                        @endphp
+                                                        <option value="{{ date('H:i', strtotime($deptTime)) }}">{{ date('H:i', strtotime($deptTime)) }} </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Hasil Pencarian -->
+                                        <div id="search-results-return" style="display: none;">
+                                            <div class="table-responsive">
+                                                <div id="shuttle-checkbox" class="shuttle-checkbox">
+                                                    <!-- Checkbox akan ditambahkan secara dinamis oleh JavaScript -->
+                                                </div>
+                                                <h5 class="card-title-return"></h5>
+                                                <table id="booking-data-table-return"
+                                                    class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                                    <thead>
+                                                        <tr class="table-light">
+                                                            <th>
+                                                                <center>Publish Adult</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Publish Child</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Nett Adult</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Nett Child</center>
+                                                            </th>
+                                                            <th>
+                                                                <center>Discount</center>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Hasil pencarian akan dimasukkan ke sini -->
+                                                    </tbody>
+                                                </table>
+                                                <br>
+                                                <!-- perhitungan -->
+                                                <div class="row">
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="adult_return_publish">Adult Publish (IDR)</label>
+                                                            <input value="" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="child_return_publish">Child Publish (IDR)</label>
+                                                            <input value="" class="form-control" id="child_return_publish" name="child_return_publish">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="total_return_end">End Total (IDR)</label>
+                                                            <input value="" class="form-control" id="total_return_end" name="total_return_end" style="background-color:lightgray" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="currency_return_end">End Total Currency (IDR)</label>
+                                                            <input value="" class="form-control" id="currency_return_end" name="currency_return_end" style="background-color:lightgray" readonly>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="card custom-border-color">
+                                <div class="collapse show" data-bs-parent="#addproduct-accordion">
+                                    <div class="p-4 border-top">
+                                        <div class="row" id="note">
+                                            <div class="mb-3">
+                                                <label class="form-label font-size-16 mb-1" for="ctc_note">Note</label>
+                                                <p class="text-muted text-truncate mb-0">If there are certain
+                                                    conditions, please add notes</p>
+                                                <textarea style="border-color: lightgray;" class="form-control" name="ctc_note" id="ctc_note"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -636,7 +616,6 @@
             }
         }
 
-
         // Trigger ketika input field berubah (pencarian ulang)
         $('#trip_date, #departure_port, #arrival_port, #fast_boat, #time_dept').on('change', function() {
             var type = $(this).attr('name');
@@ -667,44 +646,87 @@
             checkFormComplete(); // Cek dan lakukan pencarian jika semua field terisi
         });
 
-        // Fungsi untuk memperbarui label sesuai mata uang yang dipilih
+        function calculateTotal() {
+            // Ambil nilai dari input adult_publish dan child_publish
+            let adultPublish = $('#adult_publish').val().replace(/\./g, '') || 0; // Hapus titik dari pemisah ribuan
+            let childPublish = $('#child_publish').val().replace(/\./g, '') || 0; // Hapus titik dari pemisah ribuan
+
+            console.log('Adult Publish:', adultPublish);
+            console.log('Child Publish:', childPublish);
+
+            // Konversi nilai menjadi angka
+            adultPublish = parseInt(adultPublish) || 0;
+            childPublish = parseInt(childPublish) || 0;
+
+            console.log('Adult Publish (Parsed):', adultPublish);
+            console.log('Child Publish (Parsed):', childPublish);
+
+            // Ambil jumlah dewasa dan anak dari input
+            let adultCount = parseInt($('#adult_count').val()) || 1; // Default 1 dewasa
+            let childCount = parseInt($('#child_count').val()) || 0;
+
+            console.log('Adult Count:', adultCount);
+            console.log('Child Count:', childCount);
+
+            // Perhitungan total harga
+            let totalPrice = (adultPublish * adultCount) + (childPublish * childCount);
+
+            console.log('Total Price:', totalPrice);
+
+            // Set nilai total_end (IDR) dengan format pemisah ribuan
+            $('#total_end').val(totalPrice.toLocaleString('id-ID'));
+
+            // Setelah total IDR dihitung, update juga currency_end berdasarkan mata uang yang dipilih
+            updateCurrencyTotal();
+        }
+
         function updateCurrencyLabel() {
             let selectedOption = $('#currency').find('option:selected');
             let currencyCode = selectedOption.data('code') || 'IDR'; // Ambil kode mata uang atau default ke IDR
+            console.log('Currency Code:', currencyCode);
             // Ubah teks label
             $('label[for="currency_end"]').text('End Total Currency (' + currencyCode + ')');
         }
 
-        // Fungsi untuk menghitung ulang total berdasarkan currency yang dipilih
         function updateCurrencyTotal() {
             // Ambil nilai total sebelum diskon dari #total_end
-            let totalPriceAfterDiscount = parseInt($('#total_end').val().replace(/\./g, '')) || 0;
+            let totalPrice = parseInt($('#total_end').val().replace(/\./g, '')) || 0;
+
+            console.log('Total Price (for conversion):', totalPrice);
 
             // Ambil nilai rate dan kode mata uang yang dipilih dari dropdown
             let selectedOption = $('#currency').find('option:selected');
             let rate = parseFloat(selectedOption.data('rate')) || 1; // Default ke 1 jika rate tidak ditemukan
             let currencyCode = selectedOption.data('code') || 'IDR'; // Default ke IDR jika kode tidak ditemukan
 
+            console.log('Rate:', rate);
+            console.log('Currency Code (for conversion):', currencyCode);
+
             // Lakukan konversi jika rate tidak sama dengan 1
-            let convertedTotal = totalPriceAfterDiscount / rate;
+            let convertedTotal = totalPrice / rate;
 
             // Membulatkan angka terlebih dahulu
             let roundedTotal = Math.round(convertedTotal);
+
+            console.log('Converted Total:', roundedTotal);
 
             // Memformat angka bulat dengan pemisah ribuan sesuai format 'id-ID'
             let formattedTotal = roundedTotal.toLocaleString('id-ID');
 
             // Set nilai pada kolom currency_end
             $('#currency_end').val(formattedTotal);
-            console.log('Formatted Total:', formattedTotal);
 
             // Perbarui label sesuai dengan mata uang yang dipilih
             updateCurrencyLabel();
         }
 
+        // Event untuk mengubah total saat dropdown currency berubah
+        $('#currency').on('change', function() {
+            calculateTotal(); // Hitung ulang saat currency berubah
+        });
+
         // Fungsi untuk melakukan pencarian
-        function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept, adultCount = null,
-            childCount = null) {
+        function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept, adultCount = null, childCount = null) {
             // Ambil jumlah adultCount dan childCount dari parameter jika tidak null, atau dari input jika null
             adultCount = adultCount !== null ? adultCount : $('#adult_count').val() || 1; // Default 1 dewasa
             childCount = childCount !== null ? childCount : $('#child_count').val() || 0;
@@ -722,45 +744,49 @@
                     child_count: childCount
                 },
                 success: function(response) {
-                    if (response.html) {
-                        // Tampilkan tabel hasil tanpa mereset
-                        $('#booking-data-table tbody').html(response.html);
-                        $('.card-title').html(response.card_title);
+                    // Tampilkan tabel hasil pencarian tanpa mereset
+                    $('#booking-data-table tbody').html(response.html);
+                    $('.card-title').html(response.card_title);
 
-                        let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g,
-                            '')) || 0;
-                        let childPublishPrice = parseInt(response.child_publish.replace(/\./g,
-                            '')) || 0;
-                        let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
+                    let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g, '')) || 0;
+                    let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) || 0;
+                    let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
 
-                        // Perhitungan total diskon hanya untuk orang dewasa (adultCount), bukan total customer
-                        let totalDiscount = adultCount * discountPerPerson;
+                    let totalDiscount = adultCount * discountPerPerson;
+                    let totalPriceBeforeDiscount = (adultPublishPrice * adultCount) + (childPublishPrice * childCount);
+                    let totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
 
-                        // Total harga sebelum diskon
-                        let totalPriceBeforeDiscount = (adultPublishPrice * adultCount) + (
-                            childPublishPrice * childCount);
+                    if (totalPriceAfterDiscount < 0) {
+                        totalPriceAfterDiscount = 0;
+                    }
 
-                        // Total harga setelah diskon
-                        let totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
+                    $('#adult_publish').val(response.adult_publish);
+                    $('#child_publish').val(response.child_publish);
+                    $('#total_end').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
 
-                        // Pastikan total tidak negatif
-                        if (totalPriceAfterDiscount < 0) {
-                            totalPriceAfterDiscount = 0;
-                        }
+                    // Update nilai currency_end berdasarkan currency yang dipilih
+                    updateCurrencyTotal();
 
-                        $('#adult_publish').val(response.adult_publish);
-                        $('#child_publish').val(response.child_publish);
-                        $('#total_end').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
+                    // Tampilkan hasil pencarian baru
+                    $('#search-results').show();
 
-                        // Update nilai currency_end berdasarkan currency yang dipilih
-                        updateCurrencyTotal(); // Menghitung nilai currency setelah pencarian
-
-                        // Tampilkan hasil pencarian baru
-                        $('#search-results').show();
+                    // Cek apakah shuttle checkbox perlu ditampilkan
+                    if (response.show_shuttle_checkbox) {
+                        $('#shuttle-checkbox').html(`
+                            <div>
+                                <label>
+                                    <input type="checkbox" id="pickup-shuttle" name="pickup_shuttle" value="1"> 
+                                    Pickup Shuttle
+                                </label>
+                                &nbsp; &nbsp; &nbsp;
+                                <label>
+                                    <input type="checkbox" id="dropoff-shuttle" name="dropoff_shuttle" value="1"> 
+                                    Dropoff Shuttle
+                                </label>
+                            </div>
+                        `);
                     } else {
-                        // Jika tidak ada hasil atau stok tidak mencukupi
-                        resetSearchResults(); // Sembunyikan hasil pencarian
-                        resetDropdowns(); // Bersihkan dropdown
+                        $('#shuttle-checkbox').empty(); // Hapus checkbox jika tidak ada shuttle
                     }
                 },
                 error: function(xhr, status, error) {

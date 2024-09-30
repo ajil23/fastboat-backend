@@ -83,7 +83,7 @@ class BookingDataController extends Controller
         try {
 
             dd($request);
-            
+
             // Mendapatkan IP address
             $ipAddress = $request->ip(); // IP Publik pengguna
 
@@ -182,7 +182,6 @@ class BookingDataController extends Controller
         }
     }
 
-
     public function search(Request $request)
     {
         try {
@@ -225,6 +224,11 @@ class BookingDataController extends Controller
             // Ambil data FastboatAvailability
             $availability = $availabilityQuery->get();
 
+            $shuttleType = null;
+            if (!$availability->isEmpty()) {
+                $shuttleType = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
+            }
+
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
                 $tripQuery = FastboatTrip::whereHas('departure', function ($query) use ($departurePort) {
@@ -238,7 +242,7 @@ class BookingDataController extends Controller
                     })
                     ->where('fbt_dept_time', $timeDept)
                     ->whereDate('fbt_trip_date', $tripDate)
-                    ->where('fbt_stock', '>', $totalCustomer); // Asumsikan ada field fbt_stock
+                    ->where('fbt_stock', '>', $totalCustomer);
 
                 $trips = $tripQuery->get();
 
@@ -246,7 +250,6 @@ class BookingDataController extends Controller
                     return response()->json(['message' => 'No availability found'], 404);
                 }
 
-                // Jika availability tidak ada, gunakan data dari trip
                 $availability = $trips->map(function ($trip) {
                     return (object)[
                         'fba_adult_publish' => null,
@@ -260,19 +263,18 @@ class BookingDataController extends Controller
                 });
             }
 
-            // Buat HTML dan perhitungan
             $html = '';
             $cardTitle = '';
             $adultPublishTotal = 0;
             $childPublishTotal = 0;
             $discountPerPerson = 0;
+            $shuttleAvailable = false; // Inisialisasi shuttle tidak tersedia
 
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
                 $deptTime = $avail->fba_dept_time ?? $trip->fbt_dept_time;
                 $cardTitle = '<center>' . $trip->fastboat->fb_name . ' (' .
-                    $trip->departure->prt_code . ' -> ' .
-                    $trip->arrival->prt_code . ' ' .
+                    $trip->departure->prt_code . ' -> ' . $trip->arrival->prt_code . ' ' .
                     date('H:i', strtotime($deptTime)) . ')' . '</center>';
 
                 $html .= '<tr>';
@@ -287,14 +289,24 @@ class BookingDataController extends Controller
                 $childPublishTotal += $avail->fba_child_publish ?? 0;
 
                 $discountPerPerson = $avail->fba_discount ?? 0;
+
+                // Cek apakah shuttle tersedia
+                if (!empty($trip->fbt_shuttle_type)) {
+                    $shuttleAvailable = true;
+                }
             }
 
+            // Tentukan apakah checkbox harus ditampilkan berdasarkan tipe shuttle
+            $showShuttleCheckbox = in_array($shuttleAvailable, ['Private', 'Sharing']);
+
+            // Kembalikan response termasuk shuttle availability
             return response()->json([
                 'html' => $html,
                 'card_title' => $cardTitle,
                 'adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
                 'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
                 'discount' => number_format($discountPerPerson, 0, ',', '.'),
+                'show_shuttle_checkbox' => $showShuttleCheckbox, // Menambahkan informasi untuk checkbox
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -317,8 +329,7 @@ class BookingDataController extends Controller
 
             // Filter berdasarkan tanggal
             $query = FastboatAvailability::where('fba_date', $tripDate)
-                // Tambahkan filter stok harus lebih dari total customer
-                ->where('fba_stock', '>', $totalCustomer);
+                ->where('fba_stock', '>', $totalCustomer); // Tambahkan filter stok
 
             // Filter berdasarkan departure port
             if ($departurePort) {
@@ -350,6 +361,7 @@ class BookingDataController extends Controller
                     'arrival_ports' => [],
                     'fast_boats' => [],
                     'time_depts' => [],
+                    'show_shuttle_checkbox' => false, // Tidak ada checkbox
                 ]);
             }
 
@@ -358,6 +370,7 @@ class BookingDataController extends Controller
             $arrivalPorts = [];
             $fastBoats = [];
             $timeDepts = [];
+            $showShuttleCheckbox = false;
 
             foreach ($availabilities as $availability) {
                 $trip = $availability->trip;
@@ -384,14 +397,20 @@ class BookingDataController extends Controller
                 if (!in_array($formattedTimeDept, $timeDepts)) {
                     $timeDepts[] = $formattedTimeDept;
                 }
+
+                // Cek apakah shuttle type adalah 'Private' atau 'Sharing'
+                if ($trip->fbt_shuttle_type === 'Private' || $trip->fbt_shuttle_type === 'Sharing') {
+                    $showShuttleCheckbox = true; // Tampilkan checkbox jika shuttle tersedia
+                }
             }
 
-            // Return data untuk setiap dropdown
+            // Return data untuk setiap dropdown dan flag shuttle checkbox
             return response()->json([
                 'departure_ports' => $departurePorts,
                 'arrival_ports' => $arrivalPorts,
                 'fast_boats' => $fastBoats,
                 'time_depts' => $timeDepts,
+                'show_shuttle_checkbox' => $showShuttleCheckbox,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
