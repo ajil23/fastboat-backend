@@ -458,6 +458,11 @@ class BookingDataController extends Controller
             // Ambil data FastboatAvailability
             $availability = $availabilityQuery->get();
 
+            $shuttleTypeReturn = null;
+            if (!$availability->isEmpty()) {
+                $shuttleTypeReturn = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
+            }
+
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
                 $tripQuery = FastboatTrip::whereHas('departure', function ($query) use ($departurePortReturn) {
@@ -479,7 +484,6 @@ class BookingDataController extends Controller
                     return response()->json(['message' => 'No availability found'], 404);
                 }
 
-                // Jika availability tidak ada, gunakan data dari trip
                 $availability = $trips->map(function ($trip) {
                     return (object)[
                         'fba_adult_publish' => null,
@@ -493,23 +497,18 @@ class BookingDataController extends Controller
                 });
             }
 
-            // Buat HTML dan perhitungan
             $htmlReturn = '';
             $cardTitleReturn = '';
             $adultPublishTotalReturn = 0;
             $childPublishTotalReturn = 0;
             $discountPerPersonReturn = 0;
+            $shuttleAvailableReturn = null; // Inisialisasi shuttle tidak tersedia
 
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
-
-                // Tentukan waktu keberangkatan
                 $deptTimeReturn = $avail->fba_dept_time ?? $trip->fbt_dept_time;
-
-                // Buat card-title
                 $cardTitleReturn = '<center>' . $trip->fastboat->fb_name . ' (' .
-                    $trip->departure->prt_code . ' -> ' .
-                    $trip->arrival->prt_code . ' ' .
+                    $trip->departure->prt_code . ' -> ' . $trip->arrival->prt_code . ' ' .
                     date('H:i', strtotime($deptTimeReturn)) . ')</center>';
 
                 $htmlReturn .= '<tr>';
@@ -523,15 +522,21 @@ class BookingDataController extends Controller
                 $adultPublishTotalReturn += $avail->fba_adult_publish ?? 0;
                 $childPublishTotalReturn += $avail->fba_child_publish ?? 0;
                 $discountPerPersonReturn = $avail->fba_discount ?? 0;
+
+                if (!empty($trip->fbt_shuttle_type)) {
+                    $shuttleAvailableReturn = true;
+                }
             }
 
-            // Return hasil HTML dan perhitungan
+            $showShuttleCheckboxReturn = in_array($shuttleAvailableReturn, ['Private', 'Sharing']);
+
             return response()->json([
                 'htmlReturn' => $htmlReturn,
                 'card_return_title' => $cardTitleReturn,
                 'adult_return_publish' => number_format($adultPublishTotalReturn, 0, ',', '.'),
                 'child_return_publish' => number_format($childPublishTotalReturn, 0, ',', '.'),
                 'discount_return' => number_format($discountPerPersonReturn, 0, ',', '.'),
+                'show_shuttle_checkbox_return' => $showShuttleCheckboxReturn, // Menambahkan informasi untuk checkbox
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -542,92 +547,100 @@ class BookingDataController extends Controller
     {
         try {
             // Ambil data dari request
-            $tripDateReturn = $request->input('trip_return_date');
-            $departurePortReturn = $request->input('departure_return_port');
-            $arrivalPortReturn = $request->input('arrival_return_port');
-            $fastBoatReturn = $request->input('fast_boat_return');
-            $adultCountReturn = $request->input('adult_count', 1); // Default 1 dewasa
-            $childCountReturn = $request->input('child_count', 0); // Default 0 anak-anak
+            $tripDate = $request->input('trip_return_date');
+            $departurePort = $request->input('departure_return_port');
+            $arrivalPort = $request->input('arrival_return_port');
+            $fastBoat = $request->input('fast_boat_return');
+            $adultCount = $request->input('adult_count', 1); // Default 1 dewasa
+            $childCount = $request->input('child_count', 0); // Default 0 anak-anak
 
             // Hitung total customer (dewasa + anak-anak)
-            $totalCustomerReturn = $adultCountReturn + $childCountReturn;
+            $totalCustomer = $adultCount + $childCount;
 
             // Filter berdasarkan tanggal dan stok
-            $query = FastboatAvailability::where('fba_date', $tripDateReturn)
-                ->where('fba_stock', '>', $totalCustomerReturn);
+            $query = FastboatAvailability::where('fba_date', $tripDate)
+                ->where('fba_stock', '>', $totalCustomer); // Tambahkan filter stok
 
             // Filter berdasarkan departure port
-            if ($departurePortReturn) {
-                $query->whereHas('trip.departure', function ($q) use ($departurePortReturn) {
-                    $q->where('prt_name_en', $departurePortReturn);
+            if ($departurePort) {
+                $query->whereHas('trip.departure', function ($q) use ($departurePort) {
+                    $q->where('prt_name_en', $departurePort);
                 });
             }
 
             // Filter berdasarkan arrival port
-            if ($arrivalPortReturn) {
-                $query->whereHas('trip.arrival', function ($q) use ($arrivalPortReturn) {
-                    $q->where('prt_name_en', $arrivalPortReturn);
+            if ($arrivalPort) {
+                $query->whereHas('trip.arrival', function ($q) use ($arrivalPort) {
+                    $q->where('prt_name_en', $arrivalPort);
                 });
             }
 
             // Filter berdasarkan fastboat
-            if ($fastBoatReturn) {
-                $query->whereHas('trip.fastboat', function ($q) use ($fastBoatReturn) {
-                    $q->where('fb_name', $fastBoatReturn);
+            if ($fastBoat) {
+                $query->whereHas('trip.fastboat', function ($q) use ($fastBoat) {
+                    $q->where('fb_name', $fastBoat);
                 });
             }
 
-            $availabilitiesReturn = $query->get();
+            $availabilities = $query->get();
 
             // Jika tidak ada availability, tidak perlu melanjutkan
-            if ($availabilitiesReturn->isEmpty()) {
+            if ($availabilities->isEmpty()) {
                 return response()->json([
                     'departure_return_ports' => [],
                     'arrival_return_ports' => [],
                     'fast_boats_return' => [],
                     'time_depts_return' => [],
+                    'show_shuttle_checkbox_return' => false, // Tidak ada checkbox
                 ]);
             }
 
             // Format data untuk dropdown
-            $departurePortsReturn = [];
-            $arrivalPortsReturn = [];
-            $fastBoatsReturn = [];
-            $timeDeptsReturn = [];
+            $departurePorts = [];
+            $arrivalPorts = [];
+            $fastBoats = [];
+            $timeDepts = [];
+            $showShuttleCheckbox = false;
 
-            foreach ($availabilitiesReturn as $availability) {
+            foreach ($availabilities as $availability) {
                 $trip = $availability->trip;
 
                 // Mengumpulkan departure port
-                if (!in_array($trip->departure->prt_name_en, $departurePortsReturn)) {
-                    $departurePortsReturn[] = $trip->departure->prt_name_en;
+                if (!in_array($trip->departure->prt_name_en, $departurePorts)) {
+                    $departurePorts[] = $trip->departure->prt_name_en;
                 }
 
                 // Mengumpulkan arrival port
-                if (!in_array($trip->arrival->prt_name_en, $arrivalPortsReturn)) {
-                    $arrivalPortsReturn[] = $trip->arrival->prt_name_en;
+                if (!in_array($trip->arrival->prt_name_en, $arrivalPorts)) {
+                    $arrivalPorts[] = $trip->arrival->prt_name_en;
                 }
 
                 // Mengumpulkan fastboat
-                if (!in_array($trip->fastboat->fb_name, $fastBoatsReturn)) {
-                    $fastBoatsReturn[] = $trip->fastboat->fb_name;
+                if (!in_array($trip->fastboat->fb_name, $fastBoats)) {
+                    $fastBoats[] = $trip->fastboat->fb_name;
                 }
 
                 // Mengumpulkan waktu keberangkatan
-                $deptTimeReturn = $availability->fba_dept_time ?? $trip->fbt_dept_time;
-                $formattedTimeDeptReturn = date('H:i', strtotime($deptTimeReturn));
+                $deptTime = $availability->fba_dept_time ?? $trip->fbt_dept_time;
+                $formattedTimeDept = date('H:i', strtotime($deptTime));
 
-                if (!in_array($formattedTimeDeptReturn, $timeDeptsReturn)) {
-                    $timeDeptsReturn[] = $formattedTimeDeptReturn;
+                if (!in_array($formattedTimeDept, $timeDepts)) {
+                    $timeDepts[] = $formattedTimeDept;
+                }
+
+                // Cek apakah shuttle type adalah 'Private' atau 'Sharing'
+                if ($trip->fbt_shuttle_type === 'Private' || $trip->fbt_shuttle_type === 'Sharing') {
+                    $showShuttleCheckbox = true; // Tampilkan checkbox jika shuttle tersedia
                 }
             }
 
             // Return data untuk setiap dropdown
             return response()->json([
-                'departure_return_ports' => $departurePortsReturn,
-                'arrival_return_ports' => $arrivalPortsReturn,
-                'fast_boats_return' => $fastBoatsReturn,
-                'time_depts_return' => $timeDeptsReturn,
+                'departure_return_ports' => $departurePorts,
+                'arrival_return_ports' => $arrivalPorts,
+                'fast_boats_return' => $fastBoats,
+                'time_depts_return' => $timeDepts,
+                'show_shuttle_checkbox_return' => $showShuttleCheckbox,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
