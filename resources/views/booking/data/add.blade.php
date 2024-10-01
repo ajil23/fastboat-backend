@@ -784,7 +784,71 @@
                                     Dropoff Shuttle
                                 </label>
                             </div>
+                            <div class="container">
+                                <div class="row">
+                            <div class="col-md-6 shuttle-inputs" style="display:none;" id="pickup-inputs">
+                                <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Pickup Area</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Pickup Meeting Point</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="adult_return_publish">Address Pickup</label>
+                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
+                                            </div>
+                                    </div>
+                                </div>
+                            <div class="col-md-6 shuttle-inputs" style="display:none;" id="dropoff-inputs">
+                                <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Dropoff Area</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Dropoff Meeting Point</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                </div>
+                                </div>
+                            <div class="row">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Address Dropoff</label>
+                                        <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
+                                    </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
                         `);
+                        // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
+                        $('#pickup-shuttle').change(function() {
+                            if ($(this).is(':checked')) {
+                                $('#pickup-inputs').show();
+                            } else {
+                                $('#pickup-inputs').hide();
+                            }
+                        });
+
+                        $('#dropoff-shuttle').change(function() {
+                            if ($(this).is(':checked')) {
+                                $('#dropoff-inputs').show();
+                            } else {
+                                $('#dropoff-inputs').hide();
+                            }
+                        });
                     } else {
                         $('#shuttle-checkbox').empty(); // Hapus checkbox jika tidak ada shuttle
                     }
@@ -1118,7 +1182,71 @@
                             Dropoff Shuttle
                         </label>
                     </div>
-                `);
+                            <div class="container">
+                                <div class="row">
+                            <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="pickup-inputs-return">
+                                <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Pickup Area</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Pickup Meeting Point</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <div class="row">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="adult_return_publish">Address Pickup</label>
+                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
+                                            </div>
+                                    </div>
+                                </div>
+                            <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="dropoff-inputs-return">
+                                <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Dropoff Area</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Dropoff Meeting Point</label>
+                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                    </div>
+                                </div>
+                                </div>
+                            <div class="row">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="adult_return_publish">Address Dropoff</label>
+                                        <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
+                                    </div>
+                            </div>
+                            </div>
+                            </div>
+                            </div>
+                        `);
+                        // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
+                        $('#pickup-shuttle-return').change(function() {
+                            if ($(this).is(':checked')) {
+                                $('#pickup-inputs-return').show();
+                            } else {
+                                $('#pickup-inputs-return').hide();
+                            }
+                        });
+
+                        $('#dropoff-shuttle-return').change(function() {
+                            if ($(this).is(':checked')) {
+                                $('#dropoff-inputs-return').show();
+                            } else {
+                                $('#dropoff-inputs-return').hide();
+                            }
+                        });
                     } else {
                         $('#shuttle-checkbox-return').empty(); // Hapus checkbox jika tidak ada shuttle
                     }
