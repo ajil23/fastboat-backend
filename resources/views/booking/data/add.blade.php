@@ -483,7 +483,7 @@
                                         <!-- Hasil Pencarian -->
                                         <div id="search-results-return" style="display: none;">
                                             <div class="table-responsive">
-                                                <div id="shuttle-checkbox" class="shuttle-checkbox">
+                                                <div id="shuttle-checkbox-return" class="shuttle-checkbox-return">
                                                     <!-- Checkbox akan ditambahkan secara dinamis oleh JavaScript -->
                                                 </div>
                                                 <h5 class="card-title-return"></h5>
@@ -1059,9 +1059,9 @@
             updateCurrencyLabelReturn();
         }
 
-        // Fungsi untuk melakukan pencarian
+        // Fungsi untuk melakukan pencarian return
         function performSearchReturn(tripDateReturn, departurePortReturn, arrivalPortReturn, fastBoatReturn, timeDeptReturn, adultCountReturn = null, childCountReturn = null) {
-            // Ambil nilai adultCountReturn dan childCountReturn dari parameter jika tidak null, atau dari input jika null
+            // Ambil jumlah adultCountReturn dan childCountReturn dari parameter jika tidak null, atau dari input jika null
             adultCountReturn = adultCountReturn !== null ? adultCountReturn : $('#adult_count').val() || 1; // Default 1 dewasa
             childCountReturn = childCountReturn !== null ? childCountReturn : $('#child_count').val() || 0;
 
@@ -1078,42 +1078,49 @@
                     child_count: childCountReturn
                 },
                 success: function(response) {
-                    if (response.htmlReturn) {
-                        // Tampilkan tabel hasil
-                        $('#booking-data-table-return tbody').html(response.htmlReturn);
-                        $('.card-title-return').html(response.card_return_title);
+                    // Tampilkan tabel hasil pencarian return tanpa mereset
+                    $('#booking-data-table-return tbody').html(response.htmlReturn);
+                    $('.card-title-return').html(response.card_return_title);
 
-                        let adultPublishPriceReturn = parseInt(response.adult_return_publish.replace(/\./g, '')) || 0;
-                        let childPublishPriceReturn = parseInt(response.child_return_publish.replace(/\./g, '')) || 0;
-                        let discountPerPersonReturn = parseInt(response.discount_return.replace(/\./g, '')) || 0;
+                    let adultPublishPriceReturn = parseInt(response.adult_return_publish.replace(/\./g, '')) || 0;
+                    let childPublishPriceReturn = parseInt(response.child_return_publish.replace(/\./g, '')) || 0;
+                    let discountPerPersonReturn = parseInt(response.discount_return.replace(/\./g, '')) || 0;
 
-                        // Perhitungan total diskon hanya untuk orang dewasa (adultCountReturn)
-                        let totalDiscountReturn = adultCountReturn * discountPerPersonReturn;
+                    let totalDiscountReturn = adultCountReturn * discountPerPersonReturn;
+                    let totalPriceBeforeDiscountReturn = (adultPublishPriceReturn * adultCountReturn) + (childPublishPriceReturn * childCountReturn);
+                    let totalPriceAfterDiscountReturn = totalPriceBeforeDiscountReturn - totalDiscountReturn;
 
-                        // Total harga sebelum diskon
-                        let totalPriceBeforeDiscountReturn = (adultPublishPriceReturn * adultCountReturn) + (childPublishPriceReturn * childCountReturn);
+                    if (totalPriceAfterDiscountReturn < 0) {
+                        totalPriceAfterDiscountReturn = 0;
+                    }
 
-                        // Total harga setelah diskon
-                        let totalPriceAfterDiscountReturn = totalPriceBeforeDiscountReturn - totalDiscountReturn;
+                    $('#adult_return_publish').val(response.adult_return_publish);
+                    $('#child_return_publish').val(response.child_return_publish);
+                    $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
 
-                        // Pastikan total tidak negatif
-                        if (totalPriceAfterDiscountReturn < 0) {
-                            totalPriceAfterDiscountReturn = 0;
-                        }
+                    // Update nilai currency_return_end berdasarkan currency yang dipilih
+                    updateCurrencyTotalReturn(); // Menghitung nilai currency setelah pencarian
 
-                        $('#adult_return_publish').val(response.adult_return_publish);
-                        $('#child_return_publish').val(response.child_return_publish);
-                        $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
+                    // Tampilkan hasil pencarian baru
+                    $('#search-results-return').show();
 
-                        // Update nilai currency_return_end berdasarkan currency yang dipilih
-                        updateCurrencyTotalReturn(); // Menghitung nilai currency setelah pencarian
-
-                        // Tampilkan hasil pencarian baru
-                        $('#search-results-return').show();
+                    // Cek apakah shuttle checkbox perlu ditampilkan
+                    if (response.show_shuttle_checkbox_return) {
+                        $('#shuttle-checkbox-return').html(`
+                    <div>
+                        <label>
+                            <input type="checkbox" id="pickup-shuttle-return" name="pickup_shuttle_return" value="1"> 
+                            Pickup Shuttle
+                        </label>
+                        &nbsp; &nbsp; &nbsp;
+                        <label>
+                            <input type="checkbox" id="dropoff-shuttle-return" name="dropoff_shuttle_return" value="1"> 
+                            Dropoff Shuttle
+                        </label>
+                    </div>
+                `);
                     } else {
-                        // Jika tidak ada hasil atau stok tidak mencukupi
-                        resetSearchResultsReturn(); // Sembunyikan hasil pencarian
-                        resetDropdownsReturn(); // Bersihkan dropdown
+                        $('#shuttle-checkbox-return').empty(); // Hapus checkbox jika tidak ada shuttle
                     }
                 },
                 error: function(xhr, status, error) {
