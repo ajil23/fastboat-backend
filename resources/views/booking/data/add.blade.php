@@ -786,51 +786,51 @@
                             </div>
                             <div class="container">
                                 <div class="row">
-                            <div class="col-md-6 shuttle-inputs" style="display:none;" id="pickup-inputs">
-                                <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Pickup Area</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Pickup Meeting Point</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                    </div>
-                                    </div>
-                                    <div class="row">
-                                            <div class="mb-3">
-                                                <label class="form-label" for="adult_return_publish">Address Pickup</label>
-                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
+                                    <div class="col-md-6 shuttle-inputs" style="display:none;" id="pickup-inputs">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_publish">Pickup Area</label>
+                                                    <input value="" style="border-color: lightgray;" class="form-control" id="adult_publish" name="adult_publish">
+                                                </div>
                                             </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_publish">Phone</label>
+                                                    <input type="number" style="border-color: lightgray;" class="form-control" id="adult_publish" name="adult_publish">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="adult_publish">Address Pickup</label>
+                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_publish" name="adult_publish"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 shuttle-inputs" style="display:none;" id="dropoff-inputs">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_publish">Dropoff Area</label>
+                                                    <input value="" style="border-color: lightgray;" class="form-control" id="adult_publish" name="adult_publish">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_publish">Phone</label>
+                                                    <input type="number" style="border-color: lightgray;" class="form-control" id="adult_publish" name="adult_publish">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="adult_publish">Address Dropoff</label>
+                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_publish" name="adult_publish"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            <div class="col-md-6 shuttle-inputs" style="display:none;" id="dropoff-inputs">
-                                <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Dropoff Area</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Dropoff Meeting Point</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                </div>
-                                </div>
-                            <div class="row">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Address Dropoff</label>
-                                        <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
-                                    </div>
-                            </div>
-                            </div>
-                            </div>
                             </div>
                         `);
                         // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
@@ -1027,6 +1027,17 @@
             }
         });
 
+        // Fungsi untuk reset hasil pencarian
+        function resetSearchResultsReturn() {
+            $('#booking-data-table-return tbody').empty();
+            $('.card-title-return').empty();
+            $('#adult_return_publish').val('');
+            $('#child_return_publish').val('');
+            $('#total_return_end').val('');
+            $('#currency_return_end').val('');
+            $('#search-results-return').hide();
+        }
+
         // Fungsi untuk mengecek apakah semua field telah diisi
         function checkFormComplete() {
             let tripDateReturn = $('#trip_return_date').val();
@@ -1042,32 +1053,18 @@
             }
         }
 
-        // Fungsi untuk reset hasil pencarian
-        function resetSearchResultsReturn() {
-            $('#booking-data-table-return tbody').empty();
-            $('.card-title-return').empty();
-            $('#adult_return_publish').val('');
-            $('#child_return_publish').val('');
-            $('#total_return_end').val('');
-            $('#currency_return_end').val('');
-            $('#search-results-return').hide();
-        }
-
         // Trigger ketika input diubah
         $('#trip_return_date, #departure_return_port, #arrival_return_port, #fast_boat_return, #time_dept_return')
             .on('change', function() {
                 var type = $(this).attr('name');
                 if (type === 'trip_return_date') {
-                    $('#departure_return_port').empty().append(
-                        '<option value="">Select Departure Port</option>');
-                    $('#arrival_return_port').empty().append(
-                        '<option value="">Select Arrival Port</option>');
+                    $('#departure_return_port').empty().append('<option value="">Select Departure Port</option>');
+                    $('#arrival_return_port').empty().append('<option value="">Select Arrival Port</option>');
                     $('#fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
                     $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
                     console.log(type);
                 } else if (type === 'departure_return_port') {
-                    $('#arrival_return_port').empty().append(
-                        '<option value="">Select Arrival Port</option>');
+                    $('#arrival_return_port').empty().append('<option value="">Select Arrival Port</option>');
                     $('#fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
                     $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
                     console.log(type);
@@ -1084,7 +1081,6 @@
                 $('#total_return_end').val(''); // Reset total harga
                 $('#currency_return_end').val(''); // Reset format mata uang
                 $('#search-results-return').hide(); // Sembunyikan hasil pencarian
-
                 checkFormComplete(); // Cek dan lakukan pencarian jika semua field terisi
             });
 
@@ -1171,64 +1167,64 @@
                     // Cek apakah shuttle checkbox perlu ditampilkan
                     if (response.show_shuttle_checkbox_return) {
                         $('#shuttle-checkbox-return').html(`
-                    <div>
-                        <label>
-                            <input type="checkbox" id="pickup-shuttle-return" name="pickup_shuttle_return" value="1"> 
-                            Pickup Shuttle
-                        </label>
-                        &nbsp; &nbsp; &nbsp;
-                        <label>
-                            <input type="checkbox" id="dropoff-shuttle-return" name="dropoff_shuttle_return" value="1"> 
-                            Dropoff Shuttle
-                        </label>
-                    </div>
+                            <div>
+                                <label>
+                                    <input type="checkbox" id="pickup-shuttle-return" name="pickup_shuttle_return" value="1"> 
+                                    Pickup Shuttle
+                                </label>
+                                &nbsp; &nbsp; &nbsp;
+                                <label>
+                                    <input type="checkbox" id="dropoff-shuttle-return" name="dropoff_shuttle_return" value="1"> 
+                                    Dropoff Shuttle
+                                </label>
+                            </div>
                             <div class="container">
                                 <div class="row">
-                            <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="pickup-inputs-return">
-                                <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Pickup Area</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Pickup Meeting Point</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                    </div>
-                                    </div>
-                                    <div class="row">
+                                    <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="pickup-inputs-return">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_return_publish">Pickup Area</label>
+                                                    <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_return_publish">Phone</label>
+                                                    <input type="number"  style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
                                             <div class="mb-3">
                                                 <label class="form-label" for="adult_return_publish">Address Pickup</label>
                                                 <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="dropoff-inputs-return">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_return_publish">Dropoff Area</label>
+                                                    <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="adult_return_publish">Phone</label>
+                                                    <input type="number" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-3">
+                                                <label class="form-label" for="adult_return_publish">Address Dropoff</label>
+                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="dropoff-inputs-return">
-                                <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Dropoff Area</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Dropoff Meeting Point</label>
-                                        <input value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish">
-                                    </div>
-                                </div>
-                                </div>
-                            <div class="row">
-                                    <div class="mb-3">
-                                        <label class="form-label" for="adult_return_publish">Address Dropoff</label>
-                                        <textarea value="" style="border-color: lightgray;" class="form-control" id="adult_return_publish" name="adult_return_publish"></textarea>
-                                    </div>
-                            </div>
-                            </div>
-                            </div>
                             </div>
                         `);
                         // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
