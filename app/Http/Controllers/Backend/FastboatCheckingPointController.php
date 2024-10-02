@@ -67,4 +67,10 @@ class FastboatCheckingPointController extends Controller
         toast('Your data as been submited!', 'success');
         return redirect()->route('checking.view');
     }
+
+    public function show($fcp_id)
+    {
+        $pointData = FastboatCheckingPoint::with(['company', 'departure'])->find($fcp_id);  // Mengambil id dari data yang dipilih
+        return response()->json($pointData);
+    }
 }
