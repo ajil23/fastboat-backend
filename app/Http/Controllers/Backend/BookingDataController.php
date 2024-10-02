@@ -7,6 +7,7 @@ use App\Models\Contact;
 use App\Models\DataFastboat;
 use App\Models\DataRoute;
 use App\Models\FastboatAvailability;
+use App\Models\FastboatShuttleArea;
 use App\Models\MasterPort;
 use App\Models\FastboatTrip;
 use App\Models\MasterCurrency;
@@ -186,13 +187,14 @@ class BookingDataController extends Controller
     {
         try {
             // Ambil data dari request
-            $tripDate = $request->input('trip_date');
-            $departurePort = $request->input('departure_port');
-            $arrivalPort = $request->input('arrival_port');
-            $fastBoat = $request->input('fast_boat');
+            $tripDate = $request->input('fbo_trip_date');
+            $departurePort = $request->input('fbo_departure_port');
+            $arrivalPort = $request->input('fbo_arrival_port');
+            $fastBoat = $request->input('fbo_fast_boat');
             $timeDept = $request->input('time_dept');
-            $adultCount = $request->input('adult_count', 1); // Default 1 dewasa
-            $childCount = $request->input('child_count', 0); // Default 0 anak-anak
+            $adultCount = $request->input('fbo_adult', 1); // Default 1 dewasa
+            $childCount = $request->input('fbo_child', 0); // Default 0 anak-anak
+            $area = $request->input('fbo_area'); // Tambahkan input area
 
             // Total customer
             $totalCustomer = $adultCount + $childCount;
@@ -210,6 +212,13 @@ class BookingDataController extends Controller
                 ->where('fba_date', $tripDate)
                 // Pengecekan stok harus lebih besar dari total customer
                 ->where('fba_stock', '>', $totalCustomer);
+
+            // Filter berdasarkan area, jika ada
+            if ($area) {
+                $availabilityQuery->whereHas('trip.area', function ($query) use ($area) {
+                    $query->where('area_name', $area);
+                });
+            }
 
             // Filter berdasarkan timeDept, jika ada
             if ($timeDept) {
@@ -229,6 +238,34 @@ class BookingDataController extends Controller
                 $shuttleType = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
             }
 
+
+            // Jika ada data availability
+            $shuttleAreas = [];
+            $generalAreas = [];
+            if (!$availability->isEmpty()) {
+                // Ambil area shuttle dari trip yang terkait
+                foreach ($availability as $avail) {
+                    if ($avail->trip->shuttle && $avail->trip->shuttle->areas) {
+                        foreach ($avail->trip->shuttle->areas as $area) {
+                            $shuttleAreas[] = [
+                                'id' => $area->sa_id,
+                                'name' => $area->sa_name,
+                            ];
+                        }
+                    }
+                }
+            }
+
+            // Jika tidak ada shuttle, ambil area dari tabel umum fastboatshuttlearea
+            if (empty($shuttleAreas)) {
+                $generalAreas = FastboatShuttleArea::all()->map(function ($area) {
+                    return [
+                        'id' => $area->sa_id,
+                        'name' => $area->sa_name,
+                    ];
+                });
+            }
+
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
                 $tripQuery = FastboatTrip::whereHas('departure', function ($query) use ($departurePort) {
@@ -241,8 +278,14 @@ class BookingDataController extends Controller
                         $query->where('fb_name', $fastBoat);
                     })
                     ->where('fbt_dept_time', $timeDept)
-                    ->whereDate('fbt_trip_date', $tripDate)
+                    ->whereDate('fbt_fbo_trip_date', $tripDate)
                     ->where('fbt_stock', '>', $totalCustomer);
+
+                if ($area) {
+                    $tripQuery->whereHas('area', function ($query) use ($area) {
+                        $query->where('area_name', $area);
+                    });
+                }
 
                 $trips = $tripQuery->get();
 
@@ -306,7 +349,9 @@ class BookingDataController extends Controller
                 'adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
                 'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
                 'discount' => number_format($discountPerPerson, 0, ',', '.'),
-                'show_shuttle_checkbox' => $showShuttleCheckbox, // Menambahkan informasi untuk checkbox
+                'show_shuttle_checkbox' => $showShuttleCheckbox,
+                'shuttle_areas' => $shuttleAreas,
+                'general_areas' => $generalAreas,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -317,12 +362,12 @@ class BookingDataController extends Controller
     {
         try {
             // Ambil data dari request
-            $tripDate = $request->input('trip_date');
-            $departurePort = $request->input('departure_port');
-            $arrivalPort = $request->input('arrival_port');
-            $fastBoat = $request->input('fast_boat');
-            $adultCount = $request->input('adult_count', 1); // Default 1 dewasa
-            $childCount = $request->input('child_count', 0); // Default 0 anak-anak
+            $tripDate = $request->input('fbo_trip_date');
+            $departurePort = $request->input('fbo_departure_port');
+            $arrivalPort = $request->input('fbo_arrival_port');
+            $fastBoat = $request->input('fbo_fast_boat');
+            $adultCount = $request->input('fbo_adult', 1); // Default 1 dewasa
+            $childCount = $request->input('fbo_child', 0); // Default 0 anak-anak
 
             // Hitung total customer (dewasa + anak-anak)
             $totalCustomer = $adultCount + $childCount;
@@ -357,9 +402,9 @@ class BookingDataController extends Controller
             // Jika tidak ada availability, tidak perlu melanjutkan
             if ($availabilities->isEmpty()) {
                 return response()->json([
-                    'departure_ports' => [],
-                    'arrival_ports' => [],
-                    'fast_boats' => [],
+                    'fbo_departure_ports' => [],
+                    'fbo_arrival_ports' => [],
+                    'fbo_fast_boats' => [],
                     'time_depts' => [],
                     'show_shuttle_checkbox' => false, // Tidak ada checkbox
                 ]);
@@ -406,9 +451,9 @@ class BookingDataController extends Controller
 
             // Return data untuk setiap dropdown dan flag shuttle checkbox
             return response()->json([
-                'departure_ports' => $departurePorts,
-                'arrival_ports' => $arrivalPorts,
-                'fast_boats' => $fastBoats,
+                'fbo_departure_ports' => $departurePorts,
+                'fbo_arrival_ports' => $arrivalPorts,
+                'fbo_fast_boats' => $fastBoats,
                 'time_depts' => $timeDepts,
                 'show_shuttle_checkbox' => $showShuttleCheckbox,
             ]);
@@ -424,10 +469,11 @@ class BookingDataController extends Controller
             $tripDateReturn = $request->input('trip_return_date');
             $departurePortReturn = $request->input('departure_return_port');
             $arrivalPortReturn = $request->input('arrival_return_port');
-            $fastBoatReturn = $request->input('fast_boat_return');
+            $fastBoatReturn = $request->input('fbo_fast_boat_return');
             $timeDeptReturn = $request->input('time_dept_return');
-            $adultCountReturn = $request->input('adult_count', 1); // Default 1 dewasa
-            $childCountReturn = $request->input('child_count', 0); // Default 0 anak-anak
+            $adultCountReturn = $request->input('fbo_adult', 1); // Default 1 dewasa
+            $childCountReturn = $request->input('fbo_child', 0); // Default 0 anak-anak
+            $areaReturn = $request->input('fbo_area'); // Tambahkan input area
 
             // Total customer
             $totalCustomerReturn = $adultCountReturn + $childCountReturn;
@@ -445,6 +491,13 @@ class BookingDataController extends Controller
                 ->where('fba_date', $tripDateReturn)
                 ->where('fba_stock', '>', $totalCustomerReturn);
 
+            // Filter berdasarkan area, jika ada
+            if ($areaReturn) {
+                $availabilityQuery->whereHas('trip.area', function ($query) use ($areaReturn) {
+                    $query->where('area_name', $areaReturn);
+                });
+            }
+
             // Filter berdasarkan timeDept, jika ada
             if ($timeDeptReturn) {
                 $availabilityQuery->where(function ($query) use ($timeDeptReturn) {
@@ -458,41 +511,38 @@ class BookingDataController extends Controller
             // Ambil data FastboatAvailability
             $availability = $availabilityQuery->get();
 
-            $shuttleTypeReturn = null;
+            // Inisialisasi
+            $shuttleAvailableReturn = null;
+            $shuttleAreasReturn = [];
+            $generalAreasReturn = [];
+
             if (!$availability->isEmpty()) {
                 $shuttleTypeReturn = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
+
+                // Jika shuttle type adalah "Private" atau "Sharing", tampilkan checkbox
+                if (in_array($shuttleTypeReturn, ['Private', 'Sharing'])) {
+                    $shuttleAvailableReturn = true;
+
+                    // Ambil area shuttle dari trip
+                    foreach ($availability as $avail) {
+                        if ($avail->trip->shuttle && $avail->trip->shuttle->areas) {
+                            foreach ($avail->trip->shuttle->areas as $area) {
+                                $shuttleAreasReturn[] = [
+                                    'id' => $area->sa_id,
+                                    'name' => $area->sa_name,
+                                ];
+                            }
+                        }
+                    }
+                }
             }
 
-            // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
-            if ($availability->isEmpty()) {
-                $tripQuery = FastboatTrip::whereHas('departure', function ($query) use ($departurePortReturn) {
-                    $query->where('prt_name_en', $departurePortReturn);
-                })
-                    ->whereHas('arrival', function ($query) use ($arrivalPortReturn) {
-                        $query->where('prt_name_en', $arrivalPortReturn);
-                    })
-                    ->whereHas('fastboat', function ($query) use ($fastBoatReturn) {
-                        $query->where('fb_name', $fastBoatReturn);
-                    })
-                    ->where('fbt_dept_time', $timeDeptReturn)
-                    ->whereDate('fbt_trip_date', $tripDateReturn)
-                    ->where('fbt_stock', '>', $totalCustomerReturn);
-
-                $trips = $tripQuery->get();
-
-                if ($trips->isEmpty()) {
-                    return response()->json(['message' => 'No availability found'], 404);
-                }
-
-                $availability = $trips->map(function ($trip) {
-                    return (object)[
-                        'fba_adult_publish' => null,
-                        'fba_child_publish' => null,
-                        'fba_adult_nett' => null,
-                        'fba_child_nett' => null,
-                        'fba_discount' => null,
-                        'fba_dept_time' => null,
-                        'trip' => $trip,
+            // Jika tidak ada shuttle atau shuttle type tidak sesuai, ambil area umum
+            if (empty($shuttleAreasReturn)) {
+                $generalAreasReturn = FastboatShuttleArea::all()->map(function ($area) {
+                    return [
+                        'id' => $area->sa_id,
+                        'name' => $area->sa_name,
                     ];
                 });
             }
@@ -502,7 +552,6 @@ class BookingDataController extends Controller
             $adultPublishTotalReturn = 0;
             $childPublishTotalReturn = 0;
             $discountPerPersonReturn = 0;
-            $shuttleAvailableReturn = null; // Inisialisasi shuttle tidak tersedia
 
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
@@ -522,13 +571,9 @@ class BookingDataController extends Controller
                 $adultPublishTotalReturn += $avail->fba_adult_publish ?? 0;
                 $childPublishTotalReturn += $avail->fba_child_publish ?? 0;
                 $discountPerPersonReturn = $avail->fba_discount ?? 0;
-
-                if (!empty($trip->fbt_shuttle_type)) {
-                    $shuttleAvailableReturn = true;
-                }
             }
 
-            $showShuttleCheckboxReturn = in_array($shuttleAvailableReturn, ['Private', 'Sharing']);
+            $showShuttleCheckboxReturn = $shuttleAvailableReturn; // Tampilkan checkbox shuttle hanya jika ada tipe shuttle
 
             return response()->json([
                 'htmlReturn' => $htmlReturn,
@@ -536,7 +581,9 @@ class BookingDataController extends Controller
                 'adult_return_publish' => number_format($adultPublishTotalReturn, 0, ',', '.'),
                 'child_return_publish' => number_format($childPublishTotalReturn, 0, ',', '.'),
                 'discount_return' => number_format($discountPerPersonReturn, 0, ',', '.'),
-                'show_shuttle_checkbox_return' => $showShuttleCheckboxReturn, // Menambahkan informasi untuk checkbox
+                'show_shuttle_checkbox_return' => $showShuttleCheckboxReturn, // Mengirim status untuk menampilkan checkbox
+                'shuttle_areas_return' => $shuttleAreasReturn,
+                'general_areas_return' => $generalAreasReturn,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -550,9 +597,9 @@ class BookingDataController extends Controller
             $tripDate = $request->input('trip_return_date');
             $departurePort = $request->input('departure_return_port');
             $arrivalPort = $request->input('arrival_return_port');
-            $fastBoat = $request->input('fast_boat_return');
-            $adultCount = $request->input('adult_count', 1); // Default 1 dewasa
-            $childCount = $request->input('child_count', 0); // Default 0 anak-anak
+            $fastBoat = $request->input('fbo_fast_boat_return');
+            $adultCount = $request->input('fbo_adult', 1); // Default 1 dewasa
+            $childCount = $request->input('fbo_child', 0); // Default 0 anak-anak
 
             // Hitung total customer (dewasa + anak-anak)
             $totalCustomer = $adultCount + $childCount;
@@ -589,7 +636,7 @@ class BookingDataController extends Controller
                 return response()->json([
                     'departure_return_ports' => [],
                     'arrival_return_ports' => [],
-                    'fast_boats_return' => [],
+                    'fbo_fast_boats_return' => [],
                     'time_depts_return' => [],
                     'show_shuttle_checkbox_return' => false, // Tidak ada checkbox
                 ]);
@@ -638,7 +685,7 @@ class BookingDataController extends Controller
             return response()->json([
                 'departure_return_ports' => $departurePorts,
                 'arrival_return_ports' => $arrivalPorts,
-                'fast_boats_return' => $fastBoats,
+                'fbo_fast_boats_return' => $fastBoats,
                 'time_depts_return' => $timeDepts,
                 'show_shuttle_checkbox_return' => $showShuttleCheckbox,
             ]);
