@@ -151,6 +151,7 @@ Route::middleware([
         Route::post('/checking-point/store', [FastboatCheckingPointController::class, 'store'])->name('checking.store');
         Route::post('/checking-point/update/{id}', [FastboatCheckingPointController::class, 'update'])->name('checking.update');
         Route::delete('/checking-point/delete/{id}', [FastboatCheckingPointController::class, 'delete'])->name('checking.delete');
+        Route::get('/checking-point/{id}', [FastboatCheckingPointController::class, 'show'])->name('checking.show');
     });
 
     Route::prefix('master')->group(function () {

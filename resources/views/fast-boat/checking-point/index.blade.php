@@ -26,7 +26,7 @@
                                                 <th>Company</th>
                                                 <th>Departure Port</th>
                                                 <th>Address</th>
-                                                <th>Maps</th>
+                                                <th>Map</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -37,7 +37,12 @@
                                                     <td>{{ $item->company->cpn_name }}</td>
                                                     <td>{{ $item->departure->prt_name_en }}</td>
                                                     <td>{{ Str::limit($item->fcp_address, 10) }}</td>
-                                                    <td>{{ Str::limit($item->fcp_maps, 10) }}</td>
+                                                    <td>
+                                                        <a href="{{ $item->fcp_maps }}"
+                                                            class="badge bg-success-subtle text-success  font-size-12"
+                                                            target="blank">
+                                                            See<i class="mdi mdi-arrow-right"></i></a>
+                                                    </td>
                                                     <td>
                                                         <div class="dropstart">
                                                             <a class="text-muted dropdown-toggle font-size-18"
@@ -46,6 +51,9 @@
                                                                 <i class="mdi mdi-dots-horizontal"></i>
                                                             </a>
                                                             <div class="dropdown-menu dropdown-menu-end">
+                                                                <a class="dropdown-item" href="javascript:void(0)"
+                                                                    id="showDetail"
+                                                                    data-url="{{route('checking.show', $item->fcp_id)}}">View</a>
                                                                 <a class="dropdown-item" id="edit-btn"
                                                                     href="javascript:void(0)" data-id="{{ $item->fcp_id }}"
                                                                     data-point-company="{{ $item->fcp_company }}"
@@ -172,12 +180,48 @@
                 </div>
             </div>
         </div>
+
+        <!-- Scrollable modal -->
+        <div class="modal fade" id="viewDetailModal" tabindex="-1" role="dialog"
+            aria-labelledby="viewDetailModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewDetailModalTitle">Cheking Point Information</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Company : </strong><span id="company"></span></p>
+                        <p><strong>Departure Port : </strong><span id="port"></span></p>
+                        <p><strong>Address : </strong><span id="address"></span></p>
+                        <p><strong>Map : </strong><span id="map"></span></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
         @include('admin.components.footer')
     </div>
 @endsection
 
 
 @section('script')
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('body').on('click', '#showDetail', function() {
+                var detailURL = $(this).data('url');
+                $.get(detailURL, function(data) {
+                    $('#viewDetailModal').modal('show');
+                    $('#company').text(data.company.cpn_name);
+                    $('#port').text(data.departure.prt_name_en);
+                    $('#address').text(data.fcp_address);
+                    $('#map').text(data.fcp_maps);
+                })
+            })
+        });
+    </script>
     <script>
         new TomSelect("#fcp_company");
         new TomSelect("#fcp_dept");
