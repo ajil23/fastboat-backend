@@ -32,7 +32,6 @@ return new class extends Migration
             $table->string('fbo_adult_publish');
             $table->string('fbo_child_publish');
             $table->string('fbo_total_publish');
-
             $table->string('fbo_adult_currency');
             $table->string('fbo_child_currency');
             $table->string('fbo_total_currency');
@@ -42,6 +41,7 @@ return new class extends Migration
             $table->string('fbo_discount_total');
             $table->string('fbo_refund');
             $table->string('fbo_end_total');
+            $table->string('fbo_end_total_currency');
             $table->string('fbo_profit');
             $table->text('fbo_passenger');
             $table->string('fbo_adult');
