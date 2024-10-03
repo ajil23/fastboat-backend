@@ -321,8 +321,18 @@ class BookingDataController extends Controller
                     date('H:i', strtotime($deptTime)) . ')' . '</center>';
 
                 $html .= '<tr>';
-                $html .= '<td><center>' . number_format($avail->fba_adult_publish ?? 0, 0, ',', '.') . '</center></td>';
-                $html .= '<td><center>' . number_format($avail->fba_child_publish ?? 0, 0, ',', '.') . '</center></td>';
+                // Kolom untuk adult publish dengan input
+                $html .= '<td><center>';
+                $html .= '<input type="hidden" name="availability[' . $avail->fba_id . '][adult_publish]" value="' . $avail->fba_adult_publish . '">';
+                $html .= number_format($avail->fba_adult_publish ?? 0, 0, ',', '.');
+                $html .= '</center></td>';
+
+                // Kolom untuk child publish dengan input
+                $html .= '<td><center>';
+                $html .= '<input type="hidden" name="availability[' . $avail->fba_id . '][child_publish]" value="' . $avail->fba_child_publish . '">';
+                $html .= number_format($avail->fba_child_publish ?? 0, 0, ',', '.');
+                $html .= '</center></td>';
+
                 $html .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
                 $html .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
                 $html .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
@@ -561,8 +571,18 @@ class BookingDataController extends Controller
                     date('H:i', strtotime($deptTimeReturn)) . ')</center>';
 
                 $htmlReturn .= '<tr>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_publish ?? 0, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_publish ?? 0, 0, ',', '.') . '</center></td>';
+                // Kolom untuk adult publish dengan input
+                $htmlReturn .= '<td><center>';
+                $htmlReturn .= '<input type="hidden" name="availability[' . $avail->fba_id . '][adult_publish]" value="' . $avail->fba_adult_publish . '">';
+                $htmlReturn .= number_format($avail->fba_adult_publish ?? 0, 0, ',', '.');
+                $htmlReturn .= '</center></td>';
+
+                // Kolom untuk child publish dengan input
+                $htmlReturn .= '<td><center>';
+                $htmlReturn .= '<input type="hidden" name="availability[' . $avail->fba_id . '][child_publish]" value="' . $avail->fba_child_publish . '">';
+                $htmlReturn .= number_format($avail->fba_child_publish ?? 0, 0, ',', '.');
+                $htmlReturn .= '</center></td>';
+
                 $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
                 $htmlReturn .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
                 $htmlReturn .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
