@@ -256,11 +256,6 @@
                                                     <select class="form-control" id="fbo_departure_port"
                                                         name="fbo_departure_port">
                                                         <option value="">Select Departure Port</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->departure->prt_name_en }}">
-                                                            {{ $item->trip->departure->prt_name_en }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -271,11 +266,6 @@
                                                     <select class="form-control" id="fbo_arrival_port"
                                                         name="fbo_arrival_port">
                                                         <option value="">Select Arrival Port</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->arrival->prt_name_en }}">
-                                                            {{ $item->trip->arrival->prt_name_en }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -287,11 +277,6 @@
                                                     <select class="form-control" id="fbo_fast_boat"
                                                         name="fbo_fast_boat">
                                                         <option value="">Select Fast Boat</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->fastboat->fb_name }}">
-                                                            {{ $item->trip->fastboat->fb_name }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -300,17 +285,6 @@
                                                     <label class="form-label" for="time_dept">Time Dept</label>
                                                     <select class="form-control" id="time_dept" name="time_dept">
                                                         <option value="">Select Time Dept</option>
-                                                        @foreach ($availability as $item)
-                                                        @php
-                                                        // Tentukan waktu keberangkatan dari availability atau trip
-                                                        $deptTime = $item->fba_dept_time
-                                                        ? $item->fba_dept_time
-                                                        : $item->trip->fbt_dept_time;
-                                                        @endphp
-                                                        <option value="{{ date('H:i', strtotime($deptTime)) }}">
-                                                            {{ date('H:i', strtotime($deptTime)) }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -497,11 +471,6 @@
                                                     <select class="form-control" id="departure_return_port"
                                                         name="departure_return_port" disabled>
                                                         <option value="">Select Departure Port</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->departure->prt_name_en }}">
-                                                            {{ $item->trip->departure->prt_name_en }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -512,11 +481,6 @@
                                                     <select class="form-control" id="arrival_return_port"
                                                         name="arrival_return_port" disabled>
                                                         <option value="">Select Arrival Port</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->arrival->prt_name_en }}">
-                                                            {{ $item->trip->arrival->prt_name_en }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -529,11 +493,6 @@
                                                     <select class="form-control" id="fbo_fast_boat_return"
                                                         name="fbo_fast_boat_return" disabled>
                                                         <option value="">Select Fast Boat</option>
-                                                        @foreach ($availability as $item)
-                                                        <option value="{{ $item->trip->fastboat->fb_name }}">
-                                                            {{ $item->trip->fastboat->fb_name }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -544,17 +503,6 @@
                                                     <select class="form-control" id="time_dept_return"
                                                         name="time_dept_return" disabled>
                                                         <option value="">Select Time Dept</option>
-                                                        @foreach ($availability as $item)
-                                                        @php
-                                                        // Tentukan waktu keberangkatan dari availability atau trip
-                                                        $deptTime = $item->fba_dept_time
-                                                        ? $item->fba_dept_time
-                                                        : $item->trip->fbt_dept_time;
-                                                        @endphp
-                                                        <option value="{{ date('H:i', strtotime($deptTime)) }}">
-                                                            {{ date('H:i', strtotime($deptTime)) }}
-                                                        </option>
-                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -1236,27 +1184,16 @@
             let childPublish = $('#child_return_publish').val().replace(/\./g, '') ||
                 0; // Hapus titik dari pemisah ribuan
 
-            console.log('Adult Publish:', adultPublish);
-            console.log('Child Publish:', childPublish);
-
             // Konversi nilai menjadi angka
             adultPublish = parseInt(adultPublish) || 0;
             childPublish = parseInt(childPublish) || 0;
-
-            console.log('Adult Publish (Parsed):', adultPublish);
-            console.log('Child Publish (Parsed):', childPublish);
 
             // Ambil jumlah dewasa dan anak dari input
             let adultCount = parseInt($('#fbo_adult').val()) || 1; // Default 1 dewasa
             let childCount = parseInt($('#fbo_child').val()) || 0;
 
-            console.log('Adult Count:', adultCount);
-            console.log('Child Count:', childCount);
-
             // Perhitungan total harga
             let totalPrice = (adultPublish * adultCount) + (childPublish * childCount);
-
-            console.log('Total Price:', totalPrice);
 
             // Set nilai fbo_end_total (IDR) dengan format pemisah ribuan
             $('#total_return_end').val(totalPrice.toLocaleString('id-ID'));
@@ -1365,35 +1302,6 @@
 
                     // Cek apakah shuttle checkbox perlu ditampilkan
                     if (response.show_shuttle_checkbox_return) {
-                        let pickupDropdownOptionsReturn = '';
-                        let dropoffDropdownOptionsReturn = '';
-
-                        // Jika ada shuttle, tampilkan area shuttle
-                        if (response.shuttle_areas_return && response.shuttle_areas_return.length >
-                            0) {
-                            pickupDropdownOptionsReturn =
-                                '<option value="">Select Shuttle Area</option>';
-                            dropoffDropdownOptionsReturn =
-                                '<option value="">Select Shuttle Area</option>';
-                            response.shuttle_areas_return.forEach(function(area) {
-                                pickupDropdownOptionsReturn +=
-                                    `<option value="${area.id}">${area.name}</option>`;
-                                dropoffDropdownOptionsReturn +=
-                                    `<option value="${area.id}">${area.name}</option>`;
-                            });
-                        } else {
-                            // Jika tidak ada shuttle, tampilkan area umum
-                            pickupDropdownOptionsReturn =
-                                '<option value="">Select General Area</option>';
-                            dropoffDropdownOptionsReturn =
-                                '<option value="">Select General Area</option>';
-                            response.general_areas_return.forEach(function(area) {
-                                pickupDropdownOptionsReturn +=
-                                    `<option value="${area.id}">${area.name}</option>`;
-                                dropoffDropdownOptionsReturn +=
-                                    `<option value="${area.id}">${area.name}</option>`;
-                            });
-                        }
                         $('#shuttle-checkbox-return').show();
                         // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
                         $('#pickup-shuttle-return').change(function() {

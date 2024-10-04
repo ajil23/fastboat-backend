@@ -26,18 +26,11 @@ class BookingDataController extends Controller
 
     public function add()
     {
-        $trip = FastboatTrip::all();
-        $fastboat = DataFastboat::all();
-        $departure = MasterPort::all();
-        $arrival = MasterPort::all();
-        $route = DataRoute::all();
-        $deptTime = FastboatTrip::all();
-        $availability = FastboatAvailability::all();
         $currency = MasterCurrency::where('cy_status', '1')->get();
         $nationality = MasterNationality::all();
         $payment_method = MasterPaymentMethod::all();
         $contact = Contact::all();
-        return view('booking.data.add', compact('trip', 'fastboat', 'departure', 'arrival', 'route', 'deptTime', 'availability', 'currency', 'nationality', 'payment_method', 'contact'));
+        return view('booking.data.add', compact( 'currency', 'nationality', 'payment_method', 'contact'));
     }
 
     function generateOrderId()
