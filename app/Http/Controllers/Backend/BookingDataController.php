@@ -30,7 +30,7 @@ class BookingDataController extends Controller
         $nationality = MasterNationality::all();
         $payment_method = MasterPaymentMethod::all();
         $contact = Contact::all();
-        return view('booking.data.add', compact( 'currency', 'nationality', 'payment_method', 'contact'));
+        return view('booking.data.add', compact('currency', 'nationality', 'payment_method', 'contact'));
     }
 
     function generateOrderId()
@@ -514,27 +514,22 @@ class BookingDataController extends Controller
             // Ambil data FastboatAvailability
             $availability = $availabilityQuery->get();
 
-            // Inisialisasi
-            $shuttleAvailableReturn = null;
-            $shuttleAreasReturn = [];
-            $generalAreasReturn = [];
-
+            $shuttleTypeReturn = null;
             if (!$availability->isEmpty()) {
                 $shuttleTypeReturn = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
+            }
 
-                // Jika shuttle type adalah "Private" atau "Sharing", tampilkan checkbox
-                if (in_array($shuttleTypeReturn, ['Private', 'Sharing'])) {
-                    $shuttleAvailableReturn = true;
-
-                    // Ambil area shuttle dari trip
-                    foreach ($availability as $avail) {
-                        if ($avail->trip->shuttle && $avail->trip->shuttle->areas) {
-                            foreach ($avail->trip->shuttle->areas as $area) {
-                                $shuttleAreasReturn[] = [
-                                    'id' => $area->sa_id,
-                                    'name' => $area->sa_name,
-                                ];
-                            }
+            // Inisialisasi
+            $shuttleAreasReturn = [];
+            $generalAreasReturn = [];
+            if (!$availability->isEmpty()) {
+                foreach ($availability as $avail) {
+                    if ($avail->trip->shuttle && $avail->trip->shuttle->areas) {
+                        foreach ($avail->trip->shuttle->areas as $area) {
+                            $shuttleAreasReturn[] = [
+                                'id' => $area->sa_id,
+                                'name' => $area->sa_name,
+                            ];
                         }
                     }
                 }
@@ -550,11 +545,52 @@ class BookingDataController extends Controller
                 });
             }
 
+            // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
+            if ($availability->isEmpty()) {
+                $tripQuery = FastboatTrip::whereHas('departure', function ($query) use ($departurePortReturn) {
+                    $query->where('prt_name_en', $departurePortReturn);
+                })
+                    ->whereHas('arrival', function ($query) use ($arrivalPortReturn) {
+                        $query->where('prt_name_en', $arrivalPortReturn);
+                    })
+                    ->whereHas('fastboat', function ($query) use ($fastBoatReturn) {
+                        $query->where('fb_name', $fastBoatReturn);
+                    })
+                    ->where('fbt_dept_time', $timeDeptReturn)
+                    ->whereDate('fbt_fbo_trip_date', $tripDateReturn)
+                    ->where('fbt_stock', '>', $totalCustomerReturn);
+
+                if ($areaReturn) {
+                    $tripQuery->whereHas('area', function ($query) use ($areaReturn) {
+                        $query->where('area_name', $areaReturn);
+                    });
+                }
+
+                $trips = $tripQuery->get();
+
+                if ($trips->isEmpty()) {
+                    return response()->json(['message' => 'No availability found'], 404);
+                }
+
+                $availability = $trips->map(function ($trip) {
+                    return (object)[
+                        'fba_adult_publish' => null,
+                        'fba_child_publish' => null,
+                        'fba_adult_nett' => null,
+                        'fba_child_nett' => null,
+                        'fba_discount' => null,
+                        'fba_dept_time' => null,
+                        'trip' => $trip,
+                    ];
+                });
+            }
+
             $htmlReturn = '';
             $cardTitleReturn = '';
             $adultPublishTotalReturn = 0;
             $childPublishTotalReturn = 0;
             $discountPerPersonReturn = 0;
+            $shuttleAvailableReturn = false;
 
             foreach ($availability as $avail) {
                 $trip = $avail->trip;
@@ -584,17 +620,24 @@ class BookingDataController extends Controller
                 $adultPublishTotalReturn += $avail->fba_adult_publish ?? 0;
                 $childPublishTotalReturn += $avail->fba_child_publish ?? 0;
                 $discountPerPersonReturn = $avail->fba_discount ?? 0;
+
+                // Cek apakah shuttle tersedia
+                if (!empty($trip->fbt_shuttle_type)) {
+                    $shuttleAvailableReturn = true;
+                }
             }
 
-            $showShuttleCheckboxReturn = $shuttleAvailableReturn; // Tampilkan checkbox shuttle hanya jika ada tipe shuttle
+            // Tentukan apakah checkbox harus ditampilkan berdasarkan tipe shuttle
+            $showShuttleCheckboxReturn = in_array($shuttleTypeReturn, ['Private', 'Sharing']);
 
+            // Kembalikan response termasuk shuttle availability
             return response()->json([
                 'htmlReturn' => $htmlReturn,
                 'card_return_title' => $cardTitleReturn,
                 'adult_return_publish' => number_format($adultPublishTotalReturn, 0, ',', '.'),
                 'child_return_publish' => number_format($childPublishTotalReturn, 0, ',', '.'),
                 'discount_return' => number_format($discountPerPersonReturn, 0, ',', '.'),
-                'show_shuttle_checkbox_return' => $showShuttleCheckboxReturn, // Mengirim status untuk menampilkan checkbox
+                'show_shuttle_checkbox_return' => $showShuttleCheckboxReturn,
                 'shuttle_areas_return' => $shuttleAreasReturn,
                 'general_areas_return' => $generalAreasReturn,
             ]);
@@ -694,7 +737,7 @@ class BookingDataController extends Controller
                 }
             }
 
-            // Return data untuk setiap dropdown
+            // Return data untuk setiap dropdown dan flag shuttle checkbox
             return response()->json([
                 'departure_return_ports' => $departurePorts,
                 'arrival_return_ports' => $arrivalPorts,
