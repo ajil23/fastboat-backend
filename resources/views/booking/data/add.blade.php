@@ -320,7 +320,7 @@
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label" for="">Phone</label>
-                                                                                    <input type="number" style="border-color: lightgray;" class="form-control" id="" name="pickup_phone">
+                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="pickup_phone" placeholder="62XXXXXXXXXXX">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -337,14 +337,14 @@
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label" for="">Dropoff Area</label>
                                                                                     <select style="border-color: lightgray;" class="form-control" id="dropoff_area" name="dropoff_area">
-                                                                                        ${dropoffDropdownOptions}
+                                                                                    <option value="">Select Option</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label" for="">Phone</label>
-                                                                                    <input type="number" style="border-color: lightgray;" class="form-control" id="" name="dropoff_phone">
+                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="dropoff_phone" placeholder="62XXXXXXXXXXX">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -512,14 +512,12 @@
                                                     <div id="shuttle-checkbox-return" class="shuttle-checkbox-return">
                                                         <div>
                                                             <label>
-                                                                <input type="checkbox" id="pickup-shuttle-return"
-                                                                    name="pickup_shuttle_return" value="1">
+                                                                <input type="checkbox" id="pickup-shuttle-return" name="pickup_shuttle_return" value="1">
                                                                 Pickup Shuttle
                                                             </label>
                                                             &nbsp; &nbsp; &nbsp;
                                                             <label>
-                                                                <input type="checkbox" id="dropoff-shuttle-return"
-                                                                    name="dropoff_shuttle_return" value="1">
+                                                                <input type="checkbox" id="dropoff-shuttle-return" name="dropoff_shuttle_return" value="1">
                                                                 Dropoff Shuttle
                                                             </label>
                                                         </div>
@@ -530,32 +528,22 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Pickup Area</label>
-                                                                                <select style="border-color: lightgray;"
-                                                                                    class="form-control"
-                                                                                    id="pickup_area_return"
-                                                                                    name="pickup_area_return">
-                                                                                    <option value="">Select Option
-                                                                                    </option>
+                                                                                <label class="form-label" for="">Pickup Area</label>
+                                                                                <select style="border-color: lightgray;" class="form-control" id="pickup_area_return" name="pickup_area_return">
+                                                                                    <option value="">Select Option</option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Phone</label>
-                                                                                <input type="number"
-                                                                                    style="border-color: lightgray;"
-                                                                                    class="form-control" id=""
-                                                                                    name="">
+                                                                                <label class="form-label" for="">Phone</label>
+                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="pickup_phone_return" placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Address Pickup</label>
-                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="" name=""></textarea>
+                                                                                <label class="form-label" for="pickup_address_return">Address Pickup</label>
+                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="pickup_address_return" name="pickup_address_return"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -565,33 +553,23 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Dropoff Area</label>
-                                                                                <select style="border-color: lightgray;"
-                                                                                    class="form-control"
-                                                                                    id="dropoff_area_return"
-                                                                                    name="dropoff_area_return">
-                                                                                    <option value="">Select Option
-                                                                                    </option>
+                                                                                <label class="form-label" for="">Dropoff Area</label>
+                                                                                <select style="border-color: lightgray;" class="form-control" id="dropoff_area_return" name="dropoff_area_return">
+                                                                                    <option value="">Select Option </option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Phone</label>
-                                                                                <input type="number"
-                                                                                    style="border-color: lightgray;"
-                                                                                    class="form-control" id=""
-                                                                                    name="">
+                                                                                <label class="form-label" for="">Phone</label>
+                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="dropoff_phone_return" placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="mb-3">
-                                                                            <label class="form-label"
-                                                                                for="">Address Dropoff</label>
-                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="" name=""></textarea>
+                                                                            <label class="form-label" for="dropoff_address_return">Address Dropoff</label>
+                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="dropoff_address_return" name="dropoff_address_return"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -1238,6 +1216,45 @@
                 }
             });
 
+            // Hide pickup and dropoff inputs on page load
+            $(document).ready(function() {
+                $('#pickup-inputs-return, #dropoff-inputs-return').hide(); // Hide initially
+            });
+
+            // Function to reset pickup inputs (without removing options)
+            function resetPickupInputsReturn() {
+                $('#pickup_area_return').val(''); // Clear the selected value, not the options
+                $('#pickup_address_return').val(''); // Reset the pickup address
+                $('input[name="pickup_phone_return"]').val(''); // Reset the pickup phone input
+            }
+
+            // Function to reset dropoff inputs (without removing options)
+            function resetDropoffInputsReturn() {
+                $('#dropoff_area_return').val(''); // Clear the selected value, not the options
+                $('#dropoff_address_return').val(''); // Reset the dropoff address
+                $('input[name="dropoff_phone_return"]').val(''); // Reset the dropoff phone input
+            }
+
+            // Event handler for Pickup Shuttle checkbox
+            $('#pickup-shuttle-return').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#pickup-inputs-return').stop(true, true).slideDown(); // Show pickup inputs
+                } else {
+                    $('#pickup-inputs-return').stop(true, true).slideUp(); // Hide pickup inputs
+                    resetPickupInputsReturn(); // Reset pickup inputs when unchecked
+                }
+            });
+
+            // Event handler for Dropoff Shuttle checkbox
+            $('#dropoff-shuttle-return').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#dropoff-inputs-return').stop(true, true).slideDown(); // Show dropoff inputs
+                } else {
+                    $('#dropoff-inputs-return').stop(true, true).slideUp(); // Hide dropoff inputs
+                    resetDropoffInputsReturn(); // Reset dropoff inputs when unchecked
+                }
+            });
+
             // Fungsi untuk mengecek apakah semua field telah diisi
             function checkFormComplete() {
                 let tripDateReturn = $('#trip_return_date').val();
@@ -1262,6 +1279,17 @@
                 $('#total_return_end').val('');
                 $('#currency_return_end').val('');
                 $('#search-results-return').hide();
+                // Reset checkboxes
+                $('#pickup-shuttle-return').prop('checked', false); // Reset Pickup Shuttle checkbox
+                $('#dropoff-shuttle-return').prop('checked', false); // Reset Dropoff Shuttle checkbox
+
+                // Reset inputs in pickup and dropoff sections
+                resetPickupInputsReturn();
+                resetDropoffInputsReturn();
+
+                // Hide pickup and dropoff inputs
+                $('#pickup-inputs-return').hide(); // Hide pickup inputs after search reset
+                $('#dropoff-inputs-return').hide(); // Hide dropoff inputs after search reset
             }
 
             // Trigger ketika input diubah
@@ -1295,7 +1323,7 @@
                     $('#total_return_end').val(''); // Reset total harga
                     $('#currency_return_end').val(''); // Reset format mata uang
                     $('#search-results-return').hide(); // Sembunyikan hasil pencarian
-
+                    resetSearchResultsReturn();
                     checkFormComplete(); // Cek dan lakukan pencarian jika semua field terisi
                 });
 
@@ -1388,6 +1416,20 @@
                         $('#booking-data-table-return tbody').html(response.htmlReturn);
                         $('.card-title-return').html(response.card_return_title);
 
+                        // Jika ada pickup_meeting_point, tampilkan dan disable input
+                        if (response.pickup_meeting_point_return) {
+                            $('#pickup-address-return').val(response.pickup_meeting_point_return).prop('disabled', true);
+                        } else {
+                            $('#pickup-address-return').val('').prop('disabled', false);
+                        }
+
+                        // Jika ada dropoff_meeting_point, tampilkan dan disable input
+                        if (response.dropoff_meeting_point_return) {
+                            $('#dropoff-address-return').val(response.dropoff_meeting_point_return).prop('disabled', true);
+                        } else {
+                            $('#dropoff-address-return').val('').prop('disabled', false);
+                        }
+
                         let adultPublishPriceReturn = parseInt(response.adult_return_publish.replace(
                             /\./g, '')) || 0;
                         let childPublishPriceReturn = parseInt(response.child_return_publish.replace(
@@ -1418,14 +1460,12 @@
 
                         // Cek apakah shuttle checkbox perlu ditampilkan
                         if (response.show_shuttle_checkbox_return) {
-                            let pickupDropdownOptionsReturn = '';
-                            let dropoffDropdownOptionsReturn = '';
+                            let pickupDropdownOptionsReturn = '<option value="">Select Pickup Area</option>';
+                            let dropoffDropdownOptionsReturn = '<option value="">Select Dropoff Area</option>';
 
                             // Jika ada pickup shuttle area
-                            if (response.pickup_areas_return && response.pickup_areas_return.length >
-                                0) {
-                                pickupDropdownOptionsReturn =
-                                    '<option value="">Select Pickup Area</option>';
+                            if (response.pickup_areas_return && response.pickup_areas_return.length > 0) {
+                                pickupDropdownOptionsReturn = '<option value="">Select Pickup Area</option>';
                                 response.pickup_areas_return.forEach(function(area) {
                                     pickupDropdownOptionsReturn +=
                                         `<option value="${area.id}">${area.name}</option>`;
@@ -1475,6 +1515,8 @@
                                 }
                             });
 
+                            // Memanggil fungsi updateMeetingPoints setelah shuttle ditemukan
+                            updateMeetingPointsReturn(response.shuttle_addresses_return);
                         } else {
                             // Jika tidak perlu shuttle checkbox, sembunyikan dan kosongkan
                             $('#shuttle-checkbox-return').hide();
@@ -1484,6 +1526,35 @@
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr.responseText);
+                    }
+                });
+            }
+
+            // Fungsi untuk mengisi pickup/dropoff address berdasarkan shuttle yang dipilih
+            function updateMeetingPointsReturn(shuttleAddressesReturn) {
+                $('#pickup_area_return').change(function() {
+                    const selectedAreaId = $(this).val();
+                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id == selectedAreaId);
+
+                    if (selectedShuttle && selectedShuttle.pickup_meeting_point_return) {
+                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                        $('#pickup_address_return').val(selectedShuttle.pickup_meeting_point_return).prop('readonly', true);
+                    } else {
+                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                        $('#pickup_address_return').val('').prop('readonly', false);
+                    }
+                });
+
+                $('#dropoff_area_return').change(function() {
+                    const selectedAreaId = $(this).val();
+                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id == selectedAreaId);
+
+                    if (selectedShuttle && selectedShuttle.dropoff_meeting_point_return) {
+                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                        $('#dropoff_address_return').val(selectedShuttle.dropoff_meeting_point_return).prop('readonly', true);
+                    } else {
+                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                        $('#dropoff_address_return').val('').prop('readonly', false);
                     }
                 });
             }
