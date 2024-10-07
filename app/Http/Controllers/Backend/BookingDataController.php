@@ -227,39 +227,73 @@ class BookingDataController extends Controller
             // Ambil data FastboatAvailability
             $availability = $availabilityQuery->get();
             $shuttleType = null;
-            if (!$availability->isEmpty()) {
-                $shuttleType = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
-            }
-
-
-            // Jika ada data availability
-            $shuttleAreas = [];
-            $generalAreas = [];
+            $shuttleOption = null;
+            $pickupAreas = [];
+            $dropoffAreas = [];
 
             if (!$availability->isEmpty()) {
-                // Ambil area shuttle dari trip yang terkait
+                $trip = $availability->first()->trip;
+                $shuttleType = $trip->fbt_shuttle_type;
+                $shuttleOption = $trip->fbt_shuttle_option;
+            
                 foreach ($availability as $avail) {
-                    $trip_id = $avail->trip->fbt_id;
-                    $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
-                    foreach ($Areas as $key => $value) {
-                        $shuttleAreas[] = [
-                            'id' => $value->area->sa_id,
-                            'name' => $value->area->sa_name
-                        ];
+                    if ($shuttleType && in_array($shuttleType, ['Private', 'Sharing'])) {
+                        $trip_id = $avail->trip->fbt_id;
+                        $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
+            
+                        if ($shuttleOption === 'pickup') {
+                            // For pickup option
+                            $pickupAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
+                                return [
+                                    'id' => $value->area->sa_id,
+                                    'name' => $value->area->sa_name
+                                ];
+                            })->toArray() : [];
+            
+                            $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
+                                return [
+                                    'id' => $area->sa_id,
+                                    'name' => $area->sa_name,
+                                ];
+                            })->toArray();
+                        } elseif ($shuttleOption === 'drop') {
+                            // For drop option
+                            $dropoffAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
+                                return [
+                                    'id' => $value->area->sa_id,
+                                    'name' => $value->area->sa_name
+                                ];
+                            })->toArray() : [];
+            
+                            $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
+                                return [
+                                    'id' => $area->sa_id,
+                                    'name' => $area->sa_name,
+                                ];
+                            })->toArray();
+                        }
+            
+                        // Jika tidak ada data pickupAreas atau dropoffAreas, fallback ke FastboatShuttleArea
+                        if (empty($pickupAreas)) {
+                            $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
+                                return [
+                                    'id' => $area->sa_id,
+                                    'name' => $area->sa_name,
+                                ];
+                            })->toArray();
+                        }
+            
+                        if (empty($dropoffAreas)) {
+                            $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
+                                return [
+                                    'id' => $area->sa_id,
+                                    'name' => $area->sa_name,
+                                ];
+                            })->toArray();
+                        }
                     }
                 }
-            }
-            // dd($shuttleAreas);
-
-            // Jika tidak ada shuttle, ambil area dari tabel umum fastboatshuttlearea
-            if (empty($shuttleAreas)) {
-                $generalAreas = FastboatShuttleArea::all()->map(function ($area) {
-                    return [
-                        'id' => $area->sa_id,
-                        'name' => $area->sa_name,
-                    ];
-                });
-            }
+            }            
 
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
@@ -346,7 +380,7 @@ class BookingDataController extends Controller
 
             // Tentukan apakah checkbox harus ditampilkan berdasarkan tipe shuttle
             $showShuttleCheckbox = in_array($shuttleAvailable, ['Private', 'Sharing']);
-
+            // dd($pickupAreas);
             // Kembalikan response termasuk shuttle availability
             return response()->json([
                 'html' => $html,
@@ -355,8 +389,10 @@ class BookingDataController extends Controller
                 'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
                 'discount' => number_format($discountPerPerson, 0, ',', '.'),
                 'show_shuttle_checkbox' => $showShuttleCheckbox,
-                'shuttle_areas' => $shuttleAreas,
-                'general_areas' => $generalAreas,
+                'shuttle_type' => $shuttleType,
+                'shuttle_option' => $shuttleOption,
+                'pickup_areas' => $pickupAreas,
+                'dropoff_areas' => $dropoffAreas,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
