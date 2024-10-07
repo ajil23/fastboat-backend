@@ -230,6 +230,7 @@ class BookingDataController extends Controller
             $shuttleOption = null;
             $pickupAreas = [];
             $dropoffAreas = [];
+            $shuttleAddresses = []; 
 
             if (!$availability->isEmpty()) {
                 $trip = $availability->first()->trip;
@@ -240,6 +241,24 @@ class BookingDataController extends Controller
                     if ($shuttleType && in_array($shuttleType, ['Private', 'Sharing'])) {
                         $trip_id = $avail->trip->fbt_id;
                         $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
+
+                        if (!$availability->isEmpty()) {
+                            $shuttleType = $availability->first()->trip->fbt_shuttle_type;
+                
+                            foreach ($availability as $avail) {
+                                $trip_id = $avail->trip->fbt_id;
+                                $shuttles = FastboatShuttle::where('s_trip', $trip_id)->get();
+                
+                                foreach ($shuttles as $shuttle) {
+                                    $shuttleAddresses[] = [
+                                        'area_id' => $shuttle->area->sa_id,
+                                        'area_name' => $shuttle->area->sa_name,
+                                        'pickup_meeting_point' => $shuttle->s_meeting_point ?? '',  // Ambil pickup meeting point
+                                        'dropoff_meeting_point' => $shuttle->s_meeting_point ?? '', // Ambil dropoff meeting point
+                                    ];
+                                }
+                            }
+                        }
             
                         if ($shuttleOption === 'pickup') {
                             // For pickup option
@@ -393,6 +412,7 @@ class BookingDataController extends Controller
                 'shuttle_option' => $shuttleOption,
                 'pickup_areas' => $pickupAreas,
                 'dropoff_areas' => $dropoffAreas,
+                'shuttle_addresses' => $shuttleAddresses, 
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
