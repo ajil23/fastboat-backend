@@ -967,13 +967,6 @@
                                 $('#shuttle_type').val(response.shuttle_type);
                             }
 
-                            // Handle shuttle option
-                            if (response.shuttle_option === 'pickup') {
-                                $('#pickup-shuttle').prop('checked', true).trigger('change');
-                            } else if (response.shuttle_option === 'drop') {
-                                $('#dropoff-shuttle').prop('checked', true).trigger('change');
-                            }
-
                             // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
                             $('#pickup-shuttle').change(function() {
                                 if ($(this).is(':checked')) {
