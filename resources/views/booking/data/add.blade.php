@@ -529,8 +529,8 @@
                                                                     <div class="col-sm-6">
                                                                         <div class="mb-3">
                                                                             <label class="form-label" for="">Pickup Area</label>
-                                                                            <select style="border-color: lightgray;" class="form-control" id="pickup_area" name="pickup_area">
-                                                                                ${pickupDropdownOptionsReturn}
+                                                                            <select style="border-color: lightgray;" class="form-control" id="pickup_area_return" name="pickup_area_return">
+                                                                                <option value="">Select Option</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -553,8 +553,8 @@
                                                                     <div class="col-sm-6">
                                                                         <div class="mb-3">
                                                                             <label class="form-label" for="">Dropoff Area</label>
-                                                                            <select style="border-color: lightgray;" class="form-control" id="dropoff_area" name="dropoff_area">
-                                                                                ${dropoffDropdownOptionsReturn}
+                                                                            <select style="border-color: lightgray;" class="form-control" id="dropoff_area_return" name="dropoff_area_return">
+                                                                                <option value="">Select Option</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1241,18 +1241,10 @@
         }
 
         // Fungsi untuk melakukan pencarian return
-        function performSearchReturn(tripDateReturn, departurePortReturn, arrivalPortReturn, fastBoatReturn,
-            timeDeptReturn, adultCountReturn = null, childCountReturn = null) {
-
-            if (!$('#switch').is(':checked')) {
-                // Jika switch nonaktif, sembunyikan search results dan keluar dari fungsi
-                $('#search-results-return').hide();
-                return;
-            }
+        function performSearchReturn(tripDateReturn, departurePortReturn, arrivalPortReturn, fastBoatReturn, timeDeptReturn, adultCountReturn = null, childCountReturn = null) {
 
             // Ambil jumlah adultCountReturn dan childCountReturn dari parameter jika tidak null, atau dari input jika null
-            adultCountReturn = adultCountReturn !== null ? adultCountReturn : $('#fbo_adult').val() ||
-                1; // Default 1 dewasa
+            adultCountReturn = adultCountReturn !== null ? adultCountReturn : $('#fbo_adult').val() || 1; // Default 1 dewasa
             childCountReturn = childCountReturn !== null ? childCountReturn : $('#fbo_child').val() || 0;
 
             $.ajax({
@@ -1272,18 +1264,13 @@
                     $('#booking-data-table-return tbody').html(response.htmlReturn);
                     $('.card-title-return').html(response.card_return_title);
 
-                    let adultPublishPriceReturn = parseInt(response.adult_return_publish.replace(
-                        /\./g, '')) || 0;
-                    let childPublishPriceReturn = parseInt(response.child_return_publish.replace(
-                        /\./g, '')) || 0;
-                    let discountPerPersonReturn = parseInt(response.discount_return.replace(/\./g,
-                        '')) || 0;
+                    let adultPublishPriceReturn = parseInt(response.adult_return_publish.replace(/\./g, '')) || 0;
+                    let childPublishPriceReturn = parseInt(response.child_return_publish.replace(/\./g, '')) || 0;
+                    let discountPerPersonReturn = parseInt(response.discount_return.replace(/\./g, '')) || 0;
 
                     let totalDiscountReturn = adultCountReturn * discountPerPersonReturn;
-                    let totalPriceBeforeDiscountReturn = (adultPublishPriceReturn *
-                        adultCountReturn) + (childPublishPriceReturn * childCountReturn);
-                    let totalPriceAfterDiscountReturn = totalPriceBeforeDiscountReturn -
-                        totalDiscountReturn;
+                    let totalPriceBeforeDiscountReturn = (adultPublishPriceReturn * adultCountReturn) + (childPublishPriceReturn * childCountReturn);
+                    let totalPriceAfterDiscountReturn = totalPriceBeforeDiscountReturn - totalDiscountReturn;
 
                     if (totalPriceAfterDiscountReturn < 0) {
                         totalPriceAfterDiscountReturn = 0;
@@ -1291,18 +1278,47 @@
 
                     $('#adult_return_publish').val(response.adult_return_publish);
                     $('#child_return_publish').val(response.child_return_publish);
-                    $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString(
-                        'id-ID'));
+                    $('#total_return_end').val(totalPriceAfterDiscountReturn.toLocaleString('id-ID'));
 
                     // Update nilai currency_return_end berdasarkan currency yang dipilih
-                    updateCurrencyTotalReturn(); // Menghitung nilai currency setelah pencarian
+                    updateCurrencyTotalReturn();
 
                     // Tampilkan hasil pencarian baru
                     $('#search-results-return').show();
 
                     // Cek apakah shuttle checkbox perlu ditampilkan
                     if (response.show_shuttle_checkbox_return) {
+                        let pickupDropdownOptionsReturn = '';
+                        let dropoffDropdownOptionsReturn = '';
+
+                        // Jika ada shuttle (cek dari `shuttle_areas_return`), tampilkan area shuttle
+                        if (response.shuttle_areas_return && response.shuttle_areas_return.length > 0) {
+                            pickupDropdownOptionsReturn = '<option value="">Select Shuttle Area</option>';
+                            dropoffDropdownOptionsReturn = '<option value="">Select Shuttle Area</option>';
+                            response.shuttle_areas_return.forEach(function(area) {
+                                pickupDropdownOptionsReturn += `<option value="${area.id}">${area.name}</option>`;
+                                dropoffDropdownOptionsReturn += `<option value="${area.id}">${area.name}</option>`;
+                            });
+
+                            // Tampilkan dropdown shuttle area
+                            $('#pickup_area_return').html(pickupDropdownOptionsReturn);
+                            $('#dropoff_area_return').html(dropoffDropdownOptionsReturn);
+                        } else if (response.general_areas_return && response.general_areas_return.length > 0) {
+                            // Jika tidak ada shuttle, tampilkan area umum dari `general_areas_return`
+                            pickupDropdownOptionsReturn = '<option value="">Select General Area</option>';
+                            dropoffDropdownOptionsReturn = '<option value="">Select General Area</option>';
+                            response.general_areas_return.forEach(function(area) {
+                                pickupDropdownOptionsReturn += `<option value="${area.id}">${area.name}</option>`;
+                                dropoffDropdownOptionsReturn += `<option value="${area.id}">${area.name}</option>`;
+                            });
+
+                            // Tampilkan dropdown area umum
+                            $('#pickup_area_return').html(pickupDropdownOptionsReturn);
+                            $('#dropoff_area_return').html(dropoffDropdownOptionsReturn);
+                        }
+
                         $('#shuttle-checkbox-return').show();
+
                         // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
                         $('#pickup-shuttle-return').change(function() {
                             if ($(this).is(':checked')) {
@@ -1320,8 +1336,9 @@
                             }
                         });
                     } else {
-                        $('#shuttle-checkbox-return')
-                            .empty(); // Hapus checkbox jika tidak ada shuttle
+                        $('#shuttle-checkbox-return').hide();
+                        $('#pickup_area_return').empty();
+                        $('#dropoff_area_return').empty();
                     }
                 },
                 error: function(xhr, status, error) {

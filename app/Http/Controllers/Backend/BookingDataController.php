@@ -7,6 +7,7 @@ use App\Models\Contact;
 use App\Models\DataFastboat;
 use App\Models\DataRoute;
 use App\Models\FastboatAvailability;
+use App\Models\FastboatShuttle;
 use App\Models\FastboatShuttleArea;
 use App\Models\MasterPort;
 use App\Models\FastboatTrip;
@@ -225,7 +226,6 @@ class BookingDataController extends Controller
 
             // Ambil data FastboatAvailability
             $availability = $availabilityQuery->get();
-
             $shuttleType = null;
             if (!$availability->isEmpty()) {
                 $shuttleType = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
@@ -235,19 +235,21 @@ class BookingDataController extends Controller
             // Jika ada data availability
             $shuttleAreas = [];
             $generalAreas = [];
+
             if (!$availability->isEmpty()) {
                 // Ambil area shuttle dari trip yang terkait
                 foreach ($availability as $avail) {
-                    if ($avail->trip->shuttle && $avail->trip->shuttle->areas) {
-                        foreach ($avail->trip->shuttle->areas as $area) {
-                            $shuttleAreas[] = [
-                                'id' => $area->sa_id,
-                                'name' => $area->sa_name,
-                            ];
-                        }
+                    $trip_id = $avail->trip->fbt_id;
+                    $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
+                    foreach ($Areas as $key => $value) {
+                        $shuttleAreas[] = [
+                            'id' => $value->area->sa_id,
+                            'name' => $value->area->sa_name
+                        ];
                     }
                 }
             }
+            // dd($shuttleAreas);
 
             // Jika tidak ada shuttle, ambil area dari tabel umum fastboatshuttlearea
             if (empty($shuttleAreas)) {
@@ -519,23 +521,25 @@ class BookingDataController extends Controller
                 $shuttleTypeReturn = $availability->first()->trip->fbt_shuttle_type; // Ambil tipe shuttle dari trip
             }
 
-            // Inisialisasi
+            // Jika ada data availability
             $shuttleAreasReturn = [];
             $generalAreasReturn = [];
+
             if (!$availability->isEmpty()) {
+                // Ambil area shuttle dari trip yang terkait
                 foreach ($availability as $avail) {
-                    if ($avail->trip->shuttle && $avail->trip->shuttle->areas) {
-                        foreach ($avail->trip->shuttle->areas as $area) {
-                            $shuttleAreasReturn[] = [
-                                'id' => $area->sa_id,
-                                'name' => $area->sa_name,
-                            ];
-                        }
+                    $trip_id = $avail->trip->fbt_id;
+                    $returnAreas = FastboatShuttle::where('s_trip', $trip_id)->get();
+                    foreach ($returnAreas as $key => $value) {
+                        $shuttleAreasReturn[] = [
+                            'id' => $value->area->sa_id,
+                            'name' => $value->area->sa_name
+                        ];
                     }
                 }
             }
 
-            // Jika tidak ada shuttle atau shuttle type tidak sesuai, ambil area umum
+            // Jika tidak ada shuttle, ambil area dari tabel umum fastboatshuttlearea
             if (empty($shuttleAreasReturn)) {
                 $generalAreasReturn = FastboatShuttleArea::all()->map(function ($area) {
                     return [
@@ -600,18 +604,8 @@ class BookingDataController extends Controller
                     date('H:i', strtotime($deptTimeReturn)) . ')</center>';
 
                 $htmlReturn .= '<tr>';
-                // Kolom untuk adult publish dengan input
-                $htmlReturn .= '<td><center>';
-                $htmlReturn .= '<input type="hidden" name="availability[' . $avail->fba_id . '][adult_publish]" value="' . $avail->fba_adult_publish . '">';
-                $htmlReturn .= number_format($avail->fba_adult_publish ?? 0, 0, ',', '.');
-                $htmlReturn .= '</center></td>';
-
-                // Kolom untuk child publish dengan input
-                $htmlReturn .= '<td><center>';
-                $htmlReturn .= '<input type="hidden" name="availability[' . $avail->fba_id . '][child_publish]" value="' . $avail->fba_child_publish . '">';
-                $htmlReturn .= number_format($avail->fba_child_publish ?? 0, 0, ',', '.');
-                $htmlReturn .= '</center></td>';
-
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_publish ?? 0, 0, ',', '.') . '</center></td>';
+                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_publish ?? 0, 0, ',', '.') . '</center></td>';
                 $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
                 $htmlReturn .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
                 $htmlReturn .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
@@ -621,16 +615,13 @@ class BookingDataController extends Controller
                 $childPublishTotalReturn += $avail->fba_child_publish ?? 0;
                 $discountPerPersonReturn = $avail->fba_discount ?? 0;
 
-                // Cek apakah shuttle tersedia
                 if (!empty($trip->fbt_shuttle_type)) {
                     $shuttleAvailableReturn = true;
                 }
             }
 
-            // Tentukan apakah checkbox harus ditampilkan berdasarkan tipe shuttle
             $showShuttleCheckboxReturn = in_array($shuttleTypeReturn, ['Private', 'Sharing']);
 
-            // Kembalikan response termasuk shuttle availability
             return response()->json([
                 'htmlReturn' => $htmlReturn,
                 'card_return_title' => $cardTitleReturn,

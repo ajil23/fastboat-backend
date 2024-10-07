@@ -34,7 +34,7 @@ class FastboatTrip extends Model
     }
     public function shuttle()
     {
-        return $this->belongsTo(FastboatShuttle::class);
+        return $this->belongsTo(FastboatShuttle::class, 'fbt_id', 's_trip');
     }
     public function deptPort()
     {
