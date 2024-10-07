@@ -836,116 +836,118 @@
         });
 
         // Fungsi untuk melakukan pencarian
-        function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept, adultCount = null,
-            childCount = null) {
-            // Ambil jumlah adultCount dan childCount dari parameter jika tidak null, atau dari input jika null
-            adultCount = adultCount !== null ? adultCount : $('#fbo_adult').val() || 1; // Default 1 dewasa
-            childCount = childCount !== null ? childCount : $('#fbo_child').val() || 0;
+        function performSearch(tripDate, departurePort, arrivalPort, fastBoat, timeDept, adultCount = null, childCount = null) {
+    // Ambil jumlah adultCount dan childCount dari parameter jika tidak null, atau dari input jika null
+    adultCount = adultCount !== null ? adultCount : $('#fbo_adult').val() || 1; // Default 1 dewasa
+    childCount = childCount !== null ? childCount : $('#fbo_child').val() || 0;
 
-            $.ajax({
-                url: "{{ route('data.search') }}",
-                method: 'GET',
-                data: {
-                    fbo_trip_date: tripDate,
-                    fbo_departure_port: departurePort,
-                    fbo_arrival_port: arrivalPort,
-                    fbo_fast_boat: fastBoat,
-                    time_dept: timeDept,
-                    fbo_adult: adultCount,
-                    fbo_child: childCount
-                },
-                success: function(response) {
-                    // Tampilkan tabel hasil pencarian tanpa mereset
-                    $('#booking-data-table tbody').html(response.html);
-                    $('.card-title').html(response.card_title);
+    $.ajax({
+        url: "{{ route('data.search') }}",
+        method: 'GET',
+        data: {
+            fbo_trip_date: tripDate,
+            fbo_departure_port: departurePort,
+            fbo_arrival_port: arrivalPort,
+            fbo_fast_boat: fastBoat,
+            time_dept: timeDept,
+            fbo_adult: adultCount,
+            fbo_child: childCount
+        },
+        success: function(response) {
+            // Tampilkan tabel hasil pencarian tanpa mereset
+            $('#booking-data-table tbody').html(response.html);
+            $('.card-title').html(response.card_title);
 
-                    let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g, '')) ||
-                        0;
-                    let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) ||
-                        0;
-                    let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
+            let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g, '')) || 0;
+            let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) || 0;
+            let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
 
-                    let totalDiscount = adultCount * discountPerPerson;
-                    let totalPriceBeforeDiscount = (adultPublishPrice * adultCount) + (
-                        childPublishPrice * childCount);
-                    let totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
+            let totalDiscount = adultCount * discountPerPerson;
+            let totalPriceBeforeDiscount = (adultPublishPrice * adultCount) + (childPublishPrice * childCount);
+            let totalPriceAfterDiscount = totalPriceBeforeDiscount - totalDiscount;
 
-                    if (totalPriceAfterDiscount < 0) {
-                        totalPriceAfterDiscount = 0;
-                    }
+            if (totalPriceAfterDiscount < 0) {
+                totalPriceAfterDiscount = 0;
+            }
 
-                    $('#adult_publish').val(response.adult_publish);
-                    $('#child_publish').val(response.child_publish);
-                    $('#fbo_end_total').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
+            $('#adult_publish').val(response.adult_publish);
+            $('#child_publish').val(response.child_publish);
+            $('#fbo_end_total').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
 
-                    // Update nilai fbo_end_total_currency berdasarkan currency yang dipilih
-                    updateCurrencyTotal();
+            // Update nilai fbo_end_total_currency berdasarkan currency yang dipilih
+            updateCurrencyTotal();
 
-                    // Tampilkan hasil pencarian baru
-                    $('#search-results').show();
+            // Tampilkan hasil pencarian baru
+            $('#search-results').show();
 
-                    // Cek apakah shuttle checkbox perlu ditampilkan
-                    if (response.show_shuttle_checkbox) {
-                        let pickupDropdownOptions = '';
-                        let dropoffDropdownOptions = '';
+            // Cek apakah shuttle checkbox perlu ditampilkan
+            if (response.show_shuttle_checkbox) {
+                let pickupDropdownOptions = '<option value="">Select Pickup Area</option>';
+                let dropoffDropdownOptions = '<option value="">Select Dropoff Area</option>';
 
-                        // Jika ada shuttle (cek dari `shuttle_areas`), tampilkan area shuttle
-                        if (response.shuttle_areas && response.shuttle_areas.length > 0) {
-                            pickupDropdownOptions = '<option value="">Select Shuttle Area</option>';
-                            dropoffDropdownOptions = '<option value="">Select Shuttle Area</option>';
-                            response.shuttle_areas.forEach(function(area) {
-                                pickupDropdownOptions += `<option value="${area.id}">${area.name}</option>`;
-                                dropoffDropdownOptions += `<option value="${area.id}">${area.name}</option>`;
-                            });
-
-                            // Tampilkan dropdown shuttle area
-                            $('#pickup_area').html(pickupDropdownOptions);
-                            $('#dropoff_area').html(dropoffDropdownOptions);
-                        } else if (response.general_areas && response.general_areas.length > 0) {
-                            // Jika tidak ada shuttle, tampilkan area umum dari `general_areas`
-                            pickupDropdownOptions = '<option value="">Select General Area</option>';
-                            dropoffDropdownOptions = '<option value="">Select General Area</option>';
-                            response.general_areas.forEach(function(area) {
-                                pickupDropdownOptions += `<option value="${area.id}">${area.name}</option>`;
-                                dropoffDropdownOptions += `<option value="${area.id}">${area.name}</option>`;
-                            });
-
-                            // Tampilkan dropdown area umum
-                            $('#pickup_area').html(pickupDropdownOptions);
-                            $('#dropoff_area').html(dropoffDropdownOptions);
-                        }
-
-                        // Tampilkan shuttle checkbox jika shuttle ditemukan
-                        $('#shuttle-checkbox').show();
-
-                        // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
-                        $('#pickup-shuttle').change(function() {
-                            if ($(this).is(':checked')) {
-                                $('#pickup-inputs').show();
-                            } else {
-                                $('#pickup-inputs').hide();
-                            }
-                        });
-
-                        $('#dropoff-shuttle').change(function() {
-                            if ($(this).is(':checked')) {
-                                $('#dropoff-inputs').show();
-                            } else {
-                                $('#dropoff-inputs').hide();
-                            }
-                        });
-                    } else {
-                        // Jika tidak ada shuttle, sembunyikan checkbox dan dropdown
-                        $('#shuttle-checkbox').hide();
-                        $('#pickup_area').empty();
-                        $('#dropoff_area').empty();
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
+                // Populate pickup areas
+                if (response.pickup_areas && response.pickup_areas.length > 0) {
+                    response.pickup_areas.forEach(function(area) {
+                        pickupDropdownOptions += `<option value="${area.id}">${area.name}</option>`;
+                    });
                 }
-            });
+
+                // Populate dropoff areas
+                if (response.dropoff_areas && response.dropoff_areas.length > 0) {
+                    response.dropoff_areas.forEach(function(area) {
+                        dropoffDropdownOptions += `<option value="${area.id}">${area.name}</option>`;
+                    });
+                }
+
+                // Tampilkan dropdown shuttle area
+                $('#pickup_area').html(pickupDropdownOptions);
+                $('#dropoff_area').html(dropoffDropdownOptions);
+
+                // Tampilkan shuttle checkbox
+                $('#shuttle-checkbox').show();
+
+                // Set shuttle type if available
+                if (response.shuttle_type) {
+                    $('#shuttle_type').val(response.shuttle_type);
+                }
+
+                // Handle shuttle option
+                if (response.shuttle_option === 'pickup') {
+                    $('#pickup-shuttle').prop('checked', true).trigger('change');
+                } else if (response.shuttle_option === 'drop') {
+                    $('#dropoff-shuttle').prop('checked', true).trigger('change');
+                }
+
+                // Event listener untuk menampilkan input berdasarkan checkbox yang dipilih
+                $('#pickup-shuttle').change(function() {
+                    if ($(this).is(':checked')) {
+                        $('#pickup-inputs').show();
+                    } else {
+                        $('#pickup-inputs').hide();
+                    }
+                });
+
+                $('#dropoff-shuttle').change(function() {
+                    if ($(this).is(':checked')) {
+                        $('#dropoff-inputs').show();
+                    } else {
+                        $('#dropoff-inputs').hide();
+                    }
+                });
+            } else {
+                // Jika tidak ada shuttle, sembunyikan checkbox dan dropdown
+                $('#shuttle-checkbox').hide();
+                $('#pickup_area').empty();
+                $('#dropoff_area').empty();
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error in search:", error);
+            console.log(xhr.responseText);
+            // Tambahkan notifikasi error untuk user di sini jika diperlukan
         }
+    });
+}
 
         // Ketika jumlah orang dewasa atau anak-anak diubah, lakukan pencarian ulang tanpa reset hasil
         $('#fbo_adult, #fbo_child').on('input', function() {
