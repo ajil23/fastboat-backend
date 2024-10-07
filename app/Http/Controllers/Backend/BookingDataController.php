@@ -575,6 +575,7 @@ class BookingDataController extends Controller
             $shuttleOption = null;
             $pickupAreas = [];
             $dropoffAreas = [];
+            $shuttleAddressesReturn = []; 
 
             if (!$availability->isEmpty()) {
                 $trip = $availability->first()->trip;
@@ -585,6 +586,24 @@ class BookingDataController extends Controller
                     if ($shuttleTypeReturn && in_array($shuttleTypeReturn, ['Private', 'Sharing'])) {
                         $trip_id = $avail->trip->fbt_id;
                         $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
+
+                        if (!$availability->isEmpty()) {
+                            $shuttleType = $availability->first()->trip->fbt_shuttle_type;
+                
+                            foreach ($availability as $avail) {
+                                $trip_id = $avail->trip->fbt_id;
+                                $shuttles = FastboatShuttle::where('s_trip', $trip_id)->get();
+                
+                                foreach ($shuttles as $shuttle) {
+                                    $shuttleAddressesReturn[] = [
+                                        'area_id' => $shuttle->area->sa_id,
+                                        'area_name' => $shuttle->area->sa_name,
+                                        'pickup_meeting_point_return' => $shuttle->s_meeting_point ?? '',  // Ambil pickup meeting point
+                                        'dropoff_meeting_point_return' => $shuttle->s_meeting_point ?? '', // Ambil dropoff meeting point
+                                    ];
+                                }
+                            }
+                        }
             
                         if ($shuttleOptionReturn === 'pickup') {
                             // For pickup option
@@ -725,6 +744,7 @@ class BookingDataController extends Controller
                 'shuttle_option_return' => $shuttleOption,
                 'pickup_areas_return' => $pickupAreas,
                 'dropoff_areas_return' => $dropoffAreas,
+                'shuttle_addresses_return' => $shuttleAddressesReturn, 
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
