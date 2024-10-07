@@ -294,90 +294,64 @@
                                                 <div id="search-results" style="display: none;">
                                                     <div class="table-responsive">
                                                         <div id="shuttle-checkbox" class="shuttle-checkbox">
-
                                                             <div>
                                                                 <label>
-                                                                    <input type="checkbox" id="pickup-shuttle"
-                                                                        name="pickup_shuttle" value="1">
+                                                                    <input type="checkbox" id="pickup-shuttle" name="pickup_shuttle" value="1">
                                                                     Pickup Shuttle
                                                                 </label>
                                                                 &nbsp; &nbsp; &nbsp;
                                                                 <label>
-                                                                    <input type="checkbox" id="dropoff-shuttle"
-                                                                        name="dropoff_shuttle" value="1">
+                                                                    <input type="checkbox" id="dropoff-shuttle" name="dropoff_shuttle" value="1">
                                                                     Dropoff Shuttle
                                                                 </label>
                                                             </div>
                                                             <div class="container">
                                                                 <div class="row">
-                                                                    <div class="col-md-6 shuttle-inputs"
-                                                                        style="display:none;" id="pickup-inputs">
+                                                                    <div class="col-md-6 shuttle-inputs" style="display:none;" id="pickup-inputs">
                                                                         <div class="row">
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label"
-                                                                                        for="">Pickup Area</label>
-                                                                                    <select
-                                                                                        style="border-color: lightgray;"
-                                                                                        class="form-control"
-                                                                                        id="pickup_area"
-                                                                                        name="pickup_area">
-                                                                                        <option value="">Select
-                                                                                            Option</option>
+                                                                                    <label class="form-label" for="">Pickup Area</label>
+                                                                                    <select style="border-color: lightgray;" class="form-control" id="pickup_area" name="pickup_area">
+                                                                                        <option value="">Select Option</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label"
-                                                                                        for="">Phone</label>
-                                                                                    <input type="number"
-                                                                                        style="border-color: lightgray;"
-                                                                                        class="form-control"
-                                                                                        id="" name="">
+                                                                                    <label class="form-label" for="">Phone</label>
+                                                                                    <input type="number" style="border-color: lightgray;" class="form-control" id="" name="pickup_phone">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Address Pickup</label>
-                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="" name=""></textarea>
+                                                                                <label class="form-label" for="pickup_address">Address Pickup</label>
+                                                                                <textarea id="pickup_address" name="pickup_address" class="form-control" style="border-color: lightgray;"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-6 shuttle-inputs"
-                                                                        style="display:none;" id="dropoff-inputs">
+                                                                    <div class="col-md-6 shuttle-inputs" style="display:none;" id="dropoff-inputs">
                                                                         <div class="row">
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label"
-                                                                                        for="">Dropoff Area</label>
-                                                                                    <select
-                                                                                        style="border-color: lightgray;"
-                                                                                        class="form-control"
-                                                                                        id="dropoff_area"
-                                                                                        name="dropoff_area">
+                                                                                    <label class="form-label" for="">Dropoff Area</label>
+                                                                                    <select style="border-color: lightgray;" class="form-control" id="dropoff_area" name="dropoff_area">
                                                                                         ${dropoffDropdownOptions}
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label"
-                                                                                        for="">Phone</label>
-                                                                                    <input type="number"
-                                                                                        style="border-color: lightgray;"
-                                                                                        class="form-control"
-                                                                                        id="" name="">
+                                                                                    <label class="form-label" for="">Phone</label>
+                                                                                    <input type="number" style="border-color: lightgray;" class="form-control" id="" name="dropoff_phone">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Address Dropoff</label>
-                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="" name=""></textarea>
+                                                                                <label class="form-label" for="dropoff_address">Address Dropoff</label>
+                                                                                <textarea id="dropoff_address" name="dropoff_address" class="form-control" style="border-color: lightgray;"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -741,6 +715,45 @@
 
         // Pencarian trip
         $(document).ready(function() {
+           // Hide pickup and dropoff inputs on page load
+            $(document).ready(function() {
+                $('#pickup-inputs, #dropoff-inputs').hide(); // Hide initially
+            });
+
+            // Function to reset pickup inputs (without removing options)
+            function resetPickupInputs() {
+                $('#pickup_area').val(''); // Clear the selected value, not the options
+                $('#pickup_address').val(''); // Reset the pickup address
+                $('input[name="pickup_phone"]').val(''); // Reset the pickup phone input
+            }
+
+            // Function to reset dropoff inputs (without removing options)
+            function resetDropoffInputs() {
+                $('#dropoff_area').val(''); // Clear the selected value, not the options
+                $('#dropoff_address').val(''); // Reset the dropoff address
+                $('input[name="dropoff_phone"]').val(''); // Reset the dropoff phone input
+            }
+
+            // Event handler for Pickup Shuttle checkbox
+            $('#pickup-shuttle').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#pickup-inputs').stop(true, true).slideDown(); // Show pickup inputs
+                } else {
+                    $('#pickup-inputs').stop(true, true).slideUp(); // Hide pickup inputs
+                    resetPickupInputs(); // Reset pickup inputs when unchecked
+                }
+            });
+
+            // Event handler for Dropoff Shuttle checkbox
+            $('#dropoff-shuttle').change(function() {
+                if ($(this).is(':checked')) {
+                    $('#dropoff-inputs').stop(true, true).slideDown(); // Show dropoff inputs
+                } else {
+                    $('#dropoff-inputs').stop(true, true).slideUp(); // Hide dropoff inputs
+                    resetDropoffInputs(); // Reset dropoff inputs when unchecked
+                }
+            });
+
             // Fungsi untuk mengecek apakah semua field sudah diisi
             function resetSearchResults() {
                 $('#booking-data-table tbody').empty(); // Hapus data di tabel
@@ -750,6 +763,17 @@
                 $('#fbo_end_total').val(''); // Reset total harga
                 $('#fbo_end_total_currency').val(''); // Reset format mata uang
                 $('#search-results').hide(); // Sembunyikan hasil pencarian
+                // Reset checkboxes
+                $('#pickup-shuttle').prop('checked', false); // Reset Pickup Shuttle checkbox
+                $('#dropoff-shuttle').prop('checked', false); // Reset Dropoff Shuttle checkbox
+
+                // Reset inputs in pickup and dropoff sections
+                resetPickupInputs();
+                resetDropoffInputs();
+
+                // Hide pickup and dropoff inputs
+                $('#pickup-inputs').hide(); // Hide pickup inputs after search reset
+                $('#dropoff-inputs').hide(); // Hide dropoff inputs after search reset
             }
 
             // Fungsi untuk mengecek apakah semua field sudah diisi
@@ -797,6 +821,7 @@
                     $('#fbo_end_total').val(''); // Reset total harga
                     $('#fbo_end_total_currency').val(''); // Reset format mata uang
                     $('#search-results').hide(); // Sembunyikan hasil pencarian
+                    resetSearchResults();
                     checkFormComplete(); // Cek dan lakukan pencarian jika semua field terisi
                 });
 
@@ -908,6 +933,20 @@
                         $('#booking-data-table tbody').html(response.html);
                         $('.card-title').html(response.card_title);
 
+                        // Jika ada pickup_meeting_point, tampilkan dan disable input
+                        if (response.pickup_meeting_point) {
+                            $('#pickup-address').val(response.pickup_meeting_point).prop('disabled', true);
+                        } else {
+                            $('#pickup-address').val('').prop('disabled', false);
+                        }
+
+                        // Jika ada dropoff_meeting_point, tampilkan dan disable input
+                        if (response.dropoff_meeting_point) {
+                            $('#dropoff-address').val(response.dropoff_meeting_point).prop('disabled', true);
+                        } else {
+                            $('#dropoff-address').val('').prop('disabled', false);
+                        }
+
                         let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g, '')) ||
                             0;
                         let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) ||
@@ -983,6 +1022,9 @@
                                     $('#dropoff-inputs').hide();
                                 }
                             });
+
+                            // Memanggil fungsi updateMeetingPoints setelah shuttle ditemukan
+                            updateMeetingPoints(response.shuttle_addresses);
                         } else {
                             // Jika tidak ada shuttle, sembunyikan checkbox dan dropdown
                             $('#shuttle-checkbox').hide();
@@ -994,6 +1036,35 @@
                         console.error("Error in search:", error);
                         console.log(xhr.responseText);
                         // Tambahkan notifikasi error untuk user di sini jika diperlukan
+                    }
+                });
+            }
+
+            // Fungsi untuk mengisi pickup/dropoff address berdasarkan shuttle yang dipilih
+            function updateMeetingPoints(shuttleAddresses) {
+                $('#pickup_area').change(function() {
+                    const selectedAreaId = $(this).val();
+                    const selectedShuttle = shuttleAddresses.find(shuttle => shuttle.area_id == selectedAreaId);
+
+                    if (selectedShuttle && selectedShuttle.pickup_meeting_point) {
+                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                        $('#pickup_address').val(selectedShuttle.pickup_meeting_point).prop('readonly', true);
+                    } else {
+                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                        $('#pickup_address').val('').prop('readonly', false);
+                    }
+                });
+
+                $('#dropoff_area').change(function() {
+                    const selectedAreaId = $(this).val();
+                    const selectedShuttle = shuttleAddresses.find(shuttle => shuttle.area_id == selectedAreaId);
+
+                    if (selectedShuttle && selectedShuttle.dropoff_meeting_point) {
+                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                        $('#dropoff_address').val(selectedShuttle.dropoff_meeting_point).prop('readonly', true);
+                    } else {
+                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                        $('#dropoff_address').val('').prop('readonly', false);
                     }
                 });
             }
