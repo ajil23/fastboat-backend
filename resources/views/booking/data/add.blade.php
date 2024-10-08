@@ -1000,10 +1000,10 @@
                         }
 
                         let adultPublishPrice = parseInt(response.fbo_adult_publish.replace(/\./g,
-                            '')) ||
+                                '')) ||
                             0;
                         let childPublishPrice = parseInt(response.fbo_child_publish.replace(/\./g,
-                            '')) ||
+                                '')) ||
                             0;
                         let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
 
@@ -1030,7 +1030,7 @@
                         if (response.show_shuttle_checkbox) {
                             let pickupDropdownOptions = '<option value="">Select Pickup Area</option>';
                             let dropoffDropdownOptions =
-                            '<option value="">Select Dropoff Area</option>';
+                                '<option value="">Select Dropoff Area</option>';
 
                             // Populate pickup areas
                             if (response.fbo_pickups && response.fbo_pickups.length > 0) {
@@ -1086,7 +1086,8 @@
                                 if (selectedShuttle && selectedShuttle.pickup_meeting_point) {
                                     if (selectedShuttle.pickup_meeting_point === 'not_set') {
                                         // Jika meeting point 'not_set', kosongkan input dan izinkan pengguna mengisi
-                                        $('#fbo_specific_pickup').val('').prop('readonly', false);
+                                        $('#fbo_specific_pickup').val('').prop('readonly',
+                                            false);
                                     } else {
                                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
                                         $('#fbo_specific_pickup').val(selectedShuttle
@@ -1106,7 +1107,8 @@
                                 if (selectedShuttle && selectedShuttle.dropoff_meeting_point) {
                                     if (selectedShuttle.dropoff_meeting_point === 'not_set') {
                                         // Jika meeting point 'not_set', kosongkan input dan izinkan pengguna mengisi
-                                        $('#fbo_specific_dropoff').val('').prop('readonly', false);
+                                        $('#fbo_specific_dropoff').val('').prop('readonly',
+                                            false);
                                     } else {
                                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
                                         $('#fbo_specific_dropoff').val(selectedShuttle
@@ -1613,8 +1615,58 @@
                                 }
                             });
 
-                            // Memanggil fungsi updateMeetingPoints setelah shuttle ditemukan
-                            updateMeetingPointsReturn(response.shuttle_addresses_return);
+                            $('#fbo_pickup_return').change(function() {
+                                const selectedAreaId = $(this).val();
+                                const selectedShuttle = response.fbo_pickups_return.find(
+                                    shuttle =>
+                                    shuttle.id == selectedAreaId);
+
+                                if (selectedShuttle && selectedShuttle
+                                    .pickup_meeting_point_return) {
+                                    if (selectedShuttle.pickup_meeting_point_return ===
+                                        'not_set') {
+                                        // Jika meeting point 'not_set', kosongkan input dan izinkan pengguna mengisi
+                                        $('#fbo_specific_pickup_return').val('').prop(
+                                            'readonly',
+                                            false);
+                                    } else {
+                                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                                        $('#fbo_specific_pickup_return').val(selectedShuttle
+                                            .pickup_meeting_point_return).prop('readonly',
+                                            true);
+                                    }
+                                } else {
+                                    // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                                    $('#fbo_specific_pickup_return').val('').prop('readonly',
+                                        false);
+                                }
+                            });
+
+                            $('#fbo_dropoff_return').change(function() {
+                                const selectedAreaId = $(this).val();
+                                const selectedShuttle = response.fbo_dropoffs_return.find(
+                                    shuttle =>
+                                    shuttle.id == selectedAreaId);
+
+                                if (selectedShuttle && selectedShuttle
+                                    .dropoff_meeting_point_return) {
+                                    if (selectedShuttle.dropoff_meeting_point_return ===
+                                        'not_set') {
+                                        // Jika meeting point 'not_set', kosongkan input dan izinkan pengguna mengisi
+                                        $('#fbo_specific_dropoff_return').val('').prop('readonly',
+                                            false);
+                                    } else {
+                                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                                        $('#fbo_specific_dropoff_return').val(selectedShuttle
+                                            .dropoff_meeting_point_return).prop('readonly',
+                                            true);
+                                    }
+                                } else {
+                                    // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                                    $('#fbo_specific_dropoff_return').val('').prop('readonly', false);
+                                }
+                            });
+
                         } else {
                             // Jika tidak perlu shuttle checkbox, sembunyikan dan kosongkan
                             $('#shuttle-checkbox-return').hide();
@@ -1627,40 +1679,6 @@
                     }
                 });
             }
-
-            // Fungsi untuk mengisi pickup/dropoff address berdasarkan shuttle yang dipilih
-            function updateMeetingPointsReturn(shuttleAddressesReturn) {
-                $('#fbo_pickup_return').change(function() {
-                    const selectedAreaId = $(this).val();
-                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id ==
-                        selectedAreaId);
-
-                    if (selectedShuttle && selectedShuttle.pickup_meeting_point_return) {
-                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#fbo_specific_pickup_return').val(selectedShuttle.pickup_meeting_point_return)
-                            .prop('readonly', true);
-                    } else {
-                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#fbo_specific_pickup_return').val('').prop('readonly', false);
-                    }
-                });
-
-                $('#fbo_dropoff_return').change(function() {
-                    const selectedAreaId = $(this).val();
-                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id ==
-                        selectedAreaId);
-
-                    if (selectedShuttle && selectedShuttle.dropoff_meeting_point_return) {
-                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#fbo_specific_dropoff_return').val(selectedShuttle.dropoff_meeting_point_return)
-                            .prop('readonly', true);
-                    } else {
-                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#fbo_specific_dropoff_return').val('').prop('readonly', false);
-                    }
-                });
-            }
-
 
             // Event listener untuk memulai pencarian saat semua input telah terisi
             $('#trip_return_date, #departure_return_port, #arrival_return_port, #fbo_fast_boat_return, #fbo_departure_time_return')
@@ -1799,7 +1817,7 @@
             // Ketika fbo_fast_boat_return diubah, ambil data baru untuk fbo_departure_time
             $('#fbo_fast_boat_return').change(function() {
                 $('#fbo_departure_time_return').empty().append(
-                '<option value="">Select Time Dept</option>');
+                    '<option value="">Select Time Dept</option>');
 
                 let tripDateReturn = $('#trip_return_date').val();
                 let departurePortReturn = $('#departure_return_port').val();
