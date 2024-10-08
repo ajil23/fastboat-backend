@@ -119,7 +119,8 @@
                                                 <div class="col-md-3 transaction-id" id="paypal_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_transaction_id">Transaction ID</label>
+                                                        <label class="form-label" for="fbo_transaction_id">Transaction
+                                                            ID</label>
                                                         <input id="fbo_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Paypal Transaction ID" type="text"
                                                             class="form-control">
@@ -154,7 +155,8 @@
                                                 <div class="col-md-3 transaction-id" id="cash_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_transaction_id">Transaction ID</label>
+                                                        <label class="form-label" for="fbo_transaction_id">Transaction
+                                                            ID</label>
                                                         <input id="fbo_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Recipient" type="text"
                                                             class="form-control">
@@ -166,7 +168,8 @@
                                                     style="display: none;">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fbo_transaction_id">Agent</label>
-                                                        <select id="fbo_transaction_id" name="fbo_transaction_id" class="form-control">
+                                                        <select id="fbo_transaction_id" name="fbo_transaction_id"
+                                                            class="form-control">
                                                             <option value="">Select Agent</option>
                                                             <option value="Agen A">Agen A</option>
                                                             <option value="Agen B">Agen B</option>
@@ -284,8 +287,10 @@
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_departure_time">Time Dept</label>
-                                                        <select class="form-control" id="fbo_departure_time" name="fbo_departure_time">
+                                                        <label class="form-label" for="fbo_departure_time">Time
+                                                            Dept</label>
+                                                        <select class="form-control" id="fbo_departure_time"
+                                                            name="fbo_departure_time">
                                                             <option value="">Select Time Dept</option>
                                                         </select>
                                                     </div>
@@ -298,62 +303,96 @@
                                                         <div id="shuttle-checkbox" class="shuttle-checkbox">
                                                             <div>
                                                                 <label>
-                                                                    <input type="checkbox" id="pickup-shuttle" name="fbo_pickup" value="1">
+                                                                    <input type="checkbox" id="pickup-shuttle"
+                                                                        name="fbo_pickup" value="1">
                                                                     Pickup Shuttle
                                                                 </label>
                                                                 &nbsp; &nbsp; &nbsp;
                                                                 <label>
-                                                                    <input type="checkbox" id="dropoff-shuttle" name="fbo_dropoff" value="1">
+                                                                    <input type="checkbox" id="dropoff-shuttle"
+                                                                        name="fbo_dropoff" value="1">
                                                                     Dropoff Shuttle
                                                                 </label>
                                                             </div>
                                                             <div class="container">
                                                                 <div class="row">
-                                                                    <div class="col-md-6 shuttle-inputs" style="display:none;" id="pickup-inputs">
+                                                                    <div class="col-md-6 shuttle-inputs"
+                                                                        style="display:none;" id="pickup-inputs">
                                                                         <div class="row">
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label" for="fbo_pickup">Pickup Area</label>
-                                                                                    <select style="border-color: lightgray;" class="form-control" id="fbo_pickup" name="fbo_pickup">
-                                                                                        <option value="">Select Option</option>
+                                                                                    <label class="form-label"
+                                                                                        for="fbo_pickup">Pickup
+                                                                                        Area</label>
+                                                                                    <select
+                                                                                        style="border-color: lightgray;"
+                                                                                        class="form-control"
+                                                                                        id="fbo_pickup" name="fbo_pickup">
+                                                                                        <option value="">Select
+                                                                                            Option</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label" for="">Phone</label>
-                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_pickup" placeholder="62XXXXXXXXXXX">
+                                                                                    <label class="form-label"
+                                                                                        for="">Phone</label>
+                                                                                    <input type="text"
+                                                                                        style="border-color: lightgray;"
+                                                                                        class="form-control"
+                                                                                        id=""
+                                                                                        name="fbo_contact_pickup"
+                                                                                        placeholder="62XXXXXXXXXXX">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="fbo_specific_pickup">Address Pickup</label>
+                                                                                <label class="form-label"
+                                                                                    for="fbo_specific_pickup">Address
+                                                                                    Pickup</label>
                                                                                 <textarea id="fbo_specific_pickup" name="fbo_specific_pickup" class="form-control" style="border-color: lightgray;"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-md-6 shuttle-inputs" style="display:none;" id="dropoff-inputs">
+                                                                    <div class="col-md-6 shuttle-inputs"
+                                                                        style="display:none;" id="dropoff-inputs">
                                                                         <div class="row">
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label" for="fbo_dropoff">Dropoff Area</label>
-                                                                                    <select style="border-color: lightgray;" class="form-control" id="fbo_dropoff" name="fbo_dropoff">
-                                                                                    <option value="">Select Option</option>
+                                                                                    <label class="form-label"
+                                                                                        for="fbo_dropoff">Dropoff
+                                                                                        Area</label>
+                                                                                    <select
+                                                                                        style="border-color: lightgray;"
+                                                                                        class="form-control"
+                                                                                        id="fbo_dropoff"
+                                                                                        name="fbo_dropoff">
+                                                                                        <option value="">Select
+                                                                                            Option</option>
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label" for="">Phone</label>
-                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_dropoff" placeholder="62XXXXXXXXXXX">
+                                                                                    <label class="form-label"
+                                                                                        for="">Phone</label>
+                                                                                    <input type="text"
+                                                                                        style="border-color: lightgray;"
+                                                                                        class="form-control"
+                                                                                        id=""
+                                                                                        name="fbo_contact_dropoff"
+                                                                                        placeholder="62XXXXXXXXXXX">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="fbo_specific_dropoff">Address Dropoff</label>
-                                                                                <textarea id="fbo_specific_dropoff" name="fbo_specific_dropoff" class="form-control" style="border-color: lightgray;"></textarea>
+                                                                                <label class="form-label"
+                                                                                    for="fbo_specific_dropoff">Address
+                                                                                    Dropoff</label>
+                                                                                <textarea id="fbo_specific_dropoff" name="fbo_specific_dropoff" class="form-control"
+                                                                                    style="border-color: lightgray;"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -391,7 +430,8 @@
                                                         <div class="row">
                                                             <div class="col-sm-3">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label" for="fbo_adult_publish">Adult
+                                                                    <label class="form-label"
+                                                                        for="fbo_adult_publish">Adult
                                                                         Publish (IDR)</label>
                                                                     <input value="" class="form-control"
                                                                         id="fbo_adult_publish" name="fbo_adult_publish"
@@ -400,7 +440,8 @@
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label" for="fbo_child_publish">Child
+                                                                    <label class="form-label"
+                                                                        for="fbo_child_publish">Child
                                                                         Publish (IDR)</label>
                                                                     <input value="" class="form-control"
                                                                         id="fbo_child_publish" name="fbo_child_publish"
@@ -514,12 +555,14 @@
                                                     <div id="shuttle-checkbox-return" class="shuttle-checkbox-return">
                                                         <div>
                                                             <label>
-                                                                <input type="checkbox" id="pickup-shuttle-return" name="pickup_shuttle_return" value="1">
+                                                                <input type="checkbox" id="pickup-shuttle-return"
+                                                                    name="pickup_shuttle_return" value="1">
                                                                 Pickup Shuttle
                                                             </label>
                                                             &nbsp; &nbsp; &nbsp;
                                                             <label>
-                                                                <input type="checkbox" id="dropoff-shuttle-return" name="dropoff_shuttle_return" value="1">
+                                                                <input type="checkbox" id="dropoff-shuttle-return"
+                                                                    name="dropoff_shuttle_return" value="1">
                                                                 Dropoff Shuttle
                                                             </label>
                                                         </div>
@@ -530,22 +573,35 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="">Pickup Area</label>
-                                                                                <select style="border-color: lightgray;" class="form-control" id="fbo_pickup_return" name="fbo_pickup_return">
-                                                                                    <option value="">Select Option</option>
+                                                                                <label class="form-label"
+                                                                                    for="">Pickup Area</label>
+                                                                                <select style="border-color: lightgray;"
+                                                                                    class="form-control"
+                                                                                    id="fbo_pickup_return"
+                                                                                    name="fbo_pickup_return">
+                                                                                    <option value="">Select Option
+                                                                                    </option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="">Phone</label>
-                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_pickup_return" placeholder="62XXXXXXXXXXX">
+                                                                                <label class="form-label"
+                                                                                    for="">Phone</label>
+                                                                                <input type="text"
+                                                                                    style="border-color: lightgray;"
+                                                                                    class="form-control" id=""
+                                                                                    name="fbo_contact_pickup_return"
+                                                                                    placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="fbo_specific_pickup_return">Address Pickup</label>
-                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_pickup_return" name="fbo_specific_pickup_return"></textarea>
+                                                                                <label class="form-label"
+                                                                                    for="fbo_specific_pickup_return">Address
+                                                                                    Pickup</label>
+                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_pickup_return"
+                                                                                    name="fbo_specific_pickup_return"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -555,23 +611,36 @@
                                                                     <div class="row">
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="">Dropoff Area</label>
-                                                                                <select style="border-color: lightgray;" class="form-control" id="fbo_dropoff_return" name="fbo_dropoff_return">
-                                                                                    <option value="">Select Option </option>
+                                                                                <label class="form-label"
+                                                                                    for="">Dropoff Area</label>
+                                                                                <select style="border-color: lightgray;"
+                                                                                    class="form-control"
+                                                                                    id="fbo_dropoff_return"
+                                                                                    name="fbo_dropoff_return">
+                                                                                    <option value="">Select Option
+                                                                                    </option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="">Phone</label>
-                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_dropoff_return" placeholder="62XXXXXXXXXXX">
+                                                                                <label class="form-label"
+                                                                                    for="">Phone</label>
+                                                                                <input type="text"
+                                                                                    style="border-color: lightgray;"
+                                                                                    class="form-control" id=""
+                                                                                    name="fbo_contact_dropoff_return"
+                                                                                    placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="mb-3">
-                                                                            <label class="form-label" for="fbo_specific_dropoff_return">Address Dropoff</label>
-                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_dropoff_return" name="fbo_specific_dropoff_return"></textarea>
+                                                                            <label class="form-label"
+                                                                                for="fbo_specific_dropoff_return">Address
+                                                                                Dropoff</label>
+                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_dropoff_return"
+                                                                                name="fbo_specific_dropoff_return"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -695,7 +764,7 @@
 
         // Pencarian trip
         $(document).ready(function() {
-           // Hide pickup and dropoff inputs on page load
+            // Hide pickup and dropoff inputs on page load
             $(document).ready(function() {
                 $('#pickup-inputs, #dropoff-inputs').hide(); // Hide initially
             });
@@ -773,7 +842,8 @@
             }
 
             // Trigger ketika input field berubah (pencarian ulang)
-            $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_fast_boat, #fbo_departure_time').on('change',
+            $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_fast_boat, #fbo_departure_time').on(
+                'change',
                 function() {
                     var type = $(this).attr('name');
                     if (type === 'fbo_trip_date') {
@@ -915,21 +985,25 @@
 
                         // Jika ada pickup_meeting_point, tampilkan dan disable input
                         if (response.pickup_meeting_point) {
-                            $('#pickup-address').val(response.pickup_meeting_point).prop('disabled', true);
+                            $('#pickup-address').val(response.pickup_meeting_point).prop('disabled',
+                                true);
                         } else {
                             $('#pickup-address').val('').prop('disabled', false);
                         }
 
                         // Jika ada dropoff_meeting_point, tampilkan dan disable input
                         if (response.dropoff_meeting_point) {
-                            $('#dropoff-address').val(response.dropoff_meeting_point).prop('disabled', true);
+                            $('#dropoff-address').val(response.dropoff_meeting_point).prop('disabled',
+                                true);
                         } else {
                             $('#dropoff-address').val('').prop('disabled', false);
                         }
 
-                        let adultPublishPrice = parseInt(response.fbo_adult_publish.replace(/\./g, '')) ||
+                        let adultPublishPrice = parseInt(response.fbo_adult_publish.replace(/\./g,
+                            '')) ||
                             0;
-                        let childPublishPrice = parseInt(response.fbo_child_publish.replace(/\./g, '')) ||
+                        let childPublishPrice = parseInt(response.fbo_child_publish.replace(/\./g,
+                            '')) ||
                             0;
                         let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
 
@@ -956,7 +1030,7 @@
                         if (response.show_shuttle_checkbox) {
                             let pickupDropdownOptions = '<option value="">Select Pickup Area</option>';
                             let dropoffDropdownOptions =
-                                '<option value="">Select Dropoff Area</option>';
+                            '<option value="">Select Dropoff Area</option>';
 
                             // Populate pickup areas
                             if (response.fbo_pickups && response.fbo_pickups.length > 0) {
@@ -1003,14 +1077,54 @@
                                 }
                             });
 
-                            // Memanggil fungsi updateMeetingPoints setelah shuttle ditemukan
-                            updateMeetingPoints(response.shuttle_addresses);
+                            // Update meeting points for pickup and dropoff areas
+                            $('#fbo_pickup').change(function() {
+                                const selectedAreaId = $(this).val();
+                                const selectedShuttle = response.fbo_pickups.find(shuttle =>
+                                    shuttle.id == selectedAreaId);
+
+                                if (selectedShuttle && selectedShuttle.pickup_meeting_point) {
+                                    if (selectedShuttle.pickup_meeting_point === 'not_set') {
+                                        // Jika meeting point 'not_set', kosongkan input dan izinkan pengguna mengisi
+                                        $('#fbo_specific_pickup').val('').prop('readonly', false);
+                                    } else {
+                                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                                        $('#fbo_specific_pickup').val(selectedShuttle
+                                            .pickup_meeting_point).prop('readonly', true);
+                                    }
+                                } else {
+                                    // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                                    $('#fbo_specific_pickup').val('').prop('readonly', false);
+                                }
+                            });
+
+                            $('#fbo_dropoff').change(function() {
+                                const selectedAreaId = $(this).val();
+                                const selectedShuttle = response.fbo_dropoffs.find(shuttle =>
+                                    shuttle.id == selectedAreaId);
+
+                                if (selectedShuttle && selectedShuttle.dropoff_meeting_point) {
+                                    if (selectedShuttle.dropoff_meeting_point === 'not_set') {
+                                        // Jika meeting point 'not_set', kosongkan input dan izinkan pengguna mengisi
+                                        $('#fbo_specific_dropoff').val('').prop('readonly', false);
+                                    } else {
+                                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
+                                        $('#fbo_specific_dropoff').val(selectedShuttle
+                                            .dropoff_meeting_point).prop('readonly', true);
+                                    }
+                                } else {
+                                    // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
+                                    $('#fbo_specific_dropoff').val('').prop('readonly', false);
+                                }
+                            });
+
                         } else {
                             // Jika tidak ada shuttle, sembunyikan checkbox dan dropdown
                             $('#shuttle-checkbox').hide();
                             $('#fbo_pickup').empty();
                             $('#fbo_dropoff').empty();
                         }
+
                     },
                     error: function(xhr, status, error) {
                         console.error("Error in search:", error);
@@ -1020,34 +1134,6 @@
                 });
             }
 
-            // Fungsi untuk mengisi pickup/dropoff address berdasarkan shuttle yang dipilih
-            function updateMeetingPoints(shuttleAddresses) {
-                $('#fbo_pickup').change(function() {
-                    const selectedAreaId = $(this).val();
-                    const selectedShuttle = shuttleAddresses.find(shuttle => shuttle.area_id == selectedAreaId);
-
-                    if (selectedShuttle && selectedShuttle.pickup_meeting_point) {
-                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#fbo_specific_pickup').val(selectedShuttle.pickup_meeting_point).prop('readonly', true);
-                    } else {
-                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#fbo_specific_pickup').val('').prop('readonly', false);
-                    }
-                });
-
-                $('#fbo_dropoff').change(function() {
-                    const selectedAreaId = $(this).val();
-                    const selectedShuttle = shuttleAddresses.find(shuttle => shuttle.area_id == selectedAreaId);
-
-                    if (selectedShuttle && selectedShuttle.dropoff_meeting_point) {
-                        // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#fbo_specific_dropoff').val(selectedShuttle.dropoff_meeting_point).prop('readonly', true);
-                    } else {
-                        // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#fbo_specific_dropoff').val('').prop('readonly', false);
-                    }
-                });
-            }
 
             // Ketika jumlah orang dewasa atau anak-anak diubah, lakukan pencarian ulang tanpa reset hasil
             $('#fbo_adult, #fbo_child').on('input', function() {
@@ -1194,7 +1280,8 @@
                         $('#fbo_departure_time').empty().append(
                             '<option value="">Select Time Dept</option>');
                         $.each(response.fbo_departure_times, function(index, time) {
-                            $('#fbo_departure_time').append('<option value="' + time + '">' +
+                            $('#fbo_departure_time').append('<option value="' + time +
+                                '">' +
                                 time + '</option>');
                         });
                     }
@@ -1304,19 +1391,23 @@
                         $('#arrival_return_port').empty().append(
                             '<option value="">Select Arrival Port</option>');
                         $('#fbo_fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append(
+                            '<option value="">Select Time Dept</option>');
                         console.log(type);
                     } else if (type === 'departure_return_port') {
                         $('#arrival_return_port').empty().append(
                             '<option value="">Select Arrival Port</option>');
                         $('#fbo_fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append(
+                            '<option value="">Select Time Dept</option>');
                         console.log(type);
                     } else if (type === 'arrival_return_port') {
                         $('#fbo_fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append(
+                            '<option value="">Select Time Dept</option>');
                     } else if (type === 'fbo_fast_boat_return') {
-                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append(
+                            '<option value="">Select Time Dept</option>');
                     }
                     $('#booking-data-table-return tbody').empty(); // Hapus data di tabel
                     $('.card-title-return').empty(); // Hapus judul kartu
@@ -1398,7 +1489,7 @@
 
                 // Ambil jumlah adultCountReturn dan childCountReturn dari parameter jika tidak null, atau dari input jika null
                 adultCountReturn = adultCountReturn !== null ? adultCountReturn : $('#fbo_adult').val() ||
-                1; // Default 1 dewasa
+                    1; // Default 1 dewasa
                 childCountReturn = childCountReturn !== null ? childCountReturn : $('#fbo_child').val() || 0;
 
                 $.ajax({
@@ -1420,14 +1511,16 @@
 
                         // Jika ada pickup_meeting_point, tampilkan dan disable input
                         if (response.pickup_meeting_point_return) {
-                            $('#pickup-address-return').val(response.pickup_meeting_point_return).prop('disabled', true);
+                            $('#pickup-address-return').val(response.pickup_meeting_point_return).prop(
+                                'disabled', true);
                         } else {
                             $('#pickup-address-return').val('').prop('disabled', false);
                         }
 
                         // Jika ada dropoff_meeting_point, tampilkan dan disable input
                         if (response.dropoff_meeting_point_return) {
-                            $('#dropoff-address-return').val(response.dropoff_meeting_point_return).prop('disabled', true);
+                            $('#dropoff-address-return').val(response.dropoff_meeting_point_return)
+                                .prop('disabled', true);
                         } else {
                             $('#dropoff-address-return').val('').prop('disabled', false);
                         }
@@ -1462,12 +1555,15 @@
 
                         // Cek apakah shuttle checkbox perlu ditampilkan
                         if (response.show_shuttle_checkbox_return) {
-                            let pickupDropdownOptionsReturn = '<option value="">Select Pickup Area</option>';
-                            let dropoffDropdownOptionsReturn = '<option value="">Select Dropoff Area</option>';
+                            let pickupDropdownOptionsReturn =
+                                '<option value="">Select Pickup Area</option>';
+                            let dropoffDropdownOptionsReturn =
+                                '<option value="">Select Dropoff Area</option>';
 
                             // Jika ada pickup shuttle area
                             if (response.fbo_pickups_return && response.fbo_pickups_return.length > 0) {
-                                pickupDropdownOptionsReturn = '<option value="">Select Pickup Area</option>';
+                                pickupDropdownOptionsReturn =
+                                    '<option value="">Select Pickup Area</option>';
                                 response.fbo_pickups_return.forEach(function(area) {
                                     pickupDropdownOptionsReturn +=
                                         `<option value="${area.id}">${area.name}</option>`;
@@ -1536,11 +1632,13 @@
             function updateMeetingPointsReturn(shuttleAddressesReturn) {
                 $('#fbo_pickup_return').change(function() {
                     const selectedAreaId = $(this).val();
-                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id == selectedAreaId);
+                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id ==
+                        selectedAreaId);
 
                     if (selectedShuttle && selectedShuttle.pickup_meeting_point_return) {
                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#fbo_specific_pickup_return').val(selectedShuttle.pickup_meeting_point_return).prop('readonly', true);
+                        $('#fbo_specific_pickup_return').val(selectedShuttle.pickup_meeting_point_return)
+                            .prop('readonly', true);
                     } else {
                         // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
                         $('#fbo_specific_pickup_return').val('').prop('readonly', false);
@@ -1549,11 +1647,13 @@
 
                 $('#fbo_dropoff_return').change(function() {
                     const selectedAreaId = $(this).val();
-                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id == selectedAreaId);
+                    const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id ==
+                        selectedAreaId);
 
                     if (selectedShuttle && selectedShuttle.dropoff_meeting_point_return) {
                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#fbo_specific_dropoff_return').val(selectedShuttle.dropoff_meeting_point_return).prop('readonly', true);
+                        $('#fbo_specific_dropoff_return').val(selectedShuttle.dropoff_meeting_point_return)
+                            .prop('readonly', true);
                     } else {
                         // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
                         $('#fbo_specific_dropoff_return').val('').prop('readonly', false);
@@ -1698,7 +1798,8 @@
 
             // Ketika fbo_fast_boat_return diubah, ambil data baru untuk fbo_departure_time
             $('#fbo_fast_boat_return').change(function() {
-                $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
+                $('#fbo_departure_time_return').empty().append(
+                '<option value="">Select Time Dept</option>');
 
                 let tripDateReturn = $('#trip_return_date').val();
                 let departurePortReturn = $('#departure_return_port').val();
@@ -1719,7 +1820,8 @@
                         $('#fbo_departure_time_return').empty().append(
                             '<option value="">Select Time Dept</option>');
                         $.each(response.fbo_departure_times_return, function(index, time) {
-                            $('#fbo_departure_time_return').append('<option value="' + time +
+                            $('#fbo_departure_time_return').append('<option value="' +
+                                time +
                                 '">' + time + '</option>');
                         });
                     }
