@@ -145,9 +145,9 @@
                                                     <br>
                                                     <input class="form-check-input" type="radio" id="null" name="fbt_shuttle_type" value="null" @if($tripEdit->fbt_shuttle_type == 'null') checked @endif>
                                                     <label for="null">Null</label>
-                                                    <input class="form-check-input" type="radio" id="private" name="fbt_shuttle_type" value="private" @if($tripEdit->fbt_shuttle_type == 'private') checked @endif>
+                                                    <input class="form-check-input" type="radio" id="private" name="fbt_shuttle_type" value="Private" @if($tripEdit->fbt_shuttle_type == 'private') checked @endif>
                                                     <label for="private">Private</label>
-                                                    <input class="form-check-input" type="radio" id="Sharing" name="fbt_shuttle_type" value="sharing" @if($tripEdit->fbt_shuttle_type == 'sharing') checked @endif>
+                                                    <input class="form-check-input" type="radio" id="Sharing" name="fbt_shuttle_type" value="Sharing" @if($tripEdit->fbt_shuttle_type == 'sharing') checked @endif>
                                                     <label for="Sharing">Sharing</label>
                                                 </div>
                                             </div>
@@ -157,7 +157,7 @@
                                                     <br>
                                                     <input class="form-check-input" type="radio" id="pickup" name="fbt_shuttle_option" value="pickup" @if($tripEdit->fbt_shuttle_option == 'pickup') checked @endif>
                                                     <label for="pickup">Pick up</label>
-                                                    <input class="form-check-input" type="radio" id="dropoff" name="fbt_shuttle_option" value="dropoff" @if($tripEdit->fbt_shuttle_option == 'dropoff') checked @endif>
+                                                    <input class="form-check-input" type="radio" id="dropoff" name="fbt_shuttle_option" value="drop" @if($tripEdit->fbt_shuttle_option == 'dropoff') checked @endif>
                                                     <label for="dropoff">Drop Off</label>
                                                 </div>
                                             </div>
