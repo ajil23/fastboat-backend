@@ -30,7 +30,7 @@ class FastboatShuttleController extends Controller
     public function add()
     {
         // Menampilkan data trip yang memiliki shuttle option (pickup / dropoff)
-        $trip = FastboatTrip::whereIn('fbt_shuttle_option', ['pickup', 'dropoff'])->get();
+        $trip = FastboatTrip::whereIn('fbt_shuttle_option', ['pickup', 'drop'])->get();
         $area = FastboatShuttleArea::all();
         $company = DataCompany::orderBy('cpn_name', 'asc')->get();
         return view('fast-boat.shuttle.add', compact('trip', 'area', 'company'));

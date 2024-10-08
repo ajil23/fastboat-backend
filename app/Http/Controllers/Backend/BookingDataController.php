@@ -241,31 +241,13 @@ class BookingDataController extends Controller
                     if ($shuttleType && in_array($shuttleType, ['Private', 'Sharing'])) {
                         $trip_id = $avail->trip->fbt_id;
                         $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
-
-                        if (!$availability->isEmpty()) {
-                            $shuttleType = $availability->first()->trip->fbt_shuttle_type;
-                
-                            foreach ($availability as $avail) {
-                                $trip_id = $avail->trip->fbt_id;
-                                $shuttles = FastboatShuttle::where('s_trip', $trip_id)->get();
-                
-                                foreach ($shuttles as $shuttle) {
-                                    $shuttleAddresses[] = [
-                                        'area_id' => $shuttle->area->sa_id,
-                                        'area_name' => $shuttle->area->sa_name,
-                                        'pickup_meeting_point' => $shuttle->s_meeting_point ?? '',  // Ambil pickup meeting point
-                                        'dropoff_meeting_point' => $shuttle->s_meeting_point ?? '', // Ambil dropoff meeting point
-                                    ];
-                                }
-                            }
-                        }
-            
                         if ($shuttleOption === 'pickup') {
                             // For pickup option
                             $pickupAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
                                 return [
                                     'id' => $value->area->sa_id,
-                                    'name' => $value->area->sa_name
+                                    'name' => $value->area->sa_name,
+                                    'pickup_meeting_point' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
             
@@ -280,7 +262,8 @@ class BookingDataController extends Controller
                             $dropoffAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
                                 return [
                                     'id' => $value->area->sa_id,
-                                    'name' => $value->area->sa_name
+                                    'name' => $value->area->sa_name,
+                                    'dropoff_meeting_point' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
             
@@ -427,7 +410,6 @@ class BookingDataController extends Controller
                 'shuttle_option' => $shuttleOption,
                 'fbo_pickups' => $pickupAreas,
                 'fbo_dropoffs' => $dropoffAreas,
-                'shuttle_addresses' => $shuttleAddresses, 
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -601,31 +583,14 @@ class BookingDataController extends Controller
                     if ($shuttleTypeReturn && in_array($shuttleTypeReturn, ['Private', 'Sharing'])) {
                         $trip_id = $avail->trip->fbt_id;
                         $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
-
-                        if (!$availability->isEmpty()) {
-                            $shuttleType = $availability->first()->trip->fbt_shuttle_type;
-                
-                            foreach ($availability as $avail) {
-                                $trip_id = $avail->trip->fbt_id;
-                                $shuttles = FastboatShuttle::where('s_trip', $trip_id)->get();
-                
-                                foreach ($shuttles as $shuttle) {
-                                    $shuttleAddressesReturn[] = [
-                                        'area_id' => $shuttle->area->sa_id,
-                                        'area_name' => $shuttle->area->sa_name,
-                                        'pickup_meeting_point_return' => $shuttle->s_meeting_point ?? '',  // Ambil pickup meeting point
-                                        'dropoff_meeting_point_return' => $shuttle->s_meeting_point ?? '', // Ambil dropoff meeting point
-                                    ];
-                                }
-                            }
-                        }
             
                         if ($shuttleOptionReturn === 'pickup') {
                             // For pickup option
                             $pickupAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
                                 return [
                                     'id' => $value->area->sa_id,
-                                    'name' => $value->area->sa_name
+                                    'name' => $value->area->sa_name,
+                                    'pickup_meeting_point_return' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
             
@@ -640,7 +605,8 @@ class BookingDataController extends Controller
                             $dropoffAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
                                 return [
                                     'id' => $value->area->sa_id,
-                                    'name' => $value->area->sa_name
+                                    'name' => $value->area->sa_name,
+                                    'dropoff_meeting_point_return' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
             
@@ -673,7 +639,7 @@ class BookingDataController extends Controller
                     }
                 }
             }  
-            // dd($dropoffAreas);
+            // dd($pickupAreas);
 
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
@@ -759,7 +725,6 @@ class BookingDataController extends Controller
                 'shuttle_option_return' => $shuttleOption,
                 'fbo_pickups_return' => $pickupAreas,
                 'fbo_dropoffs_return' => $dropoffAreas,
-                'shuttle_addresses_return' => $shuttleAddressesReturn, 
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
