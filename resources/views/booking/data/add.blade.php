@@ -1564,8 +1564,6 @@
 
                             // Jika ada pickup shuttle area
                             if (response.fbo_pickups_return && response.fbo_pickups_return.length > 0) {
-                                pickupDropdownOptionsReturn =
-                                    '<option value="">Select Pickup Area</option>';
                                 response.fbo_pickups_return.forEach(function(area) {
                                     pickupDropdownOptionsReturn +=
                                         `<option value="${area.id}">${area.name}</option>`;
@@ -1581,8 +1579,6 @@
                             // Jika ada dropoff shuttle area
                             if (response.fbo_dropoffs_return && response.fbo_dropoffs_return.length >
                                 0) {
-                                dropoffDropdownOptionsReturn =
-                                    '<option value="">Select Dropoff Area</option>';
                                 response.fbo_dropoffs_return.forEach(function(area) {
                                     dropoffDropdownOptionsReturn +=
                                         `<option value="${area.id}">${area.name}</option>`;
@@ -1614,6 +1610,7 @@
                                     $('#dropoff-inputs-return').hide();
                                 }
                             });
+
 
                             $('#fbo_pickup_return').change(function() {
                                 const selectedAreaId = $(this).val();
@@ -1653,7 +1650,8 @@
                                     if (selectedShuttle.dropoff_meeting_point_return ===
                                         'not_set') {
                                         // Jika meeting point 'not_set', kosongkan input dan izinkan pengguna mengisi
-                                        $('#fbo_specific_dropoff_return').val('').prop('readonly',
+                                        $('#fbo_specific_dropoff_return').val('').prop(
+                                            'readonly',
                                             false);
                                     } else {
                                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
@@ -1663,7 +1661,8 @@
                                     }
                                 } else {
                                     // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                                    $('#fbo_specific_dropoff_return').val('').prop('readonly', false);
+                                    $('#fbo_specific_dropoff_return').val('').prop('readonly',
+                                        false);
                                 }
                             });
 
