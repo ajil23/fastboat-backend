@@ -65,14 +65,14 @@ return new class extends Migration
             $table->foreign('fbo_checking_point')->references('fcp_id')->on('fastboatcheckingpoint')->onDelete('cascade')->onUpdate('cascade');
             $table->string('fbo_pickup')->nullable();
             $table->string('fbo_dropoff')->nullable();
-            $table->string('fbo_shuttle_pickup')->nullable();
-            $table->string('fbo_shuttle_dropoff')->nullable();
+            $table->string('fbo_specific_pickup')->nullable();
+            $table->string('fbo_specific_dropoff')->nullable();
             $table->string('fbo_contact_pickup')->nullable();
             $table->string('fbo_contact_dropoff')->nullable();
             $table->string('fbo_mail_admin');
             $table->string('fbo_mail_client');
             $table->string('fbo_log')->nullable();
-            $table->string('fbo_sourch')->nullable();
+            $table->string('fbo_source')->nullable();
             $table->string('fbo_updated_by')->nullable();
             $table->timestamps();
         });

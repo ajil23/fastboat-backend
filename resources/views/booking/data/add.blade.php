@@ -119,8 +119,8 @@
                                                 <div class="col-md-3 transaction-id" id="paypal_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="paypal_tid">Transaction ID</label>
-                                                        <input id="paypal_tid" name="paypal_tid"
+                                                        <label class="form-label" for="fbo_transaction_id">Transaction ID</label>
+                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Paypal Transaction ID" type="text"
                                                             class="form-control">
                                                     </div>
@@ -130,9 +130,9 @@
                                                 <div class="col-md-3 transaction-id" id="midtrans_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="midtrans_tid">Transaction
+                                                        <label class="form-label" for="fbo_transaction_id">Transaction
                                                             ID</label>
-                                                        <input id="midtrans_tid" name="midtrans_tid"
+                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Midtrans Transaction ID" type="text"
                                                             class="form-control">
                                                     </div>
@@ -142,9 +142,9 @@
                                                 <div class="col-md-3 transaction-id" id="bank_transfer_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="bank_transfer_tid">Transaction
+                                                        <label class="form-label" for="fbo_transaction_id">Transaction
                                                             ID</label>
-                                                        <input id="bank_transfer_tid" name="bank_transfer_tid"
+                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Bank Transaction ID" type="text"
                                                             class="form-control">
                                                     </div>
@@ -154,8 +154,8 @@
                                                 <div class="col-md-3 transaction-id" id="cash_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="cash_tid">Transaction ID</label>
-                                                        <input id="cash_tid" name="cash_tid"
+                                                        <label class="form-label" for="fbo_transaction_id">Transaction ID</label>
+                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Recipient" type="text"
                                                             class="form-control">
                                                     </div>
@@ -165,8 +165,8 @@
                                                 <div class="col-md-3 transaction-id" id="agent_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="agent_tid">Agent</label>
-                                                        <select id="agent_tid" name="agent_tid" class="form-control">
+                                                        <label class="form-label" for="fbo_transaction_id">Agent</label>
+                                                        <select id="fbo_transaction_id" name="fbo_transaction_id" class="form-control">
                                                             <option value="">Select Agent</option>
                                                             <option value="Agen A">Agen A</option>
                                                             <option value="Agen B">Agen B</option>
@@ -223,6 +223,8 @@
                                             <div id="child_info"></div>
                                             <!-- Placeholder for Infant Information -->
                                             <div id="infant_info"></div>
+                                            <!-- Hidden field to store combined passenger info -->
+                                            <input type="hidden" id="fbo_passenger" name="fbo_passenger">
                                         </div>
                                     </div>
                                 </div>
@@ -282,8 +284,8 @@
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="time_dept">Time Dept</label>
-                                                        <select class="form-control" id="time_dept" name="time_dept">
+                                                        <label class="form-label" for="fbo_departure_time">Time Dept</label>
+                                                        <select class="form-control" id="fbo_departure_time" name="fbo_departure_time">
                                                             <option value="">Select Time Dept</option>
                                                         </select>
                                                     </div>
@@ -296,12 +298,12 @@
                                                         <div id="shuttle-checkbox" class="shuttle-checkbox">
                                                             <div>
                                                                 <label>
-                                                                    <input type="checkbox" id="pickup-shuttle" name="pickup_shuttle" value="1">
+                                                                    <input type="checkbox" id="pickup-shuttle" name="fbo_pickup" value="1">
                                                                     Pickup Shuttle
                                                                 </label>
                                                                 &nbsp; &nbsp; &nbsp;
                                                                 <label>
-                                                                    <input type="checkbox" id="dropoff-shuttle" name="dropoff_shuttle" value="1">
+                                                                    <input type="checkbox" id="dropoff-shuttle" name="fbo_dropoff" value="1">
                                                                     Dropoff Shuttle
                                                                 </label>
                                                             </div>
@@ -311,8 +313,8 @@
                                                                         <div class="row">
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label" for="">Pickup Area</label>
-                                                                                    <select style="border-color: lightgray;" class="form-control" id="pickup_area" name="pickup_area">
+                                                                                    <label class="form-label" for="fbo_pickup">Pickup Area</label>
+                                                                                    <select style="border-color: lightgray;" class="form-control" id="fbo_pickup" name="fbo_pickup">
                                                                                         <option value="">Select Option</option>
                                                                                     </select>
                                                                                 </div>
@@ -320,14 +322,14 @@
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label" for="">Phone</label>
-                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="pickup_phone" placeholder="62XXXXXXXXXXX">
+                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_pickup" placeholder="62XXXXXXXXXXX">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="pickup_address">Address Pickup</label>
-                                                                                <textarea id="pickup_address" name="pickup_address" class="form-control" style="border-color: lightgray;"></textarea>
+                                                                                <label class="form-label" for="fbo_specific_pickup">Address Pickup</label>
+                                                                                <textarea id="fbo_specific_pickup" name="fbo_specific_pickup" class="form-control" style="border-color: lightgray;"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -335,8 +337,8 @@
                                                                         <div class="row">
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
-                                                                                    <label class="form-label" for="">Dropoff Area</label>
-                                                                                    <select style="border-color: lightgray;" class="form-control" id="dropoff_area" name="dropoff_area">
+                                                                                    <label class="form-label" for="fbo_dropoff">Dropoff Area</label>
+                                                                                    <select style="border-color: lightgray;" class="form-control" id="fbo_dropoff" name="fbo_dropoff">
                                                                                     <option value="">Select Option</option>
                                                                                     </select>
                                                                                 </div>
@@ -344,14 +346,14 @@
                                                                             <div class="col-sm-6">
                                                                                 <div class="mb-3">
                                                                                     <label class="form-label" for="">Phone</label>
-                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="dropoff_phone" placeholder="62XXXXXXXXXXX">
+                                                                                    <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_dropoff" placeholder="62XXXXXXXXXXX">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="dropoff_address">Address Dropoff</label>
-                                                                                <textarea id="dropoff_address" name="dropoff_address" class="form-control" style="border-color: lightgray;"></textarea>
+                                                                                <label class="form-label" for="fbo_specific_dropoff">Address Dropoff</label>
+                                                                                <textarea id="fbo_specific_dropoff" name="fbo_specific_dropoff" class="form-control" style="border-color: lightgray;"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -389,19 +391,19 @@
                                                         <div class="row">
                                                             <div class="col-sm-3">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label" for="adult_publish">Adult
+                                                                    <label class="form-label" for="fbo_adult_publish">Adult
                                                                         Publish (IDR)</label>
                                                                     <input value="" class="form-control"
-                                                                        id="adult_publish" name="adult_publish"
+                                                                        id="fbo_adult_publish" name="fbo_adult_publish"
                                                                         oninput="calculateTotal()">
                                                                 </div>
                                                             </div>
                                                             <div class="col-sm-3">
                                                                 <div class="mb-3">
-                                                                    <label class="form-label" for="child_publish">Child
+                                                                    <label class="form-label" for="fbo_child_publish">Child
                                                                         Publish (IDR)</label>
                                                                     <input value="" class="form-control"
-                                                                        id="child_publish" name="child_publish"
+                                                                        id="fbo_child_publish" name="fbo_child_publish"
                                                                         oninput="calculateTotal()">
                                                                 </div>
                                                             </div>
@@ -497,10 +499,10 @@
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="time_dept_return">Time
+                                                        <label class="form-label" for="fbo_departure_time_return">Time
                                                             Dept</label>
-                                                        <select class="form-control" id="time_dept_return"
-                                                            name="time_dept_return" disabled>
+                                                        <select class="form-control" id="fbo_departure_time_return"
+                                                            name="fbo_departure_time_return" disabled>
                                                             <option value="">Select Time Dept</option>
                                                         </select>
                                                     </div>
@@ -529,7 +531,7 @@
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
                                                                                 <label class="form-label" for="">Pickup Area</label>
-                                                                                <select style="border-color: lightgray;" class="form-control" id="pickup_area_return" name="pickup_area_return">
+                                                                                <select style="border-color: lightgray;" class="form-control" id="fbo_pickup_return" name="fbo_pickup_return">
                                                                                     <option value="">Select Option</option>
                                                                                 </select>
                                                                             </div>
@@ -537,13 +539,13 @@
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
                                                                                 <label class="form-label" for="">Phone</label>
-                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="pickup_phone_return" placeholder="62XXXXXXXXXXX">
+                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_pickup_return" placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label" for="pickup_address_return">Address Pickup</label>
-                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="pickup_address_return" name="pickup_address_return"></textarea>
+                                                                                <label class="form-label" for="fbo_specific_pickup_return">Address Pickup</label>
+                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_pickup_return" name="fbo_specific_pickup_return"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -554,7 +556,7 @@
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
                                                                                 <label class="form-label" for="">Dropoff Area</label>
-                                                                                <select style="border-color: lightgray;" class="form-control" id="dropoff_area_return" name="dropoff_area_return">
+                                                                                <select style="border-color: lightgray;" class="form-control" id="fbo_dropoff_return" name="fbo_dropoff_return">
                                                                                     <option value="">Select Option </option>
                                                                                 </select>
                                                                             </div>
@@ -562,14 +564,14 @@
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
                                                                                 <label class="form-label" for="">Phone</label>
-                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="dropoff_phone_return" placeholder="62XXXXXXXXXXX">
+                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_dropoff_return" placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="mb-3">
-                                                                            <label class="form-label" for="dropoff_address_return">Address Dropoff</label>
-                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="dropoff_address_return" name="dropoff_address_return"></textarea>
+                                                                            <label class="form-label" for="fbo_specific_dropoff_return">Address Dropoff</label>
+                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_dropoff_return" name="fbo_specific_dropoff_return"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -700,16 +702,16 @@
 
             // Function to reset pickup inputs (without removing options)
             function resetPickupInputs() {
-                $('#pickup_area').val(''); // Clear the selected value, not the options
-                $('#pickup_address').val(''); // Reset the pickup address
-                $('input[name="pickup_phone"]').val(''); // Reset the pickup phone input
+                $('#fbo_pickup').val(''); // Clear the selected value, not the options
+                $('#fbo_specific_pickup').val(''); // Reset the pickup address
+                $('input[name="fbo_contact_pickup"]').val(''); // Reset the pickup phone input
             }
 
             // Function to reset dropoff inputs (without removing options)
             function resetDropoffInputs() {
-                $('#dropoff_area').val(''); // Clear the selected value, not the options
-                $('#dropoff_address').val(''); // Reset the dropoff address
-                $('input[name="dropoff_phone"]').val(''); // Reset the dropoff phone input
+                $('#fbo_dropoff').val(''); // Clear the selected value, not the options
+                $('#fbo_specific_dropoff').val(''); // Reset the dropoff address
+                $('input[name="fbo_contact_dropoff"]').val(''); // Reset the dropoff phone input
             }
 
             // Event handler for Pickup Shuttle checkbox
@@ -736,8 +738,8 @@
             function resetSearchResults() {
                 $('#booking-data-table tbody').empty(); // Hapus data di tabel
                 $('.card-title').empty(); // Hapus judul kartu
-                $('#adult_publish').val(''); // Reset harga dewasa
-                $('#child_publish').val(''); // Reset harga anak
+                $('#fbo_adult_publish').val(''); // Reset harga dewasa
+                $('#fbo_child_publish').val(''); // Reset harga anak
                 $('#fbo_end_total').val(''); // Reset total harga
                 $('#fbo_end_total_currency').val(''); // Reset format mata uang
                 $('#search-results').hide(); // Sembunyikan hasil pencarian
@@ -760,7 +762,7 @@
                 let departurePort = $('#fbo_departure_port').val();
                 let arrivalPort = $('#fbo_arrival_port').val();
                 let fastBoat = $('#fbo_fast_boat').val();
-                let timeDept = $('#time_dept').val();
+                let timeDept = $('#fbo_departure_time').val();
 
                 // Cek apakah semua field sudah diisi
                 if (tripDate && departurePort && arrivalPort && fastBoat && timeDept) {
@@ -771,7 +773,7 @@
             }
 
             // Trigger ketika input field berubah (pencarian ulang)
-            $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_fast_boat, #time_dept').on('change',
+            $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_fast_boat, #fbo_departure_time').on('change',
                 function() {
                     var type = $(this).attr('name');
                     if (type === 'fbo_trip_date') {
@@ -779,23 +781,23 @@
                             '<option value="">Select Departure Port</option>');
                         $('#fbo_arrival_port').empty().append('<option value="">Select Arrival Port</option>');
                         $('#fbo_fast_boat').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time').empty().append('<option value="">Select Time Dept</option>');
                         console.log(type);
                     } else if (type === 'fbo_departure_port') {
                         $('#fbo_arrival_port').empty().append('<option value="">Select Arrival Port</option>');
                         $('#fbo_fast_boat').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time').empty().append('<option value="">Select Time Dept</option>');
                         console.log(type);
                     } else if (type === 'fbo_arrival_port') {
                         $('#fbo_fast_boat').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time').empty().append('<option value="">Select Time Dept</option>');
                     } else if (type === 'fbo_fast_boat') {
-                        $('#time_dept').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time').empty().append('<option value="">Select Time Dept</option>');
                     }
                     $('#booking-data-table tbody').empty(); // Hapus data di tabel
                     $('.card-title').empty(); // Hapus judul kartu
-                    $('#adult_publish').val(''); // Reset harga dewasa
-                    $('#child_publish').val(''); // Reset harga anak
+                    $('#fbo_adult_publish').val(''); // Reset harga dewasa
+                    $('#fbo_child_publish').val(''); // Reset harga anak
                     $('#fbo_end_total').val(''); // Reset total harga
                     $('#fbo_end_total_currency').val(''); // Reset format mata uang
                     $('#search-results').hide(); // Sembunyikan hasil pencarian
@@ -804,10 +806,10 @@
                 });
 
             function calculateTotal() {
-                // Ambil nilai dari input adult_publish dan child_publish
-                let adultPublish = $('#adult_publish').val().replace(/\./g, '') ||
+                // Ambil nilai dari input fbo_adult_publish dan fbo_child_publish
+                let adultPublish = $('#fbo_adult_publish').val().replace(/\./g, '') ||
                     0; // Hapus titik dari pemisah ribuan
-                let childPublish = $('#child_publish').val().replace(/\./g, '') ||
+                let childPublish = $('#fbo_child_publish').val().replace(/\./g, '') ||
                     0; // Hapus titik dari pemisah ribuan
 
                 console.log('Adult Publish:', adultPublish);
@@ -838,7 +840,7 @@
                 // Setelah total IDR dihitung, update juga fbo_end_total_currency berdasarkan mata uang yang dipilih
                 updateCurrencyTotal();
             }
-            $('#adult_publish, #child_publish').on('input', function() {
+            $('#fbo_adult_publish, #fbo_child_publish').on('input', function() {
                 calculateTotal(); // Hitung ulang total harga dan total dalam mata uang
             });
 
@@ -902,7 +904,7 @@
                         fbo_departure_port: departurePort,
                         fbo_arrival_port: arrivalPort,
                         fbo_fast_boat: fastBoat,
-                        time_dept: timeDept,
+                        fbo_departure_time: timeDept,
                         fbo_adult: adultCount,
                         fbo_child: childCount
                     },
@@ -925,9 +927,9 @@
                             $('#dropoff-address').val('').prop('disabled', false);
                         }
 
-                        let adultPublishPrice = parseInt(response.adult_publish.replace(/\./g, '')) ||
+                        let adultPublishPrice = parseInt(response.fbo_adult_publish.replace(/\./g, '')) ||
                             0;
-                        let childPublishPrice = parseInt(response.child_publish.replace(/\./g, '')) ||
+                        let childPublishPrice = parseInt(response.fbo_child_publish.replace(/\./g, '')) ||
                             0;
                         let discountPerPerson = parseInt(response.discount.replace(/\./g, '')) || 0;
 
@@ -940,8 +942,8 @@
                             totalPriceAfterDiscount = 0;
                         }
 
-                        $('#adult_publish').val(response.adult_publish);
-                        $('#child_publish').val(response.child_publish);
+                        $('#fbo_adult_publish').val(response.fbo_adult_publish);
+                        $('#fbo_child_publish').val(response.fbo_child_publish);
                         $('#fbo_end_total').val(totalPriceAfterDiscount.toLocaleString('id-ID'));
 
                         // Update nilai fbo_end_total_currency berdasarkan currency yang dipilih
@@ -957,24 +959,24 @@
                                 '<option value="">Select Dropoff Area</option>';
 
                             // Populate pickup areas
-                            if (response.pickup_areas && response.pickup_areas.length > 0) {
-                                response.pickup_areas.forEach(function(area) {
+                            if (response.fbo_pickups && response.fbo_pickups.length > 0) {
+                                response.fbo_pickups.forEach(function(area) {
                                     pickupDropdownOptions +=
                                         `<option value="${area.id}">${area.name}</option>`;
                                 });
                             }
 
                             // Populate dropoff areas
-                            if (response.dropoff_areas && response.dropoff_areas.length > 0) {
-                                response.dropoff_areas.forEach(function(area) {
+                            if (response.fbo_dropoffs && response.fbo_dropoffs.length > 0) {
+                                response.fbo_dropoffs.forEach(function(area) {
                                     dropoffDropdownOptions +=
                                         `<option value="${area.id}">${area.name}</option>`;
                                 });
                             }
 
                             // Tampilkan dropdown shuttle area
-                            $('#pickup_area').html(pickupDropdownOptions);
-                            $('#dropoff_area').html(dropoffDropdownOptions);
+                            $('#fbo_pickup').html(pickupDropdownOptions);
+                            $('#fbo_dropoff').html(dropoffDropdownOptions);
 
                             // Tampilkan shuttle checkbox
                             $('#shuttle-checkbox').show();
@@ -1006,8 +1008,8 @@
                         } else {
                             // Jika tidak ada shuttle, sembunyikan checkbox dan dropdown
                             $('#shuttle-checkbox').hide();
-                            $('#pickup_area').empty();
-                            $('#dropoff_area').empty();
+                            $('#fbo_pickup').empty();
+                            $('#fbo_dropoff').empty();
                         }
                     },
                     error: function(xhr, status, error) {
@@ -1020,29 +1022,29 @@
 
             // Fungsi untuk mengisi pickup/dropoff address berdasarkan shuttle yang dipilih
             function updateMeetingPoints(shuttleAddresses) {
-                $('#pickup_area').change(function() {
+                $('#fbo_pickup').change(function() {
                     const selectedAreaId = $(this).val();
                     const selectedShuttle = shuttleAddresses.find(shuttle => shuttle.area_id == selectedAreaId);
 
                     if (selectedShuttle && selectedShuttle.pickup_meeting_point) {
                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#pickup_address').val(selectedShuttle.pickup_meeting_point).prop('readonly', true);
+                        $('#fbo_specific_pickup').val(selectedShuttle.pickup_meeting_point).prop('readonly', true);
                     } else {
                         // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#pickup_address').val('').prop('readonly', false);
+                        $('#fbo_specific_pickup').val('').prop('readonly', false);
                     }
                 });
 
-                $('#dropoff_area').change(function() {
+                $('#fbo_dropoff').change(function() {
                     const selectedAreaId = $(this).val();
                     const selectedShuttle = shuttleAddresses.find(shuttle => shuttle.area_id == selectedAreaId);
 
                     if (selectedShuttle && selectedShuttle.dropoff_meeting_point) {
                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#dropoff_address').val(selectedShuttle.dropoff_meeting_point).prop('readonly', true);
+                        $('#fbo_specific_dropoff').val(selectedShuttle.dropoff_meeting_point).prop('readonly', true);
                     } else {
                         // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#dropoff_address').val('').prop('readonly', false);
+                        $('#fbo_specific_dropoff').val('').prop('readonly', false);
                     }
                 });
             }
@@ -1053,7 +1055,7 @@
                 let departurePort = $('#fbo_departure_port').val();
                 let arrivalPort = $('#fbo_arrival_port').val();
                 let fastBoat = $('#fbo_fast_boat').val();
-                let timeDept = $('#time_dept').val();
+                let timeDept = $('#fbo_departure_time').val();
 
                 let adultCount = $('#fbo_adult').val() || 1;
                 let childCount = $('#fbo_child').val() || 0;
@@ -1108,7 +1110,7 @@
                     '<option value="">Select Arrival Port</option>'); // Reset Arrival Port
                 $('#fbo_fast_boat').empty().append(
                     '<option value="">Select Fast Boat</option>'); // Reset Fast Boat
-                $('#time_dept').empty().append(
+                $('#fbo_departure_time').empty().append(
                     '<option value="">Select Time Dept</option>'); // Reset Time Dept
 
                 var tripDate = $('#fbo_trip_date').val();
@@ -1139,7 +1141,7 @@
             $('#fbo_arrival_port').change(function() {
                 $('#fbo_fast_boat').empty().append(
                     '<option value="">Select Fast Boat</option>'); // Reset Fast Boat
-                $('#time_dept').empty().append(
+                $('#fbo_departure_time').empty().append(
                     '<option value="">Select Time Dept</option>'); // Reset Time Dept
 
                 var tripDate = $('#fbo_trip_date').val();
@@ -1169,7 +1171,7 @@
 
             // Ketika Fast Boat dipilih, ambil data untuk Time Dept
             $('#fbo_fast_boat').change(function() {
-                $('#time_dept').empty().append(
+                $('#fbo_departure_time').empty().append(
                     '<option value="">Select Time Dept</option>'); // Reset Time Dept
 
                 var tripDate = $('#fbo_trip_date').val();
@@ -1189,10 +1191,10 @@
                     }, customerCount),
                     success: function(response) {
                         // Isi dropdown Time Dept berdasarkan response
-                        $('#time_dept').empty().append(
+                        $('#fbo_departure_time').empty().append(
                             '<option value="">Select Time Dept</option>');
-                        $.each(response.time_depts, function(index, time) {
-                            $('#time_dept').append('<option value="' + time + '">' +
+                        $.each(response.fbo_departure_times, function(index, time) {
+                            $('#fbo_departure_time').append('<option value="' + time + '">' +
                                 time + '</option>');
                         });
                     }
@@ -1207,7 +1209,7 @@
             // Mengaktifkan atau menonaktifkan field ketika switch diubah
             $('#switch').on('change', function() {
                 var inputs = $(
-                    '#fbo_fast_boat_return, #time_dept_return, #trip_return_date, #departure_return_port, #arrival_return_port'
+                    '#fbo_fast_boat_return, #fbo_departure_time_return, #trip_return_date, #departure_return_port, #arrival_return_port'
                 );
                 if ($(this).is(':checked')) {
                     inputs.removeAttr('disabled');
@@ -1223,16 +1225,16 @@
 
             // Function to reset pickup inputs (without removing options)
             function resetPickupInputsReturn() {
-                $('#pickup_area_return').val(''); // Clear the selected value, not the options
-                $('#pickup_address_return').val(''); // Reset the pickup address
-                $('input[name="pickup_phone_return"]').val(''); // Reset the pickup phone input
+                $('#fbo_pickup_return').val(''); // Clear the selected value, not the options
+                $('#fbo_specific_pickup_return').val(''); // Reset the pickup address
+                $('input[name="fbo_contact_pickup_return"]').val(''); // Reset the pickup phone input
             }
 
             // Function to reset dropoff inputs (without removing options)
             function resetDropoffInputsReturn() {
-                $('#dropoff_area_return').val(''); // Clear the selected value, not the options
-                $('#dropoff_address_return').val(''); // Reset the dropoff address
-                $('input[name="dropoff_phone_return"]').val(''); // Reset the dropoff phone input
+                $('#fbo_dropoff_return').val(''); // Clear the selected value, not the options
+                $('#fbo_specific_dropoff_return').val(''); // Reset the dropoff address
+                $('input[name="fbo_contact_dropoff_return"]').val(''); // Reset the dropoff phone input
             }
 
             // Event handler for Pickup Shuttle checkbox
@@ -1261,7 +1263,7 @@
                 let departurePortReturn = $('#departure_return_port').val();
                 let arrivalPortReturn = $('#arrival_return_port').val();
                 let fastBoatReturn = $('#fbo_fast_boat_return').val();
-                let timeDeptReturn = $('#time_dept_return').val();
+                let timeDeptReturn = $('#fbo_departure_time_return').val();
 
                 if (tripDateReturn && departurePortReturn && arrivalPortReturn && fastBoatReturn &&
                     timeDeptReturn) {
@@ -1293,7 +1295,7 @@
             }
 
             // Trigger ketika input diubah
-            $('#trip_return_date, #departure_return_port, #arrival_return_port, #fbo_fast_boat_return, #time_dept_return')
+            $('#trip_return_date, #departure_return_port, #arrival_return_port, #fbo_fast_boat_return, #fbo_departure_time_return')
                 .on('change', function() {
                     var type = $(this).attr('name');
                     if (type === 'trip_return_date') {
@@ -1302,19 +1304,19 @@
                         $('#arrival_return_port').empty().append(
                             '<option value="">Select Arrival Port</option>');
                         $('#fbo_fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
                         console.log(type);
                     } else if (type === 'departure_return_port') {
                         $('#arrival_return_port').empty().append(
                             '<option value="">Select Arrival Port</option>');
                         $('#fbo_fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
                         console.log(type);
                     } else if (type === 'arrival_return_port') {
                         $('#fbo_fast_boat_return').empty().append('<option value="">Select Fast Boat</option>');
-                        $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
                     } else if (type === 'fbo_fast_boat_return') {
-                        $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
+                        $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
                     }
                     $('#booking-data-table-return tbody').empty(); // Hapus data di tabel
                     $('.card-title-return').empty(); // Hapus judul kartu
@@ -1407,7 +1409,7 @@
                         departure_return_port: departurePortReturn,
                         arrival_return_port: arrivalPortReturn,
                         fbo_fast_boat_return: fastBoatReturn,
-                        time_dept_return: timeDeptReturn,
+                        fbo_departure_time_return: timeDeptReturn,
                         fbo_adult: adultCountReturn,
                         fbo_child: childCountReturn
                     },
@@ -1464,35 +1466,35 @@
                             let dropoffDropdownOptionsReturn = '<option value="">Select Dropoff Area</option>';
 
                             // Jika ada pickup shuttle area
-                            if (response.pickup_areas_return && response.pickup_areas_return.length > 0) {
+                            if (response.fbo_pickups_return && response.fbo_pickups_return.length > 0) {
                                 pickupDropdownOptionsReturn = '<option value="">Select Pickup Area</option>';
-                                response.pickup_areas_return.forEach(function(area) {
+                                response.fbo_pickups_return.forEach(function(area) {
                                     pickupDropdownOptionsReturn +=
                                         `<option value="${area.id}">${area.name}</option>`;
                                 });
 
                                 // Tampilkan dropdown pickup area
-                                $('#pickup_area_return').html(pickupDropdownOptionsReturn);
+                                $('#fbo_pickup_return').html(pickupDropdownOptionsReturn);
                             } else {
                                 // Jika tidak ada data pickup, kosongkan
-                                $('#pickup_area_return').empty();
+                                $('#fbo_pickup_return').empty();
                             }
 
                             // Jika ada dropoff shuttle area
-                            if (response.dropoff_areas_return && response.dropoff_areas_return.length >
+                            if (response.fbo_dropoffs_return && response.fbo_dropoffs_return.length >
                                 0) {
                                 dropoffDropdownOptionsReturn =
                                     '<option value="">Select Dropoff Area</option>';
-                                response.dropoff_areas_return.forEach(function(area) {
+                                response.fbo_dropoffs_return.forEach(function(area) {
                                     dropoffDropdownOptionsReturn +=
                                         `<option value="${area.id}">${area.name}</option>`;
                                 });
 
                                 // Tampilkan dropdown dropoff area
-                                $('#dropoff_area_return').html(dropoffDropdownOptionsReturn);
+                                $('#fbo_dropoff_return').html(dropoffDropdownOptionsReturn);
                             } else {
                                 // Jika tidak ada data dropoff, kosongkan
-                                $('#dropoff_area_return').empty();
+                                $('#fbo_dropoff_return').empty();
                             }
 
                             // Tampilkan shuttle checkbox
@@ -1520,8 +1522,8 @@
                         } else {
                             // Jika tidak perlu shuttle checkbox, sembunyikan dan kosongkan
                             $('#shuttle-checkbox-return').hide();
-                            $('#pickup_area_return').empty();
-                            $('#dropoff_area_return').empty();
+                            $('#fbo_pickup_return').empty();
+                            $('#fbo_dropoff_return').empty();
                         }
                     },
                     error: function(xhr, status, error) {
@@ -1532,42 +1534,42 @@
 
             // Fungsi untuk mengisi pickup/dropoff address berdasarkan shuttle yang dipilih
             function updateMeetingPointsReturn(shuttleAddressesReturn) {
-                $('#pickup_area_return').change(function() {
+                $('#fbo_pickup_return').change(function() {
                     const selectedAreaId = $(this).val();
                     const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id == selectedAreaId);
 
                     if (selectedShuttle && selectedShuttle.pickup_meeting_point_return) {
                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#pickup_address_return').val(selectedShuttle.pickup_meeting_point_return).prop('readonly', true);
+                        $('#fbo_specific_pickup_return').val(selectedShuttle.pickup_meeting_point_return).prop('readonly', true);
                     } else {
                         // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#pickup_address_return').val('').prop('readonly', false);
+                        $('#fbo_specific_pickup_return').val('').prop('readonly', false);
                     }
                 });
 
-                $('#dropoff_area_return').change(function() {
+                $('#fbo_dropoff_return').change(function() {
                     const selectedAreaId = $(this).val();
                     const selectedShuttle = shuttleAddressesReturn.find(shuttle => shuttle.area_id == selectedAreaId);
 
                     if (selectedShuttle && selectedShuttle.dropoff_meeting_point_return) {
                         // Jika meeting point tersedia, tampilkan dan non-aktifkan input
-                        $('#dropoff_address_return').val(selectedShuttle.dropoff_meeting_point_return).prop('readonly', true);
+                        $('#fbo_specific_dropoff_return').val(selectedShuttle.dropoff_meeting_point_return).prop('readonly', true);
                     } else {
                         // Jika tidak ada meeting point, izinkan pengguna untuk mengisi
-                        $('#dropoff_address_return').val('').prop('readonly', false);
+                        $('#fbo_specific_dropoff_return').val('').prop('readonly', false);
                     }
                 });
             }
 
 
             // Event listener untuk memulai pencarian saat semua input telah terisi
-            $('#trip_return_date, #departure_return_port, #arrival_return_port, #fbo_fast_boat_return, #time_dept_return')
+            $('#trip_return_date, #departure_return_port, #arrival_return_port, #fbo_fast_boat_return, #fbo_departure_time_return')
                 .on('change keyup input click', function() {
                     let tripDateReturn = $('#trip_return_date').val();
                     let departurePortReturn = $('#departure_return_port').val();
                     let arrivalPortReturn = $('#arrival_return_port').val();
                     let fastBoatReturn = $('#fbo_fast_boat_return').val();
-                    let timeDeptReturn = $('#time_dept_return').val();
+                    let timeDeptReturn = $('#fbo_departure_time_return').val();
 
                     if (tripDateReturn && departurePortReturn && arrivalPortReturn && fastBoatReturn &&
                         timeDeptReturn) {
@@ -1583,7 +1585,7 @@
                 let departurePortReturn = $('#departure_return_port').val();
                 let arrivalPortReturn = $('#arrival_return_port').val();
                 let fastBoatReturn = $('#fbo_fast_boat_return').val();
-                let timeDeptReturn = $('#time_dept_return').val();
+                let timeDeptReturn = $('#fbo_departure_time_return').val();
 
                 let adultCountReturn = $('#fbo_adult').val() || 1;
                 let childCountReturn = $('#fbo_child').val() || 0;
@@ -1636,9 +1638,9 @@
             $('#departure_return_port').change(function() {
                 $('#arrival_return_port').empty().append(
                     '<option value="">Select Arrival Port</option>');
-                $('#fbo_fast_boat_return, #time_dept_return').empty().append(
+                $('#fbo_fast_boat_return, #fbo_departure_time_return').empty().append(
                     '<option value="">Select Fast Boat</option>');
-                $('#time_dept_return').empty().append(
+                $('#fbo_departure_time_return').empty().append(
                     '<option value="">Select Time Dept</option>');
 
                 let tripDateReturn = $('#trip_return_date').val();
@@ -1665,9 +1667,9 @@
 
             // Ketika arrival_return_port diubah, reset dan ambil data baru untuk fbo_fast_boat
             $('#arrival_return_port').change(function() {
-                $('#fbo_fast_boat_return, #time_dept_return').empty().append(
+                $('#fbo_fast_boat_return, #fbo_departure_time_return').empty().append(
                     '<option value="">Select Fast Boat</option>');
-                $('#time_dept_return').empty().append(
+                $('#fbo_departure_time_return').empty().append(
                     '<option value="">Select Time Dept</option>');
 
                 let tripDateReturn = $('#trip_return_date').val();
@@ -1694,9 +1696,9 @@
                 });
             });
 
-            // Ketika fbo_fast_boat_return diubah, ambil data baru untuk time_dept
+            // Ketika fbo_fast_boat_return diubah, ambil data baru untuk fbo_departure_time
             $('#fbo_fast_boat_return').change(function() {
-                $('#time_dept_return').empty().append('<option value="">Select Time Dept</option>');
+                $('#fbo_departure_time_return').empty().append('<option value="">Select Time Dept</option>');
 
                 let tripDateReturn = $('#trip_return_date').val();
                 let departurePortReturn = $('#departure_return_port').val();
@@ -1714,10 +1716,10 @@
                         fbo_fast_boat_return: fastBoatReturn
                     }, customerCount),
                     success: function(response) {
-                        $('#time_dept_return').empty().append(
+                        $('#fbo_departure_time_return').empty().append(
                             '<option value="">Select Time Dept</option>');
-                        $.each(response.time_depts_return, function(index, time) {
-                            $('#time_dept_return').append('<option value="' + time +
+                        $.each(response.fbo_departure_times_return, function(index, time) {
+                            $('#fbo_departure_time_return').append('<option value="' + time +
                                 '">' + time + '</option>');
                         });
                     }
@@ -1779,44 +1781,44 @@
                 // Create Adult Info
                 for (var i = 1; i <= adultCount; i++) {
                     $('#adult_info').append(`
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
-                        <input id="adult_name_${i}" name="adult_name_[]" type="text" placeholder="Enter Name" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="adult_age_${i}">Adult ${i} Age</label>
-                        <select id="adult_age_${i}" name="adult_age_[]" class="form-control">
-                            <option value="">Select Age</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
-                        <select id="adult_gender_${i}" name="adult_gender_[]" class="form-control">
-                            <option value="">Select Gender</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
-                        <select id="adult_nationality_${i}" name="adult_nationality_[]" class="nationality-select">
-                            <option value="">Select Nationality</option>
-                            @foreach ($nationality as $item)
-                            <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-            `);
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
+                                    <input id="adult_name_${i}" name="adult_name_[]" type="text" placeholder="Enter Name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="adult_age_${i}">Adult ${i} Age</label>
+                                    <select id="adult_age_${i}" name="adult_age_[]" class="form-control">
+                                        <option value="">Select Age</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
+                                    <select id="adult_gender_${i}" name="adult_gender_[]" class="form-control">
+                                        <option value="">Select Gender</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Male">Male</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
+                                    <select id="adult_nationality_${i}" name="adult_nationality_[]" class="nationality-select">
+                                        <option value="">Select Nationality</option>
+                                        @foreach ($nationality as $item)
+                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    `);
                     var ageSelect = $(`#adult_age_${i}`);
                     for (var age = 13; age <= 49; age++) {
                         ageSelect.append(`<option value="${age}">${age}</option>`);
@@ -1827,44 +1829,44 @@
                 // Create Child Info
                 for (var i = 1; i <= childCount; i++) {
                     $('#child_info').append(`
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
-                        <input id="child_name_${i}" name="child_name_[]" type="text" placeholder="Enter Name" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="child_age_${i}">Child ${i} Age</label>
-                        <select id="child_age_${i}" name="child_age_[]" class="form-control">
-                            <option value="">Select Age</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
-                        <select id="child_gender_${i}" name="child_gender_[]" class="form-control">
-                            <option value="">Select Gender</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
-                        <select id="child_nationality_${i}" name="child_nationality_[]" class="nationality-select">
-                            <option value="">Select Nationality</option>
-                            @foreach ($nationality as $item)
-                            <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-            `);
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
+                                    <input id="child_name_${i}" name="child_name_[]" type="text" placeholder="Enter Name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="child_age_${i}">Child ${i} Age</label>
+                                    <select id="child_age_${i}" name="child_age_[]" class="form-control">
+                                        <option value="">Select Age</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
+                                    <select id="child_gender_${i}" name="child_gender_[]" class="form-control">
+                                        <option value="">Select Gender</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Male">Male</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
+                                    <select id="child_nationality_${i}" name="child_nationality_[]" class="nationality-select">
+                                        <option value="">Select Nationality</option>
+                                        @foreach ($nationality as $item)
+                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    `);
                     var ageSelect = $(`#child_age_${i}`);
                     for (var age = 3; age <= 12; age++) {
                         ageSelect.append(`<option value="${age}">${age}</option>`);
@@ -1874,44 +1876,44 @@
                 // Create Infant Info
                 for (var i = 1; i <= infantCount; i++) {
                     $('#infant_info').append(`
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
-                        <input id="infant_name_${i}" name="infant_name_[]" type="text" placeholder="Enter Name" class="form-control">
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="infant_age_${i}">Infant ${i} Age</label>
-                        <select id="infant_age_${i}" name="infant_age_[]" class="form-control">
-                            <option value="">Select Age</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
-                        <select id="infant_gender_${i}" name="infant_gender_[]" class="form-control">
-                            <option value="">Select Gender</option>
-                            <option value="Female">Female</option>
-                            <option value="Male">Male</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <div class="mb-3">
-                        <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
-                        <select id="infant_nationality_${i}" name="infant_nationality_[]" class="nationality-select">
-                            <option value="">Select Nationality</option>
-                            @foreach ($nationality as $item)
-                            <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-            `);
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
+                                    <input id="infant_name_${i}" name="infant_name_[]" type="text" placeholder="Enter Name" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="infant_age_${i}">Infant ${i} Age</label>
+                                    <select id="infant_age_${i}" name="infant_age_[]" class="form-control">
+                                        <option value="">Select Age</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
+                                    <select id="infant_gender_${i}" name="infant_gender_[]" class="form-control">
+                                        <option value="">Select Gender</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Male">Male</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
+                                    <select id="infant_nationality_${i}" name="infant_nationality_[]" class="nationality-select">
+                                        <option value="">Select Nationality</option>
+                                        @foreach ($nationality as $item)
+                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    `);
                     var ageSelect = $(`#infant_age_${i}`);
                     for (var age = 0; age <= 2; age++) {
                         ageSelect.append(`<option value="${age}">${age}</option>`);
@@ -1929,17 +1931,60 @@
                     $('#' + id).val(value);
                 });
 
+                // Simpan data ke fbo_passenger
+                savePassengerInfo();
+
                 // Initialize Tom Select on all newly created select elements with class 'nationality-select'
                 $('.nationality-select').each(function() {
                     new TomSelect(this);
                 });
             }
 
-            // Call updateInfo whenever values change
-            $('#fbo_adult, #fbo_child, #fbo_infant').on('input', updateInfo);
+            function savePassengerInfo() {
+                var passengerInfo = [];
 
-            // Initialize info on page load
+                // Get Adult Info
+                $('#adult_info .row').each(function() {
+                    var name = $(this).find('[name="adult_name_[]"]').val();
+                    var age = $(this).find('[name="adult_age_[]"]').val();
+                    var gender = $(this).find('[name="adult_gender_[]"]').val();
+                    var nationality = $(this).find('[name="adult_nationality_[]"]').val();
+
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                });
+
+                // Get Child Info
+                $('#child_info .row').each(function() {
+                    var name = $(this).find('[name="child_name_[]"]').val();
+                    var age = $(this).find('[name="child_age_[]"]').val();
+                    var gender = $(this).find('[name="child_gender_[]"]').val();
+                    var nationality = $(this).find('[name="child_nationality_[]"]').val();
+
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                });
+
+                // Get Infant Info
+                $('#infant_info .row').each(function() {
+                    var name = $(this).find('[name="infant_name_[]"]').val();
+                    var age = $(this).find('[name="infant_age_[]"]').val();
+                    var gender = $(this).find('[name="infant_gender_[]"]').val();
+                    var nationality = $(this).find('[name="infant_nationality_[]"]').val();
+
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                });
+
+                // Gabungkan semua informasi penumpang
+                var combinedInfo = passengerInfo.join(';');
+
+                // Set nilai ke field fbo_passenger
+                $('#fbo_passenger').val(combinedInfo);
+            }
+
+            // Inisialisasi update pertama kali saat halaman dimuat
             updateInfo();
+
+            // Perbarui informasi setiap kali input jumlah dewasa, anak, atau bayi berubah
+            $('#fbo_adult, #fbo_child, #fbo_infant').on('change', updateInfo);
         });
     </script>
 

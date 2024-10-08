@@ -185,7 +185,7 @@ class BookingDataController extends Controller
             $departurePort = $request->input('fbo_departure_port');
             $arrivalPort = $request->input('fbo_arrival_port');
             $fastBoat = $request->input('fbo_fast_boat');
-            $timeDept = $request->input('time_dept');
+            $timeDept = $request->input('fbo_departure_time');
             $adultCount = $request->input('fbo_adult', 1); // Default 1 dewasa
             $childCount = $request->input('fbo_child', 0); // Default 0 anak-anak
             $area = $request->input('fbo_area'); // Tambahkan input area
@@ -371,19 +371,34 @@ class BookingDataController extends Controller
                 $html .= '<tr>';
                 // Kolom untuk adult publish dengan input
                 $html .= '<td><center>';
-                $html .= '<input type="hidden" name="availability[' . $avail->fba_id . '][adult_publish]" value="' . $avail->fba_adult_publish . '">';
+                $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_adult_publish]" value="' . $avail->fba_adult_publish . '">';
                 $html .= number_format($avail->fba_adult_publish ?? 0, 0, ',', '.');
                 $html .= '</center></td>';
 
                 // Kolom untuk child publish dengan input
                 $html .= '<td><center>';
-                $html .= '<input type="hidden" name="availability[' . $avail->fba_id . '][child_publish]" value="' . $avail->fba_child_publish . '">';
+                $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_child_publish]" value="' . $avail->fba_child_publish . '">';
                 $html .= number_format($avail->fba_child_publish ?? 0, 0, ',', '.');
                 $html .= '</center></td>';
 
-                $html .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
-                $html .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
-                $html .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
+                // Kolom untuk adult nett dengan input
+                $html .= '<td><center>';
+                $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_adult_nett]" value="' . $avail->fba_adult_nett . '">';
+                $html .= number_format($avail->fba_adult_nett ?? 0, 0, ',', '.');
+                $html .= '</center></td>';
+
+                // Kolom untuk child nett dengan input
+                $html .= '<td><center>';
+                $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_child_nett]" value="' . $avail->fba_child_nett . '">';
+                $html .= number_format($avail->fba_child_nett ?? 0, 0, ',', '.');
+                $html .= '</center></td>';
+
+                // Kolom untuk discount dengan input
+                $html .= '<td><center>';
+                $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_discount]" value="' . $avail->fba_discount . '">';
+                $html .= number_format($avail->fba_discount ?? 0, 0, ',', '.');
+                $html .= '</center></td>';
+
                 $html .= '</tr>';
 
                 $adultPublishTotal += $avail->fba_adult_publish ?? 0;
@@ -404,14 +419,14 @@ class BookingDataController extends Controller
             return response()->json([
                 'html' => $html,
                 'card_title' => $cardTitle,
-                'adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
-                'child_publish' => number_format($childPublishTotal, 0, ',', '.'),
+                'fbo_adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
+                'fbo_child_publish' => number_format($childPublishTotal, 0, ',', '.'),
                 'discount' => number_format($discountPerPerson, 0, ',', '.'),
                 'show_shuttle_checkbox' => $showShuttleCheckbox,
                 'shuttle_type' => $shuttleType,
                 'shuttle_option' => $shuttleOption,
-                'pickup_areas' => $pickupAreas,
-                'dropoff_areas' => $dropoffAreas,
+                'fbo_pickups' => $pickupAreas,
+                'fbo_dropoffs' => $dropoffAreas,
                 'shuttle_addresses' => $shuttleAddresses, 
             ]);
         } catch (\Exception $e) {
@@ -466,7 +481,7 @@ class BookingDataController extends Controller
                     'fbo_departure_ports' => [],
                     'fbo_arrival_ports' => [],
                     'fbo_fast_boats' => [],
-                    'time_depts' => [],
+                    'fbo_departure_times' => [],
                     'show_shuttle_checkbox' => false, // Tidak ada checkbox
                 ]);
             }
@@ -515,7 +530,7 @@ class BookingDataController extends Controller
                 'fbo_departure_ports' => $departurePorts,
                 'fbo_arrival_ports' => $arrivalPorts,
                 'fbo_fast_boats' => $fastBoats,
-                'time_depts' => $timeDepts,
+                'fbo_departure_times' => $timeDepts,
                 'show_shuttle_checkbox' => $showShuttleCheckbox,
             ]);
         } catch (\Exception $e) {
@@ -531,7 +546,7 @@ class BookingDataController extends Controller
             $departurePortReturn = $request->input('departure_return_port');
             $arrivalPortReturn = $request->input('arrival_return_port');
             $fastBoatReturn = $request->input('fbo_fast_boat_return');
-            $timeDeptReturn = $request->input('time_dept_return');
+            $timeDeptReturn = $request->input('fbo_departure_time_return');
             $adultCountReturn = $request->input('fbo_adult', 1); // Default 1 dewasa
             $childCountReturn = $request->input('fbo_child', 0); // Default 0 anak-anak
             $areaReturn = $request->input('fbo_area'); // Tambahkan input area
@@ -742,8 +757,8 @@ class BookingDataController extends Controller
                 'show_shuttle_checkbox_return' => $showShuttleCheckboxReturn,
                 'shuttle_type_return' => $shuttleType,
                 'shuttle_option_return' => $shuttleOption,
-                'pickup_areas_return' => $pickupAreas,
-                'dropoff_areas_return' => $dropoffAreas,
+                'fbo_pickups_return' => $pickupAreas,
+                'fbo_dropoffs_return' => $dropoffAreas,
                 'shuttle_addresses_return' => $shuttleAddressesReturn, 
             ]);
         } catch (\Exception $e) {
@@ -798,7 +813,7 @@ class BookingDataController extends Controller
                     'departure_return_ports' => [],
                     'arrival_return_ports' => [],
                     'fbo_fast_boats_return' => [],
-                    'time_depts_return' => [],
+                    'fbo_departure_times_return' => [],
                     'show_shuttle_checkbox_return' => false, // Tidak ada checkbox
                 ]);
             }
@@ -847,7 +862,7 @@ class BookingDataController extends Controller
                 'departure_return_ports' => $departurePorts,
                 'arrival_return_ports' => $arrivalPorts,
                 'fbo_fast_boats_return' => $fastBoats,
-                'time_depts_return' => $timeDepts,
+                'fbo_departure_times_return' => $timeDepts,
                 'show_shuttle_checkbox_return' => $showShuttleCheckbox,
             ]);
         } catch (\Exception $e) {
