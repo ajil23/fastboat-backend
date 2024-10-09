@@ -431,6 +431,13 @@ class BookingDataController extends Controller
                 $html .= number_format($avail->fba_child_publish ?? 0, 0, ',', '.');
                 $html .= '</center></td>';
 
+                // Perhitungan Total Publish (adult publish * adult count) + (child publish * child count)
+                $total_publish = ($avail->fba_adult_publish ?? 0) * $adultCount + ($avail->fba_child_publish ?? 0) * $childCount;
+
+                // Kolom untuk total publish
+                $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_total_publish]" value="' . $total_publish . '">';
+                $html .= number_format($total_publish, 0, ',', '.');
+                
                 // Kolom untuk adult nett dengan input
                 $html .= '<td><center>';
                 $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_adult_nett]" value="' . $avail->fba_adult_nett . '">';
@@ -442,6 +449,13 @@ class BookingDataController extends Controller
                 $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_child_nett]" value="' . $avail->fba_child_nett . '">';
                 $html .= number_format($avail->fba_child_nett ?? 0, 0, ',', '.');
                 $html .= '</center></td>';
+
+                // Perhitungan Total Nett (Adult Nett * Adult Count + Child Nett * Child Count)
+                $total_nett = (($avail->fba_adult_nett ?? 0) * $adultCount) + (($avail->fba_child_nett ?? 0) * $childCount);
+
+                // Kolom untuk total nett
+                $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_total_nett]" value="' . $total_nett . '">';
+                $html .= number_format($total_nett, 0, ',', '.');
 
                 // Kolom untuk discount dengan input
                 $html .= '<td><center>';
@@ -469,8 +483,8 @@ class BookingDataController extends Controller
             return response()->json([
                 'html' => $html,
                 'card_title' => $cardTitle,
-                'fbo_adult_publish' => number_format($adultPublishTotal, 0, ',', '.'),
-                'fbo_child_publish' => number_format($childPublishTotal, 0, ',', '.'),
+                'price_adult' => number_format($adultPublishTotal, 0, ',', '.'),
+                'price_child' => number_format($childPublishTotal, 0, ',', '.'),
                 'discount' => number_format($discountPerPerson, 0, ',', '.'),
                 'show_shuttle_checkbox' => $showShuttleCheckbox,
                 'shuttle_type' => $shuttleType,
@@ -763,11 +777,50 @@ class BookingDataController extends Controller
                     date('H:i', strtotime($deptTimeReturn)) . ')</center>';
 
                 $htmlReturn .= '<tr>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_publish ?? 0, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_publish ?? 0, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_adult_nett ?? 0, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_child_nett ?? 0, 0, ',', '.') . '</center></td>';
-                $htmlReturn .= '<td><center>' . number_format($avail->fba_discount ?? 0, 0, ',', '.') . '</center></td>';
+                // Kolom untuk adult publish dengan input
+                $htmlReturn .= '<td><center>';
+                $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_adult_publish]" value="' . $avail->fba_adult_publish . '">';
+                $htmlReturn .= number_format($avail->fba_adult_publish ?? 0, 0, ',', '.');
+                $htmlReturn .= '</center></td>';
+
+                // Kolom untuk child publish dengan input
+                $htmlReturn .= '<td><center>';
+                $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_child_publish]" value="' . $avail->fba_child_publish . '">';
+                $htmlReturn .= number_format($avail->fba_child_publish ?? 0, 0, ',', '.');
+                $htmlReturn .= '</center></td>';
+
+                // Perhitungan Total Publish (adult publish * adult count) + (child publish * child count)
+                $total_publish = ($avail->fba_adult_publish ?? 0) * $adultCountReturn + ($avail->fba_child_publish ?? 0) * $childCountReturn;
+
+                // Kolom untuk total publish
+                $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_total_publish]" value="' . $total_publish . '">';
+                $htmlReturn .= number_format($total_publish, 0, ',', '.');
+                
+                // Kolom untuk adult nett dengan input
+                $htmlReturn .= '<td><center>';
+                $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_adult_nett]" value="' . $avail->fba_adult_nett . '">';
+                $htmlReturn .= number_format($avail->fba_adult_nett ?? 0, 0, ',', '.');
+                $htmlReturn .= '</center></td>';
+
+                // Kolom untuk child nett dengan input
+                $htmlReturn .= '<td><center>';
+                $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_child_nett]" value="' . $avail->fba_child_nett . '">';
+                $htmlReturn .= number_format($avail->fba_child_nett ?? 0, 0, ',', '.');
+                $htmlReturn .= '</center></td>';
+
+                // Perhitungan Total Nett (Adult Nett * Adult Count + Child Nett * Child Count)
+                $total_nett = (($avail->fba_adult_nett ?? 0) * $adultCountReturn) + (($avail->fba_child_nett ?? 0) * $childCountReturn);
+
+                // Kolom untuk total nett
+                $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_total_nett]" value="' . $total_nett . '">';
+                $htmlReturn .= number_format($total_nett, 0, ',', '.');
+
+                // Kolom untuk discount dengan input
+                $htmlReturn .= '<td><center>';
+                $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_discount]" value="' . $avail->fba_discount . '">';
+                $htmlReturn .= number_format($avail->fba_discount ?? 0, 0, ',', '.');
+                $htmlReturn .= '</center></td>';
+
                 $htmlReturn .= '</tr>';
 
                 $adultPublishTotalReturn += $avail->fba_adult_publish ?? 0;
