@@ -73,7 +73,7 @@
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fbo_currency">Currency</label>
                                                         <select id="fbo_currency" name="fbo_currency">
-                                                            <option value="10" data-rate="1" data-code="IDR">Indonesia Rupiah (IDR)</option>
+                                                            <option value="IDR" data-rate="1" data-code="IDR">Indonesia Rupiah (IDR)</option>
                                                             @foreach ($currency as $item)
                                                                 <option value="{{ $item->cy_code }}" data-rate="{{ $item->cy_rate }}" data-code="{{ $item->cy_code }}"> {{ $item->cy_name }} ({{ $item->cy_code }})
                                                                 </option>
