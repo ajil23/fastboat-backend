@@ -304,13 +304,13 @@
                                                             <div>
                                                                 <label>
                                                                     <input type="checkbox" id="pickup-shuttle"
-                                                                        name="fbo_pickup" value="1">
+                                                                        name="fbo_pickup" value="Pickup">
                                                                     Pickup Shuttle
                                                                 </label>
                                                                 &nbsp; &nbsp; &nbsp;
                                                                 <label>
                                                                     <input type="checkbox" id="dropoff-shuttle"
-                                                                        name="fbo_dropoff" value="1">
+                                                                        name="fbo_dropoff" value="Dropoff">
                                                                     Dropoff Shuttle
                                                                 </label>
                                                             </div>
@@ -556,13 +556,13 @@
                                                         <div>
                                                             <label>
                                                                 <input type="checkbox" id="pickup-shuttle-return"
-                                                                    name="pickup_shuttle_return" value="1">
+                                                                    name="pickup_shuttle_return" value="Pickup">
                                                                 Pickup Shuttle
                                                             </label>
                                                             &nbsp; &nbsp; &nbsp;
                                                             <label>
                                                                 <input type="checkbox" id="dropoff-shuttle-return"
-                                                                    name="dropoff_shuttle_return" value="1">
+                                                                    name="dropoff_shuttle_return" value="Dropoff">
                                                                 Dropoff Shuttle
                                                             </label>
                                                         </div>
@@ -1036,7 +1036,7 @@
                             if (response.fbo_pickups && response.fbo_pickups.length > 0) {
                                 response.fbo_pickups.forEach(function(area) {
                                     pickupDropdownOptions +=
-                                        `<option value="${area.id}">${area.name}</option>`;
+                                        `<option value="${area.name}">${area.name}</option>`;
                                 });
                             }
 
@@ -1044,7 +1044,7 @@
                             if (response.fbo_dropoffs && response.fbo_dropoffs.length > 0) {
                                 response.fbo_dropoffs.forEach(function(area) {
                                     dropoffDropdownOptions +=
-                                        `<option value="${area.id}">${area.name}</option>`;
+                                        `<option value="${area.name}">${area.name}</option>`;
                                 });
                             }
 
@@ -1081,7 +1081,7 @@
                             $('#fbo_pickup').change(function() {
                                 const selectedAreaId = $(this).val();
                                 const selectedShuttle = response.fbo_pickups.find(shuttle =>
-                                    shuttle.id == selectedAreaId);
+                                    shuttle.name == selectedAreaId);
 
                                 if (selectedShuttle && selectedShuttle.pickup_meeting_point) {
                                     if (selectedShuttle.pickup_meeting_point === 'not_set') {
@@ -1102,7 +1102,7 @@
                             $('#fbo_dropoff').change(function() {
                                 const selectedAreaId = $(this).val();
                                 const selectedShuttle = response.fbo_dropoffs.find(shuttle =>
-                                    shuttle.id == selectedAreaId);
+                                    shuttle.name == selectedAreaId);
 
                                 if (selectedShuttle && selectedShuttle.dropoff_meeting_point) {
                                     if (selectedShuttle.dropoff_meeting_point === 'not_set') {
@@ -1566,7 +1566,7 @@
                             if (response.fbo_pickups_return && response.fbo_pickups_return.length > 0) {
                                 response.fbo_pickups_return.forEach(function(area) {
                                     pickupDropdownOptionsReturn +=
-                                        `<option value="${area.id}">${area.name}</option>`;
+                                        `<option value="${area.name}">${area.name}</option>`;
                                 });
 
                                 // Tampilkan dropdown pickup area
@@ -1581,7 +1581,7 @@
                                 0) {
                                 response.fbo_dropoffs_return.forEach(function(area) {
                                     dropoffDropdownOptionsReturn +=
-                                        `<option value="${area.id}">${area.name}</option>`;
+                                        `<option value="${area.name}">${area.name}</option>`;
                                 });
 
                                 // Tampilkan dropdown dropoff area
@@ -1616,7 +1616,7 @@
                                 const selectedAreaId = $(this).val();
                                 const selectedShuttle = response.fbo_pickups_return.find(
                                     shuttle =>
-                                    shuttle.id == selectedAreaId);
+                                    shuttle.name == selectedAreaId);
 
                                 if (selectedShuttle && selectedShuttle
                                     .pickup_meeting_point_return) {
@@ -1643,7 +1643,7 @@
                                 const selectedAreaId = $(this).val();
                                 const selectedShuttle = response.fbo_dropoffs_return.find(
                                     shuttle =>
-                                    shuttle.id == selectedAreaId);
+                                    shuttle.name == selectedAreaId);
 
                                 if (selectedShuttle && selectedShuttle
                                     .dropoff_meeting_point_return) {
