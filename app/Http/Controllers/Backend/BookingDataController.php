@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\BookingData;
 use App\Models\Contact;
 use App\Models\DataFastboat;
 use App\Models\DataRoute;
@@ -73,12 +74,11 @@ class BookingDataController extends Controller
 
     public function store(Request $request)
     {
+        dd($request);
+
         DB::beginTransaction();  // Memulai transaksi database
 
         try {
-
-            dd($request);
-
             // Mendapatkan IP address
             $ipAddress = $request->ip(); // IP Publik pengguna
 
@@ -88,7 +88,7 @@ class BookingDataController extends Controller
             } else {
                 $ipAddress = $request->ip();
             }
-
+            
             // Simpan data kontak utama
             $contactData = new Contact();
             $contactData->ctc_order_id = $this->generateOrderId();
@@ -103,70 +103,137 @@ class BookingDataController extends Controller
             $contactData->ctc_browser = $request->header('User-Agent');
             $contactData->ctc_updated_by = Auth()->id();
             $contactData->ctc_created_by = Auth()->id();
-            $contactData->save();
+            // $contactData->save();
 
-            // Ambil input data dewasa
-            $adults = $request->input('adult_name');
-            $adultAges = $request->input('adult_age');
-            $adultGenders = $request->input('adult_gender');
-            $adultNationalities = $request->input('adult_nationality');
+            // Menentukan tipe perjalanan, apakah sekali jalan atau pulang pergi
+            if ($request->has('switch')) {
+                $departSuffix = 'Y'; // Kode pergi
+                $returnSuffix = 'Z'; // Kode pulang
+                
+                $keys = array_keys($request->input('fbo_availability_id')); // Memecah array untuk mengambil nilai id dari availability
 
-            // Ambil input data anak-anak
-            $children = $request->input('child_name');
-            $childAges = $request->input('child_age');
-            $childGenders = $request->input('child_gender');
-            $childNationalities = $request->input('child_nationality');
+                $bookingDataDepart = new BookingData();
+                $bookingDataDepart->fbo_order_id = $contactData->ctc_order_id;
+                $bookingDataDepart->fbo_transaction_id = $request->fbo_transaction_id;
+                $bookingDataDepart->fbo_booking_id = 'F' . $contactData->ctc_order_id . $departSuffix;
+                $bookingDataDepart->fbo_availability_id = $keys[0];
+                $bookingDataDepart->fbo_trip_id;
+                $bookingDataDepart->fbo_transaction_status;
+                $bookingDataDepart->fbo_currency;
+                $bookingDataDepart->fbo_payment_method;
+                $bookingDataDepart->fbo_payment_status;
+                $bookingDataDepart->fbo_trip_date;
+                $bookingDataDepart->fbo_adult_nett;
+                $bookingDataDepart->fbo_child_nett;
+                $bookingDataDepart->fbo_total_nett;
+                $bookingDataDepart->fbo_adult_publish;
+                $bookingDataDepart->fbo_child_publish;
+                $bookingDataDepart->fbo_total_publish;
+                $bookingDataDepart->fbo_adult_currency;
+                $bookingDataDepart->fbo_child_currency;
+                $bookingDataDepart->fbo_total_currency;
+                $bookingDataDepart->fbo_kurs;
+                $bookingDataDepart->fbo_discount;
+                $bookingDataDepart->fbo_price_cut;
+                $bookingDataDepart->fbo_discount_total;
+                $bookingDataDepart->fbo_refund;
+                $bookingDataDepart->fbo_end_total;
+                $bookingDataDepart->fbo_end_total_currency;
+                $bookingDataDepart->fbo_profit;
+                $bookingDataDepart->fbo_passenger;
+                $bookingDataDepart->fbo_adult;
+                $bookingDataDepart->fbo_child;
+                $bookingDataDepart->fbo_infant;
+                $bookingDataDepart->fbo_company;
+                $bookingDataDepart->fbo_fast_boat;
+                $bookingDataDepart->fbo_departure_island;
+                $bookingDataDepart->fbo_departure_port;
+                $bookingDataDepart->fbo_departure_time;
+                $bookingDataDepart->fbo_arrival_island;
+                $bookingDataDepart->fbo_arrival_port;
+                $bookingDataDepart->fbo_arrival_time;
+                $bookingDataDepart->fbo_checking_point;
+                $bookingDataDepart->fbo_mail_admin;
+                $bookingDataDepart->fbo_mail_client;
+                $bookingDataDepart->fbo_pickup;
+                $bookingDataDepart->fbo_dropoff;
+                $bookingDataDepart->fbo_specific_pickup;
+                $bookingDataDepart->fbo_specific_dropoff;
+                $bookingDataDepart->fbo_contact_pickup;
+                $bookingDataDepart->fbo_contact_dropoff;
+                $bookingDataDepart->fbo_log;
+                $bookingDataDepart->fbo_source;
+                $bookingDataDepart->fbo_updated_by;
+                // $bookingDataDepart->save();
 
-            // Ambil input data bayi
-            $infants = $request->input('infant_name');
-            $infantAges = $request->input('infant_age');
-            $infantGenders = $request->input('infant_gender');
-            $infantNationalities = $request->input('infant_nationality');
+                $bookingDataReturn = new BookingData();
+                $bookingDataReturn->fbo_order_id = $contactData->ctc_order_id;
+                $bookingDataReturn->fbo_transaction_id = $request->fbo_transaction_id;
+                $bookingDataReturn->fbo_booking_id = 'F' . $contactData->ctc_order_id . $returnSuffix;
+                $bookingDataReturn->fbo_availability_id = $keys[0];
+                $bookingDataReturn->fbo_trip_id;
+                $bookingDataReturn->fbo_transaction_status;
+                $bookingDataReturn->fbo_currency;
+                $bookingDataReturn->fbo_payment_method;
+                $bookingDataReturn->fbo_payment_status;
+                $bookingDataReturn->fbo_trip_date;
+                $bookingDataReturn->fbo_adult_nett;
+                $bookingDataReturn->fbo_child_nett;
+                $bookingDataReturn->fbo_total_nett;
+                $bookingDataReturn->fbo_adult_publish;
+                $bookingDataReturn->fbo_child_publish;
+                $bookingDataReturn->fbo_total_publish;
+                $bookingDataReturn->fbo_adult_currency;
+                $bookingDataReturn->fbo_child_currency;
+                $bookingDataReturn->fbo_total_currency;
+                $bookingDataReturn->fbo_kurs;
+                $bookingDataReturn->fbo_discount;
+                $bookingDataReturn->fbo_price_cut;
+                $bookingDataReturn->fbo_discount_total;
+                $bookingDataReturn->fbo_refund;
+                $bookingDataReturn->fbo_end_total;
+                $bookingDataReturn->fbo_end_total_currency;
+                $bookingDataReturn->fbo_profit;
+                $bookingDataReturn->fbo_passenger;
+                $bookingDataReturn->fbo_adult;
+                $bookingDataReturn->fbo_child;
+                $bookingDataReturn->fbo_infant;
+                $bookingDataReturn->fbo_company;
+                $bookingDataReturn->fbo_fast_boat;
+                $bookingDataReturn->fbo_departure_island;
+                $bookingDataReturn->fbo_departure_port;
+                $bookingDataReturn->fbo_departure_time;
+                $bookingDataReturn->fbo_arrival_island;
+                $bookingDataReturn->fbo_arrival_port;
+                $bookingDataReturn->fbo_arrival_time;
+                $bookingDataReturn->fbo_checking_point;
+                $bookingDataReturn->fbo_mail_admin;
+                $bookingDataReturn->fbo_mail_client;
+                $bookingDataReturn->fbo_pickup;
+                $bookingDataReturn->fbo_dropoff;
+                $bookingDataReturn->fbo_specific_pickup;
+                $bookingDataReturn->fbo_specific_dropoff;
+                $bookingDataReturn->fbo_contact_pickup;
+                $bookingDataReturn->fbo_contact_dropoff;
+                $bookingDataReturn->fbo_log;
+                $bookingDataReturn->fbo_source;
+                $bookingDataReturn->fbo_updated_by;
+                // $bookingDataReturn->save();
+            } else {
+                $singleSuffix = 'X'; // Kode pergi
+                $keys = array_keys($request->input('fbo_availability_id')); // Memecah array untuk mengambil nilai id dari availability
 
-            // Simpan data dewasa (Adult)
-            foreach ($adults as $index => $adultName) {
-                Adult::create([
-                    'name' => $adultName,
-                    'age' => $adultAges[$index],
-                    'gender' => $adultGenders[$index],
-                    'nationality' => $adultNationalities[$index],
-                    'contact_id' => $contactData->id, // Referensi ke kontak utama
-                ]);
+                $bookingDataSingle = new BookingData();
+                $bookingDataSingle->fbo_order_id = $contactData->ctc_order_id;
+                $bookingDataSingle->fbo_transaction_id = $request->fbo_transaction_id;
+                $bookingDataSingle->fbo_booking_id = 'F' . $contactData->ctc_order_id . $singleSuffix;
+                $bookingDataSingle->fbo_availability_id = $keys[0];
+                // $bookingDataSingle->save();
             }
 
-            // Simpan data anak-anak (Child), hanya jika data tersedia
-            if ($children) {
-                foreach ($children as $index => $childName) {
-                    if ($childName) { // Pastikan ada input nama anak
-                        Child::create([
-                            'name' => $childName,
-                            'age' => $childAges[$index],
-                            'gender' => $childGenders[$index],
-                            'nationality' => $childNationalities[$index],
-                            'contact_id' => $contactData->id, // Referensi ke kontak utama
-                        ]);
-                    }
-                }
-            }
-
-            // Simpan data bayi (Infant), hanya jika data tersedia
-            if ($infants) {
-                foreach ($infants as $index => $infantName) {
-                    if ($infantName) { // Pastikan ada input nama bayi
-                        Infant::create([
-                            'name' => $infantName,
-                            'age' => $infantAges[$index],
-                            'gender' => $infantGenders[$index],
-                            'nationality' => $infantNationalities[$index],
-                            'contact_id' => $contactData->id, // Referensi ke kontak utama
-                        ]);
-                    }
-                }
-            }
-
+            dd();
             // Commit transaksi jika semua proses berhasil
             DB::commit();
-
             return redirect()->route('data.view')->with('success', 'Data berhasil disimpan');
         } catch (\Exception $e) {
             // Rollback semua perubahan jika terjadi error
@@ -230,13 +297,13 @@ class BookingDataController extends Controller
             $shuttleOption = null;
             $pickupAreas = [];
             $dropoffAreas = [];
-            $shuttleAddresses = []; 
+            $shuttleAddresses = [];
 
             if (!$availability->isEmpty()) {
                 $trip = $availability->first()->trip;
                 $shuttleType = $trip->fbt_shuttle_type;
                 $shuttleOption = $trip->fbt_shuttle_option;
-            
+
                 foreach ($availability as $avail) {
                     if ($shuttleType && in_array($shuttleType, ['Private', 'Sharing'])) {
                         $trip_id = $avail->trip->fbt_id;
@@ -250,7 +317,7 @@ class BookingDataController extends Controller
                                     'pickup_meeting_point' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
-            
+
                             $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
                                 return [
                                     'id' => $area->sa_id,
@@ -266,7 +333,7 @@ class BookingDataController extends Controller
                                     'dropoff_meeting_point' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
-            
+
                             $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
                                 return [
                                     'id' => $area->sa_id,
@@ -274,7 +341,7 @@ class BookingDataController extends Controller
                                 ];
                             })->toArray();
                         }
-            
+
                         // Jika tidak ada data pickupAreas atau dropoffAreas, fallback ke FastboatShuttleArea
                         if (empty($pickupAreas)) {
                             $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
@@ -284,7 +351,7 @@ class BookingDataController extends Controller
                                 ];
                             })->toArray();
                         }
-            
+
                         if (empty($dropoffAreas)) {
                             $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
                                 return [
@@ -295,7 +362,7 @@ class BookingDataController extends Controller
                         }
                     }
                 }
-            }            
+            }
 
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
             if ($availability->isEmpty()) {
@@ -572,18 +639,18 @@ class BookingDataController extends Controller
             $shuttleOption = null;
             $pickupAreas = [];
             $dropoffAreas = [];
-            $shuttleAddressesReturn = []; 
+            $shuttleAddressesReturn = [];
 
             if (!$availability->isEmpty()) {
                 $trip = $availability->first()->trip;
                 $shuttleTypeReturn = $trip->fbt_shuttle_type;
                 $shuttleOptionReturn = $trip->fbt_shuttle_option;
-            
+
                 foreach ($availability as $avail) {
                     if ($shuttleTypeReturn && in_array($shuttleTypeReturn, ['Private', 'Sharing'])) {
                         $trip_id = $avail->trip->fbt_id;
                         $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
-            
+
                         if ($shuttleOptionReturn === 'pickup') {
                             // For pickup option
                             $pickupAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
@@ -593,7 +660,7 @@ class BookingDataController extends Controller
                                     'pickup_meeting_point_return' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
-            
+
                             $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
                                 return [
                                     'id' => $area->sa_id,
@@ -609,7 +676,7 @@ class BookingDataController extends Controller
                                     'dropoff_meeting_point_return' => $value->s_meeting_point ?? '',
                                 ];
                             })->toArray() : [];
-            
+
                             $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
                                 return [
                                     'id' => $area->sa_id,
@@ -617,7 +684,7 @@ class BookingDataController extends Controller
                                 ];
                             })->toArray();
                         }
-            
+
                         // Jika tidak ada data pickupAreas atau dropoffAreas, fallback ke FastboatShuttleArea
                         if (empty($pickupAreas)) {
                             $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
@@ -627,7 +694,7 @@ class BookingDataController extends Controller
                                 ];
                             })->toArray();
                         }
-            
+
                         if (empty($dropoffAreas)) {
                             $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
                                 return [
@@ -638,7 +705,7 @@ class BookingDataController extends Controller
                         }
                     }
                 }
-            }  
+            }
             // dd($pickupAreas);
 
             // Jika tidak ada data di FastboatAvailability, ambil dari trip saja
