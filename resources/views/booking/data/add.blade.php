@@ -20,8 +20,7 @@
                         <div class="col-lg-12">
                             <div id="addproduct-accordion" class="custom-accordion">
                                 <div class="card custom-border-color">
-                                    <a class="text-body" data-bs-toggle="collapse" aria-expanded="true"
-                                        aria-controls="addproduct-productinfo-collapse">
+                                    <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                         <div class="p-4">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 overflow-hidden">
@@ -37,22 +36,19 @@
                                                 <div class="col-md-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="ctc_name">Name</label>
-                                                        <input id="ctc_name" name="ctc_name" placeholder="Enter Name"
-                                                            type="text" class="form-control">
+                                                        <input id="ctc_name" name="ctc_name" placeholder="Enter Name" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="ctc_email">Email</label>
-                                                        <input id="ctc_email" name="ctc_email" placeholder="Enter Email"
-                                                            type="email" class="form-control">
+                                                        <input id="ctc_email" name="ctc_email" placeholder="Enter Email" type="email" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="ctc_phone">Phone</label>
-                                                        <input id="ctc_phone" name="ctc_phone" placeholder="Enter Phone"
-                                                            type="text" class="form-control">
+                                                        <input id="ctc_phone" name="ctc_phone" placeholder="Enter Phone" type="text" class="form-control">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -61,8 +57,7 @@
                                                         <select id="ctc_nationality" name="ctc_nationality">
                                                             <option value="">Select Nationality</option>
                                                             @foreach ($nationality as $item)
-                                                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }}
-                                                                </option>
+                                                                <option value="{{ $item->nas_country }}">{{ $item->nas_country }} </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -115,48 +110,34 @@
                                                 </div>
 
                                                 <!-- Midtrans Transaction ID -->
-                                                <div class="col-md-3 transaction-id" id="midtrans_transaction_id"
-                                                    style="display: none;">
+                                                <div class="col-md-3 transaction-id" id="midtrans_transaction_id" style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="midtrans_transaction_id">Transaction
-                                                            ID</label>
-                                                        <input id="midtrans_transaction_id" name="fbo_transaction_id"
-                                                            placeholder="Type Midtrans Transaction ID" type="text"
-                                                            class="form-control">
+                                                        <label class="form-label" for="midtrans_transaction_id">Transaction ID</label>
+                                                        <input id="midtrans_transaction_id" name="fbo_transaction_id" placeholder="Type Midtrans Transaction ID" type="text" class="form-control">
                                                     </div>
                                                 </div>
 
                                                 <!-- Bank Transfer Transaction ID -->
-                                                <div class="col-md-3 transaction-id" id="bank_transfer_transaction_id"
-                                                    style="display: none;">
+                                                <div class="col-md-3 transaction-id" id="bank_transfer_transaction_id" style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="bank_transfer_transaction_id">Transaction
-                                                            ID</label>
-                                                        <input id="bank_transfer_transaction_id" name="fbo_transaction_id"
-                                                            placeholder="Type Bank Transaction ID" type="text"
-                                                            class="form-control">
+                                                        <label class="form-label" for="bank_transfer_transaction_id">Transaction ID</label>
+                                                        <input id="bank_transfer_transaction_id" name="fbo_transaction_id" placeholder="Type Bank Transaction ID" type="text" class="form-control">
                                                     </div>
                                                 </div>
 
                                                 <!-- Cash Transaction ID -->
-                                                <div class="col-md-3 transaction-id" id="cash_transaction_id"
-                                                    style="display: none;">
+                                                <div class="col-md-3 transaction-id" id="cash_transaction_id" style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="cash_transaction_id">Transaction
-                                                            ID</label>
-                                                        <input id="cash_transaction_id" name="fbo_transaction_id"
-                                                            placeholder="Type Recipient" type="text"
-                                                            class="form-control">
+                                                        <label class="form-label" for="cash_transaction_id">Transaction ID</label>
+                                                        <input id="cash_transaction_id" name="fbo_transaction_id" placeholder="Type Recipient" type="text" class="form-control">
                                                     </div>
                                                 </div>
 
                                                 <!-- Agent Transaction ID -->
-                                                <div class="col-md-3 transaction-id" id="agent_transaction_id"
-                                                    style="display: none;">
+                                                <div class="col-md-3 transaction-id" id="agent_transaction_id" style="display: none;">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="agent_transaction_id">Agent</label>
-                                                        <select id="agent_transaction_id" name="fbo_transaction_id"
-                                                            class="form-control">
+                                                        <select id="agent_transaction_id" name="fbo_transaction_id" class="form-control">
                                                             <option value="">Select Agent</option>
                                                             <option value="Agen A">Agen A</option>
                                                             <option value="Agen B">Agen B</option>
@@ -171,8 +152,7 @@
                                     </div>
                                 </div>
                                 <div class="card custom-border-color">
-                                    <a class="text-body" data-bs-toggle="collapse" aria-expanded="true"
-                                        aria-controls="addproduct-productinfo-collapse">
+                                    <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                         <div class="p-4">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 overflow-hidden">
@@ -188,22 +168,19 @@
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fbo_adult">Adult</label>
-                                                        <input id="fbo_adult" name="fbo_adult" type="number"
-                                                            class="form-control" value="1" min="1">
+                                                        <input id="fbo_adult" name="fbo_adult" type="number" class="form-control" value="1" min="1">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fbo_child">Child</label>
-                                                        <input id="fbo_child" name="fbo_child" type="number"
-                                                            class="form-control" value="0" min="0">
+                                                        <input id="fbo_child" name="fbo_child" type="number" class="form-control" value="0" min="0">
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-4">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fbo_infant">Infant</label>
-                                                        <input id="fbo_infant" name="fbo_infant" type="number"
-                                                            class="form-control" value="0" min="0">
+                                                        <input id="fbo_infant" name="fbo_infant" type="number" class="form-control" value="0" min="0">
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,8 +196,7 @@
                                     </div>
                                 </div>
                                 <div class="card custom-border-color">
-                                    <a class="text-body" data-bs-toggle="collapse" aria-expanded="true"
-                                        aria-controls="addproduct-productinfo-collapse">
+                                    <a class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                         <div class="p-4">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 overflow-hidden">
@@ -392,19 +368,15 @@
                                     </div>
                                 </div>
                                 <div class="card custom-border-color">
-                                    <div class="text-body" data-bs-toggle="collapse" aria-expanded="true"
-                                        aria-controls="addproduct-productinfo-collapse">
+                                    <div class="text-body" data-bs-toggle="collapse" aria-expanded="true" aria-controls="addproduct-productinfo-collapse">
                                         <div class="p-4">
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-grow-1 overflow-hidden">
                                                     <h5 class="font-size-16 mb-1">Trip Return</h5>
                                                     <p class="text-muted text-truncate mb-0">Fill all information below</p>
                                                 </div>
-                                                <div class="form-check form-switch"
-                                                    style="display: flex; align-items: center;justify-content: center;">
-                                                    <input class="form-check-input"
-                                                        style="width: 3rem; height: 1.75rem; border-radius: 1rem;"
-                                                        type="checkbox" id="switch" name="switch" />
+                                                <div class="form-check form-switch" style="display: flex; align-items: center;justify-content: center;">
+                                                    <input class="form-check-input" style="width: 3rem; height: 1.75rem; border-radius: 1rem;" type="checkbox" id="switch" name="switch" />
                                                 </div>
                                             </div>
                                         </div>
@@ -415,28 +387,22 @@
                                             <div class="row" id="searchForm">
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="trip_return_date">Trip
-                                                            Date</label>
-                                                        <input type="date" class="form-control" id="trip_return_date"
-                                                            name="trip_return_date" disabled>
+                                                        <label class="form-label" for="trip_return_date">Trip Date</label>
+                                                        <input type="date" class="form-control" id="trip_return_date" name="trip_return_date" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="departure_return_port">Departure
-                                                            Port</label>
-                                                        <select class="form-control" id="departure_return_port"
-                                                            name="departure_return_port" disabled>
+                                                        <label class="form-label" for="departure_return_port">Departure Port</label>
+                                                        <select class="form-control" id="departure_return_port" name="departure_return_port" disabled>
                                                             <option value="">Select Departure Port</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="arrival_return_port">Arrival
-                                                            Port</label>
-                                                        <select class="form-control" id="arrival_return_port"
-                                                            name="arrival_return_port" disabled>
+                                                        <label class="form-label" for="arrival_return_port">Arrival Port</label>
+                                                        <select class="form-control" id="arrival_return_port" name="arrival_return_port" disabled>
                                                             <option value="">Select Arrival Port</option>
                                                         </select>
                                                     </div>
@@ -445,20 +411,16 @@
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_fast_boat_return">Fast
-                                                            Boat</label>
-                                                        <select class="form-control" id="fbo_fast_boat_return"
-                                                            name="fbo_fast_boat_return" disabled>
+                                                        <label class="form-label" for="fbo_fast_boat_return">Fast Boat</label>
+                                                        <select class="form-control" id="fbo_fast_boat_return" name="fbo_fast_boat_return" disabled>
                                                             <option value="">Select Fast Boat</option>
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_departure_time_return">Time
-                                                            Dept</label>
-                                                        <select class="form-control" id="fbo_departure_time_return"
-                                                            name="fbo_departure_time_return" disabled>
+                                                        <label class="form-label" for="fbo_departure_time_return">Time Dept</label>
+                                                        <select class="form-control" id="fbo_departure_time_return" name="fbo_departure_time_return" disabled>
                                                             <option value="">Select Time Dept</option>
                                                         </select>
                                                     </div>
@@ -470,92 +432,60 @@
                                                     <div id="shuttle-checkbox-return" class="shuttle-checkbox-return">
                                                         <div>
                                                             <label>
-                                                                <input type="checkbox" id="pickup-shuttle-return"
-                                                                    name="pickup_shuttle_return" value="Pickup">
-                                                                Pickup Shuttle
+                                                                <input type="checkbox" id="pickup-shuttle-return" name="pickup_shuttle_return" value="Pickup"> Pickup Shuttle
                                                             </label>
                                                             &nbsp; &nbsp; &nbsp;
                                                             <label>
-                                                                <input type="checkbox" id="dropoff-shuttle-return"
-                                                                    name="dropoff_shuttle_return" value="Dropoff">
-                                                                Dropoff Shuttle
+                                                                <input type="checkbox" id="dropoff-shuttle-return" name="dropoff_shuttle_return" value="Dropoff"> Dropoff Shuttle
                                                             </label>
                                                         </div>
                                                         <div class="container">
                                                             <div class="row">
-                                                                <div class="col-md-6 shuttle-inputs-return"
-                                                                    style="display:none;" id="pickup-inputs-return">
+                                                                <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="pickup-inputs-return">
                                                                     <div class="row">
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Pickup Area</label>
-                                                                                <select style="border-color: lightgray;"
-                                                                                    class="form-control"
-                                                                                    id="fbo_pickup_return"
-                                                                                    name="fbo_pickup_return">
-                                                                                    <option value="">Select Option
-                                                                                    </option>
+                                                                                <label class="form-label" for="">Pickup Area</label>
+                                                                                <select style="border-color: lightgray;" class="form-control" id="fbo_pickup_return" name="fbo_pickup_return">
+                                                                                    <option value="">Select Option </option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Phone</label>
-                                                                                <input type="text"
-                                                                                    style="border-color: lightgray;"
-                                                                                    class="form-control" id=""
-                                                                                    name="fbo_contact_pickup_return"
-                                                                                    placeholder="62XXXXXXXXXXX">
+                                                                                <label class="form-label" for="">Phone</label>
+                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_pickup_return" placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                         <div class="row">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="fbo_specific_pickup_return">Address
-                                                                                    Pickup</label>
-                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_pickup_return"
-                                                                                    name="fbo_specific_pickup_return"></textarea>
+                                                                                <label class="form-label" for="fbo_specific_pickup_return">Address Pickup</label>
+                                                                                <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_pickup_return" name="fbo_specific_pickup_return"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-6 shuttle-inputs-return"
-                                                                    style="display:none;" id="dropoff-inputs-return">
+                                                                <div class="col-md-6 shuttle-inputs-return" style="display:none;" id="dropoff-inputs-return">
                                                                     <div class="row">
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Dropoff Area</label>
-                                                                                <select style="border-color: lightgray;"
-                                                                                    class="form-control"
-                                                                                    id="fbo_dropoff_return"
-                                                                                    name="fbo_dropoff_return">
-                                                                                    <option value="">Select Option
-                                                                                    </option>
+                                                                                <label class="form-label" for="">Dropoff Area</label>
+                                                                                <select style="border-color: lightgray;" class="form-control" id="fbo_dropoff_return" name="fbo_dropoff_return">
+                                                                                    <option value="">Select Option </option>
                                                                                 </select>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-6">
                                                                             <div class="mb-3">
-                                                                                <label class="form-label"
-                                                                                    for="">Phone</label>
-                                                                                <input type="text"
-                                                                                    style="border-color: lightgray;"
-                                                                                    class="form-control" id=""
-                                                                                    name="fbo_contact_dropoff_return"
-                                                                                    placeholder="62XXXXXXXXXXX">
+                                                                                <label class="form-label" for="">Phone</label>
+                                                                                <input type="text" style="border-color: lightgray;" class="form-control" id="" name="fbo_contact_dropoff_return" placeholder="62XXXXXXXXXXX">
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
                                                                         <div class="mb-3">
-                                                                            <label class="form-label"
-                                                                                for="fbo_specific_dropoff_return">Address
-                                                                                Dropoff</label>
-                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_dropoff_return"
-                                                                                name="fbo_specific_dropoff_return"></textarea>
+                                                                            <label class="form-label" for="fbo_specific_dropoff_return">Address Dropoff</label>
+                                                                            <textarea value="" style="border-color: lightgray;" class="form-control" id="fbo_specific_dropoff_return" name="fbo_specific_dropoff_return"></textarea>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -563,25 +493,14 @@
                                                         </div>
                                                     </div>
                                                     <h5 class="card-title-return"></h5>
-                                                    <table id="booking-data-table-return"
-                                                        class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
+                                                    <table id="booking-data-table-return" class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
                                                         <thead>
                                                             <tr class="table-light">
-                                                                <th>
-                                                                    <center>Publish Adult</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Publish Child</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Nett Adult</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Nett Child</center>
-                                                                </th>
-                                                                <th>
-                                                                    <center>Discount</center>
-                                                                </th>
+                                                                <th><center>Publish Adult</center></th>
+                                                                <th><center>Publish Child</center></th>
+                                                                <th><center>Nett Adult</center></th>
+                                                                <th><center>Nett Child</center></th>
+                                                                <th><center>Discount</center></th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -593,38 +512,26 @@
                                                     <div class="row">
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="adult_return_publish">Adult
-                                                                    Publish (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="adult_return_publish" name="adult_return_publish"
-                                                                    oninput="calculateTotalReturn()">
+                                                                <label class="form-label" for="adult_return_publish">AdultPublish (IDR)</label>
+                                                                <input value="" class="form-control"id="adult_return_publish" name="adult_return_publish"oninput="calculateTotalReturn()">
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="child_return_publish">Child
-                                                                    Publish (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="child_return_publish" name="child_return_publish"
-                                                                    oninput="calculateTotalReturn()">
+                                                                <label class="form-label" for="child_return_publish">Child Publish (IDR)</label>
+                                                                <input value="" class="form-control" id="child_return_publish" name="child_return_publish" oninput="calculateTotalReturn()">
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="total_return_end">End Total
-                                                                    (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="total_return_end" name="total_return_end"
-                                                                    style="background-color:lightgray" readonly>
+                                                                <label class="form-label" for="total_return_end">End Total (IDR)</label>
+                                                                <input value="" class="form-control" id="total_return_end" name="total_return_end" style="background-color:lightgray" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-3">
                                                             <div class="mb-3">
-                                                                <label class="form-label" for="currency_return_end">End
-                                                                    Total Currency (IDR)</label>
-                                                                <input value="" class="form-control"
-                                                                    id="currency_return_end" name="currency_return_end"
-                                                                    style="background-color:lightgray" readonly>
+                                                                <label class="form-label" for="currency_return_end">End Total Currency (IDR)</label>
+                                                                <input value="" class="form-control" id="currency_return_end" name="currency_return_end" style="background-color:lightgray" readonly>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -638,10 +545,8 @@
                                         <div class="p-4 border-top">
                                             <div class="row" id="note">
                                                 <div class="mb-3">
-                                                    <label class="form-label font-size-16 mb-1"
-                                                        for="ctc_note">Note</label>
-                                                    <p class="text-muted text-truncate mb-0">If there are certain
-                                                        conditions, please add notes</p>
+                                                    <label class="form-label font-size-16 mb-1" for="ctc_note">Note</label>
+                                                    <p class="text-muted text-truncate mb-0">If there are certain conditions, please add notes</p>
                                                     <textarea style="border-color: lightgray;" class="form-control" name="ctc_note" id="ctc_note"></textarea>
                                                 </div>
                                             </div>
@@ -654,8 +559,7 @@
                     {{-- Button --}}
                     <div class="row mb-4">
                         <div class="col text-end">
-                            <button type="button" onclick="history.back()" class="btn btn-outline-dark"><i
-                                    class="bx bx-x me-1"></i> Cancel</button>
+                            <button type="button" onclick="history.back()" class="btn btn-outline-dark"><i class="bx bx-x me-1"></i> Cancel</button>
                             <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save </button>
                         </div> <!-- end col -->
                     </div> <!-- end row-->
@@ -1833,13 +1737,7 @@
                     }
                 });
 
-                if (isValid) {
-                    // Jika validasi berhasil, kirim form
                     this.submit();
-                } else {
-                    // Jika tidak ada metode transaksi yang valid, tampilkan pesan error
-                    alert("Pilih metode transaksi dan isi Transaction ID.");
-                }
             });
         });
     </script>
@@ -1905,7 +1803,7 @@
                                     <select id="adult_nationality_${i}" name="adult_nationality_[]" class="nationality-select">
                                         <option value="">Select Nationality</option>
                                         @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -1953,7 +1851,7 @@
                                     <select id="child_nationality_${i}" name="child_nationality_[]" class="nationality-select">
                                         <option value="">Select Nationality</option>
                                         @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -2000,7 +1898,7 @@
                                     <select id="infant_nationality_${i}" name="infant_nationality_[]" class="nationality-select">
                                         <option value="">Select Nationality</option>
                                         @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
+                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
                                         @endforeach
                                     </select>
                                 </div>
