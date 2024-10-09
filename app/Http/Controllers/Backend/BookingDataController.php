@@ -111,7 +111,7 @@ class BookingDataController extends Controller
                 $returnSuffix = 'Z'; // Kode pulang
                 
                 $keys = array_keys($request->input('fbo_availability_id')); // Memecah array untuk mengambil nilai id dari availability
-
+                
                 $bookingDataDepart = new BookingData();
                 $bookingDataDepart->fbo_order_id = $contactData->ctc_order_id;
                 $bookingDataDepart->fbo_transaction_id = $request->fbo_transaction_id;
@@ -119,7 +119,7 @@ class BookingDataController extends Controller
                 $bookingDataDepart->fbo_availability_id = $keys[0];
                 $bookingDataDepart->fbo_trip_id;
                 $bookingDataDepart->fbo_transaction_status;
-                $bookingDataDepart->fbo_currency;
+                $bookingDataDepart->fbo_currency = $request -> fbo_currency;
                 $bookingDataDepart->fbo_payment_method;
                 $bookingDataDepart->fbo_payment_status;
                 $bookingDataDepart->fbo_trip_date;
@@ -165,7 +165,8 @@ class BookingDataController extends Controller
                 $bookingDataDepart->fbo_source;
                 $bookingDataDepart->fbo_updated_by;
                 // $bookingDataDepart->save();
-
+                
+                $keys = array_keys($request->input('fbo_availability_id_return')); // Memecah array untuk mengambil nilai id dari availability
                 $bookingDataReturn = new BookingData();
                 $bookingDataReturn->fbo_order_id = $contactData->ctc_order_id;
                 $bookingDataReturn->fbo_transaction_id = $request->fbo_transaction_id;
@@ -231,7 +232,7 @@ class BookingDataController extends Controller
                 // $bookingDataSingle->save();
             }
 
-            dd();
+            // dd($bookingDataDepart);
             // Commit transaksi jika semua proses berhasil
             DB::commit();
             return redirect()->route('data.view')->with('success', 'Data berhasil disimpan');
