@@ -2057,6 +2057,9 @@
                 $('.nationality-select').each(function() {
                     new TomSelect(this);
                 });
+
+                // Attach event listeners to update fbo_passenger when inputs change
+                attachInputListeners();
             }
 
             function savePassengerInfo() {
@@ -2092,18 +2095,34 @@
                     passengerInfo.push(`${name},${age},${gender},${nationality}`);
                 });
 
-                // Gabungkan semua informasi penumpang
+                // Gabungkan semua informasi penumpang dengan tanda ;
                 var combinedInfo = passengerInfo.join(';');
 
                 // Set nilai ke field fbo_passenger
                 $('#fbo_passenger').val(combinedInfo);
             }
 
-            // Inisialisasi update pertama kali saat halaman dimuat
+            function attachInputListeners() {
+                $('#adult_info input, #adult_info select').on('input change', function() {
+                    savePassengerInfo();
+                });
+
+                $('#child_info input, #child_info select').on('input change', function() {
+                    savePassengerInfo();
+                });
+
+                $('#infant_info input, #infant_info select').on('input change', function() {
+                    savePassengerInfo();
+                });
+            }
+
+            // Call updateInfo function when the DOM is ready
             updateInfo();
 
-            // Perbarui informasi setiap kali input jumlah dewasa, anak, atau bayi berubah
-            $('#fbo_adult, #fbo_child, #fbo_infant').on('change', updateInfo);
+            // Trigger updateInfo when the adult, child, or infant count changes
+            $('#fbo_adult, #fbo_child, #fbo_infant').on('change', function() {
+                updateInfo();
+            });
         });
     </script>
 
