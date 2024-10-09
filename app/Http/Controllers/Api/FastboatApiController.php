@@ -17,6 +17,8 @@ class FastboatApiController extends Controller
         $data = DataFastboat::all();
 
         return response()->json([
+            'status' => true,
+            'message' => 'Data retrieved successfully',
             'data' => $data,
         ], 200);
     }
