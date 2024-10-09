@@ -74,7 +74,7 @@ class BookingDataController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
 
         DB::beginTransaction();  // Memulai transaksi database
 
@@ -88,7 +88,7 @@ class BookingDataController extends Controller
             } else {
                 $ipAddress = $request->ip();
             }
-            
+
             // Simpan data kontak utama
             $contactData = new Contact();
             $contactData->ctc_order_id = $this->generateOrderId();
@@ -109,7 +109,7 @@ class BookingDataController extends Controller
             if ($request->has('switch')) {
                 $departSuffix = 'Y'; // Kode pergi
                 $returnSuffix = 'Z'; // Kode pulang
-                
+
                 $keys = array_keys($request->input('fbo_availability_id')); // Memecah array untuk mengambil nilai id dari availability
                 $availabilityId = $keys[0];
 
@@ -118,9 +118,18 @@ class BookingDataController extends Controller
                 $bookingDataDepart->fbo_transaction_id = $request->fbo_transaction_id;
                 $bookingDataDepart->fbo_booking_id = 'F' . $contactData->ctc_order_id . $departSuffix;
                 $bookingDataDepart->fbo_availability_id = $availabilityId;
-                $bookingDataDepart->fbo_trip_id;
+
+                // Mendapatkan id trip dari fast-boat availability
+                $trip = FastboatAvailability::find($availabilityId);
+                if ($trip) {
+                    // Mengambil fba_trip_id
+                    $bookingDataDepart->fbo_trip_id = $trip->fba_trip_id;
+                } else {
+                    // Menangani jika tidak ditemukan
+                    throw new \Exception("FastboatAvailability with ID {$availabilityId} not found.");
+                }
                 $bookingDataDepart->fbo_transaction_status;
-                $bookingDataDepart->fbo_currency = $request -> fbo_currency;
+                $bookingDataDepart->fbo_currency = $request->fbo_currency;
                 $bookingDataDepart->fbo_payment_method = $request->fbo_payment_method;
                 $bookingDataDepart->fbo_payment_status = $request->fbo_payment_status;
                 $bookingDataDepart->fbo_trip_date = $request->fbo_trip_date;
@@ -130,22 +139,43 @@ class BookingDataController extends Controller
                 $bookingDataDepart->fbo_adult_publish = $request->input("fbo_availability_id.$availabilityId.fbo_adult_publish");
                 $bookingDataDepart->fbo_child_publish = $request->input("fbo_availability_id.$availabilityId.fbo_child_publish");
                 $bookingDataDepart->fbo_total_publish = $request->input("fbo_availability_id.$availabilityId.fbo_total_publish");
-                $bookingDataDepart->fbo_adult_currency;
-                $bookingDataDepart->fbo_child_currency;
-                $bookingDataDepart->fbo_total_currency;
-                $bookingDataDepart->fbo_kurs;
+
+                // Mencari nilai kurs yang sesuai dengan fbo_currency
+                $currency = MasterCurrency::where('cy_code', $bookingDataDepart->fbo_currency)->first();
+
+                if (!$currency) {
+                    throw new \Exception("Rate {$bookingDataDepart->fbo_currency} not found.");
+                }
+                $bookingDataDepart->fbo_kurs = $currency->cy_rate;
+
+                $bookingDataDepart->fbo_adult_currency = round($bookingDataDepart->fbo_adult_publish / $bookingDataDepart->fbo_kurs);
+                $bookingDataDepart->fbo_child_currency = round($bookingDataDepart->fbo_child_publish / $bookingDataDepart->fbo_kurs);
+                $bookingDataDepart->fbo_total_currency = round($bookingDataDepart->fbo_total_publish / $bookingDataDepart->fbo_kurs);
                 $bookingDataDepart->fbo_discount = $request->input("fbo_availability_id.$availabilityId.fbo_dicount");
                 $bookingDataDepart->fbo_price_cut;
-                $bookingDataDepart->fbo_discount_total;
+                $bookingDataDepart->fbo_discount_total = $bookingDataDepart->fbo_discount + $bookingDataDepart->fbo_price_cut;
                 $bookingDataDepart->fbo_refund;
                 $bookingDataDepart->fbo_end_total = $request->fbo_end_total;
                 $bookingDataDepart->fbo_end_total_currency = $request->fbo_end_total_currency;
-                $bookingDataDepart->fbo_profit;
+                $bookingDataDepart->fbo_profit = $bookingDataDepart->fbo_end_total - $bookingDataDepart->fbo_total_nett;
                 $bookingDataDepart->fbo_passenger = $request->fbo_passenger;
                 $bookingDataDepart->fbo_adult = $request->fbo_adult;
                 $bookingDataDepart->fbo_child = $request->fbo_child;
                 $bookingDataDepart->fbo_infant = $request->fbo_infant;
-                $bookingDataDepart->fbo_company;
+
+                // Mendapatkan id company
+                if ($trip) {
+                    // Mengambil fba_trip_id
+                    $bookingDataDepart->fbo_trip_id = $trip->fba_trip_id;
+                
+                    // Mendapatkan ID company melalui relasi
+                    $companyId = $trip->trip->fastboat->company->cpn_id; // Asumsi ada relasi di model seperti yang dijelaskan di atas
+                    $bookingDataDepart->fbo_company = $companyId; // Simpan ID perusahaan di booking data
+                } else {
+                    // Menangani jika tidak ditemukan
+                    throw new \Exception("FastboatAvailability with ID {$availabilityId} not found.");
+                }
+                
                 $bookingDataDepart->fbo_fast_boat = $request->fbo_fast_boat;
                 $bookingDataDepart->fbo_departure_island;
                 $bookingDataDepart->fbo_departure_port = $request->fbo_departure_port;
@@ -166,7 +196,7 @@ class BookingDataController extends Controller
                 $bookingDataDepart->fbo_source = "back_office";
                 $bookingDataDepart->fbo_updated_by = Auth()->id();
                 // $bookingDataDepart->save();
-                
+
                 $keys = array_keys($request->input('fbo_availability_id_return')); // Memecah array untuk mengambil nilai id dari availability
                 $bookingDataReturn = new BookingData();
                 $bookingDataReturn->fbo_order_id = $contactData->ctc_order_id;
@@ -230,10 +260,12 @@ class BookingDataController extends Controller
                 $bookingDataSingle->fbo_transaction_id = $request->fbo_transaction_id;
                 $bookingDataSingle->fbo_booking_id = 'F' . $contactData->ctc_order_id . $singleSuffix;
                 $bookingDataSingle->fbo_availability_id = $keys[0];
+                $bookingDataSingle->fbo_currency = $request->fbo_currency;
+
                 // $bookingDataSingle->save();
             }
 
-            // dd($bookingDataDepart);
+            dd($bookingDataDepart);
             // Commit transaksi jika semua proses berhasil
             DB::commit();
             return redirect()->route('data.view')->with('success', 'Data berhasil disimpan');
@@ -439,7 +471,7 @@ class BookingDataController extends Controller
                 // Kolom untuk total publish
                 $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_total_publish]" value="' . $total_publish . '">';
                 $html .= number_format($total_publish, 0, ',', '.');
-                
+
                 // Kolom untuk adult nett dengan input
                 $html .= '<td><center>';
                 $html .= '<input type="hidden" name="fbo_availability_id[' . $avail->fba_id . '][fbo_adult_nett]" value="' . $avail->fba_adult_nett . '">';
@@ -797,7 +829,7 @@ class BookingDataController extends Controller
                 // Kolom untuk total publish
                 $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_total_publish]" value="' . $total_publish . '">';
                 $htmlReturn .= number_format($total_publish, 0, ',', '.');
-                
+
                 // Kolom untuk adult nett dengan input
                 $htmlReturn .= '<td><center>';
                 $htmlReturn .= '<input type="hidden" name="fbo_availability_id_return[' . $avail->fba_id . '][fbo_adult_nett]" value="' . $avail->fba_adult_nett . '">';
