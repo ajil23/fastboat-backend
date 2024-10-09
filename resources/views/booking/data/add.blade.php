@@ -73,13 +73,9 @@
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fbo_currency">Currency</label>
                                                         <select id="fbo_currency" name="fbo_currency">
-                                                            <option value="10" data-rate="1" data-code="IDR">Indonesia
-                                                                Rupiah (IDR)</option>
+                                                            <option value="10" data-rate="1" data-code="IDR">Indonesia Rupiah (IDR)</option>
                                                             @foreach ($currency as $item)
-                                                                <option value="{{ $item->cy_id }}"
-                                                                    data-rate="{{ $item->cy_rate }}"
-                                                                    data-code="{{ $item->cy_code }}">
-                                                                    {{ $item->cy_name }} ({{ $item->cy_code }})
+                                                                <option value="{{ $item->cy_code }}" data-rate="{{ $item->cy_rate }}" data-code="{{ $item->cy_code }}"> {{ $item->cy_name }} ({{ $item->cy_code }})
                                                                 </option>
                                                             @endforeach
                                                         </select>
@@ -89,12 +85,10 @@
                                                     <div class="mb-3">
                                                         <label class="form-label">Payment Status</label><br>
                                                         <label>
-                                                            <input type="radio" name="fbo_payment_status" value="paid"
-                                                                id="paid"> Paid
+                                                            <input type="radio" name="fbo_payment_status" value="paid" id="paid"> Paid
                                                         </label>
                                                         <label>
-                                                            <input type="radio" name="fbo_payment_status" value="unpaid"
-                                                                id="unpaid" checked="checked"> Unpaid
+                                                            <input type="radio" name="fbo_payment_status" value="unpaid" id="unpaid" checked="checked"> Unpaid
                                                         </label>
                                                     </div>
                                                 </div>
@@ -102,28 +96,21 @@
                                                 <!-- Payment Method -->
                                                 <div class="col-md-3">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_payment_method">Payment
-                                                            Method</label>
-                                                        <select id="fbo_payment_method" name="fbo_payment_method"
-                                                            class="form-control" disabled>
+                                                        <label class="form-label" for="fbo_payment_method">Payment Method</label>
+                                                        <select id="fbo_payment_method" name="fbo_payment_method" class="form-control" disabled>
                                                             <option value="">Select Payment Method</option>
                                                             @foreach ($payment_method as $item)
-                                                                <option value="{{ $item->py_value }}">{{ $item->py_name }}
-                                                                </option>
+                                                                <option value="{{ $item->py_value }}">{{ $item->py_name }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
 
                                                 <!-- Paypal Transaction ID -->
-                                                <div class="col-md-3 transaction-id" id="paypal_transaction_id"
-                                                    style="display: none;">
+                                                <div class="col-md-3 transaction-id" id="paypal_transaction_id" style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_transaction_id">Transaction
-                                                            ID</label>
-                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
-                                                            placeholder="Type Paypal Transaction ID" type="text"
-                                                            class="form-control">
+                                                        <label class="form-label" for="paypal_transaction_id">Transaction ID</label>
+                                                        <input id="paypal_transaction_id" name="fbo_transaction_id" placeholder="Type Paypal Transaction ID" type="text" class="form-control">
                                                     </div>
                                                 </div>
 
@@ -131,9 +118,9 @@
                                                 <div class="col-md-3 transaction-id" id="midtrans_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_transaction_id">Transaction
+                                                        <label class="form-label" for="midtrans_transaction_id">Transaction
                                                             ID</label>
-                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
+                                                        <input id="midtrans_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Midtrans Transaction ID" type="text"
                                                             class="form-control">
                                                     </div>
@@ -143,9 +130,9 @@
                                                 <div class="col-md-3 transaction-id" id="bank_transfer_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_transaction_id">Transaction
+                                                        <label class="form-label" for="bank_transfer_transaction_id">Transaction
                                                             ID</label>
-                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
+                                                        <input id="bank_transfer_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Bank Transaction ID" type="text"
                                                             class="form-control">
                                                     </div>
@@ -155,9 +142,9 @@
                                                 <div class="col-md-3 transaction-id" id="cash_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_transaction_id">Transaction
+                                                        <label class="form-label" for="cash_transaction_id">Transaction
                                                             ID</label>
-                                                        <input id="fbo_transaction_id" name="fbo_transaction_id"
+                                                        <input id="cash_transaction_id" name="fbo_transaction_id"
                                                             placeholder="Type Recipient" type="text"
                                                             class="form-control">
                                                     </div>
@@ -167,8 +154,8 @@
                                                 <div class="col-md-3 transaction-id" id="agent_transaction_id"
                                                     style="display: none;">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_transaction_id">Agent</label>
-                                                        <select id="fbo_transaction_id" name="fbo_transaction_id"
+                                                        <label class="form-label" for="agent_transaction_id">Agent</label>
+                                                        <select id="agent_transaction_id" name="fbo_transaction_id"
                                                             class="form-control">
                                                             <option value="">Select Agent</option>
                                                             <option value="Agen A">Agen A</option>
@@ -1806,25 +1793,54 @@
     </script>
 
     <script>
-        $('#fbo_payment_method').on('change', function() {
-            // Sembunyikan semua Transaction ID
-            $('.transaction-id').hide();
+        $(document).ready(function() {
+            // Saat payment method diubah
+            $('#fbo_payment_method').on('change', function() {
+                // Sembunyikan semua Transaction ID
+                $('.transaction-id').hide();
 
-            // Dapatkan nilai yang dipilih
-            var selectedMethod = $(this).val();
+                // Dapatkan nilai yang dipilih
+                var selectedMethod = $(this).val();
 
-            // Tampilkan Transaction ID berdasarkan pilihan
-            if (selectedMethod === 'paypal') {
-                $('#paypal_transaction_id').show();
-            } else if (selectedMethod === 'midtrans') {
-                $('#midtrans_transaction_id').show();
-            } else if (selectedMethod === 'bank_transfer') {
-                $('#bank_transfer_transaction_id').show();
-            } else if (selectedMethod === 'cash') {
-                $('#cash_transaction_id').show();
-            } else if (selectedMethod === 'agent') {
-                $('#agent_transaction_id').show();
-            }
+                // Tampilkan Transaction ID berdasarkan pilihan
+                if (selectedMethod === 'paypal') {
+                    $('#paypal_transaction_id').show();
+                } else if (selectedMethod === 'midtrans') {
+                    $('#midtrans_transaction_id').show();
+                } else if (selectedMethod === 'bank_transfer') {
+                    $('#bank_transfer_transaction_id').show();
+                } else if (selectedMethod === 'cash') {
+                    $('#cash_transaction_id').show();
+                } else if (selectedMethod === 'agent') {
+                    $('#agent_transaction_id').show();
+                }
+            });
+
+            // Saat form disubmit
+            $('form').submit(function(e) {
+                e.preventDefault(); // Mencegah submit form secara default
+                var isValid = false; // Flag untuk mengecek validasi
+
+                // Nonaktifkan semua input yang tidak terlihat (tersembunyi)
+                $('.transaction-id').each(function() {
+                    if ($(this).is(':hidden')) {
+                        // Disable input atau select pada elemen yang disembunyikan
+                        $(this).find('input, select').prop('disabled', true);
+                    } else {
+                        // Enable input atau select pada elemen yang terlihat
+                        $(this).find('input, select').prop('disabled', false);
+                        isValid = true; // Validasi berhasil jika ada input yang terlihat
+                    }
+                });
+
+                if (isValid) {
+                    // Jika validasi berhasil, kirim form
+                    this.submit();
+                } else {
+                    // Jika tidak ada metode transaksi yang valid, tampilkan pesan error
+                    alert("Pilih metode transaksi dan isi Transaction ID.");
+                }
+            });
         });
     </script>
 
