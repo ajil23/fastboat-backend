@@ -11,9 +11,11 @@ class PortApiController extends Controller
     public function index()
     {
         $data = MasterPort::all();
-  
+
         return response()->json([
-              'data' => $data,
+            'status' => true,
+            'message' => 'Data retrieved successfully',
+            'data' => $data,
         ], 200);
     }
 
@@ -44,5 +46,4 @@ class PortApiController extends Controller
         // Jika ditemukan, return data post
         return response()->json($data, 200);
     }
-
 }

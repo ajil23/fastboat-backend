@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AvailabilityApiController;
 use App\Http\Controllers\Api\FastboatApiController;
 use App\Http\Controllers\Api\PortApiController;
 use App\Models\DataFastboat;
@@ -30,4 +31,7 @@ Route::get('fast-boat/idn/{fb_slug_idn}', [FastboatApiController::class, 'show_i
 Route::get('port', [PortApiController::class, 'index']);
 Route::get('port/en/{prt_slug_en}', [PortApiController::class, 'show_en']);
 Route::get('port/idn/{prt_slug_idn}', [PortApiController::class, 'show_idn']);
+
+// availability
+Route::get('availability', [AvailabilityApiController::class, 'index']);
 
