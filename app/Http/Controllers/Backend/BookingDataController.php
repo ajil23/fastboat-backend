@@ -110,7 +110,7 @@ class BookingDataController extends Controller
                 $departSuffix = 'Y'; // Kode pergi
                 $returnSuffix = 'Z'; // Kode pulang
 
-                $keys = array_keys($request->input('fbo_availability_id')); // Memecah array untuk mengambil nilai id dari availability
+                $keys = array_keys($request->input('fbo_availability_id')); 
                 $availabilityId = $keys[0];
 
                 $bookingDataDepart = new BookingData();
@@ -169,20 +169,22 @@ class BookingDataController extends Controller
                     $bookingDataDepart->fbo_trip_id = $trip->fba_trip_id;
                 
                     // Mendapatkan ID company melalui relasi
-                    $companyId = $trip->trip->fastboat->company->cpn_id; // Asumsi ada relasi di model seperti yang dijelaskan di atas
-                    $bookingDataDepart->fbo_company = $companyId; // Simpan ID perusahaan di booking data
+                    $companyId = $trip->trip->fastboat->company->cpn_id;
+                    $bookingDataDepart->fbo_company = $companyId;
                 } else {
                     // Menangani jika tidak ditemukan
                     throw new \Exception("FastboatAvailability with ID {$availabilityId} not found.");
                 }
                 
+                // Dapatkan id availability untuk dapat mengisi islands dan arrival time
+                $avail = FastboatAvailability::find($availabilityId);
                 $bookingDataDepart->fbo_fast_boat = $request->fbo_fast_boat;
-                $bookingDataDepart->fbo_departure_island;
+                $bookingDataDepart->fbo_departure_island = $avail->trip->departure->prt_island;
                 $bookingDataDepart->fbo_departure_port = $request->fbo_departure_port;
                 $bookingDataDepart->fbo_departure_time = $request->fbo_departure_time;
-                $bookingDataDepart->fbo_arrival_island;
+                $bookingDataDepart->fbo_arrival_island = $avail->trip->arrival->prt_island;
                 $bookingDataDepart->fbo_arrival_port = $request->fbo_arrival_port;
-                $bookingDataDepart->fbo_arrival_time;
+                $bookingDataDepart->fbo_arrival_time = $avail->fba_arrival_time ?? $avail->trip->fbt_arrival_time;
                 $bookingDataDepart->fbo_checking_point;
                 $bookingDataDepart->fbo_mail_admin;
                 $bookingDataDepart->fbo_mail_client;
