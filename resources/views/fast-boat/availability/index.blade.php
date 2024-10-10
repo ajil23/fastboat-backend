@@ -163,7 +163,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Company</label>
                                         <select name="company" id="search-company">
-                                            <option value="">Select Company</option>
+                                            <option value="">~All Company~</option>
                                             @foreach ($company as $item)
                                             <option value="{{ $item->cpn_id }}" {{ old('company', request('company')) == $item->cpn_id ? 'selected' : '' }}>
                                                 {{ $item->cpn_name }}
@@ -176,7 +176,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Fast Boat</label>
                                         <select class="form-control" name="fastboat" id="fastboat-search">
-                                            <option value="">Select Fast Boat</option>
+                                            <option value="">~All Fast Boat~</option>
                                             @foreach ($fastboat as $item)
                                             <option value="{{ $item->fb_id }}" {{ old('fastboat', request('fastboat')) == $item->fb_id ? 'selected' : '' }}>
                                                 {{ $item->fb_name }}
@@ -189,7 +189,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Schedule</label>
                                         <select class="form-control" name="schedule" id="search-schedule">
-                                            <option value="">Select Schedule</option>
+                                            <option value="">~All Schedule~</option>
                                             @foreach ($schedule as $item)
                                             <option value="{{ $item->sch_id }}" {{ old('schedule', request('schedule')) == $item->sch_id ? 'selected' : '' }}>
                                                 {{ $item->sch_name }}
@@ -202,7 +202,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Route</label>
                                         <select name="route" id="search-route">
-                                            <option value="">Select Route</option>
+                                            <option value="">~All Route~</option>
                                             @foreach ($route as $item)
                                             <option value="{{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}" {{ old('route', request('route')) == $item->rt_dept_island . ' to ' . $item->rt_arrival_island ? 'selected' : '' }}>
                                                 {{ $item->rt_dept_island }} to {{ $item->rt_arrival_island }}
@@ -222,7 +222,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Departure</label>
                                         <select name="departure" id="search-departure">
-                                            <option value="">Select Departure Port</option>
+                                            <option value="">~All Departure Port~</option>
                                             @foreach ($departure as $item)
                                             <option value="{{ $item->prt_name_en }}" {{ old('departure', request('departure')) == $item->prt_name_en ? 'selected' : '' }}>
                                                 {{ $item->prt_name_en }}
@@ -235,7 +235,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Arrival</label>
                                         <select name="arrival" id="search-arrival">
-                                            <option value="">Select Arrival Port</option>
+                                            <option value="">~All Arrival Port~</option>
                                             @foreach ($arrival as $item)
                                             <option value="{{ $item->prt_name_en }}" {{ old('arrival', request('arrival')) == $item->prt_name_en ? 'selected' : '' }}>
                                                 {{ $item->prt_name_en }}
@@ -248,7 +248,7 @@
                                     <div class="mb-3">
                                         <label class="form-label">Dept time</label>
                                         <select name="dept_time" id="search-dept_time">
-                                            <option value="">Select Dept time</option>
+                                            <option value="">~All Dept time~</option>
                                             @foreach ($deptTime as $item)
                                             <option value="{{ date('H:i', strtotime($item->fbt_dept_time)) }}" {{ old('dept_time', request('dept_time')) == date('H:i', strtotime($item->fbt_dept_time)) ? 'selected' : '' }}>
                                                 {{ date('H:i', strtotime($item->fbt_dept_time)) }}
@@ -478,7 +478,6 @@
                     <span id="trip-title"></span><br>
                     <small class="bold-text" id="trip-date"></small>
                 </h5>
-
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
