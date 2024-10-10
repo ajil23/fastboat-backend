@@ -34,4 +34,5 @@ Route::get('port/idn/{prt_slug_idn}', [PortApiController::class, 'show_idn']);
 
 // availability
 Route::get('availability', [AvailabilityApiController::class, 'index']);
+Route::get('availability_search', [AvailabilityApiController::class, 'search'])->middleware('auth:sanctum');
 
