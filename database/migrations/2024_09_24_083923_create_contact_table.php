@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('ctc_phone');
             $table->unsignedBigInteger('ctc_nationality');
             $table->foreign('ctc_nationality')->references('nas_id')->on('masternationality')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('ctc_note');
+            $table->string('ctc_note')->nullable();
             $table->date('ctc_booking_date');
             $table->time('ctc_booking_time');
             $table->string('ctc_ip_address');
