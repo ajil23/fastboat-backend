@@ -77,24 +77,24 @@ class BookingDataController extends Controller
     {
         // dd($request);
         // Validasi inputan
-        $validator = Validator::make($request->all(), [
-            'ctc_order_id' => 'required',
-            'ctc_name' => 'required',
-            'ctc_email' => 'required',
-            'ctc_phone' => 'required',
-            'ctc_nationality' => 'required',
-            'ctc_booking_date' => 'required',
-            'ctc_booking_time' => 'required',
-        ]);
+        // $validator = Validator::make($request->all(), [
+        //     'ctc_order_id' => 'required',
+        //     'ctc_name' => 'required',
+        //     'ctc_email' => 'required',
+        //     'ctc_phone' => 'required',
+        //     'ctc_nationality' => 'required',
+        //     'ctc_booking_date' => 'required',
+        //     'ctc_booking_time' => 'required',
+        // ]);
 
         // Cek apakah validasi gagal
-        if ($validator->fails()) {
-            // Menambahkan pesan toast ke dalam session
-            toast('Validation failed! Please check your input.', 'error');
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+        // if ($validator->fails()) {
+        //     // Menambahkan pesan toast ke dalam session
+        //     toast('Validation failed! Please check your input.', 'error');
+        //     return redirect()->back()
+        //         ->withErrors($validator)
+        //         ->withInput();
+        // }
 
         DB::beginTransaction();  // Memulai transaksi database
 
@@ -125,139 +125,133 @@ class BookingDataController extends Controller
             $contactData->ctc_created_by = Auth()->id();
             // $contactData->save();
 
+            $departureSuffix = $request->has('switch') ? 'Y' : 'X'; // Menentukan apakah data depart berjenis one way atau round trip
+            $keys = array_keys($request->input('fbo_availability_id'));
+            $availabilityId = $keys[0];
+
+            $bookingDataDepart = new BookingData();
+            $bookingDataDepart->fbo_order_id = $contactData->ctc_order_id;
+            $bookingDataDepart->fbo_booking_id = 'F' . $contactData->ctc_order_id . $departureSuffix;
+            $bookingDataDepart->fbo_availability_id = $availabilityId;
+
+            // Mendapatkan id trip dari fast-boat availability
+            $trip = FastboatAvailability::find($availabilityId);
+
+            if ($trip) {
+                // Mengambil fba_trip_id
+                $bookingDataDepart->fbo_trip_id = $trip->fba_trip_id;
+            } else {
+                // Menangani jika tidak ditemukan
+                throw new \Exception("FastboatAvailability with ID {$availabilityId} not found.");
+            }
+
+            $fbo_payment_status = $request->fbo_payment_status;
+            $fbo_payment_method = $request->fbo_payment_method;
+            $fbo_transaction_id = $request->fbo_transaction_id;
+            if ($fbo_payment_status == 'unpaid') {
+                $bookingDataDepart->fbo_payment_method = "";
+                $bookingDataDepart->fbo_transaction_id = "";
+                $bookingDataDepart->fbo_payment_status = "";
+                $bookingDataDepart->fbo_transaction_status = "waiting";
+            } else {
+                if ($fbo_payment_method == 'paypal') {
+                    $bookingDataDepart->fbo_payment_method = "paypal";
+                    $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
+                    $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
+                    $bookingDataDepart->fbo_transaction_status = "accepted";
+                } elseif ($fbo_payment_method == 'midtrans') {
+                    $bookingDataDepart->fbo_payment_method = "midtrans";
+                    $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
+                    $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
+                    $bookingDataDepart->fbo_transaction_status = "accepted";
+                } elseif ($fbo_payment_method == 'bank_transfer') {
+                    $bookingDataDepart->fbo_payment_method = "bank transfer";
+                    $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
+                    $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
+                    $bookingDataDepart->fbo_transaction_status = "accepted";
+                } elseif ($fbo_payment_method == 'pak_anang') {
+                    $bookingDataDepart->fbo_payment_method = "pak anang";
+                    $bookingDataDepart->fbo_transaction_id = "recived by mr. anang";
+                    $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
+                    $bookingDataDepart->fbo_transaction_status = "accepted";
+                } elseif ($fbo_payment_method == 'pay_on_port') {
+                    $bookingDataDepart->fbo_payment_method = "collect";
+                    $bookingDataDepart->fbo_transaction_id = "collect";
+                    $bookingDataDepart->fbo_payment_status = "unpaid";
+                    $bookingDataDepart->fbo_transaction_status = "accepted";
+                } elseif ($fbo_payment_method == 'cash') {
+                    $bookingDataDepart->fbo_payment_method = "cash";
+                    $bookingDataDepart->fbo_transaction_id = "recived by " . $fbo_transaction_id;
+                    $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
+                    $bookingDataDepart->fbo_transaction_status = "accepted";
+                } else {
+                    $bookingDataDepart->fbo_payment_method = "gilitransfers agen";
+                    $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
+                    $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
+                    $bookingDataDepart->fbo_transaction_status = "accepted";
+                }
+            }
+
+            $bookingDataDepart->fbo_currency = $request->fbo_currency;
+            $bookingDataDepart->fbo_trip_date = $request->fbo_trip_date;
+            $bookingDataDepart->fbo_adult_nett = $request->input("fbo_availability_id.$availabilityId.fbo_adult_nett");
+            $bookingDataDepart->fbo_child_nett = $request->input("fbo_availability_id.$availabilityId.fbo_child_nett");
+            $bookingDataDepart->fbo_total_nett = $request->input("fbo_availability_id.$availabilityId.fbo_total_nett");
+            $bookingDataDepart->fbo_adult_publish = $request->input("fbo_availability_id.$availabilityId.fbo_adult_publish");
+            $bookingDataDepart->fbo_child_publish = $request->input("fbo_availability_id.$availabilityId.fbo_child_publish");
+            $bookingDataDepart->fbo_total_publish = $request->input("fbo_availability_id.$availabilityId.fbo_total_publish");
+
+            // Mencari nilai kurs yang sesuai dengan fbo_currency
+            $currency = MasterCurrency::where('cy_code', $bookingDataDepart->fbo_currency)->first();
+
+            if (!$currency) {
+                throw new \Exception("Rate {$bookingDataDepart->fbo_currency} not found.");
+            }
+            $bookingDataDepart->fbo_kurs = $currency->cy_rate;
+
+            $bookingDataDepart->fbo_passenger = $request->fbo_passenger;
+            $bookingDataDepart->fbo_adult = $request->fbo_adult;
+            $bookingDataDepart->fbo_child = $request->fbo_child;
+            $bookingDataDepart->fbo_infant = $request->fbo_infant;
+            $bookingDataDepart->fbo_adult_currency = round($request->price_adult / $bookingDataDepart->fbo_kurs);
+            $bookingDataDepart->fbo_child_currency = round($request->price_child / $bookingDataDepart->fbo_kurs);
+            $bookingDataDepart->fbo_total_currency = round(($bookingDataDepart->fbo_adult_currency * $bookingDataDepart->fbo_adult) + ($bookingDataDepart->fbo_child_currency * $bookingDataDepart->fbo_child));
+            $discount = $request->input("fbo_availability_id.$availabilityId.fbo_dicount");
+            $bookingDataDepart->fbo_discount = $discount * ($bookingDataDepart->fbo_adult + $bookingDataDepart->fbo_child);
+            $bookingDataDepart->fbo_price_cut = ((($bookingDataDepart->fbo_adult_publish - $request->price_adult) * $bookingDataDepart->fbo_adult) + (($bookingDataDepart->fbo_child_publish - $request->price_child) * $bookingDataDepart->fbo_child));
+            $bookingDataDepart->fbo_discount_total = $bookingDataDepart->fbo_discount + $bookingDataDepart->fbo_price_cut;
+            $bookingDataDepart->fbo_refund = "";
+            $bookingDataDepart->fbo_end_total = $request->fbo_end_total;
+            $bookingDataDepart->fbo_end_total_currency = $request->fbo_end_total_currency;
+            $bookingDataDepart->fbo_profit = $bookingDataDepart->fbo_end_total - $bookingDataDepart->fbo_total_nett;
+            $bookingDataDepart->fbo_fast_boat = $request->fbo_fast_boat;
+            $bookingDataDepart->fbo_departure_island = $trip->trip->departure->island->isd_name;
+            $bookingDataDepart->fbo_departure_port = $request->fbo_departure_port;
+            $bookingDataDepart->fbo_departure_time = $request->fbo_departure_time;
+            $bookingDataDepart->fbo_arrival_island = $trip->trip->arrival->island->isd_name;
+            $bookingDataDepart->fbo_arrival_port = $request->fbo_arrival_port;
+            $bookingDataDepart->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
+            $bookingDataDepart->fbo_checking_point;
+            $bookingDataDepart->fbo_mail_admin = "";
+            $bookingDataDepart->fbo_mail_client = "";
+            $bookingDataDepart->fbo_pickup = $request->fbo_pickup;
+            $bookingDataDepart->fbo_dropoff = $request->fbo_dropoff;
+            $bookingDataDepart->fbo_specific_pickup = $request->fbo_specific_pickup;
+            $bookingDataDepart->fbo_specific_dropoff = $request->fbo_specific_dropoff;
+            $bookingDataDepart->fbo_contact_pickup = $request->fbo_contact_pickup;
+            $bookingDataDepart->fbo_contact_dropoff = $request->fbo_contact_dropoff;
+            $bookingDataDepart->fbo_log;
+            $bookingDataDepart->fbo_source = "backoffice";
+            $bookingDataDepart->fbo_updated_by = Auth()->id();
+            // $bookingDataDepart->save();
+
             // Menentukan tipe perjalanan, apakah sekali jalan atau pulang pergi
             if ($request->has('switch')) {
-                $departSuffix = 'Y'; // Kode pergi
-                $returnSuffix = 'Z'; // Kode pulang
-
-                $keys = array_keys($request->input('fbo_availability_id'));
-                $availabilityId = $keys[0];
-
-                // Depart
-                $bookingDataDepart = new BookingData();
-                $bookingDataDepart->fbo_order_id = $contactData->ctc_order_id;
-                $bookingDataDepart->fbo_booking_id = 'F' . $contactData->ctc_order_id . $departSuffix;
-                $bookingDataDepart->fbo_availability_id = $availabilityId;
-
-                // Mendapatkan id trip dari fast-boat availability
-                $trip = FastboatAvailability::find($availabilityId);
-                $avail = FastboatAvailability::find($availabilityId);
-
-                if ($trip) {
-                    // Mengambil fba_trip_id
-                    $bookingDataDepart->fbo_trip_id = $trip->fba_trip_id;
-                } else {
-                    // Menangani jika tidak ditemukan
-                    throw new \Exception("FastboatAvailability with ID {$availabilityId} not found.");
-                }
-
-                $fbo_payment_status = $request->fbo_payment_status;
-                $fbo_payment_method = $request->fbo_payment_method;
-                $fbo_transaction_id = $request->fbo_transaction_id;
-                $fbo_transaction_status = '';
-                if ($fbo_payment_status == 'unpaid') {
-                    $bookingDataDepart->fbo_payment_method = "";
-                    $bookingDataDepart->fbo_transaction_id = "";
-                    $bookingDataDepart->fbo_payment_status = "";
-                    $bookingDataDepart->fbo_transaction_status = "waiting";
-                } else {
-                    if ($fbo_payment_method == 'paypal') {
-                        $bookingDataDepart->fbo_payment_method = "paypal";
-                        $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
-                        $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
-                        $bookingDataDepart->fbo_transaction_status = "accepted";
-                    } elseif ($fbo_payment_method == 'midtrans') {
-                        $bookingDataDepart->fbo_payment_method = "midtrans";
-                        $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
-                        $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
-                        $bookingDataDepart->fbo_transaction_status = "accepted";
-                    } elseif ($fbo_payment_method == 'bank_transfer') {
-                        $bookingDataDepart->fbo_payment_method = "bank transfer";
-                        $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
-                        $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
-                        $bookingDataDepart->fbo_transaction_status = "accepted";
-                    } elseif ($fbo_payment_method == 'pak_anang') {
-                        $bookingDataDepart->fbo_payment_method = "pak anang";
-                        $bookingDataDepart->fbo_transaction_id = "recived by mr. anang";
-                        $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
-                        $bookingDataDepart->fbo_transaction_status = "accepted";
-                    } elseif ($fbo_payment_method == 'pay_on_port') {
-                        $bookingDataDepart->fbo_payment_method = "collect";
-                        $bookingDataDepart->fbo_transaction_id = "collect";
-                        $bookingDataDepart->fbo_payment_status = "unpaid";
-                        $bookingDataDepart->fbo_transaction_status = "accepted";
-                    } elseif ($fbo_payment_method == 'cash') {
-                        $bookingDataDepart->fbo_payment_method = "cash";
-                        $bookingDataDepart->fbo_transaction_id = "recived by " . $fbo_transaction_id;
-                        $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
-                        $bookingDataDepart->fbo_transaction_status = "accepted";
-                    } else {
-                        $bookingDataDepart->fbo_payment_method = "gilitransfers agen";
-                        $bookingDataDepart->fbo_transaction_id = $fbo_transaction_id;
-                        $bookingDataDepart->fbo_payment_status = $fbo_payment_status;
-                        $bookingDataDepart->fbo_transaction_status = "accepted";
-                    }
-                }
-
-                $bookingDataDepart->fbo_currency = $request->fbo_currency;
-                $bookingDataDepart->fbo_trip_date = $request->fbo_trip_date;
-                $bookingDataDepart->fbo_adult_nett = $request->input("fbo_availability_id.$availabilityId.fbo_adult_nett");
-                $bookingDataDepart->fbo_child_nett = $request->input("fbo_availability_id.$availabilityId.fbo_child_nett");
-                $bookingDataDepart->fbo_total_nett = $request->input("fbo_availability_id.$availabilityId.fbo_total_nett");
-                $bookingDataDepart->fbo_adult_publish = $request->input("fbo_availability_id.$availabilityId.fbo_adult_publish");
-                $bookingDataDepart->fbo_child_publish = $request->input("fbo_availability_id.$availabilityId.fbo_child_publish");
-                $bookingDataDepart->fbo_total_publish = $request->input("fbo_availability_id.$availabilityId.fbo_total_publish");
-
-                // Mencari nilai kurs yang sesuai dengan fbo_currency
-                $currency = MasterCurrency::where('cy_code', $bookingDataDepart->fbo_currency)->first();
-
-                if (!$currency) {
-                    throw new \Exception("Rate {$bookingDataDepart->fbo_currency} not found.");
-                }
-                $bookingDataDepart->fbo_kurs = $currency->cy_rate;
-
-                $bookingDataDepart->fbo_passenger = $request->fbo_passenger;
-                $bookingDataDepart->fbo_adult = $request->fbo_adult;
-                $bookingDataDepart->fbo_child = $request->fbo_child;
-                $bookingDataDepart->fbo_infant = $request->fbo_infant;
-                $bookingDataDepart->fbo_adult_currency = round($request->price_adult / $bookingDataDepart->fbo_kurs);
-                $bookingDataDepart->fbo_child_currency = round($request->price_child / $bookingDataDepart->fbo_kurs);
-                $bookingDataDepart->fbo_total_currency = round(($bookingDataDepart->fbo_adult_currency * $bookingDataDepart->fbo_adult) + ($bookingDataDepart->fbo_child_currency * $bookingDataDepart->fbo_child));
-                $discount = $request->input("fbo_availability_id.$availabilityId.fbo_dicount");
-                $bookingDataDepart->fbo_discount = $discount * ($bookingDataDepart->fbo_adult + $bookingDataDepart->fbo_child);
-                $bookingDataDepart->fbo_price_cut = ((($bookingDataDepart->fbo_adult_publish - $request->price_adult) * $bookingDataDepart->fbo_adult) + (($bookingDataDepart->fbo_child_publish - $request->price_child) * $bookingDataDepart->fbo_child));
-                $bookingDataDepart->fbo_discount_total = $bookingDataDepart->fbo_discount + $bookingDataDepart->fbo_price_cut;
-                $bookingDataDepart->fbo_refund = "";
-                $bookingDataDepart->fbo_end_total = $request->fbo_end_total;
-                $bookingDataDepart->fbo_end_total_currency = $request->fbo_end_total_currency;
-                $bookingDataDepart->fbo_profit = $bookingDataDepart->fbo_end_total - $bookingDataDepart->fbo_total_nett;
-                $bookingDataDepart->fbo_fast_boat = $request->fbo_fast_boat;
-                $bookingDataDepart->fbo_departure_island = $trip->trip->departure->island->isd_name;
-                $bookingDataDepart->fbo_departure_port = $request->fbo_departure_port;
-                $bookingDataDepart->fbo_departure_time = $request->fbo_departure_time;
-                $bookingDataDepart->fbo_arrival_island = $trip->trip->arrival->island->isd_name;
-                $bookingDataDepart->fbo_arrival_port = $request->fbo_arrival_port;
-                $bookingDataDepart->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
-                $bookingDataDepart->fbo_checking_point;
-                $bookingDataDepart->fbo_mail_admin = "";
-                $bookingDataDepart->fbo_mail_client = "";
-                $bookingDataDepart->fbo_pickup = $request->fbo_pickup;
-                $bookingDataDepart->fbo_dropoff = $request->fbo_dropoff;
-                $bookingDataDepart->fbo_specific_pickup = $request->fbo_specific_pickup;
-                $bookingDataDepart->fbo_specific_dropoff = $request->fbo_specific_dropoff;
-                $bookingDataDepart->fbo_contact_pickup = $request->fbo_contact_pickup;
-                $bookingDataDepart->fbo_contact_dropoff = $request->fbo_contact_dropoff;
-                $bookingDataDepart->fbo_log;
-                $bookingDataDepart->fbo_source = "backoffice";
-                $bookingDataDepart->fbo_updated_by = Auth()->id();
-                // $bookingDataDepart->save();
-
-                // Return
                 $keys = array_keys($request->input('fbo_availability_id_return')); // Memecah array untuk mengambil nilai id dari availability
                 $bookingDataReturn = new BookingData();
                 $bookingDataReturn->fbo_order_id = $contactData->ctc_order_id;
                 $bookingDataReturn->fbo_transaction_id = $request->fbo_transaction_id;
-                $bookingDataReturn->fbo_booking_id = 'F' . $contactData->ctc_order_id . $returnSuffix;
+                $bookingDataReturn->fbo_booking_id = 'F' . $contactData->ctc_order_id . 'Z';
                 $bookingDataReturn->fbo_availability_id = $keys[0];
                 $bookingDataReturn->fbo_trip_id;
                 $bookingDataReturn->fbo_transaction_status;
@@ -307,18 +301,6 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_source;
                 $bookingDataReturn->fbo_updated_by;
                 // $bookingDataReturn->save();
-            } else {
-                $singleSuffix = 'X'; // Kode pergi
-                $keys = array_keys($request->input('fbo_availability_id')); // Memecah array untuk mengambil nilai id dari availability
-
-                $bookingDataSingle = new BookingData();
-                $bookingDataSingle->fbo_order_id = $contactData->ctc_order_id;
-                $bookingDataSingle->fbo_transaction_id = $request->fbo_transaction_id;
-                $bookingDataSingle->fbo_booking_id = 'F' . $contactData->ctc_order_id . $singleSuffix;
-                $bookingDataSingle->fbo_availability_id = $keys[0];
-                $bookingDataSingle->fbo_currency = $request->fbo_currency;
-
-                // $bookingDataSingle->save();
             }
 
             dd($bookingDataDepart);
