@@ -85,7 +85,6 @@ class BookingDataController extends Controller
             'ctc_nationality' => 'required',
             'ctc_booking_date' => 'required',
             'ctc_booking_time' => 'required',
-            'fbt_arrival_time' => 'required',
         ]);
 
         // Cek apakah validasi gagal
