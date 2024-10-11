@@ -68,7 +68,7 @@ class BookingDataController extends Controller
         if (implode('', $characters) == str_repeat('A', count($characters))) {
             array_unshift($characters, 'A');
         }
-
+        
         // Gabungkan karakter menjadi string lagi
         return implode('', $characters);
     }
@@ -96,12 +96,13 @@ class BookingDataController extends Controller
         //         ->withInput();
         // }
 
+        
         DB::beginTransaction();  // Memulai transaksi database
-
+        
         try {
             // Mendapatkan IP address
             $ipAddress = $request->ip(); // IP Publik pengguna
-
+            
             // Jika berada di belakang proxy, coba ambil IP dari X-Forwarded-For
             if ($request->server('HTTP_X_FORWARDED_FOR')) {
                 $ipAddress = $request->server('HTTP_X_FORWARDED_FOR');
@@ -109,6 +110,9 @@ class BookingDataController extends Controller
                 $ipAddress = $request->ip();
             }
 
+            // Total penumpang
+            $totalPassanger = $request->fbo_adult + $request->fbo_child;
+            
             // Simpan data kontak utama
             $contactData = new Contact();
             $contactData->ctc_order_id = $this->generateOrderId();
@@ -116,19 +120,27 @@ class BookingDataController extends Controller
             $contactData->ctc_email = $request->ctc_email;
             $contactData->ctc_phone = $request->ctc_phone;
             $contactData->ctc_nationality = $request->ctc_nationality;
-            $contactData->ctc_note = $request->ctc_note;
+            $contactData->ctc_note = '';
+            $contactData->ctc_order_type = 'F';
             $contactData->ctc_booking_date = Carbon::now()->toDateString();  // Mengambil tanggal saat ini
             $contactData->ctc_booking_time = Carbon::now()->toTimeString();
             $contactData->ctc_ip_address = $ipAddress;
             $contactData->ctc_browser = $request->header('User-Agent');
             $contactData->ctc_updated_by = Auth()->id();
             $contactData->ctc_created_by = Auth()->id();
-            // $contactData->save();
+            $contactData->save();
 
             $departureSuffix = $request->has('switch') ? 'Y' : 'X'; // Menentukan apakah data depart berjenis one way atau round trip
             $keys = array_keys($request->input('fbo_availability_id'));
             $availabilityId = $keys[0];
 
+            // Pengecekan ketersediaan stok
+            $stokDataDepart = FastboatAvailability::where('fba_id', $availabilityId)->lockForUpdate()->first();
+            if ($stokDataDepart->fba_stock < $totalPassanger  + 1) {
+                return response()->json(['message' => 'Ticket stock is low'], 400);
+            }
+
+            // Membuat data Booking
             $bookingDataDepart = new BookingData();
             $bookingDataDepart->fbo_order_id = $contactData->ctc_order_id;
             $bookingDataDepart->fbo_booking_id = 'F' . $contactData->ctc_order_id . $departureSuffix;
@@ -243,9 +255,13 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_log;
             $bookingDataDepart->fbo_source = "backoffice";
             $bookingDataDepart->fbo_updated_by = Auth()->id();
-            // $bookingDataDepart->save();
+            $bookingDataDepart->save();
 
-            // Menentukan tipe perjalanan, apakah sekali jalan atau pulang pergi
+            // Pengurangan stok di availability
+            $stokDataDepart->fba_stock -= $totalPassanger;
+            $stokDataDepart->save();
+
+            // Membuat data Booking untuk return
             if ($request->has('switch')) {
                 $keys = array_keys($request->input('fbo_availability_id_return')); // Memecah array untuk mengambil nilai id dari availability
                 $availabilityReturnId = $keys[0];
@@ -320,20 +336,21 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_adult_publish = $request->input("fbo_availability_id_return.$availabilityReturnId.fbo_adult_publish");
                 $bookingDataReturn->fbo_child_publish = $request->input("fbo_availability_id_return.$availabilityReturnId.fbo_child_publish");
                 $bookingDataReturn->fbo_total_publish = $request->input("fbo_availability_id_return.$availabilityReturnId.fbo_total_publish");
-                $bookingDataReturn->fbo_adult_currency = round($request->adult_return_publish / $bookingDataDepart->fbo_kurs);
-                $bookingDataReturn->fbo_child_currency = round($request->child_return_publish / $bookingDataDepart->fbo_kurs);
-                $bookingDataReturn->fbo_total_currency = round($request->total_return_end / $bookingDataDepart->fbo_kurs);
-                $bookingDataReturn->fbo_discount;
-                $bookingDataReturn->fbo_price_cut;
-                $bookingDataReturn->fbo_discount_total;
-                $bookingDataReturn->fbo_refund;
-                $bookingDataReturn->fbo_end_total;
-                $bookingDataReturn->fbo_end_total_currency;
-                $bookingDataReturn->fbo_profit;
-                $bookingDataReturn->fbo_passenger = $request->fbo_passenger;
                 $bookingDataReturn->fbo_adult = $request->fbo_adult;
                 $bookingDataReturn->fbo_child = $request->fbo_child;
                 $bookingDataReturn->fbo_infant = $request->fbo_infant;
+                $bookingDataReturn->fbo_adult_currency = round($request->adult_return_publish / $bookingDataDepart->fbo_kurs);
+                $bookingDataReturn->fbo_child_currency = round($request->child_return_publish / $bookingDataDepart->fbo_kurs);
+                $bookingDataReturn->fbo_total_currency = round($request->total_return_end / $bookingDataDepart->fbo_kurs);
+                $discountReturn = $request->input("fbo_availability_id_return.$availabilityReturnId.fbo_discount");
+                $bookingDataReturn->fbo_discount = $discountReturn * ($bookingDataReturn->fbo_adult + $bookingDataReturn->fbo_child);
+                $bookingDataReturn->fbo_price_cut = ((($bookingDataReturn->fbo_adult_publish - $request->adult_return_publish) * $bookingDataReturn->fbo_adult) + (($bookingDataReturn->fbo_child_publish - $request->child_return_publish) * $bookingDataReturn->fbo_child));
+                $bookingDataReturn->fbo_discount_total = $bookingDataReturn->fbo_discount + $bookingDataReturn->fbo_price_cut;
+                $bookingDataReturn->fbo_refund = "";
+                $bookingDataReturn->fbo_end_total = $request->total_teturn_end;
+                $bookingDataReturn->fbo_end_total_currency = $request->currency_return_end;
+                $bookingDataReturn->fbo_profit = $bookingDataReturn->fbo_end_total - $bookingDataReturn->fbo_total_nett;
+                $bookingDataReturn->fbo_passenger = $request->fbo_passenger;
                 $bookingDataReturn->fbo_fast_boat = $request->fbo_fast_boat_return;
                 $bookingDataReturn->fbo_departure_island = $trip->trip->departure->island->isd_name;
                 $bookingDataReturn->fbo_departure_port = $request->departure_return_port;
@@ -353,10 +370,10 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_log;
                 $bookingDataReturn->fbo_source = "backoffice";
                 $bookingDataReturn->fbo_updated_by = Auth()->id();
-                // $bookingDataReturn->save();
+                $bookingDataReturn->save();
             }
 
-            dd($bookingDataReturn);
+            // dd($totalPassanger);
             // Commit transaksi jika semua proses berhasil
             DB::commit();
             return redirect()->route('data.view')->with('success', 'Data berhasil disimpan');
