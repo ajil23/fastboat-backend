@@ -57,7 +57,7 @@
                                                         <select id="ctc_nationality" name="ctc_nationality">
                                                             <option value="">Select Nationality</option>
                                                             @foreach ($nationality as $item)
-                                                                <option value="{{ $item->nas_country }}">{{ $item->nas_country }} </option>
+                                                                <option value="{{ $item->nas_id }}">{{ $item->nas_country }} </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -1803,7 +1803,7 @@
                                     <select id="adult_nationality_${i}" name="adult_nationality_[]" class="nationality-select">
                                         <option value="">Select Nationality</option>
                                         @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
+                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -1851,7 +1851,7 @@
                                     <select id="child_nationality_${i}" name="child_nationality_[]" class="nationality-select">
                                         <option value="">Select Nationality</option>
                                         @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
+                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -1898,7 +1898,7 @@
                                     <select id="infant_nationality_${i}" name="infant_nationality_[]" class="nationality-select">
                                         <option value="">Select Nationality</option>
                                         @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
+                                        <option value="{{ $item->nas_id }}">{{ $item->nas_country }}</option>
                                         @endforeach
                                     </select>
                                 </div>
