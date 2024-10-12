@@ -126,13 +126,7 @@ class BookingDataController extends Controller
             $departureSuffix = $request->has('switch') ? 'Y' : 'X'; // Menentukan apakah data depart berjenis one way atau round trip
             $keys = array_keys($request->input('fbo_availability_id'));
             $availabilityId = $keys[0];
-    
-            // Pengecekan ketersediaan stok sekaligus penanganan race condition
-            $stokDataDepart = FastboatAvailability::where('fba_id', $availabilityId)->lockForUpdate()->first();
-            if ($stokDataDepart->fba_stock < $totalPassenger  + 1) {
-                return response()->json(['message' => 'Ticket stock is low'], 400);
-            }
-    
+            
             // Membuat data Booking
             $bookingDataDepart = new BookingData();
             $bookingDataDepart->fbo_order_id = $contactId;
@@ -141,7 +135,7 @@ class BookingDataController extends Controller
     
             // Mendapatkan id trip dari fast-boat availability
             $trip = FastboatAvailability::find($availabilityId);
-    
+            
             if ($trip) {
                 // Mengambil fba_trip_id
                 $bookingDataDepart->fbo_trip_id = $trip->fba_trip_id;
@@ -251,16 +245,23 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_updated_by = Auth()->id();
             $bookingDataDepart->save();
             
+            // Pengecekan ketersediaan stok sekaligus penanganan race condition
+            $stokDataDepart = FastboatAvailability::where('fba_id', $availabilityId)->lockForUpdate()->first();
+            if ($stokDataDepart->fba_stock < $totalPassenger  + 1) {
+                return response()->json(['message' => 'Ticket stock is low'], 400);
+            }
+            
             // Pengurangan stok di availability
             $stokDataDepart->fba_stock -= $totalPassenger;
             $stokDataDepart->save();
+            
             
             // Membuat data Booking untuk return
             if ($request->has('switch')) {
                 $keys = array_keys($request->input('fbo_availability_id_return')); // Memecah array untuk mengambil nilai id dari availability
                 $availabilityReturnId = $keys[0];
                 $bookingDataReturn = new BookingData();
-                $bookingDataReturn->fbo_order_id = $contactData->ctc_order_id;
+                $bookingDataReturn->fbo_order_id = $contactId;
                 $bookingDataReturn->fbo_booking_id = 'F' . $contactData->ctc_order_id . 'Z';
                 $bookingDataReturn->fbo_availability_id = $availabilityReturnId;
 
@@ -341,18 +342,19 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_price_cut = ((($bookingDataReturn->fbo_adult_publish - $request->adult_return_publish) * $bookingDataReturn->fbo_adult) + (($bookingDataReturn->fbo_child_publish - $request->child_return_publish) * $bookingDataReturn->fbo_child));
                 $bookingDataReturn->fbo_discount_total = $bookingDataReturn->fbo_discount + $bookingDataReturn->fbo_price_cut;
                 $bookingDataReturn->fbo_refund = "";
-                $bookingDataReturn->fbo_end_total = $request->total_teturn_end;
+                $bookingDataReturn->fbo_end_total = $request->fbo_end_total;
                 $bookingDataReturn->fbo_end_total_currency = $request->currency_return_end;
                 $bookingDataReturn->fbo_profit = $bookingDataReturn->fbo_end_total - $bookingDataReturn->fbo_total_nett;
                 $bookingDataReturn->fbo_passenger = $request->fbo_passenger;
-                $bookingDataReturn->fbo_fast_boat = $request->fbo_fast_boat_return;
-                $bookingDataReturn->fbo_departure_island = $trip->trip->departure->island->isd_name;
-                $bookingDataReturn->fbo_departure_port = $request->departure_return_port;
-                $bookingDataReturn->fbo_departure_time = $request->fbo_departure_time_return;
-                $bookingDataReturn->fbo_arrival_island = $trip->trip->arrival->island->isd_name;
-                $bookingDataReturn->fbo_arrival_port = $request->arrival_return_port;
+                $bookingDataReturn->fbo_fast_boat = $trip->trip->fastboat->fb_id;
+                $bookingDataReturn->fbo_company = $trip->trip->fastboat->company->cpn_id;
+                $bookingDataReturn->fbo_departure_island = $trip->trip->departure->island->isd_id;
+                $bookingDataReturn->fbo_departure_port = $trip->trip->departure->prt_id;
+                $bookingDataReturn->fbo_departure_time = $request->fbo_departure_time;
+                $bookingDataReturn->fbo_arrival_island = $trip->trip->arrival->island->isd_id;
+                $bookingDataReturn->fbo_arrival_port = $trip->trip->arrival->prt_id;
                 $bookingDataReturn->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
-                $bookingDataReturn->fbo_checking_point;
+                $bookingDataReturn->fbo_checking_point = 1;
                 $bookingDataReturn->fbo_mail_admin = "";
                 $bookingDataReturn->fbo_mail_client = "";
                 $bookingDataReturn->fbo_pickup = $request->fbo_pickup_return;
@@ -365,9 +367,18 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_source = "backoffice";
                 $bookingDataReturn->fbo_updated_by = Auth()->id();
                 $bookingDataReturn->save();
+
+                 // Pengecekan ketersediaan stok sekaligus penanganan race condition
+                $stokDataReturn = FastboatAvailability::where('fba_id', $availabilityReturnId)->lockForUpdate()->first();
+                if ($stokDataReturn->fba_stock < $totalPassenger  + 1) {
+                    return response()->json(['message' => 'Ticket stock is low'], 400);
+                }
+                
+                // Pengurangan stok di availability
+                $stokDataReturn->fba_stock -= $totalPassenger;
+                $stokDataReturn->save();
             }
 
-            // dd($totalPassanger);
             // Commit transaksi jika semua proses berhasil
             DB::commit();
             toast('Data booking as been added!', 'success');
