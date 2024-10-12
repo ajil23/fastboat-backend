@@ -75,44 +75,24 @@ class BookingDataController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
-        // Validasi inputan
-        // $validator = Validator::make($request->all(), [
-        //     'ctc_order_id' => 'required',
-        //     'ctc_name' => 'required',
-        //     'ctc_email' => 'required',
-        //     'ctc_phone' => 'required',
-        //     'ctc_nationality' => 'required',
-        //     'ctc_booking_date' => 'required',
-        //     'ctc_booking_time' => 'required',
-        // ]);
-
-        // Cek apakah validasi gagal
-        // if ($validator->fails()) {
-        //     // Menambahkan pesan toast ke dalam session
-        //     toast('Validation failed! Please check your input.', 'error');
-        //     return redirect()->back()
-        //         ->withErrors($validator)
-        //         ->withInput();
-        // }
-
-
+        // dd($bookingDataDepart);
+        
         DB::beginTransaction();  // Memulai transaksi database
-
+        
         try {
             // Mendapatkan IP address
             $ipAddress = $request->ip(); // IP Publik pengguna
-
+    
             // Jika berada di belakang proxy, coba ambil IP dari X-Forwarded-For
             if ($request->server('HTTP_X_FORWARDED_FOR')) {
                 $ipAddress = $request->server('HTTP_X_FORWARDED_FOR');
             } else {
                 $ipAddress = $request->ip();
             }
-
+    
             // Total penumpang
-            $totalPassanger = $request->fbo_adult + $request->fbo_child;
-
+            $totalPassenger = $request->fbo_adult + $request->fbo_child;
+    
             // Simpan data kontak utama
             $contactData = new Contact();
             $contactData->ctc_order_id = $this->generateOrderId();
@@ -129,26 +109,39 @@ class BookingDataController extends Controller
             $contactData->ctc_updated_by = Auth()->id();
             $contactData->ctc_created_by = Auth()->id();
             $contactData->save();
-
+    
+            // Ambil ctc_id kontak yang baru dibuat
+            $contactId = $contactData->ctc_id;  
+            
+            // Jika masih null, coba query ulang
+            if ($contactId === null) {
+                $latestContact = Contact::latest('ctc_id')->first();
+                $contactId = $latestContact ? $latestContact->ctc_id : null;
+            }
+    
+            if ($contactId === null) {
+                throw new \Exception('Failed to retrieve Contact ctc_id');
+            }
+    
             $departureSuffix = $request->has('switch') ? 'Y' : 'X'; // Menentukan apakah data depart berjenis one way atau round trip
             $keys = array_keys($request->input('fbo_availability_id'));
             $availabilityId = $keys[0];
-
-            // Pengecekan ketersediaan stok
+    
+            // Pengecekan ketersediaan stok sekaligus penanganan race condition
             $stokDataDepart = FastboatAvailability::where('fba_id', $availabilityId)->lockForUpdate()->first();
-            if ($stokDataDepart->fba_stock < $totalPassanger  + 1) {
+            if ($stokDataDepart->fba_stock < $totalPassenger  + 1) {
                 return response()->json(['message' => 'Ticket stock is low'], 400);
             }
-
+    
             // Membuat data Booking
             $bookingDataDepart = new BookingData();
-            $bookingDataDepart->fbo_order_id = $contactData->ctc_order_id;
+            $bookingDataDepart->fbo_order_id = $contactId;
             $bookingDataDepart->fbo_booking_id = 'F' . $contactData->ctc_order_id . $departureSuffix;
             $bookingDataDepart->fbo_availability_id = $availabilityId;
-
+    
             // Mendapatkan id trip dari fast-boat availability
             $trip = FastboatAvailability::find($availabilityId);
-
+    
             if ($trip) {
                 // Mengambil fba_trip_id
                 $bookingDataDepart->fbo_trip_id = $trip->fba_trip_id;
@@ -156,7 +149,7 @@ class BookingDataController extends Controller
                 // Menangani jika tidak ditemukan
                 throw new \Exception("FastboatAvailability with ID {$availabilityId} not found.");
             }
-
+    
             $fbo_payment_status = $request->fbo_payment_status;
             $fbo_payment_method = $request->fbo_payment_method;
             $fbo_transaction_id = $request->fbo_transaction_id;
@@ -203,7 +196,7 @@ class BookingDataController extends Controller
                     $bookingDataDepart->fbo_transaction_status = "accepted";
                 }
             }
-
+    
             $bookingDataDepart->fbo_currency = $request->fbo_currency;
             $bookingDataDepart->fbo_trip_date = $request->fbo_trip_date;
             $bookingDataDepart->fbo_adult_nett = $request->input("fbo_availability_id.$availabilityId.fbo_adult_nett");
@@ -212,15 +205,15 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_adult_publish = $request->input("fbo_availability_id.$availabilityId.fbo_adult_publish");
             $bookingDataDepart->fbo_child_publish = $request->input("fbo_availability_id.$availabilityId.fbo_child_publish");
             $bookingDataDepart->fbo_total_publish = $request->input("fbo_availability_id.$availabilityId.fbo_total_publish");
-
+    
             // Mencari nilai kurs yang sesuai dengan fbo_currency
             $currency = MasterCurrency::where('cy_code', $bookingDataDepart->fbo_currency)->first();
-
+    
             if (!$currency) {
                 throw new \Exception("Rate {$bookingDataDepart->fbo_currency} not found.");
             }
             $bookingDataDepart->fbo_kurs = $currency->cy_rate;
-
+    
             $bookingDataDepart->fbo_passenger = $request->fbo_passenger;
             $bookingDataDepart->fbo_adult = $request->fbo_adult;
             $bookingDataDepart->fbo_child = $request->fbo_child;
@@ -236,14 +229,15 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_end_total = $request->fbo_end_total;
             $bookingDataDepart->fbo_end_total_currency = $request->fbo_end_total_currency;
             $bookingDataDepart->fbo_profit = $bookingDataDepart->fbo_end_total - $bookingDataDepart->fbo_total_nett;
-            $bookingDataDepart->fbo_fast_boat = $request->fbo_fast_boat;
-            $bookingDataDepart->fbo_departure_island = $trip->trip->departure->island->isd_name;
-            $bookingDataDepart->fbo_departure_port = $request->fbo_departure_port;
+            $bookingDataDepart->fbo_fast_boat = $trip->trip->fastboat->fb_id;
+            $bookingDataDepart->fbo_company = $trip->trip->fastboat->company->cpn_id;
+            $bookingDataDepart->fbo_departure_island = $trip->trip->departure->island->isd_id;
+            $bookingDataDepart->fbo_departure_port = $trip->trip->departure->prt_id;
             $bookingDataDepart->fbo_departure_time = $request->fbo_departure_time;
-            $bookingDataDepart->fbo_arrival_island = $trip->trip->arrival->island->isd_name;
-            $bookingDataDepart->fbo_arrival_port = $request->fbo_arrival_port;
+            $bookingDataDepart->fbo_arrival_island = $trip->trip->arrival->island->isd_id;
+            $bookingDataDepart->fbo_arrival_port = $trip->trip->arrival->prt_id;
             $bookingDataDepart->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
-            $bookingDataDepart->fbo_checking_point;
+            $bookingDataDepart->fbo_checking_point = 1; // Harus terkoneksi ke tabel checkin point
             $bookingDataDepart->fbo_mail_admin = "";
             $bookingDataDepart->fbo_mail_client = "";
             $bookingDataDepart->fbo_pickup = $request->fbo_pickup;
@@ -256,11 +250,11 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_source = "backoffice";
             $bookingDataDepart->fbo_updated_by = Auth()->id();
             $bookingDataDepart->save();
-
+            
             // Pengurangan stok di availability
-            $stokDataDepart->fba_stock -= $totalPassanger;
+            $stokDataDepart->fba_stock -= $totalPassenger;
             $stokDataDepart->save();
-
+            
             // Membuat data Booking untuk return
             if ($request->has('switch')) {
                 $keys = array_keys($request->input('fbo_availability_id_return')); // Memecah array untuk mengambil nilai id dari availability
@@ -376,7 +370,8 @@ class BookingDataController extends Controller
             // dd($totalPassanger);
             // Commit transaksi jika semua proses berhasil
             DB::commit();
-            return redirect()->route('data.view')->with('success', 'Data berhasil disimpan');
+            toast('Data booking as been added!', 'success');
+            return redirect()->route('data.view');
         } catch (\Exception $e) {
             // Rollback semua perubahan jika terjadi error
             DB::rollBack();
@@ -702,9 +697,8 @@ class BookingDataController extends Controller
                 $trip = $availability->trip;
 
                 // Mengumpulkan departure port
-                $departurePort = $trip->departure;
-                if (!isset($departurePorts[$departurePort->prt_id])) {
-                    $departurePorts[$departurePort->prt_id] = $departurePort->prt_name_en;
+                if (!in_array($trip->departure->prt_name_en, $departurePorts)) {
+                    $departurePorts[] = $trip->departure->prt_name_en;
                 }
 
                 // Mengumpulkan arrival port
