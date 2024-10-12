@@ -68,7 +68,7 @@ class BookingDataController extends Controller
         if (implode('', $characters) == str_repeat('A', count($characters))) {
             array_unshift($characters, 'A');
         }
-        
+
         // Gabungkan karakter menjadi string lagi
         return implode('', $characters);
     }
@@ -96,13 +96,13 @@ class BookingDataController extends Controller
         //         ->withInput();
         // }
 
-        
+
         DB::beginTransaction();  // Memulai transaksi database
-        
+
         try {
             // Mendapatkan IP address
             $ipAddress = $request->ip(); // IP Publik pengguna
-            
+
             // Jika berada di belakang proxy, coba ambil IP dari X-Forwarded-For
             if ($request->server('HTTP_X_FORWARDED_FOR')) {
                 $ipAddress = $request->server('HTTP_X_FORWARDED_FOR');
@@ -112,7 +112,7 @@ class BookingDataController extends Controller
 
             // Total penumpang
             $totalPassanger = $request->fbo_adult + $request->fbo_child;
-            
+
             // Simpan data kontak utama
             $contactData = new Contact();
             $contactData->ctc_order_id = $this->generateOrderId();
@@ -702,8 +702,9 @@ class BookingDataController extends Controller
                 $trip = $availability->trip;
 
                 // Mengumpulkan departure port
-                if (!in_array($trip->departure->prt_name_en, $departurePorts)) {
-                    $departurePorts[] = $trip->departure->prt_name_en;
+                $departurePort = $trip->departure;
+                if (!isset($departurePorts[$departurePort->prt_id])) {
+                    $departurePorts[$departurePort->prt_id] = $departurePort->prt_name_en;
                 }
 
                 // Mengumpulkan arrival port
