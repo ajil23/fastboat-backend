@@ -1017,9 +1017,9 @@
                     success: function(response) {
                         $('#fbo_departure_port').empty().append(
                             '<option value="">Select Departure Port</option>');
-                        $.each(response.fbo_departure_ports, function(id, name) {
-                            $('#fbo_departure_port').append('<option value="' + id +
-                                '">' + name + '</option>');
+                        $.each(response.fbo_departure_ports, function(index, port) {
+                            $('#fbo_departure_port').append('<option value="' + port +
+                                '">' + port + '</option>');
                         });
                     }
                 });
