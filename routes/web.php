@@ -6,7 +6,7 @@ use App\Http\Controllers\Backend\DataCompanyController;
 use App\Http\Controllers\Backend\DataFastboatController;
 use App\Http\Controllers\Backend\DataRouteController;
 use App\Http\Controllers\Backend\FastboatAvailabilityController;
-use App\Http\Controllers\Backend\FastboatCheckingPointController;
+use App\Http\Controllers\Backend\FastboatCheckinPointController;
 use App\Http\Controllers\Backend\FastboatScheduleController;
 use App\Http\Controllers\Backend\FastboatShuttleAreaController;
 use App\Http\Controllers\Backend\FastboatShuttleController;
@@ -146,12 +146,12 @@ Route::middleware([
         Route::post('/shuttle/search', [FastboatShuttleController::class, 'search'])->name('shuttle.search');
         Route::post('/shuttle/delete-multiple', [FastboatShuttleController::class, 'deleteMultiple'])->name('shuttle.deleteMultiple');
 
-        // Checking Point
-        Route::get('/checking-point', [FastboatCheckingPointController::class, 'index'])->name('checking.view');
-        Route::post('/checking-point/store', [FastboatCheckingPointController::class, 'store'])->name('checking.store');
-        Route::post('/checking-point/update/{id}', [FastboatCheckingPointController::class, 'update'])->name('checking.update');
-        Route::delete('/checking-point/delete/{id}', [FastboatCheckingPointController::class, 'delete'])->name('checking.delete');
-        Route::get('/checking-point/{id}', [FastboatCheckingPointController::class, 'show'])->name('checking.show');
+        // Checkin Point
+        Route::get('/checkin-point', [FastboatCheckinPointController::class, 'index'])->name('checkin.view');
+        Route::post('/checkin-point/store', [FastboatCheckinPointController::class, 'store'])->name('checkin.store');
+        Route::post('/checkin-point/update/{id}', [FastboatCheckinPointController::class, 'update'])->name('checkin.update');
+        Route::delete('/checkin-point/delete/{id}', [FastboatCheckinPointController::class, 'delete'])->name('checkin.delete');
+        Route::get('/checkin-point/{id}', [FastboatCheckinPointController::class, 'show'])->name('checkin.show');
     });
 
     Route::prefix('master')->group(function () {

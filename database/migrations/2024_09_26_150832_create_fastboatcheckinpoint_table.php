@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fastboatcheckingpoint', function (Blueprint $table) {
+        Schema::create('fastboatcheckinpoint', function (Blueprint $table) {
             $table->id('fcp_id');
             $table->unsignedBigInteger('fcp_company');
             $table->foreign('fcp_company')->references('cpn_id')->on('datacompany')->onDelete('cascade')->onUpdate('cascade');

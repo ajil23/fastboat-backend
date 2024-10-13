@@ -160,15 +160,16 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        @foreach ($bookingData as $item)
                                         <tr>
-                                            <td>1.</td>
+                                            <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div>
-                                                    <span class="badge bg-info" data-bs-toggle="modal" data-bs-target="#passengerModal">Backoffice</span>
-                                                    <strong>Piotr Leszczynski</strong> ~ piotrek.pio22@gmail.com ~ +6248502163366 ~ 10/Oct/2024 08:11
+                                                    <span class="badge bg-info" data-bs-toggle="modal" data-bs-target="#passengerModal">{{$item->fbo_source}}</span>
+                                                    <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at}}
                                                 </div>
                                                 <div>
-                                                    <strong>FAENEPQX</strong> ~ <strong>Idola Express</strong> Nusa Penida <span class="text-danger">(10-Oct-2024 13:15)</span> => Bali ~ <strong>2 pax</strong> (2 Adult)
+                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{$item->fbo_trip_date}} {{$item->fbo_departure_time}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
                                                 </div>
                                             </td>
                                             <td>
@@ -198,44 +199,7 @@
                                                 </center>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>2.</td>
-                                            <td>
-                                                <div>
-                                                    <span class="badge bg-success">API 12go</span>
-                                                    <strong>Jonas Christlieb</strong> ~ jchristlieb@web.de ~ +4917632709908 ~ 10/Oct/2024 08:01
-                                                </div>
-                                                <div>
-                                                    <strong>FAENEPX</strong> ~ <strong>Starfish Fast Cruise</strong> Gili Air <span class="text-danger">(11-Oct-2024 13:00)</span> => Nusa Penida ~ <strong>2 pax</strong> (2 Adult)
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <center>
-                                                    <span class="text-success"><i class="fas fa-check-circle"></i> paid</span><br>
-                                                    <a href="#" class="text-primary">balance</a>
-                                                </center>
-                                            </td>
-                                            <td>
-                                                <center>
-                                                    <span class="text-warning"><i class="fas fa-sync-alt"></i> Unconfirm</span><br>
-                                                    <a href="#" class="text-primary"><i class="fas fa-check-circle"></i> Confirmed</a>
-                                                </center>
-                                            </td>
-                                            <td>
-                                                <center>
-                                                    <div class="dropstart">
-                                                        <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true">
-                                                            <i class="mdi mdi-dots-horizontal"></i>
-                                                        </a>
-                                                        <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="#">View</a>
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                            <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="#">Delete</a>
-                                                        </div>
-                                                    </div>
-                                                </center>
-                                            </td>
-                                        </tr>
+                                        @endforeach
                                     </tbody>
                                     {{-- {{$company->links('pagination::bootstrap-5')}} --}}
                                 </table>

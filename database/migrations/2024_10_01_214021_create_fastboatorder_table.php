@@ -61,8 +61,8 @@ return new class extends Migration
             $table->unsignedBigInteger('fbo_arrival_port');
             $table->foreign('fbo_arrival_port')->references('prt_id')->on('masterport')->onDelete('cascade')->onUpdate('cascade');
             $table->time('fbo_arrival_time');
-            $table->unsignedBigInteger('fbo_checking_point');
-            $table->foreign('fbo_checking_point')->references('fcp_id')->on('fastboatcheckingpoint')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('fbo_checkin_point');
+            $table->foreign('fbo_checkin_point')->references('fcp_id')->on('fastboatcheckinpoint')->onDelete('cascade')->onUpdate('cascade');
             $table->string('fbo_pickup')->nullable();
             $table->string('fbo_dropoff')->nullable();
             $table->string('fbo_specific_pickup')->nullable();
