@@ -70,7 +70,7 @@
                         <li><a href="{{route ('trip.view')}}">Trip</a></li>
                         <li><a href="{{route ('shuttlearea.view')}}">Shuttle Area</a></li>
                         <li><a href="{{route ('shuttle.view')}}">Shuttle</a></li>
-                        <li><a href="{{route ('checking.view')}}">Checking Point</a></li>
+                        <li><a href="{{route ('checkin.view')}}">Checkin Point</a></li>
                         <li><a href="{{route ('availability.view')}}">Availability</a></li>
                     </ul>
                 </li>

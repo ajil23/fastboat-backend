@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FastboatCheckingPoint extends Model
+class FastboatCheckinPoint extends Model
 {
     use HasFactory;
-    protected $table = "fastboatcheckingpoint";
+    protected $table = "fastboatcheckinpoint";
     protected $primaryKey = 'fcp_id';
     protected $fillable = ['fcp_id', 'fcp_company', 'fcp_dept', 'fcp_address', 'fcp_maps'];
 

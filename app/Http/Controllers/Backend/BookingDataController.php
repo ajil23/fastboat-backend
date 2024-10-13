@@ -16,6 +16,7 @@ use App\Models\MasterCurrency;
 use App\Models\MasterNationality;
 use App\Models\MasterPaymentMethod;
 use Carbon\Carbon;
+use COM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -24,7 +25,8 @@ class BookingDataController extends Controller
 {
     public function index()
     {
-        return view('booking.data.index');
+        $bookingData = BookingData::all();
+        return view('booking.data.index', compact('bookingData'));
     }
 
     public function add()
@@ -231,7 +233,7 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_arrival_island = $trip->trip->arrival->island->isd_id;
             $bookingDataDepart->fbo_arrival_port = $trip->trip->arrival->prt_id;
             $bookingDataDepart->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
-            $bookingDataDepart->fbo_checking_point = 1; // Harus terkoneksi ke tabel checkin point
+            $bookingDataDepart->fbo_checkin_point = 1; // Harus terkoneksi ke tabel checkin point
             $bookingDataDepart->fbo_mail_admin = "";
             $bookingDataDepart->fbo_mail_client = "";
             $bookingDataDepart->fbo_pickup = $request->fbo_pickup;
@@ -354,7 +356,7 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_arrival_island = $trip->trip->arrival->island->isd_id;
                 $bookingDataReturn->fbo_arrival_port = $trip->trip->arrival->prt_id;
                 $bookingDataReturn->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
-                $bookingDataReturn->fbo_checking_point = 1;
+                $bookingDataReturn->fbo_checkin_point = 1;
                 $bookingDataReturn->fbo_mail_admin = "";
                 $bookingDataReturn->fbo_mail_client = "";
                 $bookingDataReturn->fbo_pickup = $request->fbo_pickup_return;
