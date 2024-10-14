@@ -18,37 +18,37 @@ class AvailabilityApiController extends Controller
             'data' => $data,
         ], 200);
     }
-    
+
     public function search(Request $request)
     {
-        // Validasi parameter dari request
-        $validated = $request->validate([
-            'departure_port' => 'required|integer|exists:masterport,prt_id',
-            'arrival_port' => 'required|integer|exists:masterport,prt_id',
-            'departure_time' => 'required|date',
-            'return_date' => 'nullable|date',
-            'min_pax' => 'required|integer|min:1',
-        ]);
+        $portNameDeparture = strtolower($request->input('port_name_departure')); // Ambil nama departure port
+        $portNameArrival = strtolower($request->input('port_name_arrival')); // Ambil nama arrival port
+        $date = $request->input('date');
+        $minPax = $request->input('min_pax'); // Ambil nilai minimum penumpang
 
-        // Query availability berdasarkan data pelabuhan dan waktu
-        $availabilities = FastboatAvailability::whereHas('trip', function ($query) use ($validated) {
-                // Query untuk mencocokkan pelabuhan keberangkatan dan tujuan
-                $query->where('fbt_dept_port', $validated['departure_port'])
-                      ->where('fbt_arrival_port', $validated['arrival_port']);
+        // Validasi tanggal
+        if (!$date || !\Carbon\Carbon::canBeCreatedFromFormat($date, 'Y-m-d')) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid date format. Use Y-m-d.'
+            ]);
+        }
+
+        // Ambil availabilities berdasarkan nama departure port, arrival port, tanggal, dan minimum penumpang
+        $availabilities = FastboatAvailability::whereHas('trip.departure', function ($query) use ($portNameDeparture) {
+            $query->whereRaw('LOWER(prt_name_en) = ?', [$portNameDeparture]);
+        })
+            ->whereHas('trip.arrival', function ($query) use ($portNameArrival) {
+                $query->whereRaw('LOWER(prt_name_en) = ?', [$portNameArrival]);
             })
-            // Filter berdasarkan tanggal keberangkatan
-            ->where('fba_date', '=', $validated['departure_time'])
-            // Jika ada return date, tambahkan filter opsional
-            ->when($validated['return_date'], function ($query) use ($validated) {
-                $query->where('fba_date', '=', $validated['return_date']);
+            ->where('fba_date', $date)
+            ->when($minPax, function ($query) use ($minPax) {
+                return $query->where('fba_min_pax', '>=', $minPax); // Filter berdasarkan min pax
             })
-            // Filter berdasarkan jumlah penumpang minimal
-            ->where('fba_min_pax', '<=', $validated['min_pax'])
-            ->where('fba_status', '=', 'active') // Hanya trip yang aktif
             ->get();
 
-        // Kembalikan data dalam format JSON
         return response()->json([
+            'success' => true,
             'data' => $availabilities
         ]);
     }
