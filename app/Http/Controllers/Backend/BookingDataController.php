@@ -214,9 +214,13 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_adult = $request->fbo_adult;
             $bookingDataDepart->fbo_child = $request->fbo_child;
             $bookingDataDepart->fbo_infant = $request->fbo_infant;
-            $bookingDataDepart->fbo_adult_currency = round($request->price_adult / $bookingDataDepart->fbo_kurs);
-            $bookingDataDepart->fbo_child_currency = round($request->price_child / $bookingDataDepart->fbo_kurs);
-            $bookingDataDepart->fbo_total_currency = round(($bookingDataDepart->fbo_adult_currency * $bookingDataDepart->fbo_adult) + ($bookingDataDepart->fbo_child_currency * $bookingDataDepart->fbo_child));
+            if ($bookingDataDepart->fbo_kurs == 0){
+                toast('Rate cannot be zero', 'error');
+            } else{
+                $bookingDataDepart->fbo_adult_currency = round($request->price_adult / $bookingDataDepart->fbo_kurs);
+                $bookingDataDepart->fbo_child_currency = round($request->price_child / $bookingDataDepart->fbo_kurs);
+                $bookingDataDepart->fbo_total_currency = round(($bookingDataDepart->fbo_adult_currency * $bookingDataDepart->fbo_adult) + ($bookingDataDepart->fbo_child_currency * $bookingDataDepart->fbo_child));
+            }
             $discount = $request->input("fbo_availability_id.$availabilityId.fbo_dicount");
             $bookingDataDepart->fbo_discount = $discount * ($bookingDataDepart->fbo_adult + $bookingDataDepart->fbo_child);
             $bookingDataDepart->fbo_price_cut = ((($bookingDataDepart->fbo_adult_publish - $request->price_adult) * $bookingDataDepart->fbo_adult) + (($bookingDataDepart->fbo_child_publish - $request->price_child) * $bookingDataDepart->fbo_child));
@@ -336,9 +340,18 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_adult = $request->fbo_adult;
                 $bookingDataReturn->fbo_child = $request->fbo_child;
                 $bookingDataReturn->fbo_infant = $request->fbo_infant;
-                $bookingDataReturn->fbo_adult_currency = round($request->adult_return_publish / $bookingDataDepart->fbo_kurs);
-                $bookingDataReturn->fbo_child_currency = round($request->child_return_publish / $bookingDataDepart->fbo_kurs);
-                $bookingDataReturn->fbo_total_currency = round($request->total_return_end / $bookingDataDepart->fbo_kurs);
+
+                if ($bookingDataDepart->fbo_kurs == 0){
+                    toast('Rate cannot be zero', 'error');
+                } else{
+                    $bookingDataDepart->fbo_adult_currency = round($request->price_adult / $bookingDataDepart->fbo_kurs);
+                    $bookingDataDepart->fbo_child_currency = round($request->price_child / $bookingDataDepart->fbo_kurs);
+                    $bookingDataDepart->fbo_total_currency = round(($bookingDataDepart->fbo_adult_currency * $bookingDataDepart->fbo_adult) + ($bookingDataDepart->fbo_child_currency * $bookingDataDepart->fbo_child));
+                    
+                    $bookingDataReturn->fbo_adult_currency = round($request->adult_return_publish / $bookingDataDepart->fbo_kurs);
+                    $bookingDataReturn->fbo_child_currency = round($request->child_return_publish / $bookingDataDepart->fbo_kurs);
+                    $bookingDataReturn->fbo_total_currency = round(($bookingDataReturn->fbo_adult_currency * $bookingDataReturn->fbo_adult) + ($bookingDataReturn->fbo_child_currency * $bookingDataReturn->fbo_child));
+                }
                 $discountReturn = $request->input("fbo_availability_id_return.$availabilityReturnId.fbo_discount");
                 $bookingDataReturn->fbo_discount = $discountReturn * ($bookingDataReturn->fbo_adult + $bookingDataReturn->fbo_child);
                 $bookingDataReturn->fbo_price_cut = ((($bookingDataReturn->fbo_adult_publish - $request->adult_return_publish) * $bookingDataReturn->fbo_adult) + (($bookingDataReturn->fbo_child_publish - $request->child_return_publish) * $bookingDataReturn->fbo_child));
