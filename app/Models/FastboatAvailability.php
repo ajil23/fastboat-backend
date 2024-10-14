@@ -10,7 +10,7 @@ class FastboatAvailability extends Model
     use HasFactory;
     protected $table = "fastboatavailability";
     protected $primaryKey = "fba_id";
-    protected $fillable = ['fba_trip_id', 'fba_date', 'fba_dept_time', 'fba_arriv_time', 'fba_adult_nett', 'fba_child_nett', 'fba_adult_publish', 'fba_child_publish', 'fba_discount', 'fba_stock', 'fba_status', 'fba_shuttle_status', 'fba_min_pax', 'fba_created_by', 'fba_updated_by'];
+    protected $fillable = ['fba_trip_id', 'fba_date', 'fba_dept_time', 'fba_arriv_time', 'fba_adult_nett', 'fba_child_nett', 'fba_adult_publish', 'fba_child_publish', 'fba_discount', 'fba_stock', 'fba_status', 'fba_shuttle_status', 'fba_min_pax', 'fba_info', 'fba_created_by', 'fba_updated_by'];
 
     public function trip(){
         return $this->belongsTo(FastboatTrip::class,'fba_trip_id','fbt_id');
