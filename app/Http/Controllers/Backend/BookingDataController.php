@@ -25,7 +25,7 @@ class BookingDataController extends Controller
 {
     public function index()
     {
-        $bookingData = BookingData::all();
+        $bookingData = BookingData::orderBy('created_at', 'desc')->get();
         return view('booking.data.index', compact('bookingData'));
     }
 
@@ -223,17 +223,17 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_discount = $discount * ($bookingDataDepart->fbo_adult + $bookingDataDepart->fbo_child);
 
             // Menentukan price cut
-            if ($bookingDataDepart->fbo_adult_currency > $bookingDataDepart->fbo_adult_publish){
+            if ($bookingDataDepart->fbo_adult_currency > $bookingDataDepart->fbo_adult_publish) {
                 // Apabila adult currency lebih besar dari adult publish maka price cut nya hanya dari child
                 $bookingDataDepart->fbo_price_cut = ((($bookingDataDepart->fbo_child_publish - $request->price_child) * $bookingDataDepart->fbo_child));
-            } elseif($bookingDataDepart->fbo_child_currency > $bookingDataDepart->fbo_child_publish){
+            } elseif ($bookingDataDepart->fbo_child_currency > $bookingDataDepart->fbo_child_publish) {
                 // Apabila child currency lebih besar adri child publish maka price cut nya hanya dari adult
                 $bookingDataDepart->fbo_price_cut = ((($bookingDataDepart->fbo_adult_publish - $request->price_adult) * $bookingDataDepart->fbo_adult));
-            } else{
+            } else {
                 // Apabila semua kondisi tidak terpenuhi maka lakukan kalkulasi pada adult & child
                 $bookingDataDepart->fbo_price_cut = ((($bookingDataDepart->fbo_adult_publish - $request->price_adult) * $bookingDataDepart->fbo_adult) + (($bookingDataDepart->fbo_child_publish - $request->price_child) * $bookingDataDepart->fbo_child));
             }
-            
+
             $bookingDataDepart->fbo_discount_total = $bookingDataDepart->fbo_discount + $bookingDataDepart->fbo_price_cut;
             $bookingDataDepart->fbo_refund = "";
             $bookingDataDepart->fbo_end_total = $request->fbo_end_total;
@@ -292,10 +292,11 @@ class BookingDataController extends Controller
                     throw new \Exception("FastboatAvailability with ID {$availabilityReturnId} not found.");
                 }
 
-                $fbo_payment_status = $bookingDataDepart->fbo_payment_status;
-                $fbo_payment_method = $bookingDataDepart->fbo_payment_method;
-                $fbo_transaction_id = $bookingDataDepart->fbo_transaction_id;
-                $fbo_transaction_status = $bookingDataDepart->fbo_transaction_status;
+
+                $bookingDataReturn->fbo_payment_status = $bookingDataDepart->fbo_payment_status;
+                $bookingDataReturn->fbo_payment_method = $bookingDataDepart->fbo_payment_method;
+                $bookingDataReturn->fbo_transaction_id = $bookingDataDepart->fbo_transaction_id;
+                $bookingDataReturn->fbo_transaction_status = $bookingDataDepart->fbo_transaction_status;
                 $bookingDataReturn->fbo_currency = $request->fbo_currency;
                 $bookingDataReturn->fbo_trip_date = $request->trip_return_date;
                 $bookingDataReturn->fbo_kurs = $bookingDataDepart->fbo_kurs;
@@ -318,15 +319,15 @@ class BookingDataController extends Controller
                 }
                 $discountReturn = $request->input("fbo_availability_id_return.$availabilityReturnId.fbo_discount");
                 $bookingDataReturn->fbo_discount = $discountReturn * ($bookingDataReturn->fbo_adult + $bookingDataReturn->fbo_child);
-                
-                 // Menentukan price cut
-                if ($bookingDataReturn->fbo_adult_currency > $bookingDataReturn->fbo_adult_publish){
+
+                // Menentukan price cut
+                if ($bookingDataReturn->fbo_adult_currency > $bookingDataReturn->fbo_adult_publish) {
                     // Apabila adult currency lebih besar dari adult publish maka price cut nya hanya dari child
                     $bookingDataReturn->fbo_price_cut = ((($bookingDataReturn->fbo_child_publish - $request->child_return_publish) * $bookingDataReturn->fbo_child));
-                } elseif($bookingDataReturn->fbo_child_currency > $bookingDataReturn->fbo_child_publish){
+                } elseif ($bookingDataReturn->fbo_child_currency > $bookingDataReturn->fbo_child_publish) {
                     // Apabila child currency lebih besar adri child publish maka price cut nya hanya dari adult
                     $bookingDataReturn->fbo_price_cut = ((($bookingDataReturn->fbo_adult_publish - $request->adult_return_publish) * $bookingDataReturn->fbo_adult));
-                } else{
+                } else {
                     // Apabila semua kondisi tidak terpenuhi maka lakukan kalkulasi pada adult & child
                     $bookingDataReturn->fbo_price_cut = ((($bookingDataReturn->fbo_adult_publish - $request->adult_return_publish) * $bookingDataReturn->fbo_adult) + (($bookingDataReturn->fbo_child_publish - $request->child_return_publish) * $bookingDataReturn->fbo_child));
                 }
@@ -341,7 +342,7 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_company = $trip->trip->fastboat->company->cpn_id;
                 $bookingDataReturn->fbo_departure_island = $trip->trip->departure->island->isd_id;
                 $bookingDataReturn->fbo_departure_port = $trip->trip->departure->prt_id;
-                $bookingDataReturn->fbo_departure_time = $request->fbo_departure_time;
+                $bookingDataReturn->fbo_departure_time = $request->fbo_departure_time_return;
                 $bookingDataReturn->fbo_arrival_island = $trip->trip->arrival->island->isd_id;
                 $bookingDataReturn->fbo_arrival_port = $trip->trip->arrival->prt_id;
                 $bookingDataReturn->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
@@ -1092,5 +1093,18 @@ class BookingDataController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $booking = BookingData::findOrFail($request->fbo_id);
+        if ($booking) {
+            $booking->fbo_transaction_status = $request->fbo_transaction_status;
+            $booking->save();
+
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json(['success' => false], 400);
     }
 }
