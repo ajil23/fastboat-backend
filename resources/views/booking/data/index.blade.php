@@ -165,7 +165,7 @@
                                             <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div>
-                                                    <span class="badge bg-info" data-bs-toggle="modal" data-bs-target="#passengerModal">{{$item->fbo_source}}</span>
+                                                    <span class="badge {{ $item->fbo_source == 'backoffice' ? 'bg-primary' : ($item->fbo_source == 'api' ? 'bg-success' : 'bg-warning') }}" data-bs-toggle="modal" data-bs-target="#passengerModal"> {{ $item->fbo_source == 'backoffice' ? 'Backoffice' : ($item->fbo_source == 'api' ? 'API' : 'Website') }} </span>
                                                     <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at}}
                                                 </div>
                                                 <div>
@@ -174,14 +174,26 @@
                                             </td>
                                             <td>
                                                 <center>
-                                                    <span class="text-success"><i class="fas fa-check-circle"></i> paid</span><br>
+                                                    <span class="{{ $item->fbo_payment_status == 'unpaid' || empty($item->fbo_payment_status) ? 'text-secondary' : 'text-success' }}">
+                                                        <i class="fas {{ $item->fbo_payment_status == 'unpaid' || empty($item->fbo_payment_status) ? 'fa-times-circle' : 'fa-check-circle' }}"></i>
+                                                        {{ $item->fbo_payment_status ?: 'unpaid' }}
+                                                    </span><br>
                                                     <a href="#" class="text-primary">balance</a>
                                                 </center>
                                             </td>
                                             <td>
                                                 <center>
-                                                    <span class="text-warning"><i class="fas fa-sync-alt"></i> Unconfirm</span><br>
-                                                    <a href="#" class="text-primary"><i class="fas fa-check-circle"></i> Confirmed</a>
+                                                    <!-- tombol confirm/unconfirm -->
+                                                    <a href="#" id="confirmBtn" class="text-primary" data-id="{{ $item->fbo_id }}" data-status="{{ $item->fbo_transaction_status }}">
+                                                        <i class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-sync-alt' : 'fa-check-circle' }}"></i>
+                                                        {{ $item->fbo_transaction_status == 'confirmed' ? 'Unconfirm' : 'Confirm' }}
+                                                    </a><br>
+
+                                                    <!-- status -->
+                                                    <span class="text-{{ $item->fbo_transaction_status == 'confirmed' ? 'success' : ($item->fbo_transaction_status == 'waiting' || $item->fbo_transaction_status == 'accepted' ? 'primary' : 'warning') }}">
+                                                        <i class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt' }}"></i>
+                                                        {{ ucfirst($item->fbo_transaction_status) }}
+                                                    </span>
                                                 </center>
                                             </td>
                                             <td>
@@ -502,4 +514,44 @@
 @endsection
 
 @section('script')
+<script>
+    $(document).on('click', '#confirmBtn', function(e) {
+        e.preventDefault();
+
+        let button = $(this);
+        let id = button.data('fbo_id');
+        let currentStatus = button.data('fbo_transaction_status');
+
+        // Tentukan status baru berdasarkan status saat ini
+        let newStatus = currentStatus === 'confirmed' ? 'unconfirm' : 'confirmed';
+
+        // Lakukan permintaan AJAX untuk memperbarui status
+        $.ajax({
+            url: '/booking/data/update-status', // Sesuaikan URL update Anda
+            method: 'POST',
+            data: {
+                _token: '{{ csrf_token() }}',
+                id: id,
+                status: newStatus
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Update tampilan tombol dan status sesuai dengan status baru
+                    button.data('status', newStatus);
+
+                    let icon = newStatus === 'confirmed' ? 'fa-sync-alt' : 'fa-check-circle';
+                    let label = newStatus === 'confirmed' ? 'Unconfirm' : 'Confirm';
+
+                    // Update tampilan tombol
+                    button.html('<i class="fas ' + icon + '"></i> ' + label);
+
+                    // Update tampilan status
+                    let statusIcon = newStatus === 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt';
+                    let statusColor = newStatus === 'confirmed' ? 'text-success' : 'text-primary';
+                    $('#statusDisplay').attr('class', statusColor).html('<i class="fas ' + statusIcon + '"></i> ' + newStatus.charAt(0).toUpperCase() + newStatus.slice(1));
+                }
+            }
+        });
+    });
+</script>
 @endsection
