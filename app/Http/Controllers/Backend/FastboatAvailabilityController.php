@@ -140,7 +140,6 @@ class FastboatAvailabilityController extends Controller
         for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
             foreach ($tripIds as $tripId) {
                 // Mencari atau membuat data baru berdasarkan trip_id dan fba_date
-                
                 FastboatAvailability::updateOrCreate(
                     [
                         'fba_trip_id' => $tripId,       // Kondisi untuk mencari data
