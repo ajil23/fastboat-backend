@@ -174,28 +174,53 @@
                                             </td>
                                             <td>
                                                 <center>
-                                                    <span class="{{ $item->fbo_payment_status == 'unpaid' || empty($item->fbo_payment_status) ? 'text-secondary' : 'text-success' }}">
-                                                        <i class="fas {{ $item->fbo_payment_status == 'unpaid' || empty($item->fbo_payment_status) ? 'fa-times-circle' : 'fa-check-circle' }}"></i>
-                                                        {{ $item->fbo_payment_status ?: 'unpaid' }}
+                                                    <!-- Tombol untuk memicu modal saat status unpaid -->
+                                                    @if($item->fbo_payment_status == 'unpaid' || empty($item->fbo_payment_status))
+                                                    <a href="#" class="text-secondary btn-set-paid" data-id="{{ $item->fbo_id }}">
+                                                        <i class="fas fa-times-circle"></i> {{ $item->fbo_payment_status ?: 'unpaid' }}
+                                                    </a><br>
+                                                    @else
+                                                    <!-- Tampilkan status 'paid' -->
+                                                    <span class="text-success payment-status" data-id="{{ $item->fbo_id }}">
+                                                        <i class="fas fa-check-circle"></i> {{ $item->fbo_payment_status }}
                                                     </span><br>
-                                                    <a href="#" class="text-primary">balance</a>
+                                                    @endif
+
+                                                    <!-- Metode pembayaran -->
+                                                    @if($item->fbo_payment_method == 'paypal')
+                                                    <span class="text-primary">Paypal</span>
+                                                    @elseif($item->fbo_payment_method == 'midtrans')
+                                                    <span class="text-primary">Midtrans</span>
+                                                    @else
+                                                    <span class="text-primary">Balance</span>
+                                                    @endif
                                                 </center>
                                             </td>
+
                                             <td>
                                                 <center>
-                                                    <!-- tombol confirm/unconfirm -->
-                                                    <a href="#" id="confirmBtn" class="text-primary" data-id="{{ $item->fbo_id }}" data-status="{{ $item->fbo_transaction_status }}">
+                                                    <!-- Tombol Confirm/Unconfirm -->
+                                                    @if($item->fbo_payment_status == 'paid')
+                                                    <a href="#"
+                                                        class="btn-change-status"
+                                                        data-url="{{ route('data.status', $item->fbo_id) }}">
                                                         <i class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-sync-alt' : 'fa-check-circle' }}"></i>
                                                         {{ $item->fbo_transaction_status == 'confirmed' ? 'Unconfirm' : 'Confirm' }}
                                                     </a><br>
+                                                    @else
+                                                    <span class="text-muted">
+                                                        <i class="fas fa-check-circle"></i> Confirm
+                                                    </span><br>
+                                                    @endif
 
-                                                    <!-- status -->
-                                                    <span class="text-{{ $item->fbo_transaction_status == 'confirmed' ? 'success' : ($item->fbo_transaction_status == 'waiting' || $item->fbo_transaction_status == 'accepted' ? 'primary' : 'warning') }}">
+                                                    <!-- Status display -->
+                                                    <span class="text-{{ $item->fbo_transaction_status == 'confirmed' ? 'success' : ($item->fbo_transaction_status == 'accepted' ? 'primary' : 'warning') }} transaction-status" data-id="{{ $item->fbo_id }}">
                                                         <i class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt' }}"></i>
                                                         {{ ucfirst($item->fbo_transaction_status) }}
                                                     </span>
                                                 </center>
                                             </td>
+
                                             <td>
                                                 <center>
                                                     <div class="dropstart">
@@ -507,6 +532,84 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Set Payment to Paid -->
+    <div class="modal fade" id="setPaymentModal" tabindex="-1" aria-labelledby="setPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="setPaymentModalLabel">Set Payment to Paid</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="paymentForm" method="POST" action="{{ route('data.updatePayment') }}">
+                    @csrf
+                    <input type="hidden" name="fbo_id" id="fbo_id">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="fbo_payment_method" class="form-label">Payment Method</label>
+                            <select class="form-control" id="fbo_payment_method" name="fbo_payment_method" required>
+                                <option value="" disabled selected>Select Payment Method</option>
+                                @foreach($paymentMethod as $method)
+                                <option value="{{ $method->py_value }}">{{ $method->py_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <!-- Paypal Transaction ID -->
+                        <div class="transaction-id" id="paypal_transaction_id" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label" for="paypal_transaction_id">Transaction ID</label>
+                                <input id="paypal_transaction_id" name="fbo_transaction_id" placeholder="Type Paypal Transaction ID" type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Midtrans Transaction ID -->
+                        <div class="transaction-id" id="midtrans_transaction_id" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label" for="midtrans_transaction_id">Transaction ID</label>
+                                <input id="midtrans_transaction_id" name="fbo_transaction_id" placeholder="Type Midtrans Transaction ID" type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Bank Transfer Transaction ID -->
+                        <div class="transaction-id" id="bank_transfer_transaction_id" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label" for="bank_transfer_transaction_id">Transaction ID</label>
+                                <input id="bank_transfer_transaction_id" name="fbo_transaction_id" placeholder="Type Bank Transaction ID" type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Cash Transaction ID -->
+                        <div class="transaction-id" id="cash_transaction_id" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label" for="cash_transaction_id">Transaction ID</label>
+                                <input id="cash_transaction_id" name="fbo_transaction_id" placeholder="Type Recipient" type="text" class="form-control">
+                            </div>
+                        </div>
+
+                        <!-- Agent Transaction ID -->
+                        <div class="transaction-id" id="agent_transaction_id" style="display: none;">
+                            <div class="mb-3">
+                                <label class="form-label" for="agent_transaction_id">Agent</label>
+                                <select id="agent_transaction_id" name="fbo_transaction_id" class="form-control">
+                                    <option value="">Select Agent</option>
+                                    <option value="Agen A">Agen A</option>
+                                    <option value="Agen B">Agen B</option>
+                                    <option value="Agen C">Agen C</option>
+                                    <option value="Agen D">Agen D</option>
+                                    <option value="Agen E">Agen E</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-dark">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 </div>
 @include('admin.components.footer')
@@ -514,44 +617,86 @@
 @endsection
 
 @section('script')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).on('click', '#confirmBtn', function(e) {
-        e.preventDefault();
+    $(document).ready(function() {
+        $('.btn-change-status').on('click', function(e) {
+            e.preventDefault(); // Mencegah aksi default link
+            let url = $(this).data('url'); // Ambil URL dari atribut data-url
 
-        let button = $(this);
-        let id = button.data('fbo_id');
-        let currentStatus = button.data('fbo_transaction_status');
-
-        // Tentukan status baru berdasarkan status saat ini
-        let newStatus = currentStatus === 'confirmed' ? 'unconfirm' : 'confirmed';
-
-        // Lakukan permintaan AJAX untuk memperbarui status
-        $.ajax({
-            url: '/booking/data/update-status', // Sesuaikan URL update Anda
-            method: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                id: id,
-                status: newStatus
-            },
-            success: function(response) {
-                if (response.success) {
-                    // Update tampilan tombol dan status sesuai dengan status baru
-                    button.data('status', newStatus);
-
-                    let icon = newStatus === 'confirmed' ? 'fa-sync-alt' : 'fa-check-circle';
-                    let label = newStatus === 'confirmed' ? 'Unconfirm' : 'Confirm';
-
-                    // Update tampilan tombol
-                    button.html('<i class="fas ' + icon + '"></i> ' + label);
-
-                    // Update tampilan status
-                    let statusIcon = newStatus === 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt';
-                    let statusColor = newStatus === 'confirmed' ? 'text-success' : 'text-primary';
-                    $('#statusDisplay').attr('class', statusColor).html('<i class="fas ' + statusIcon + '"></i> ' + newStatus.charAt(0).toUpperCase() + newStatus.slice(1));
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to change the transaction status?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'dark',
+                cancelButtonColor: '#6e7881',
+                confirmButtonText: 'Yes, change it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = url; // Redirect jika user konfirmasi
                 }
-            }
+            });
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $('.btn-set-paid').on('click', function(e) {
+            e.preventDefault();
+            let fboId = $(this).data('id'); // Ambil ID dari tombol yang diklik
+
+            // Set value ID ke dalam hidden input modal
+            $('#fbo_id').val(fboId);
+
+            // Tampilkan modal
+            $('#setPaymentModal').modal('show');
+        });
+    });
+
+    $(document).ready(function() {
+        // Saat payment method diubah
+        $('#fbo_payment_method').on('change', function() {
+            // Sembunyikan semua Transaction ID
+            $('.transaction-id').hide();
+
+            // Dapatkan nilai yang dipilih
+            var selectedMethod = $(this).val();
+
+            // Tampilkan Transaction ID berdasarkan pilihan
+            if (selectedMethod === 'paypal') {
+                $('#paypal_transaction_id').show();
+            } else if (selectedMethod === 'midtrans') {
+                $('#midtrans_transaction_id').show();
+            } else if (selectedMethod === 'bank_transfer') {
+                $('#bank_transfer_transaction_id').show();
+            } else if (selectedMethod === 'cash') {
+                $('#cash_transaction_id').show();
+            } else if (selectedMethod === 'agent') {
+                $('#agent_transaction_id').show();
+            }
+        });
+
+        // Saat form disubmit
+        $('form').submit(function(e) {
+            e.preventDefault(); // Mencegah submit form secara default
+            var isValid = false; // Flag untuk mengecek validasi
+
+            // Nonaktifkan semua input yang tidak terlihat (tersembunyi)
+            $('.transaction-id').each(function() {
+                if ($(this).is(':hidden')) {
+                    // Disable input atau select pada elemen yang disembunyikan
+                    $(this).find('input, select').prop('disabled', true);
+                } else {
+                    // Enable input atau select pada elemen yang terlihat
+                    $(this).find('input, select').prop('disabled', false);
+                    isValid = true; // Validasi berhasil jika ada input yang terlihat
+                }
+            });
+
+            this.submit();
+        });
+    });
+</script>
+
 @endsection

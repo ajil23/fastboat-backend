@@ -56,7 +56,8 @@ Route::middleware([
         Route::delete('/data/delete/{id}', [BookingDataController::class, 'delete'])->name('data.delete');
         Route::get('/data/search', [BookingDataController::class, 'search'])->name('data.search');
         Route::get('/data/searchReturn', [BookingDataController::class, 'searchReturn'])->name('data.searchReturn');
-        Route::post('/data/update-status', [BookingDataController::class, 'updateStatus']);
+        Route::get('/data/status/{id}', [BookingDataController::class, 'status'])->name('data.status');
+        Route::post('/data/updatePayment', [BookingDataController::class, 'updatePayment'])->name('data.updatePayment');
 
         //booking-trash route
         Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
@@ -65,6 +66,8 @@ Route::middleware([
         Route::get('/trash/edit/{id}', [BookingTrashController::class, 'edit'])->name('trash.edit');
         Route::post('/trash/update/{id}', [BookingTrashController::class, 'update'])->name('trash.update');
         Route::delete('/trash/delete/{id}', [BookingTrashController::class, 'delete'])->name('trash.delete');
+        Route::get('/trash/status/{id}', [BookingTrashController::class, 'status'])->name('trash.status');
+        Route::post('/trash/updatePayment', [BookingTrashController::class, 'updatePayment'])->name('trash.updatePayment');
     });
 
     Route::prefix('data')->group(function () {
