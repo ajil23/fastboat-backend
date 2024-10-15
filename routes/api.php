@@ -19,9 +19,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('register', [AuthControllerApi::class, 'register']);
-Route::post('login', [AuthControllerApi::class, 'login']);
-
 Route::middleware('checkStaticToken')->group(function (){
     //fastboat 
     Route::get('fast-boat', [FastboatApiController::class, 'index']);
