@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CurrencySeeder::class);
         $this->call(NationalitySeeder::class);
         $this->call(PaymentMethodSeeder::class);
+        $this->call(ApiTokenSeeder::class);
     }
 }
