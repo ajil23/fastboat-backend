@@ -35,7 +35,7 @@ class PaymentMethodSeeder extends Seeder
         ]);
         DB::table('masterpaymentmethod')->insert([
             'py_value' => 'pay_on_port',
-            'py_name' => 'Pay on Port',
+            'py_name' => 'Pay on Port (Collect)',
             'py_updated_by' => 1,
         ]);
         DB::table('masterpaymentmethod')->insert([
