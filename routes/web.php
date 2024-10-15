@@ -58,6 +58,7 @@ Route::middleware([
         Route::get('/data/searchReturn', [BookingDataController::class, 'searchReturn'])->name('data.searchReturn');
         Route::get('/data/status/{id}', [BookingDataController::class, 'status'])->name('data.status');
         Route::post('/data/updatePayment', [BookingDataController::class, 'updatePayment'])->name('data.updatePayment');
+        Route::get('/data/{id}', [BookingDataController::class, 'show'])->name('data.show');
 
         //booking-trash route
         Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
