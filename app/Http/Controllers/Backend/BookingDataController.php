@@ -1225,10 +1225,6 @@ class BookingDataController extends Controller
         $logDataString = $bookingData->fbo_log;
         $logArray = [];
 
-        if (empty($logDataString)) {
-            return $logArray;
-        }
-
         $logs = explode(';', $logDataString);
 
         foreach ($logs as $log) {
