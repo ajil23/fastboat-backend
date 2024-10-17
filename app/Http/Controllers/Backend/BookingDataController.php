@@ -27,7 +27,7 @@ class BookingDataController extends Controller
 {
     public function index()
     {
-        $bookingData = BookingData::orderBy('created_at', 'desc')->get();
+        $bookingData = BookingData::orderBy('created_at', 'desc')->whereIn('fbo_transaction_status', ['accepted', 'confirmed'])->get();
         $paymentMethod = MasterPaymentMethod::all();
         return view('booking.data.index', compact('bookingData', 'paymentMethod'));
     }
