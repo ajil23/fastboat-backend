@@ -165,7 +165,7 @@
                                             <td>{{$loop->iteration}}</td>
                                             <td>
                                                 <div>
-                                                    <span class="badge {{ $item->fbo_source == 'backoffice' ? 'bg-primary' : ($item->fbo_source == 'api' ? 'bg-success' : 'bg-warning') }}" data-bs-toggle="modal" data-bs-target="#passengerModal"> {{ $item->fbo_source == 'backoffice' ? 'Backoffice' : ($item->fbo_source == 'api' ? 'API' : 'Website') }} </span>
+                                                    <a href="javascript:void(0)" class="badge {{ $item->fbo_source == 'backoffice' ? 'bg-primary' : ($item->fbo_source == 'api' ? 'bg-success' : 'bg-warning') }}" data-bs-toggle="modal" data-bs-target="#passengerModal" id="showDetail" data-url="{{ route('trash.show', $item->fbo_id) }}"> {{ $item->fbo_source == 'backoffice' ? 'Backoffice' : ($item->fbo_source == 'api' ? 'API' : 'Website') }} </a>
                                                     <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at}}
                                                 </div>
                                                 <div>
@@ -251,7 +251,7 @@
     <!-- End Page-content -->
 
     <!-- Bootstrap Modal -->
-    <div class="modal fade" id="passengerModal" tabindex="-1" aria-labelledby="passengerModalLabel" aria-hidden="true">
+    <div class="modal fade" id="passengerModal" tabindex="-1" role="dialog" aria-labelledby="passengerModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -259,8 +259,8 @@
                 </div>
                 <div class="modal-title">
                     <h5 class="text-center">
-                        <span class="text-danger">FAENEQX</span> (Idola Express)<br>
-                        Banjar Nyuh Port (Nusa Penida, 13:15) To Sanur Port (Bali, 13:45)
+                        <span class="text-danger" id="booking-id"></span> <span id="booking-fastboat"></span><br>
+                        <span id="route-info"></span>
                     </h5>
                 </div>
                 <div class="modal-body">
@@ -291,29 +291,16 @@
                                         <th>Nationality</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Piotr Leszczynski</td>
-                                        <td>Male</td>
-                                        <td>28</td>
-                                        <td>Other</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Valeriia Budashko</td>
-                                        <td>Female</td>
-                                        <td>29</td>
-                                        <td>Other</td>
-                                    </tr>
+                                <tbody id="passenger-list">
                                 </tbody>
                             </table>
                             <div class="mt-3">
                                 <center>
                                     <strong>Passenger Note :</strong>
-                                    <p>~</p>
-                                    <strong>Meeting Point :</strong>
-                                    <p>Ped, Nusa Penida, Klungkung Regency, Bali 80771</p>
+                                    <p id="passenger-info"></p>
+                                    <p><strong>Checkin Point :</strong>
+                                        <span id="chekin-point"></span>
+                                    </p>
                                 </center>
                             </div>
                         </div>
@@ -334,20 +321,20 @@
                                 <tbody>
                                     <tr>
                                         <th>Qty</th>
-                                        <td>2</td>
-                                        <td>0</td>
-                                        <td>0</td>
+                                        <td id="count-adult"></td>
+                                        <td id="count-child"></td>
+                                        <td id="count-infant"></td>
                                     </tr>
                                     <tr>
                                         <th>Price</th>
-                                        <td>IDR 110.000</td>
-                                        <td>IDR 80.000</td>
-                                        <td>IDR 0</td>
+                                        <td>IDR <span id="adult-publish"></span></td>
+                                        <td>IDR <span id="child-publish"></span></td>
+                                        <td>IDR <span id="infant-publish"></span></td>
                                     </tr>
                                     <tr>
                                         <th>Sub Total</th>
-                                        <td>IDR 220.000</td>
-                                        <td>IDR 0</td>
+                                        <td>IDR <span id="subtotal-adult"></span></td>
+                                        <td>IDR <span id="subtotal-child"></span></td>
                                         <td>IDR 0</td>
                                     </tr>
                                 </tbody>
@@ -376,19 +363,19 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <center>IDR 220.000</center>
+                                            <center>IDR <span id="total-publish"></span></center>
                                         </td>
                                         <td>
-                                            <center>IDR 0x2pax</center>
+                                            <center>IDR <span id="discount"></span>x2pax</center>
                                         </td>
                                         <td>
-                                            <center>IDR 0</center>
+                                            <center>IDR <span id="price-cut"></span></center>
                                         </td>
                                         <td>
-                                            <center>IDR 0</center>
+                                            <center>IDR <span id="total-discount"></span></center>
                                         </td>
                                         <td>
-                                            <center>IDR 220.000</center>
+                                            <center>IDR <span id="end-total"></span></center>
                                         </td>
                                     </tr>
                                     <tr>
@@ -404,18 +391,18 @@
                                     </tr>
                                     <tr>
                                         <td>
-                                            <center>IDR 200.000</center>
+                                            <center>IDR <span id="total-nett"></span></center>
                                         </td>
                                         <td><strong>
-                                                <center>IDR 20.000</center>
+                                                <center>IDR <span id="profit"></span></center>
                                             </strong></td>
                                         <td colspan="3">
-                                            <center></center>
+                                            <center><span id="note"></span></center>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td>Balance ID:</td>
-                                        <td colspan="4">2JN34I2N3TRDDXB42P32</td>
+                                        <td colspan="4"><span id="transaction-id"></span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -698,5 +685,75 @@
         });
     });
 </script>
+<script>
+    $(document).ready(function() {
+        $('body').on('click', '#showDetail', function() {
+            var detailURL = $(this).data('url');
+            $.get(detailURL, function(data) {
 
+                function formatNumber(number) {
+                    return Number(number).toLocaleString('id-ID'); // 'id-ID' for Indonesian locale, use 'en-US' for English locale
+                }
+
+                // Isi data ke dalam modal
+                $('#booking-id').text(data.fbo_booking_id);
+                $('#booking-fastboat').text(' ( ' + data.trip.fastboat.fb_name + ' ) ');
+                $('#count-adult').text(data.fbo_adult);
+                $('#count-child').text(data.fbo_child);
+                $('#count-infant').text(data.fbo_infant);
+                $('#adult-publish').text(formatNumber(data.fbo_adult_publish));
+                $('#child-publish').text(formatNumber(data.fbo_child_publish));
+                $('#infant-publish').text(formatNumber(data.fbo_infant_publish));
+                $('#total-publish').text(formatNumber(data.fbo_total_publish));
+                $('#discount').text(formatNumber(data.fbo_discount));
+                $('#price-cut').text(formatNumber(data.fbo_price_cut));
+                $('#total-dicount').text(formatNumber(data.fbo_total_discount));
+                $('#total-nett').text(formatNumber(data.fbo_total_nett));
+                $('#end-total').text(formatNumber(data.fbo_end_total));
+                $('#profit').text(formatNumber(data.fbo_profit));
+                $('#note').text(formatNumber(data.fbo_refund));
+                $('#transaction-id').text(data.fbo_transaction_id);
+
+                // Logika untuk menghitung subtotal (count-adult * adult-publish)
+                let adultCount = parseInt(data.fbo_adult) || 0;
+                let adultPublish = parseFloat(data.fbo_adult_publish) || 0;
+                let subtotalAdult = adultCount * adultPublish;
+                // Tampilkan subtotal di modal
+                $('#subtotal-adult').text(formatNumber(subtotalAdult));
+
+                // Logika untuk menghitung subtotal (count-adult * adult-publish)
+                let childCount = parseInt(data.fbo_child) || 0;
+                let childPublish = parseFloat(data.fbo_child_publish) || 0;
+                let subtotalChild = childCount * childPublish;
+                // Tampilkan subtotal di modal
+                $('#subtotal-child').text(formatNumber(subtotalChild));
+
+                // Tampilkan informasi rute
+                let routeInfo = `
+                    ${data.trip.departure_port} (${data.trip.departure_island}, ${data.trip.departure_time}) 
+                    To ${data.trip.arrival_port} (${data.trip.arrival_island}, ${data.trip.arrival_time})
+                `;
+                $('#route-info').html(routeInfo);
+                
+                $('#passenger-list').empty();
+                // Loop untuk menambahkan data penumpang ke dalam tabel
+                data.trip.passengers.forEach(function(passenger, index) {
+                    $('#passenger-list').append(`
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${passenger.name}</td>
+                            <td>${passenger.gender}</td>
+                            <td>${passenger.age}</td>
+                            <td>${passenger.nationality}</td>
+                        </tr>
+                    `);
+                });
+                $('#passenger-info').text(data.contact.ctc_info);
+                $('#chekin-point').text(data.checkPoint.fcp_address);
+            }).fail(function() {
+                alert('Gagal mengambil data. Silakan coba lagi.');
+            });
+        });
+    });
+</script>
 @endsection

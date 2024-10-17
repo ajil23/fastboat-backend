@@ -69,6 +69,7 @@ Route::middleware([
         Route::delete('/trash/delete/{id}', [BookingTrashController::class, 'delete'])->name('trash.delete');
         Route::get('/trash/status/{id}', [BookingTrashController::class, 'status'])->name('trash.status');
         Route::post('/trash/updatePayment', [BookingTrashController::class, 'updatePayment'])->name('trash.updatePayment');
+        Route::get('/trash/{id}', [BookingTrashController::class, 'show'])->name('trash.show');
     });
 
     Route::prefix('data')->group(function () {
