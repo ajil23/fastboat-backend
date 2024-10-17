@@ -166,10 +166,10 @@
                                             <td>
                                                 <div>
                                                     <a href="javascript:void(0)" class="badge {{ $item->fbo_source == 'backoffice' ? 'bg-primary' : ($item->fbo_source == 'api' ? 'bg-success' : 'bg-warning') }}" data-bs-toggle="modal" data-bs-target="#passengerModal" id="showDetail" data-url="{{ route('trash.show', $item->fbo_id) }}"> {{ $item->fbo_source == 'backoffice' ? 'Backoffice' : ($item->fbo_source == 'api' ? 'API' : 'Website') }} </a>
-                                                    <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at}}
+                                                    <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at->format('H:i')}}
                                                 </div>
                                                 <div>
-                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{$item->fbo_trip_date}} {{$item->fbo_departure_time}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
+                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{$item->fbo_trip_date}} {{\Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i')}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
                                                 </div>
                                             </td>
                                             <td>
@@ -734,7 +734,7 @@
                     To ${data.trip.arrival_port} (${data.trip.arrival_island}, ${data.trip.arrival_time})
                 `;
                 $('#route-info').html(routeInfo);
-                
+
                 $('#passenger-list').empty();
                 // Loop untuk menambahkan data penumpang ke dalam tabel
                 data.trip.passengers.forEach(function(passenger, index) {
