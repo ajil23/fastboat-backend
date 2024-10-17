@@ -15,10 +15,12 @@ use App\Models\FastboatTrip;
 use App\Models\MasterCurrency;
 use App\Models\MasterNationality;
 use App\Models\MasterPaymentMethod;
+use App\Models\FastboatLog;
 use Carbon\Carbon;
 use COM;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BookingDataController extends Controller
@@ -1099,20 +1101,68 @@ class BookingDataController extends Controller
     // Menangani perubahan status 
     public function status($fbo_id)
     {
-        $bookingData = BookingData::find($fbo_id);  // Ambil data berdasarkan ID
-
-        if ($bookingData && $bookingData->fbo_payment_status == 'paid') {  // Cek jika payment sudah 'paid'
-            // Proses pengubahan status transaksi
-            if ($bookingData->fbo_transaction_status == 'waiting') {
-                $bookingData->fbo_transaction_status = 'accepted';
-            } elseif ($bookingData->fbo_transaction_status == 'accepted') {
-                $bookingData->fbo_transaction_status = 'confirmed';
-            } elseif ($bookingData->fbo_transaction_status == 'confirmed') {
-                $bookingData->fbo_transaction_status = 'accepted';  // Jika confirmed, kembalikan ke accepted
+        DB::beginTransaction();
+        try {
+            $bookingData = BookingData::find($fbo_id); // Ambil data berdasarkan ID
+    
+            $before = $bookingData->fbo_log;
+            if ($before != NULL){
+                $logbefore = $before . ';';
             }
-            $bookingData->save();
-        }
+            if ($bookingData && $bookingData->fbo_payment_status == 'paid') { // Cek payment status
+                $oldStatus = $bookingData->fbo_transaction_status; // Status sebelum diubah
+    
+                // Proses pengubahan status transaksi
+                if ($bookingData->fbo_transaction_status == 'waiting') {
+                    $bookingData->fbo_transaction_status = 'accepted';
+                } elseif ($bookingData->fbo_transaction_status == 'accepted') {
+                    $bookingData->fbo_transaction_status = 'confirmed';
+                    // Buat log perubahan status
 
+                    $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
+                    ->where('fbl_type', 'like', 'Update transaction status%')
+                    ->count();
+
+                    FastboatLog::create([
+                        'fbl_booking_id' => $bookingData->fbo_booking_id,
+                        'fbl_type' => 'Update transaction status ' . ($count + 1),
+                        'fbl_data_before' => 'accepted',
+                        'fbl_data_after' => 'confirmed',
+                    ]);
+    
+                    // Simpan log ke kolom `fbo_log` pada tabel booking_data
+                    $bookingData->fbo_log = $logbefore . 'Mark as confirm' . ';' . Auth::user()->name . ';' . now()->toDateTimeString();
+                    $bookingData->save();
+                } elseif ($bookingData->fbo_transaction_status == 'confirmed') {
+                    $bookingData->fbo_transaction_status = 'accepted'; // Jika confirmed, kembalikan ke accepted
+
+                    $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
+                    ->where('fbl_type', 'like', 'Update transaction status%')
+                    ->count();
+
+                    // Buat log perubahan status
+                    FastboatLog::create([
+                        'fbl_booking_id' => $bookingData->fbo_booking_id,
+                        'fbl_type' => 'Update transaction status ' . ($count + 1),
+                        'fbl_data_before' => 'confirmed',
+                        'fbl_data_after' => 'accepted',
+                    ]);
+    
+                    // Simpan log ke kolom `fbo_log` pada tabel booking_data
+                    $bookingData->fbo_log = $logbefore . 'Mark as unconfirm' . ';' . Auth::user()->name . ';' . now()->toDateTimeString();
+                    $bookingData->save();
+                }
+    
+                $newStatus = $bookingData->fbo_transaction_status; // Status setelah diubah
+    
+                // Simpan perubahan ke database
+                $bookingData->save();
+            }
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Gagal mengubah status: ' . $e->getMessage()]);
+        }
         return back();
     }
 
@@ -1149,10 +1199,10 @@ class BookingDataController extends Controller
 
         $passengerDataString = $bookingData->fbo_passenger; // Mengambil data dari database
         $passengerArray = [];
-    
+
         // Memisahkan data berdasarkan ';' untuk setiap penumpang
         $passengers = explode(';', $passengerDataString);
-    
+
         // Mengurai setiap data penumpang
         foreach ($passengers as $passenger) {
             $details = explode(',', $passenger);
@@ -1193,7 +1243,7 @@ class BookingDataController extends Controller
                 'arrival_time' => Carbon::parse($bookingData->fbo_arrival_time)->format('H:i'),
                 'passengers' => $passengerArray,
             ],
-            'checkPoint' =>[
+            'checkPoint' => [
                 'fcp_address' => $bookingData->checkPoint->fcp_address,
             ]
         ]);

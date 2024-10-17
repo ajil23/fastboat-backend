@@ -57,7 +57,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="fb_fasilitas">Fasilitas</label>
-                                            <textarea class="form-control" id="fb_fasilitas" name="fb_fasilitas" cols="30" rows="5" placeholder="Enter Fasilitas" required>{{$fastboatEdit->fb_fasilitas}}</textarea>
+                                            <textarea class="form-control" id="fb_fasilitas" name="fb_fasilitas" cols="30" rows="5" placeholder="Enter Fasilitas">{{$fastboatEdit->fb_fasilitas}}</textarea>
                                         </div>
                                         <div class="row">
                                             <div class="col-sm-6">
@@ -119,7 +119,7 @@
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <center>
-                                                        <img class="rounded me-2" src="{{ asset('storage/'.$fastboatEdit->fb_image1) }}" id="previewImage1" data-holder-rendered="true" style="height: 100px;">
+                                                        <img class="rounded me-2" src="#" id="previewImage1" data-holder-rendered="true" style="height: 100px;">
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image1">Image 1</label>
@@ -129,7 +129,7 @@
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <center>
-                                                        <img class="rounded me-2" src="{{ asset('storage/'.$fastboatEdit->fb_image2) }}" id="previewImage2" data-holder-rendered="true" style="height: 100px;">
+                                                        <img class="rounded me-2" src="#" id="previewImage2" data-holder-rendered="true" style="height: 100px;">
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image2">Image 2</label>
@@ -139,7 +139,7 @@
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <center>
-                                                        <img class="rounded me-2" src="{{ asset('storage/'.$fastboatEdit->fb_image3) }}" id="previewImage3" data-holder-rendered="true" style="height: 100px;">
+                                                        <img class="rounded me-2" src="#" id="previewImage3" data-holder-rendered="true" style="height: 100px;">
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image3">Image 3</label>
@@ -151,7 +151,7 @@
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <center>
-                                                        <img class="rounded me-2" src="{{ asset('storage/'.$fastboatEdit->fb_image4) }}" id="previewImage4" data-holder-rendered="true" style="height: 100px;">
+                                                        <img class="rounded me-2" src="#" id="previewImage4" data-holder-rendered="true" style="height: 100px;">
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image4">Image 4</label>
@@ -161,7 +161,7 @@
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <center>
-                                                        <img class="rounded me-2" src="{{ asset('storage/'.$fastboatEdit->fb_image5) }}" id="previewImage5" data-holder-rendered="true" style="height: 100px;">
+                                                        <img class="rounded me-2" src="#" id="previewImage5" data-holder-rendered="true" style="height: 100px;">
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image5">Image 5</label>
@@ -171,7 +171,7 @@
                                             <div class="col-lg-4">
                                                 <div class="mb-3">
                                                     <center>
-                                                        <img class="rounded me-2" src="{{ asset('storage/'.$fastboatEdit->fb_image6) }}" id="previewImage6" data-holder-rendered="true" style="height: 100px;">
+                                                        <img class="rounded me-2" src="#" id="previewImage6" data-holder-rendered="true" style="height: 100px;">
                                                     </center>
                                                     <br>
                                                     <label class="form-label" for="fb_image6">Image 6</label>
