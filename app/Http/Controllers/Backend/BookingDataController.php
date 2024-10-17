@@ -1160,6 +1160,7 @@ class BookingDataController extends Controller
                 $newStatus = $bookingData->fbo_transaction_status; // Status setelah diubah
 
                 // Simpan perubahan ke database
+                toast('Status Transaction as been updated!', 'success');
                 $bookingData->save();
             }
             DB::commit();
@@ -1175,7 +1176,6 @@ class BookingDataController extends Controller
         $request->validate([
             'fbo_id' => 'required',
             'fbo_payment_method' => 'required|string',
-            'fbo_transaction_id' => 'required|string',
         ]);
 
         $bookingData = BookingData::find($request->fbo_id);

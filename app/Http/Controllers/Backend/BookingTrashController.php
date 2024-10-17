@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\BookingData;
+use App\Models\FastboatLog;
 use App\Models\MasterPaymentMethod;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BookingTrashController extends Controller
 {
@@ -43,20 +46,51 @@ class BookingTrashController extends Controller
         $request->validate([
             'fbo_id' => 'required',
             'fbo_payment_method' => 'required|string',
-            'fbo_transaction_id' => 'required|string',
         ]);
 
-        $bookingData = BookingData::find($request->fbo_id);
+        DB::beginTransaction();
+        try {
+            $bookingData = BookingData::find($request->fbo_id);
 
-        if ($bookingData) {
-            $bookingData->fbo_payment_status = 'paid';
-            $bookingData->fbo_payment_method = $request->fbo_payment_method;
-            $bookingData->fbo_transaction_id = $request->fbo_transaction_id;
-            $bookingData->fbo_transaction_status = 'accepted';
-            $bookingData->save();
+            // Pengecekan data fbo_log
+            $before = $bookingData->fbo_log;
+            if ($before != NULL) {
+                $logbefore = $before . ';';
+            } else {
+                $logbefore = '';
+            }
+
+            if ($bookingData) {
+                $bookingData->fbo_payment_status = 'paid';
+                $bookingData->fbo_payment_method = $request->fbo_payment_method;
+                $bookingData->fbo_transaction_id = $request->fbo_transaction_id;
+                $bookingData->fbo_transaction_status = 'accepted';
+                $bookingData->save();
+
+                $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
+                    ->where('fbl_type', 'like', 'Update payment status%')
+                    ->count();
+
+                FastboatLog::create([
+                    'fbl_booking_id' => $bookingData->fbo_booking_id,
+                    'fbl_type' => 'Update payment status ' . ($count + 1),
+                    'fbl_data_before' => 'waiting',
+                    'fbl_data_after' => 'accepted',
+                ]);
+
+                // Simpan log ke kolom `fbo_log` pada tabel booking_data
+                $bookingData->fbo_log = $logbefore . 'Mark as accept' . ',' . Auth::user()->name . ',' . now()->toDateTimeString();
+                toast('Status Payment as been updated!', 'success');
+                $bookingData->save();
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'Gagal mengubah status: ' . $e->getMessage()]);
         }
 
-        return redirect()->back()->with('success', 'Payment status updated to paid.');
+        return redirect()->back();
     }
 
     // Menampilkan modal detail data fast-boat
