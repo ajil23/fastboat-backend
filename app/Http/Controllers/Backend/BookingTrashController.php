@@ -13,7 +13,7 @@ class BookingTrashController extends Controller
     public function index()
     {
         $bookingData = BookingData::orderBy('created_at', 'desc')
-        ->whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel'])->get();
+            ->whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel'])->get();
         $paymentMethod = MasterPaymentMethod::all();
         return view('booking.trash.index', compact('bookingData', 'paymentMethod'));
     }
@@ -88,6 +88,23 @@ class BookingTrashController extends Controller
             }
         }
 
+        // Mengambil dan memformat data log
+        $logDataString = $bookingData->fbo_log;
+        $logArray = [];
+
+        $logs = explode(';', $logDataString);
+
+        foreach ($logs as $log) {
+            $logDetails = explode(',', $log);
+            if (count($logDetails) === 3) {
+                $logArray[] = array(
+                    'activity' => trim($logDetails[0]),
+                    'user' => trim($logDetails[1]),
+                    'date' => trim($logDetails[2])
+                );
+            }
+        }
+
         return response()->json([
             'fbo_booking_id' => $bookingData->fbo_booking_id,
             'fbo_adult' => $bookingData->fbo_adult,
@@ -117,7 +134,8 @@ class BookingTrashController extends Controller
             ],
             'checkPoint' => [
                 'fcp_address' => $bookingData->checkPoint->fcp_address,
-            ]
+            ],
+            'logs' => $logArray,
         ]);
     }
 }

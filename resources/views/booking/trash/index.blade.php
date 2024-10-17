@@ -466,18 +466,9 @@
                                             </th>
                                         </tr>
                                     </thead>
+                                    <tbody id="logList">
+                                    </tbody>
                                     <tbody>
-                                        <tr>
-                                            <td>
-                                                <center>@reservasi</center>
-                                            </td>
-                                            <td>
-                                                <center>Mark as confirm</center>
-                                            </td>
-                                            <td colspan="2">
-                                                <center>19-10-2024 19:40</center>
-                                            </td>
-                                        </tr>
                                         <tr>
                                             <td style="background-color: lightskyblue;" colspan="2">
                                                 <center>Before</center>
@@ -747,6 +738,15 @@
                             <td>${passenger.nationality}</td>
                         </tr>
                     `);
+                });
+                data.logs.forEach(function(log) {
+                    $('#logList').append(
+                        `<tr>
+                        <td><center>${log.user}</center></td>
+                            <td><center>${log.activity}</center></td>
+                            <td colspan="2"><center>${log.date}</center></td>
+                        </tr>`
+                        );
                 });
                 $('#passenger-info').text(data.contact.ctc_info);
                 $('#chekin-point').text(data.checkPoint.fcp_address);
