@@ -1104,14 +1104,18 @@ class BookingDataController extends Controller
         DB::beginTransaction();
         try {
             $bookingData = BookingData::find($fbo_id); // Ambil data berdasarkan ID
-    
+
+            // Pengecekan data fbo_log
             $before = $bookingData->fbo_log;
-            if ($before != NULL){
+            if ($before != NULL) {
                 $logbefore = $before . ';';
+            } else {
+                $logbefore = '';
             }
+
             if ($bookingData && $bookingData->fbo_payment_status == 'paid') { // Cek payment status
                 $oldStatus = $bookingData->fbo_transaction_status; // Status sebelum diubah
-    
+
                 // Proses pengubahan status transaksi
                 if ($bookingData->fbo_transaction_status == 'waiting') {
                     $bookingData->fbo_transaction_status = 'accepted';
@@ -1120,8 +1124,8 @@ class BookingDataController extends Controller
                     // Buat log perubahan status
 
                     $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
-                    ->where('fbl_type', 'like', 'Update transaction status%')
-                    ->count();
+                        ->where('fbl_type', 'like', 'Update transaction status%')
+                        ->count();
 
                     FastboatLog::create([
                         'fbl_booking_id' => $bookingData->fbo_booking_id,
@@ -1129,16 +1133,16 @@ class BookingDataController extends Controller
                         'fbl_data_before' => 'accepted',
                         'fbl_data_after' => 'confirmed',
                     ]);
-    
+
                     // Simpan log ke kolom `fbo_log` pada tabel booking_data
-                    $bookingData->fbo_log = $logbefore . 'Mark as confirm' . ';' . Auth::user()->name . ';' . now()->toDateTimeString();
+                    $bookingData->fbo_log = $logbefore . 'Mark as confirm' . ',' . Auth::user()->name . ',' . now()->toDateTimeString();
                     $bookingData->save();
                 } elseif ($bookingData->fbo_transaction_status == 'confirmed') {
                     $bookingData->fbo_transaction_status = 'accepted'; // Jika confirmed, kembalikan ke accepted
 
                     $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
-                    ->where('fbl_type', 'like', 'Update transaction status%')
-                    ->count();
+                        ->where('fbl_type', 'like', 'Update transaction status%')
+                        ->count();
 
                     // Buat log perubahan status
                     FastboatLog::create([
@@ -1147,14 +1151,14 @@ class BookingDataController extends Controller
                         'fbl_data_before' => 'confirmed',
                         'fbl_data_after' => 'accepted',
                     ]);
-    
+
                     // Simpan log ke kolom `fbo_log` pada tabel booking_data
-                    $bookingData->fbo_log = $logbefore . 'Mark as unconfirm' . ';' . Auth::user()->name . ';' . now()->toDateTimeString();
+                    $bookingData->fbo_log = $logbefore . 'Mark as unconfirm' . ',' . Auth::user()->name . ',' . now()->toDateTimeString();
                     $bookingData->save();
                 }
-    
+
                 $newStatus = $bookingData->fbo_transaction_status; // Status setelah diubah
-    
+
                 // Simpan perubahan ke database
                 $bookingData->save();
             }
@@ -1200,6 +1204,7 @@ class BookingDataController extends Controller
         $passengerDataString = $bookingData->fbo_passenger; // Mengambil data dari database
         $passengerArray = [];
 
+
         // Memisahkan data berdasarkan ';' untuk setiap penumpang
         $passengers = explode(';', $passengerDataString);
 
@@ -1213,6 +1218,27 @@ class BookingDataController extends Controller
                     'gender' => $details[2],
                     'nationality' => $details[3],
                 ];
+            }
+        }
+
+        // Mengambil dan memformat data log
+        $logDataString = $bookingData->fbo_log;
+        $logArray = [];
+
+        if (empty($logDataString)) {
+            return $logArray;
+        }
+
+        $logs = explode(';', $logDataString);
+
+        foreach ($logs as $log) {
+            $logDetails = explode(',', $log);
+            if (count($logDetails) === 3) {
+                $logArray[] = array(
+                    'activity' => trim($logDetails[0]),
+                    'user' => trim($logDetails[1]),
+                    'date' => trim($logDetails[2])
+                );
             }
         }
 
@@ -1245,7 +1271,8 @@ class BookingDataController extends Controller
             ],
             'checkPoint' => [
                 'fcp_address' => $bookingData->checkPoint->fcp_address,
-            ]
+            ],
+            'logs' => $logArray,
         ]);
     }
 }
