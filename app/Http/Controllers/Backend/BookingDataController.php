@@ -1243,7 +1243,7 @@ class BookingDataController extends Controller
 
         return response()->json([
             'fbo_booking_id' => $bookingData->fbo_booking_id,
-            'fbo_adult' => $bookingData->fbo_adult,
+            'fbo_trip_date' => $bookingData->fbo_trip_date,
             'fbo_child' => $bookingData->fbo_child,
             'fbo_infant' => $bookingData->fbo_infant,
             'fbo_adult_publish' => $bookingData->fbo_adult_publish,

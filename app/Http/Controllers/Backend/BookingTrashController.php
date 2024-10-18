@@ -143,6 +143,7 @@ class BookingTrashController extends Controller
 
         return response()->json([
             'fbo_booking_id' => $bookingData->fbo_booking_id,
+            'fbo_trip_date' => $bookingData->fbo_trip_date,
             'fbo_adult' => $bookingData->fbo_adult,
             'fbo_child' => $bookingData->fbo_child,
             'fbo_infant' => $bookingData->fbo_infant,
