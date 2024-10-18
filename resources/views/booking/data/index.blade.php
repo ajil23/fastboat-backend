@@ -228,9 +228,29 @@
                                                             <i class="mdi mdi-dots-horizontal"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="#">View</a>
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                            <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="#">Delete</a>
+                                                            <a class="dropdown-item" href="#" id="=" style="color: rgb(23, 162, 184);">
+                                                                <i class="mdi mdi-ticket"></i>
+                                                                Download Ticket
+                                                            </a><a class="dropdown-item" href="#" id="=" style="color: rgb(66, 133, 244);">
+                                                                <i class="mdi mdi-email-send"></i>
+                                                                Cust. Email
+                                                            </a><a class="dropdown-item" href="#" id="=" style="color: rgb(66, 133, 244);">
+                                                                <i class="mdi mdi-email-send"></i>
+                                                                Comp. Email
+                                                            </a>
+                                                            <a class="dropdown-item" href="#" id="=" style="color: rgb(37, 211, 102);">
+                                                                <i class="mdi mdi-whatsapp"></i>
+                                                                WhatsApp
+                                                            </a>
+                                                            <a class="dropdown-item" href="#" style="color: grey;">
+                                                                <i class="mdi mdi-inbox-remove"></i>
+                                                                Remove</a>
+                                                            <a class="dropdown-item" href="#" style="color: rgb(234, 67, 53);">
+                                                                <i class="mdi mdi-cancel"></i>
+                                                                Cancel</a>
+                                                            <a class="dropdown-item" href="#" style="color: rgb(255, 90, 0);">
+                                                                <i class="mdi mdi-square-edit-outline"></i>
+                                                                Edit</a>
                                                         </div>
                                                     </div>
                                                 </center>
