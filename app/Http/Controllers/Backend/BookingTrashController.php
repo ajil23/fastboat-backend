@@ -175,4 +175,14 @@ class BookingTrashController extends Controller
             'logs' => $logArray,
         ]);
     }
+
+    public function updateStatus(Request $request, $fbo_id)
+    {
+        $bookingData = BookingData::findOrFail($fbo_id);  // Sesuaikan model dengan kebutuhan
+        $bookingData->fbo_transaction_status = 'remove';
+        $bookingData->save();
+
+        toast('Status Transaction as been removed!', 'success');
+        return response()->json(['success' => true]);
+    }
 }

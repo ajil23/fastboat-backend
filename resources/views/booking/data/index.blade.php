@@ -169,21 +169,26 @@
                                                     <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at->format('H:i')}}
                                                 </div>
                                                 <div>
-                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{\Carbon\Carbon::parse($item->fbo_trip_date)->format('d F Y')}}  {{\Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i')}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
+                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{\Carbon\Carbon::parse($item->fbo_trip_date)->format('d F Y')}} {{\Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i')}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
                                                 </div>
                                             </td>
                                             <td>
                                                 <center>
-                                                    <!-- Tombol untuk memicu modal saat status unpaid -->
+                                                    <!-- Tombol untuk status paid/unpaid -->
+                                                    @if($item->fbo_transaction_status == 'remove')
+                                                    <span class="text-muted">
+                                                        <i class="fas fa-ban"></i> Not Available
+                                                    </span><br>
+                                                    @else
                                                     @if($item->fbo_payment_status == 'unpaid' || empty($item->fbo_payment_status))
                                                     <a href="#" class="text-secondary btn-set-paid" data-id="{{ $item->fbo_id }}">
                                                         <i class="fas fa-times-circle"></i> {{ $item->fbo_payment_status ?: 'unpaid' }}
                                                     </a><br>
                                                     @else
-                                                    <!-- Tampilkan status 'paid' -->
                                                     <span class="text-success payment-status" data-id="{{ $item->fbo_id }}">
                                                         <i class="fas fa-check-circle"></i> {{ $item->fbo_payment_status }}
                                                     </span><br>
+                                                    @endif
                                                     @endif
 
                                                     <!-- Metode pembayaran -->
@@ -196,11 +201,10 @@
                                                     @endif
                                                 </center>
                                             </td>
-
                                             <td>
                                                 <center>
-                                                    <!-- Tombol Confirm/Unconfirm -->
-                                                    @if($item->fbo_payment_status == 'paid')
+                                                    <!-- Tombol Confirm/Unconfirm hanya jika status bukan 'remove' -->
+                                                    @if($item->fbo_transaction_status != 'remove' && $item->fbo_payment_status == 'paid')
                                                     <a href="#"
                                                         class="btn-change-status"
                                                         data-url="{{ route('data.status', $item->fbo_id) }}">
@@ -213,14 +217,21 @@
                                                     </span><br>
                                                     @endif
 
-                                                    <!-- Status display -->
-                                                    <span class="text-{{ $item->fbo_transaction_status == 'confirmed' ? 'success' : ($item->fbo_transaction_status == 'accepted' ? 'primary' : 'warning') }} transaction-status" data-id="{{ $item->fbo_id }}">
-                                                        <i class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt' }}"></i>
+                                                    <!-- Status display dengan tambahan kondisi 'remove' dan 'cancel' -->
+                                                    <span class="text-{{ 
+                                                            $item->fbo_transaction_status == 'confirmed' ? 'success' : 
+                                                            ($item->fbo_transaction_status == 'accepted' ? 'primary' : 
+                                                            ($item->fbo_transaction_status == 'cancel' ? 'danger' : 
+                                                            ($item->fbo_transaction_status == 'remove' ? 'secondary' : 'warning'))) 
+                                                        }} transaction-status" data-id="{{ $item->fbo_id }}">
+                                                        <i class="fas {{
+                                                            $item->fbo_transaction_status == 'confirmed' ? 'fa-check-circle' : 
+                                                            ($item->fbo_transaction_status == 'cancel' || $item->fbo_transaction_status == 'remove' ? 'fa-times-circle' : 'fa-sync-alt')
+                                                        }}"></i>
                                                         {{ ucfirst($item->fbo_transaction_status) }}
                                                     </span>
                                                 </center>
                                             </td>
-
                                             <td>
                                                 <center>
                                                     <div class="dropstart">
@@ -242,9 +253,12 @@
                                                                 <i class="mdi mdi-whatsapp"></i>
                                                                 WhatsApp
                                                             </a>
-                                                            <a class="dropdown-item" href="#" style="color: grey;">
-                                                                <i class="mdi mdi-inbox-remove"></i>
-                                                                Remove</a>
+                                                            <a class="dropdown-item text-secondary"
+                                                                href="javascript:void(0);"
+                                                                id="removeStatus"
+                                                                data-url="{{ route('data.updateStatus', $item->fbo_id) }}">
+                                                                <i class="mdi mdi-inbox-remove"></i> Remove
+                                                            </a>
                                                             <a class="dropdown-item" href="#" style="color: rgb(234, 67, 53);">
                                                                 <i class="mdi mdi-cancel"></i>
                                                                 Cancel</a>
@@ -703,7 +717,7 @@
                 function formatNumber(number) {
                     return Number(number).toLocaleString('id-ID'); // 'id-ID' for Indonesian locale, use 'en-US' for English locale
                 }
-                
+
                 // Fungsi untuk memformat tanggal menjadi tanggal-bulan-tahun
                 function formatTanggal(tanggalString) {
                     const bulanNama = [
@@ -781,12 +795,50 @@
                             <td><center>${log.activity}</center></td>
                             <td colspan="2"><center>${log.date}</center></td>
                         </tr>`
-                        );
+                    );
                 });
                 $('#passenger-info').text(data.contact.ctc_info);
                 $('#chekin-point').text(data.checkPoint.fcp_address);
             }).fail(function() {
                 alert('Gagal mengambil data. Silakan coba lagi.');
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#removeStatus').on('click', function(e) {
+            e.preventDefault(); // Mencegah aksi default link
+            let url = $(this).data('url'); // Ambil URL dari atribut data-url
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will set the status to 'remove'.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}' // Kirim CSRF token
+                        },
+                        success: function() {
+                            location.reload(); // Langsung reload halaman setelah sukses
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Error!',
+                                'Failed to update the status. Please try again.',
+                                'error'
+                            );
+                        }
+                    });
+                }
             });
         });
     });
