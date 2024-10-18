@@ -1284,4 +1284,60 @@ class BookingDataController extends Controller
         toast('Status Transaction as been removed!', 'success');
         return response()->json(['success' => true]);
     }
+
+    public function whatsappReservation($fbo_id)
+    {
+        $booking = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($fbo_id);
+
+        $passengers = explode(';', $booking->fbo_passenger);
+        $passengerArray = []; // Inisialisasi array penumpang
+
+        // Mengurai setiap data penumpang
+        foreach ($passengers as $passenger) {
+            $details = explode(',', $passenger);
+            if (count($details) === 4) {
+                // Mengubah umur menjadi string sesuai kategori
+                $age = (int) $details[1];
+                if ($age > 13) {
+                    $ageGroup = 'ADULT';
+                } elseif ($age >= 3 && $age <= 12) {
+                    $ageGroup = 'CHILD';
+                } elseif ($age >= 0 && $age <= 2) {
+                    $ageGroup = 'INFANT';
+                } else {
+                    $ageGroup = 'UNKNOWN'; // Jika umur tidak valid
+                }
+
+                $passengerArray[] = [
+                    'name' => $details[0],
+                    'age' => $ageGroup, // Menggunakan kategori umur
+                    'gender' => $details[2],
+                    'nationality' => $details[3],
+                ];
+            }
+        }
+
+        // Format trip date
+        $tripDate = new \DateTime($booking->fbo_trip_date);
+        $formattedDate = $tripDate->format('l, d M Y');
+
+        // Memformat waktu
+        $time = $booking->availability->fba_dept_time ?? $booking->trip->fbt_dept_time;
+        $timeDateTime = new \DateTime($time);
+        $formattedTime = $timeDateTime->format('H:i');
+
+        return response()->json([
+            'fbo_booking_id' => $booking->fbo_booking_id,
+            'company' => $booking->trip->fastboat->company->cpn_name,
+            'departure_port' => $booking->trip->departure->prt_name_en,
+            'arrival_port' => $booking->trip->arrival->prt_name_en,
+            'fbo_trip_date' => $formattedDate,
+            'time' => $formattedTime,
+            'name' => $booking->contact->ctc_name,
+            'email' => $booking->contact->ctc_email,
+            'phone' => $booking->contact->ctc_phone,
+            'passengers' => $passengerArray,
+            'cpn_phone' => $booking->trip->fastboat->company->cpn_phone,
+        ]);
+    }
 }

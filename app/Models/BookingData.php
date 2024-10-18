@@ -16,7 +16,7 @@ class BookingData extends Model
     {
         return $this->belongsTo(Contact::class, 'fbo_order_id', 'ctc_id');
     }
-    public function availabiltity()
+    public function availability()
     {
         return $this->belongsTo(FastboatAvailability::class, 'fbo_availability_id', 'fba_id');
     }
