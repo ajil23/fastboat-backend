@@ -68,18 +68,18 @@ class BookingTrashController extends Controller
                 $bookingData->save();
 
                 $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
-                    ->where('fbl_type', 'like', 'Update payment status%')
+                    ->where('fbl_type', 'like', 'Update transaction status%')
                     ->count();
 
                 FastboatLog::create([
                     'fbl_booking_id' => $bookingData->fbo_booking_id,
-                    'fbl_type' => 'Update payment status ' . ($count + 1),
-                    'fbl_data_before' => 'waiting',
-                    'fbl_data_after' => 'accepted',
+                    'fbl_type' => 'Update transaction status ' . ($count + 1),
+                    'fbl_data_before' => 'transaction_status:waiting',
+                    'fbl_data_after' => 'transaction_status:accepted',
                 ]);
 
                 // Simpan log ke kolom `fbo_log` pada tabel booking_data
-                $bookingData->fbo_log = $logbefore . 'Mark as accept' . ',' . Auth::user()->name . ',' . now()->toDateTimeString();
+                $bookingData->fbo_log = $logbefore . Auth::user()->name . ',' . 'Mark as accept'  . ',' . now()->toDateTimeString();
                 toast('Status Payment as been updated!', 'success');
                 $bookingData->save();
             }
@@ -132,8 +132,8 @@ class BookingTrashController extends Controller
             $logDetails = explode(',', $log);
             if (count($logDetails) === 3) {
                 $logArray[] = array(
-                    'activity' => trim($logDetails[0]),
-                    'user' => trim($logDetails[1]),
+                    'user' => trim($logDetails[0]),
+                    'activity' => trim($logDetails[1]),
                     'date' => trim($logDetails[2])
                 );
             }

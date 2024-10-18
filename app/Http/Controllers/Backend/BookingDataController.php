@@ -1130,12 +1130,12 @@ class BookingDataController extends Controller
                     FastboatLog::create([
                         'fbl_booking_id' => $bookingData->fbo_booking_id,
                         'fbl_type' => 'Update transaction status ' . ($count + 1),
-                        'fbl_data_before' => 'accepted',
-                        'fbl_data_after' => 'confirmed',
+                        'fbl_data_before' => 'transaction_status:accepted',
+                        'fbl_data_after' => 'transaction_status:confirmed',
                     ]);
 
                     // Simpan log ke kolom `fbo_log` pada tabel booking_data
-                    $bookingData->fbo_log = $logbefore . 'Mark as confirm' . ',' . Auth::user()->name . ',' . now()->toDateTimeString();
+                    $bookingData->fbo_log = $logbefore . Auth::user()->name . ',' . 'Mark as confirm' . ',' . now()->toDateTimeString();
                     $bookingData->save();
                 } elseif ($bookingData->fbo_transaction_status == 'confirmed') {
                     $bookingData->fbo_transaction_status = 'accepted'; // Jika confirmed, kembalikan ke accepted
@@ -1148,12 +1148,12 @@ class BookingDataController extends Controller
                     FastboatLog::create([
                         'fbl_booking_id' => $bookingData->fbo_booking_id,
                         'fbl_type' => 'Update transaction status ' . ($count + 1),
-                        'fbl_data_before' => 'confirmed',
-                        'fbl_data_after' => 'accepted',
+                        'fbl_data_before' => 'transaction_status:confirmed',
+                        'fbl_data_after' => 'transaction_status:accepted',
                     ]);
 
                     // Simpan log ke kolom `fbo_log` pada tabel booking_data
-                    $bookingData->fbo_log = $logbefore . 'Mark as unconfirm' . ',' . Auth::user()->name . ',' . now()->toDateTimeString();
+                    $bookingData->fbo_log = $logbefore . Auth::user()->name . ',' . 'Mark as unconfirm' . ',' . now()->toDateTimeString();
                     $bookingData->save();
                 }
 
@@ -1231,8 +1231,8 @@ class BookingDataController extends Controller
             $logDetails = explode(',', $log);
             if (count($logDetails) === 3) {
                 $logArray[] = array(
-                    'activity' => trim($logDetails[0]),
-                    'user' => trim($logDetails[1]),
+                    'user' => trim($logDetails[0]),
+                    'activity' => trim($logDetails[1]),
                     'date' => trim($logDetails[2])
                 );
             }
