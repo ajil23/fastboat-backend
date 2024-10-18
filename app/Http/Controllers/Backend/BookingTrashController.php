@@ -59,6 +59,8 @@ class BookingTrashController extends Controller
             } else {
                 $logbefore = '';
             }
+            $user = Auth::user()->name; // Pengecekan user
+            $date = now()->format('d-M-Y H:i:s'); // Tanggal
 
             if ($bookingData) {
                 $bookingData->fbo_payment_status = 'paid';
@@ -79,7 +81,7 @@ class BookingTrashController extends Controller
                 ]);
 
                 // Simpan log ke kolom `fbo_log` pada tabel booking_data
-                $bookingData->fbo_log = $logbefore . Auth::user()->name . ',' . 'Mark as accept'  . ',' . now()->toDateTimeString();
+                $bookingData->fbo_log = $logbefore . $user . ',' . 'Mark as accept'  . ',' . $date;
                 toast('Status Payment as been updated!', 'success');
                 $bookingData->save();
             }
