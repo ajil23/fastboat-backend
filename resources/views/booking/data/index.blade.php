@@ -169,7 +169,7 @@
                                                     <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at->format('H:i')}}
                                                 </div>
                                                 <div>
-                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{$item->fbo_trip_date}} {{\Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i')}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
+                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{\Carbon\Carbon::parse($item->fbo_trip_date)->format('d F Y')}}  {{\Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i')}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
                                                 </div>
                                             </td>
                                             <td>
@@ -257,7 +257,7 @@
                 </div>
                 <div class="modal-title">
                     <h5 class="text-center">
-                        <span class="text-danger" id="booking-id"></span> <span id="booking-fastboat"></span><br>
+                        <span class="text-danger" id="booking-id"></span> <span id="booking-fastboat"></span> <span id="trip-date"></span><br>
                         <span id="route-info"></span>
                     </h5>
                 </div>
@@ -683,10 +683,26 @@
                 function formatNumber(number) {
                     return Number(number).toLocaleString('id-ID'); // 'id-ID' for Indonesian locale, use 'en-US' for English locale
                 }
+                
+                // Fungsi untuk memformat tanggal menjadi tanggal-bulan-tahun
+                function formatTanggal(tanggalString) {
+                    const bulanNama = [
+                        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Augt", "Sept", "Oct", "Nov", "Dec"
+                    ];
+
+                    const tanggal = new Date(tanggalString); // Konversi string menjadi Date object
+                    const hari = tanggal.getDate(); // Ambil hari
+                    const bulan = bulanNama[tanggal.getMonth()]; // Ambil nama bulan
+                    const tahun = tanggal.getFullYear(); // Ambil tahun
+
+                    return `${hari} ${bulan} ${tahun}`; // Format tanggal-bulan-tahun
+                }
 
                 // Isi data ke dalam modal
                 $('#booking-id').text(data.fbo_booking_id);
-                $('#booking-fastboat').text(' ( ' + data.trip.fastboat.fb_name + ' ) ');
+                $('#booking-fastboat').text(data.trip.fastboat.fb_name);
+                $('#trip-date').text(formatTanggal(data.fbo_trip_date));
                 $('#count-adult').text(data.fbo_adult);
                 $('#count-child').text(data.fbo_child);
                 $('#count-infant').text(data.fbo_infant);
