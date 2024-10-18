@@ -169,21 +169,29 @@
                                                     <strong>{{$item->contact->ctc_name}}</strong> ~ {{$item->contact->ctc_email}} ~ {{$item->contact->ctc_phone}} ~ {{$item->created_at->format('H:i')}}
                                                 </div>
                                                 <div>
-                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{\Carbon\Carbon::parse($item->fbo_trip_date)->format('d F Y')}}  {{\Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i')}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
+                                                    <strong>{{$item->fbo_booking_id}}</strong> ~ <strong>{{$item->trip->fastboat->fb_name}}</strong> {{$item->trip->departure->island->isd_name}} <span class="text-danger">({{\Carbon\Carbon::parse($item->fbo_trip_date)->format('d F Y')}} {{\Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i')}})</span> => {{$item->trip->arrival->island->isd_name}} ~ <strong>{{$item->fbo_adult + $item->fbo_child}} pax</strong> ({{$item->fbo_adult}} Adult, {{$item->fbo_child}} Child, {{$item->fbo_infant}} Infant)
                                                 </div>
                                             </td>
                                             <td>
                                                 <center>
                                                     <!-- Tombol untuk memicu modal saat status unpaid -->
+                                                    @if($item->fbo_transaction_status == 'remove')
+                                                    <!-- Status payment tetap muncul, tapi tombol dinonaktifkan -->
+                                                    <span class="text-secondary">
+                                                        <i class="fas {{ $item->fbo_payment_status == 'paid' ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                                                        {{ $item->fbo_payment_status ?: 'unpaid' }}
+                                                    </span><br>
+                                                    @else
                                                     @if($item->fbo_payment_status == 'unpaid' || empty($item->fbo_payment_status))
+                                                    <!-- Tombol untuk unpaid tetap dapat digunakan -->
                                                     <a href="#" class="text-secondary btn-set-paid" data-id="{{ $item->fbo_id }}">
                                                         <i class="fas fa-times-circle"></i> {{ $item->fbo_payment_status ?: 'unpaid' }}
                                                     </a><br>
                                                     @else
-                                                    <!-- Tampilkan status 'paid' -->
                                                     <span class="text-success payment-status" data-id="{{ $item->fbo_id }}">
                                                         <i class="fas fa-check-circle"></i> {{ $item->fbo_payment_status }}
                                                     </span><br>
+                                                    @endif
                                                     @endif
 
                                                     <!-- Metode pembayaran -->
@@ -199,28 +207,35 @@
 
                                             <td>
                                                 <center>
+                                                    @if(in_array($item->fbo_transaction_status, ['accepted', 'confirmed']))
                                                     <!-- Tombol Confirm/Unconfirm -->
-                                                    @if($item->fbo_payment_status == 'paid')
                                                     <a href="#"
                                                         class="btn-change-status"
                                                         data-url="{{ route('trash.status', $item->fbo_id) }}">
                                                         <i class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-sync-alt' : 'fa-check-circle' }}"></i>
                                                         {{ $item->fbo_transaction_status == 'confirmed' ? 'Unconfirm' : 'Confirm' }}
                                                     </a><br>
-                                                    @else
-                                                    <span class="text-muted">
-                                                        <i class="fas fa-check-circle"></i> Confirm
-                                                    </span><br>
                                                     @endif
 
-                                                    <!-- Status display -->
-                                                    <span class="text-{{ $item->fbo_transaction_status == 'confirmed' ? 'success' : ($item->fbo_transaction_status == 'accepted' ? 'primary' : 'warning') }} transaction-status" data-id="{{ $item->fbo_id }}">
-                                                        <i class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt' }}"></i>
+
+                                                    <!-- Status Display -->
+                                                    <span
+                                                        class="text-{{ 
+                                                            $item->fbo_transaction_status == 'confirmed' ? 'success' : 
+                                                            ($item->fbo_transaction_status == 'accepted' ? 'primary' : 
+                                                            ($item->fbo_transaction_status == 'remove' ? 'secondary' : 
+                                                            ($item->fbo_transaction_status == 'cancel' ? 'danger' : 'warning'))) 
+                                                        }} transaction-status"
+                                                        data-id="{{ $item->fbo_id }}">
+                                                        <i class="fas 
+                                                            {{ $item->fbo_transaction_status == 'remove' || $item->fbo_transaction_status == 'cancel' ? 'fa-times-circle' : 
+                                                            ($item->fbo_transaction_status == 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt') }}">
+                                                        </i>
+
                                                         {{ ucfirst($item->fbo_transaction_status) }}
                                                     </span>
                                                 </center>
                                             </td>
-
                                             <td>
                                                 <center>
                                                     <div class="dropstart">
@@ -228,9 +243,32 @@
                                                             <i class="mdi mdi-dots-horizontal"></i>
                                                         </a>
                                                         <div class="dropdown-menu dropdown-menu-end">
-                                                            <a class="dropdown-item" href="javascript:void(0)" id="showDetail" data-url="#">View</a>
-                                                            <a class="dropdown-item" href="#">Edit</a>
-                                                            <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="#">Delete</a>
+                                                            <a class="dropdown-item" href="#" id="=" style="color: rgb(23, 162, 184);">
+                                                                <i class="mdi mdi-ticket"></i>
+                                                                Download Ticket
+                                                            </a><a class="dropdown-item" href="#" id="=" style="color: rgb(66, 133, 244);">
+                                                                <i class="mdi mdi-email-send"></i>
+                                                                Cust. Email
+                                                            </a><a class="dropdown-item" href="#" id="=" style="color: rgb(66, 133, 244);">
+                                                                <i class="mdi mdi-email-send"></i>
+                                                                Comp. Email
+                                                            </a>
+                                                            <a class="dropdown-item" href="#" id="=" style="color: rgb(37, 211, 102);">
+                                                                <i class="mdi mdi-whatsapp"></i>
+                                                                WhatsApp
+                                                            </a>
+                                                            <a class="dropdown-item text-secondary"
+                                                                href="javascript:void(0);"
+                                                                id="removeStatus"
+                                                                data-url="{{ route('trash.updateStatus', $item->fbo_id) }}">
+                                                                <i class="mdi mdi-inbox-remove"></i> Remove
+                                                            </a>
+                                                            <a class="dropdown-item" href="#" style="color: rgb(234, 67, 53);">
+                                                                <i class="mdi mdi-cancel"></i>
+                                                                Cancel</a>
+                                                            <a class="dropdown-item" href="#" style="color: rgb(255, 90, 0);">
+                                                                <i class="mdi mdi-square-edit-outline"></i>
+                                                                Edit</a>
                                                         </div>
                                                     </div>
                                                 </center>
@@ -762,12 +800,50 @@
                             <td><center>${log.activity}</center></td>
                             <td colspan="2"><center>${log.date}</center></td>
                         </tr>`
-                        );
+                    );
                 });
                 $('#passenger-info').text(data.contact.ctc_info);
                 $('#chekin-point').text(data.checkPoint.fcp_address);
             }).fail(function() {
                 alert('Gagal mengambil data. Silakan coba lagi.');
+            });
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $('#removeStatus').on('click', function(e) {
+            e.preventDefault(); // Mencegah aksi default link
+            let url = $(this).data('url'); // Ambil URL dari atribut data-url
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will set the status to 'remove'.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, remove it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}' // Kirim CSRF token
+                        },
+                        success: function() {
+                            location.reload(); // Langsung reload halaman setelah sukses
+                        },
+                        error: function() {
+                            Swal.fire(
+                                'Error!',
+                                'Failed to update the status. Please try again.',
+                                'error'
+                            );
+                        }
+                    });
+                }
             });
         });
     });
