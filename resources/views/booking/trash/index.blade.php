@@ -204,7 +204,6 @@
                                                     @endif
                                                 </center>
                                             </td>
-
                                             <td>
                                                 <center>
                                                     @if(in_array($item->fbo_transaction_status, ['accepted', 'confirmed']))
@@ -216,8 +215,6 @@
                                                         {{ $item->fbo_transaction_status == 'confirmed' ? 'Unconfirm' : 'Confirm' }}
                                                     </a><br>
                                                     @endif
-
-
                                                     <!-- Status Display -->
                                                     <span
                                                         class="text-{{ 
@@ -231,7 +228,6 @@
                                                             {{ $item->fbo_transaction_status == 'remove' || $item->fbo_transaction_status == 'cancel' ? 'fa-times-circle' : 
                                                             ($item->fbo_transaction_status == 'confirmed' ? 'fa-check-circle' : 'fa-sync-alt') }}">
                                                         </i>
-
                                                         {{ ucfirst($item->fbo_transaction_status) }}
                                                     </span>
                                                 </center>
@@ -257,15 +253,15 @@
                                                                 <i class="mdi mdi-whatsapp"></i>
                                                                 WhatsApp
                                                             </a>
-                                                            <a class="dropdown-item text-secondary"
-                                                                href="javascript:void(0);"
-                                                                id="removeStatus"
-                                                                data-url="{{ route('trash.updateStatus', $item->fbo_id) }}">
+                                                            <a class="dropdown-item text-secondary" href="javascript:void(0);" id="removeStatus" data-url="{{ route('trash.updateStatus', $item->fbo_id) }}">
                                                                 <i class="mdi mdi-inbox-remove"></i> Remove
                                                             </a>
                                                             <a class="dropdown-item" href="#" style="color: rgb(234, 67, 53);">
                                                                 <i class="mdi mdi-cancel"></i>
                                                                 Cancel</a>
+                                                            <a class="dropdown-item btn-set-paid" data-id="{{ $item->fbo_id }}" href="#" style="color: rgb(255, 215, 0);">
+                                                                <i class="mdi mdi-credit-card"></i>
+                                                                Payment</a>
                                                             <a class="dropdown-item" href="#" style="color: rgb(255, 90, 0);">
                                                                 <i class="mdi mdi-square-edit-outline"></i>
                                                                 Edit</a>
