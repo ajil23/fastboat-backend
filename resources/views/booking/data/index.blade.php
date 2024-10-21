@@ -990,9 +990,17 @@
 
                     $('#send-reservation').off('click').on('click', function() {
                         var encodedText = encodeURIComponent(whatsappText);
-                        var whatsappLink =
-                            `https://api.whatsapp.com/send/?phone=${data.cpn_phone}&text=${encodedText}&type=phone_number&app_absent=0`;
-                        window.open(whatsappLink, '_blank');
+
+                        var messageLink = `whatsapp://send?text=${encodedText}`;
+                        
+                        window.open(messageLink, '_blank');
+                        
+                        setTimeout(() => {
+                            if (!document.hidden) {
+                                // Jika aplikasi tidak terbuka, gunakan link web sebagai backup di tab baru
+                                window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+                            }
+                        }, 1000);
                     });
                 });
             })

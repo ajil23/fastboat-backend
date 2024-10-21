@@ -102,7 +102,7 @@ class AvailabilityApiController extends Controller
 
                     return [
                         'fbt_recom' => $availability->trip->fbt_recom,
-                        'fb_image1' => url($availability->trip->fastboat->fb_image1) ?? null,
+                        'fb_image1' => url('storage/' . ltrim($availability->trip->fastboat->fb_image1, '/')) ?? null,
                         'fba_dept_time' => $availability->fba_dept_time,
                         'fba_arrival_time' => $availability->fba_arrival_time,
                         'dept_port' => $availability->trip->departure->prt_name_en,
