@@ -960,42 +960,51 @@
                         Gilitransfers Team.
                     `;
 
-                // Masukkan pesan ke dalam modal
-                $('#whatsapp-message').html(message);
+                    // Masukkan pesan ke dalam modal
+                    $('#whatsapp-message').html(message);
 
-                // Buat daftar penumpang untuk WhatsApp
-                var passengersListWA = data.passengers.map((passenger, index) => {
-                    return `${index + 1}. ${passenger.name} (${passenger.gender}) ~ ${passenger.nationality} ~ ${passenger.age}`;
-                }).join('\n');
+                    // Buat daftar penumpang untuk WhatsApp
+                    var passengersListWA = data.passengers.map((passenger, index) => {
+                        return `${index + 1}. ${passenger.name} (${passenger.gender}) ~ ${passenger.nationality} ~ ${passenger.age}`;
+                    }).join('\n');
 
-                var whatsappText = [
-                    `Dear Reservation Team ${data.company}`,
-                    '',
-                    'Greetings from gilitransfers.',
-                    '',
-                    'Please Confirm Our Booking Below:',
-                    `*Booking ID:* ${data.fbo_booking_id}`,
-                    `*Route:* ${data.departure_port} To ${data.arrival_port}`,
-                    `*Trip Date:* ${data.fbo_trip_date}`,
-                    `*Time:* ${data.time}`,
-                    '',
-                    '*Buyer Contact:*',
-                    `${data.name} ~ ${data.email} ~ ${data.phone}`,
-                    '',
-                    '*Passengers:*',
-                    passengersListWA,
-                    '',
-                    'PAYMENT: ACC. GILITRANSFERS',
-                    '',
-                    'Regards,',
-                    'Gilitransfers Team.'
-                ].join('\n');
+                    var whatsappText = [
+                        `Dear Reservation Team ${data.company}`,
+                        '',
+                        'Greetings from gilitransfers.',
+                        '',
+                        'Please Confirm Our Booking Below:',
+                        `*Booking ID:* ${data.fbo_booking_id}`,
+                        `*Route:* ${data.departure_port} To ${data.arrival_port}`,
+                        `*Trip Date:* ${data.fbo_trip_date}`,
+                        `*Time:* ${data.time}`,
+                        '',
+                        '*Buyer Contact:*',
+                        `${data.name} ~ ${data.email} ~ ${data.phone}`,
+                        '',
+                        '*Passengers:*',
+                        passengersListWA,
+                        '',
+                        'PAYMENT: ACC. GILITRANSFERS',
+                        '',
+                        'Regards,',
+                        'Gilitransfers Team.'
+                    ].join('\n');
 
-                $('#send-reservation').off('click').on('click', function() {
-                    var encodedText = encodeURIComponent(whatsappText);
-                    var whatsappLink =
-                        `https://api.whatsapp.com/send/?phone=${data.cpn_phone}&text=${encodedText}&type=phone_number&app_absent=0`;
-                    window.open(whatsappLink, '_blank');
+                    $('#send-reservation').off('click').on('click', function() {
+                        var encodedText = encodeURIComponent(whatsappText);
+
+                        var messageLink = `whatsapp://send?text=${encodedText}`;
+                        
+                        window.open(messageLink, '_blank');
+                        
+                        setTimeout(() => {
+                            if (!document.hidden) {
+                                // Jika aplikasi tidak terbuka, gunakan link web sebagai backup di tab baru
+                                window.open(`https://api.whatsapp.com/send?text=${encodedText}`, '_blank');
+                            }
+                        }, 1000);
+                    });
                 });
             });
         })
