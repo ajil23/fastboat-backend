@@ -717,7 +717,7 @@
                         <!-- Refund options -->
                         <div class="form-group">
                             <label>Refund Options</label>
-                            <input type="hidden" value="" name="fbo_id" id="order_id"> 
+                            <input type="hidden" value="" name="fbo_id" id="order_id">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="fbo_payment_method" id="fullRefund" value="full_refund" required>
                                 <label class="form-check-label" for="fullRefund">Full Refund</label>
@@ -729,7 +729,7 @@
                             <!-- Partial refund input -->
                             <div class="form-group" id="partialRefundInput" style="display: none;">
                                 <label for="partial_refund_amount">Partial Refund Amount</label>
-                                <input type="number" class="form-control" name="partial_refund_amount" id="partial_refund_amount">
+                                <input type="text" class="form-control" name="partial_refund_amount" id="partial_refund_amount">
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="fbo_payment_method" id="fullCharge" value="full_charge">
@@ -1094,6 +1094,27 @@
             } else {
                 $('#partialRefundInput').hide();
             }
+        });
+
+        // Format input as currency with thousand separator
+        $('#partial_refund_amount').on('input', function() {
+            // Remove non-numeric characters
+            let value = $(this).val().replace(/[^0-9]/g, '');
+
+            // Format as currency (thousand separator)
+            if (value) {
+                $(this).val(Number(value).toLocaleString('id-ID'));
+            } else {
+                $(this).val('');
+            }
+        });
+
+        // Remove formatting when form is submitted
+        $('#cancelForm').on('submit', function() {
+            $('#partial_refund_amount').val(function() {
+                // Remove thousand separator for saving to the database
+                return $(this).val().replace(/,/g, '');
+            });
         });
     });
 </script>

@@ -185,41 +185,4 @@ class BookingTrashController extends Controller
         toast('Status Transaction as been removed!', 'success');
         return response()->json(['success' => true]);
     }
-
-    public function cancelTransaction(Request $request)
-    {
-        // Find the booking
-        $bookingData = BookingData::find($request->fbo_id);
-
-        if ($bookingData) {
-            // Handle the refund options
-            if ($request->fbo_payment_method == 'full_refund') {
-                // Full refund: fbo_refund = fbo_end_total, fbo_profit = 0
-                $bookingData->fbo_refund = $bookingData->fbo_end_total;
-                $bookingData->fbo_profit = 0;
-            } elseif ($request->fbo_payment_method == 'partial_refund') {
-                // Partial refund: set refund, calculate profit
-                $partialRefund = $request->partial_refund_amount;
-                $bookingData->fbo_refund = $partialRefund;
-                $bookingData->fbo_profit = $bookingData->fbo_end_total - $partialRefund;
-            } elseif ($request->fbo_payment_method == 'full_charge') {
-                // Full charge: refund = 0, profit = end total
-                $bookingData->fbo_refund = 0;
-                $bookingData->fbo_profit = $bookingData->fbo_end_total;
-            }
-
-            // Update other fields (if necessary)
-            $bookingData->fbo_transaction_status = 'cancel';  // Example status
-            $bookingData->fbo_payment_method = $request->fbo_payment_method ?? $bookingData->fbo_payment_method;
-
-            // Save changes to the database
-            $bookingData->save();
-
-            // Redirect back with a success message
-            return redirect()->back()->with('success', 'Transaction canceled successfully.');
-        }
-
-        // Return with error if booking not found
-        return redirect()->back()->with('error', 'Transaction not found.');
-    }
 }

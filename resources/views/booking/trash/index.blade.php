@@ -637,60 +637,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Modal for Cancel Transaction -->
-    <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="cancelModalLabel">Cancel Transaction</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Form for canceling the transaction -->
-                    <form id="cancelForm" method="POST" action="{{ route('trash.cancelTransaction') }}">
-                        @csrf
-                        <!-- Refund options -->
-                        <div class="form-group">
-                            <label>Refund Options</label>
-                            <input type="hidden" value="" name="fbo_id" id="order_id">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="fbo_payment_method" id="fullRefund" value="full_refund" required>
-                                <label class="form-check-label" for="fullRefund">Full Refund</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="fbo_payment_method" id="partialRefund" value="partial_refund">
-                                <label class="form-check-label" for="partialRefund">Partial Refund</label>
-                            </div>
-                            <!-- Partial refund input -->
-                            <div class="form-group" id="partialRefundInput" style="display: none;">
-                                <label for="partial_refund_amount">Partial Refund Amount</label>
-                                <input type="number" class="form-control" name="partial_refund_amount" id="partial_refund_amount">
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="fbo_payment_method" id="fullCharge" value="full_charge">
-                                <label class="form-check-label" for="fullCharge">Full Charge</label>
-                            </div>
-                        </div>
-
-                        <!-- Transaction details (display only) -->
-                        <div class="form-group">
-                            <label for="transaction_details">Transaction Details</label>
-                            <input type="text" id="transaction_details" class="form-control" readonly>
-                        </div>
-
-                        <!-- Submit button -->
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-dark">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
 </div>
 @include('admin.components.footer')
 </div>
@@ -909,35 +855,6 @@
                     });
                 }
             });
-        });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('.btn-cancel-transaction').on('click', function(e) {
-            e.preventDefault();
-
-            var transactionId = $(this).data('id');
-            var transactionDetails = $(this).data('details');
-
-            console.log('Transaction ID: ' + transactionId);
-            console.log('Transaction Details: ' + transactionDetails);
-
-            // Set the values in the modal
-            $('#order_id').val(transactionId);
-            $('#transaction_details').val(transactionDetails);
-
-            // Show the modal
-            $('#cancelModal').modal('show');
-        });
-
-        // Toggle partial refund input
-        $('input[name="fbo_payment_method"]').change(function() {
-            if ($('#partialRefund').is(':checked')) {
-                $('#partialRefundInput').show();
-            } else {
-                $('#partialRefundInput').hide();
-            }
         });
     });
 </script>
