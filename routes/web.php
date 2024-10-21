@@ -61,6 +61,7 @@ Route::middleware([
         Route::get('/data/{id}', [BookingDataController::class, 'show'])->name('data.show');
         Route::post('/data/{id}/update-status', [BookingDataController::class, 'updateStatus'])->name('data.updateStatus');
         Route::get('/data/{id}/whatsapp', [BookingDataController::class, 'whatsappReservation'])->name('data.whatsapp');
+        Route::post('/data/cancel-transaction', [BookingDataController::class, 'cancelTransaction'])->name('data.cancelTransaction');
 
         //booking-trash route
         Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
@@ -73,6 +74,7 @@ Route::middleware([
         Route::post('/trash/updatePayment', [BookingTrashController::class, 'updatePayment'])->name('trash.updatePayment');
         Route::get('/trash/{id}', [BookingTrashController::class, 'show'])->name('trash.show');
         Route::post('/trash/{id}/update-status', [BookingTrashController::class, 'updateStatus'])->name('trash.updateStatus');
+        Route::post('/trash/cancel-transaction', [BookingTrashController::class, 'cancelTransaction'])->name('trash.cancelTransaction');
     });
 
     Route::prefix('data')->group(function () {
