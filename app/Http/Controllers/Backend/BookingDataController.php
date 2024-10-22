@@ -1177,21 +1177,45 @@ class BookingDataController extends Controller
 
     public function updatePayment(Request $request)
     {
+        // Validasi request
         $request->validate([
             'fbo_id' => 'required',
             'fbo_payment_method' => 'required|string',
         ]);
 
+        // Cari data booking berdasarkan fbo_id
         $bookingData = BookingData::find($request->fbo_id);
 
         if ($bookingData) {
+            // Set status pembayaran ke 'paid'
             $bookingData->fbo_payment_status = 'paid';
+
+            // Set metode pembayaran
             $bookingData->fbo_payment_method = $request->fbo_payment_method;
-            $bookingData->fbo_transaction_id = $request->fbo_transaction_id;
+
+            // Logika untuk menentukan fbo_transaction_id
+            $fbo_transaction_id = '';
+
+            if ($request->fbo_payment_method == 'pak_anang') {
+                $fbo_transaction_id = 'received by Mr. Anang';
+            } elseif ($request->fbo_payment_method == 'pay_on_port') {
+                $fbo_transaction_id = 'collect';
+            } elseif ($request->fbo_payment_method == 'cash') {
+                $fbo_transaction_id = 'received by ' . $request->input('fbo_transaction_id');
+            } else {
+                // Gunakan nilai dari input pengguna untuk metode lain
+                $fbo_transaction_id = $request->input('fbo_transaction_id');
+            }
+
+            // Set fbo_transaction_id dan status transaksi
+            $bookingData->fbo_transaction_id = $fbo_transaction_id;
             $bookingData->fbo_transaction_status = 'accepted';
+
+            // Simpan perubahan
             $bookingData->save();
         }
 
+        // Redirect kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Payment status updated to paid.');
     }
 
@@ -1380,8 +1404,9 @@ class BookingDataController extends Controller
         return redirect()->back()->with('error', 'Transaction not found.');
     }
 
-    public function viewTicket(Request $request, $ticketId){
-        $ticketType = $request->input('downloadTicket'); 
+    public function viewTicket(Request $request, $ticketId)
+    {
+        $ticketType = $request->input('downloadTicket');
         $dataTicket = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($ticketId);
 
         $passengers = explode(';', $dataTicket->fbo_passenger);
@@ -1430,17 +1455,18 @@ class BookingDataController extends Controller
         $bookingDate = new \DateTime($dataTicket->created_at);
         $formattedBookingDate = $bookingDate->format('l, d M Y');
 
-        function getImagePath($imagePath) {
+        function getImagePath($imagePath)
+        {
             // Jika menggunakan asset()
             if (strpos($imagePath, 'assets/') === 0) {
                 return public_path($imagePath);
             }
-            
+
             // Handle path untuk cpn_logo
             // Karena di database mungkin hanya tersimpan nama filenya saja
             return storage_path('app/public/' . $imagePath);
         }
-        
+
 
         $data = [
             'fbo_booking_id' => $dataTicket->fbo_booking_id,
@@ -1465,10 +1491,10 @@ class BookingDataController extends Controller
             'logo_ticket' => base64_encode(file_get_contents(public_path('assets/images/logo-ticket.png'))),
         ];
 
-        if ($ticketType == "gt"){
+        if ($ticketType == "gt") {
             $pdf = Pdf::loadView('ticket.gt', $data);
             return $pdf->stream('ticket.pdf');
-        } elseif ($ticketType == "agen1"){
+        } elseif ($ticketType == "agen1") {
             return view('ticket.agen1');
         } else {
             return view('ticket.agen2');

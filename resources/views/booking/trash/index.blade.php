@@ -13,15 +13,6 @@
 <div class="main-content">
     <div class="page-content">
         <div class="container-fluid">
-            <div class="row">
-                <div class="ms-auto">
-                    <div class="btn-toolbar float-end" role="toolbar">
-                        <div class="btn-group me-2 mb-2">
-                            <a href="{{route('trash.add')}}" class="btn btn-dark w-100" id="btn-new-event"><i class="mdi mdi-plus"></i>Add</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card">
                 <a href="#addproduct-img-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-img-collapse">
                     <div class="p-4">
