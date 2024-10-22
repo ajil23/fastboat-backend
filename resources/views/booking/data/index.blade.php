@@ -802,7 +802,7 @@
                             <!-- Submit button -->
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                                <button type="submit" class="btn btn-dark">Submit</button>
+                                <button type="submit" id="printButton" class="btn btn-dark">Submit</button>
                             </div>
                         </form>
                     </div>
@@ -1188,7 +1188,7 @@
                 $('#ticket_id').val(ticketId);
 
                 // Update form action with the ticket ID
-                var actionUrl = '{{ route("data.viewTicket", ":ticketId") }}';
+                var actionUrl = '{{ route('data.viewTicket', ':ticketId') }}';
                 actionUrl = actionUrl.replace(':ticketId', ticketId); // Ganti placeholder dengan ID tiket
                 $('#ticketForm').attr('action', actionUrl);
 
