@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BookingDataController extends Controller
 {
@@ -1429,12 +1430,23 @@ class BookingDataController extends Controller
         $bookingDate = new \DateTime($dataTicket->created_at);
         $formattedBookingDate = $bookingDate->format('l, d M Y');
 
+        function getImagePath($imagePath) {
+            // Jika menggunakan asset()
+            if (strpos($imagePath, 'assets/') === 0) {
+                return public_path($imagePath);
+            }
+            
+            // Handle path untuk cpn_logo
+            // Karena di database mungkin hanya tersimpan nama filenya saja
+            return storage_path('app/public/' . $imagePath);
+        }
+        
+
         $data = [
             'fbo_booking_id' => $dataTicket->fbo_booking_id,
             'created_at' => $formattedBookingDate,
             'fbo_payment_status' => $dataTicket->fbo_payment_status,
             'cpn_name' => $dataTicket->trip->fastboat->company->cpn_name,
-            'cpn_logo' => $dataTicket->trip->fastboat->company->cpn_logo,
             'cpn_email' => $dataTicket->trip->fastboat->company->cpn_email,
             'cpn_phone' => $dataTicket->trip->fastboat->company->cpn_phone,
             'departure_port' => $dataTicket->trip->departure->prt_name_en,
@@ -1449,10 +1461,13 @@ class BookingDataController extends Controller
             'phone' => $dataTicket->contact->ctc_phone,
             'passengers' => $passengerArray,
             'cpn_phone' => $dataTicket->trip->fastboat->company->cpn_phone,
+            'cpn_logo' => base64_encode(file_get_contents(getImagePath($dataTicket->trip->fastboat->company->cpn_logo))),
+            'logo_ticket' => base64_encode(file_get_contents(public_path('assets/images/logo-ticket.png'))),
         ];
 
         if ($ticketType == "gt"){
-            return view('ticket.gt', compact('data'));
+            $pdf = Pdf::loadView('ticket.gt', $data);
+            return $pdf->stream('ticket.pdf');
         } elseif ($ticketType == "agen1"){
             return view('ticket.agen1');
         } else {
