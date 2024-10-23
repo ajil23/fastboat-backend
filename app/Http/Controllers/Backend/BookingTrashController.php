@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BookingTrashController extends Controller
 {
@@ -184,5 +185,109 @@ class BookingTrashController extends Controller
 
         toast('Status Transaction as been removed!', 'success');
         return response()->json(['success' => true]);
+    }
+
+    public function viewTicket(Request $request, $ticketId)
+    {
+        $ticketType = $request->input('downloadTicket');
+        $dataTicket = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($ticketId);
+
+        $passengers = explode(';', $dataTicket->fbo_passenger);
+        $passengerArray = []; // Inisialisasi array penumpang
+
+        // Mengurai setiap data penumpang
+        foreach ($passengers as $passenger) {
+            $details = explode(',', $passenger);
+            if (count($details) === 4) {
+                // Mengubah umur menjadi string sesuai kategori
+                $age = (int) $details[1];
+                if ($age > 13) {
+                    $ageGroup = 'ADULT';
+                } elseif ($age >= 3 && $age <= 12) {
+                    $ageGroup = 'CHILD';
+                } elseif ($age >= 0 && $age <= 2) {
+                    $ageGroup = 'INFANT';
+                } else {
+                    $ageGroup = 'UNKNOWN'; // Jika umur tidak valid
+                }
+
+                $passengerArray[] = [
+                    'name' => $details[0],
+                    'age' => $ageGroup, // Menggunakan kategori umur
+                    'gender' => $details[2],
+                    'nationality' => $details[3],
+                ];
+            }
+        }
+
+        // Format trip date
+        $tripDate = new \DateTime($dataTicket->fbo_trip_date);
+        $formattedTripDate = $tripDate->format('l, d M Y');
+
+        // Memformat waktu departur
+        $time = $dataTicket->availability->fba_dept_time ?? $dataTicket->trip->fbt_dept_time;
+        $timeDateTime = new \DateTime($time);
+        $formattedTime = $timeDateTime->format('H:i');
+
+        // Memformat waktu arrival
+        $arrivaltime = $dataTicket->fbo_arrival_time;
+        $arrivaltimeDateTime = new \DateTime($arrivaltime);
+        $arrivalformattedTime = $arrivaltimeDateTime->format('H:i');
+
+        // Memformat created_at
+        $bookingDate = new \DateTime($dataTicket->created_at);
+        $formattedBookingDate = $bookingDate->format('l, d M Y');
+
+        function getImagePath($imagePath)
+        {
+            // Jika menggunakan asset()
+            if (strpos($imagePath, 'assets/') === 0) {
+                return public_path($imagePath);
+            }
+
+            // Handle path untuk cpn_logo
+            // Karena di database mungkin hanya tersimpan nama filenya saja
+            return storage_path('app/public/' . $imagePath);
+        }
+
+
+        $data = [
+            'name' => $dataTicket->contact->ctc_name,
+            'email' => $dataTicket->contact->ctc_email,
+            'phone' => $dataTicket->contact->ctc_phone,
+            'fbo_booking_id' => $dataTicket->fbo_booking_id,
+            'fbo_payment_status' => $dataTicket->fbo_payment_status,
+            'fbo_trip_date' => $formattedTripDate,
+            'fbo_checkin_point_address' => $dataTicket->checkinPoint->fcp_address,
+            'fbo_checkin_point_maps' => $dataTicket->checkinPoint->fcp_maps,
+            'fbo_pickup' => $dataTicket->fbo_pickup,
+            'fbo_specific_pickup' => $dataTicket->fbo_specific_pickup,
+            'fbo_contact_pickup' => $dataTicket->fbo_contact_pickup,
+            'fbo_dropoff' => $dataTicket->fbo_dropoff,
+            'fbo_specific_dropoff' => $dataTicket->fbo_specific_dropoff,
+            'fbo_contact_dropoff' => $dataTicket->fbo_contact_dropoff,
+            'cpn_name' => $dataTicket->trip->fastboat->company->cpn_name,
+            'cpn_email' => $dataTicket->trip->fastboat->company->cpn_email,
+            'cpn_phone' => $dataTicket->trip->fastboat->company->cpn_phone,
+            'cpn_logo' => base64_encode(file_get_contents(getImagePath($dataTicket->trip->fastboat->company->cpn_logo))),
+            'departure_port' => $dataTicket->trip->departure->prt_name_en,
+            'departure_island' => $dataTicket->trip->departure->island->isd_name,
+            'departure_time' => $formattedTime,
+            'arrival_port' => $dataTicket->trip->arrival->prt_name_en,
+            'arrival_island' => $dataTicket->trip->arrival->island->isd_name,
+            'arrival_time' => $arrivalformattedTime,
+            'passengers' => $passengerArray,
+            'logo_ticket' => base64_encode(file_get_contents(public_path('assets/images/logo-ticket.png'))),
+            'created_at' => $formattedBookingDate,
+        ];
+
+        if ($ticketType == "gt") {
+            $pdf = Pdf::loadView('ticket.gt', $data); 
+            return $pdf->stream('ticket.pdf');
+        } elseif ($ticketType == "agen1") {
+            return view('ticket.agen1');
+        } else {
+            return view('ticket.agen2');
+        }
     }
 }
