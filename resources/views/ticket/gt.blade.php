@@ -154,6 +154,7 @@
             </div>
         </div>
 
+        <h3>Booking Details</h3>
         <table class="booking-details">
             <tr>
                 <th>Booking ID</th>
@@ -170,6 +171,8 @@
             <tr>
                 <th>Payment Status</th>
                 <td>{{ $fbo_payment_status }}</td>
+                <td></td>
+                <td></td>
             </tr>
         </table>
 

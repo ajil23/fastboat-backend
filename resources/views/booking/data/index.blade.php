@@ -1196,5 +1196,17 @@
                 $('#TicketModal').modal('show');
             });
         });
+
+        // Validate if a radio button is selected before submitting the form
+        $('#printButton').on('click', function(e) {
+            // Check if any radio button is selected
+            if (!$("input[name='downloadTicket']:checked").val()) {
+                // Prevent form submission
+                e.preventDefault();
+                
+                // Show an alert or message indicating the validation error
+                alert('Please select one of the ticket format options before submitting.');
+            }
+        });
     </script>
 @endsection
