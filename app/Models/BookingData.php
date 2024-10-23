@@ -48,7 +48,7 @@ class BookingData extends Model
     {
         return $this->belongsTo(DataFastboat::class, 'fbo_arrival_port', 'prt_id');
     }
-    public function checkPoint()
+    public function checkinPoint()
     {
         return $this->belongsTo(FastboatCheckinPoint::class, 'fbo_checkin_point', 'fcp_id');
     }

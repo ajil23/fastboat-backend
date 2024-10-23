@@ -211,16 +211,20 @@
                     Email: {{ $cpn_email }}
                 </td>
                 <td class="center">
-                    {{ $fbo_trip_date }}<br>
-                    {{ $departure_time }}<br>
-                    {{ $departure_port }}<br>
-                    {{ $departure_island }}
+                    <center>
+                        <b>{{ $fbo_trip_date }}</b><br>
+                        <b>{{ $departure_time }}</b><br>
+                        <b>{{ $departure_port }}</b><br>
+                        {{ $departure_island }}
+                    </center>
                 </td>
                 <td class="center">
-                    {{ $fbo_trip_date }}<br>
-                    {{ $arrival_time }}<br>
-                    {{ $arrival_port }}<br>
-                    {{ $arrival_island }}
+                    <center>
+                        <b>{{ $fbo_trip_date }}</b><br>
+                        <b>{{ $arrival_time }}</b><br>
+                        <b>{{ $arrival_port }}</b><br>
+                        {{ $arrival_island }}
+                    </center>
                 </td>
             </tr>
             <tr>
@@ -229,8 +233,12 @@
                 <th>Note</th>
             </tr>
             <tr>
-                <td>ph:</td>
-                <td>ph:</td>
+                <td>
+                    ph: {{ $fbo_pickup }} {{ $fbo_specific_pickup }} {{ $fbo_contact_pickup }}
+                </td>
+                <td>
+                    ph:{{ $fbo_dropoff }} {{ $fbo_specific_dropoff }} {{ $fbo_contact_dropoff }}
+                </td>
                 <td></td>
             </tr>
         </table>
@@ -262,24 +270,25 @@
         <h3>Checkin Point</h3>
         <table class="checkin">
             <tr>
-                <th>No.</th>
-                <th>Name</th>
-                <th>Country</th>
-                <th>Type</th>
+                <th>Trip</th>
+                <td><b>{{ $fbo_booking_id }}</b> - {{ $cpn_name }} - {{ $departure_port }} to {{ $arrival_port }}</td>
             </tr>
             <tr>
-                <td>1</td>
-                <td>Mr. Muhammad Haqqul Yaqin</td>
-                <td>Indonesia</td>
-                <td>Adult</td>
+                <th>Departure Time</th>
+                <td>{{ $fbo_trip_date }} - {{ $departure_time }}</td>
             </tr>
             <tr>
-                <td>2</td>
-                <td>Mrs. Erna Ainul Khasanah</td>
-                <td>Indonesia</td>
-                <td>Adult</td>
+                <th>Address</th>
+                <td>{{ $fbo_checkin_point_address }}</td>
+            </tr>
+            <tr>
+                <th>Coordinate</th>
+                <td><a href="{{ $fbo_checkin_point_maps }}" target="_blank">View on Google Maps</a></td>
             </tr>
         </table>
+        <div class="contact-info">
+            <a href="https://gilitransfers.com" target="_blank">Gilitransfers.Com</a> ~ Phone: <a href="tel:+6281533304990">+62-81353304990</a> ~ Email: <a href="mailto:reservation@gilitransfers.com">reservation@gilitransfers.com</a>
+        </div>
     </div>
 </body>
 
