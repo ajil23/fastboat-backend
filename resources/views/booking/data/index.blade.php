@@ -40,97 +40,149 @@
                     </a>
                     <div id="addproduct-img-collapse" class="collapse" data-bs-parent="#addproduct-accordion">
                         <div class="p-4 border-top">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Order ID</label>
-                                        <input type="text" name="company" id="search-company" class="form-control">
+                            <form method="GET" action="{{ route('data.view') }}">
+                                <div class="row">
+                                    <!-- Order ID -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Order ID</label>
+                                            <input type="text" name="order_id" id="search-order-id" class="form-control" value="{{ request('order_id') }}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Booking ID -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Booking ID</label>
+                                            <input type="text" name="booking_id" id="search-booking-id" class="form-control" value="{{ request('booking_id') }}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact Name -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Contact Name</label>
+                                            <input type="text" name="contact_name" id="search-contact-name" class="form-control" value="{{ request('contact_name') }}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Contact Email -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Contact Email</label>
+                                            <input type="text" name="contact_email" id="search-contact-email" class="form-control" value="{{ request('contact_email') }}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Passanger Name -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Passanger Name</label>
+                                            <input type="text" name="passenger_name" id="search-passenger-name" class="form-control" value="{{ request('passenger_name') }}">
+                                        </div>
+                                    </div>
+
+                                    <!-- Company -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Company</label>
+                                            <select name="company" id="search-company" class="form-control">
+                                                <option value="">~All Company~</option>
+                                                @foreach ($companies as $company)
+                                                    <option value="{{ $company->cpn_name }}"
+                                                        {{ request('company') == $company->cpn_name ? 'selected' : '' }}>
+                                                        {{ $company->cpn_name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Departure Port -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Departure</label>
+                                            <select name="departure" id="search-departure" class="form-control">
+                                                <option value="">~All Departure Port~</option>
+                                                @foreach ($departurePorts as $port)
+                                                    <option value="{{ $port->prt_name_en }}" 
+                                                        {{ request('departure') == $port->prt_name_en ? 'selected' : '' }}>
+                                                        {{ $port->prt_name_en }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Arrival Port -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Arrival</label>
+                                            <select name="arrival" id="search-arrival" class="form-control">
+                                                <option value="">~All Arrival Port~</option>
+                                                @foreach ($arrivalPorts as $item)
+                                                        <option value="{{$item->prt_name_en}}" {{ old('arrival', request('arrival')) == $item->prt_name_en ? 'selected' : '' }}>{{$item->prt_name_en}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Transaction Status -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Transaction Status</label>
+                                            <select name="fbo_transaction_status" id="search-transaction-status" class="form-control">
+                                                <option value="">~All Transaction Status~</option>
+                                                <option value="accepted" {{ request('fbo_transaction_status') === 'accepted' ? 'selected' : '' }}>Accepted</option>
+                                                <option value="confirmed" {{ request('fbo_transaction_status') === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Source -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Source</label>
+                                            <select name="fbo_source" id="search-source" class="form-control">
+                                                <option value="">~All Source~</option>
+                                                @foreach ($sources as $source)
+                                                    <option value="{{ $source->fbo_source }}" 
+                                                        {{ request('fbo_source') == $source->fbo_source ? 'selected' : '' }}>
+                                                        {{ $source->fbo_source }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Range type</label>
+                                            <select name="range_type" id="search-range-type" class="form-control">
+                                                <option value="">~All Range~</option>
+                                                <option value="trip_date" {{ request('range_type') === 'trip_date' ? 'selected' : '' }}>Trip Date</option>
+                                                <option value="booking_date" {{ request('range_type') === 'booking_date' ? 'selected' : '' }}>Booking Date</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Date Range -->
+                                    <div class="col-lg-3">
+                                        <div class="mb-3">
+                                            <label class="form-label">Date range</label>
+                                            <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range"
+                                                value="">
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <div class="position-relative text-center pb-3">
+                                        <button type="submit" class="btn btn-outline-dark">
+                                            <i class="mdi mdi-magnify"></i>&thinsp;Search
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Booking ID</label>
-                                        <input type="text" name="company" id="search-company" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Contact Name</label>
-                                        <input type="text" name="company" id="search-company" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Contact Name</label>
-                                        <input type="text" name="company" id="search-company" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Passenger Name</label>
-                                        <input type="text" name="company" id="search-company" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Company</label>
-                                        <select name="company" id="search-company" class="form-control">
-                                            <option value="">~All Company~</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Departure</label>
-                                        <select name="departure" id="search-departure" class="form-control">
-                                            <option value="">~All Departure Port~</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Arrival</label>
-                                        <select name="arrival" id="search-arrival" class="form-control">
-                                            <option value="">~All Arrival Port~</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Source</label>
-                                        <select name="route" id="search-route" class="form-control">
-                                            <option value="">~All Source~</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Trans Status</label>
-                                        <select name="route" id="search-route" class="form-control">
-                                            <option value="">~All Trans Status~</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Range Trip</label>
-                                        <select name="departure" id="search-departure" class="form-control">
-                                            <option value="">Trip Date</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
-                                        <label class="form-label">Start Date</label>
-                                        <input name="daterange" type="text" class="form-control flatpickr-input"
-                                            id="daterange" placeholder="Input date range" value="">
-                                    </div>
-                                </div>
-                                <div class="position-relative text-center pb-3">
-                                    <button type="submit" class="btn btn-outline-dark"><i
-                                            class="mdi mdi-magnify"></i>&thinsp;Search</button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -1209,4 +1261,16 @@
             }
         });
     </script>
+
+<script>
+    flatpickr("#daterange", {
+        mode: "range",
+        dateFormat: "d-m-Y",
+        disable: [
+            function(date) {
+                return !(date.getDate() % 100); // Custom disabling logic (optional)
+            }
+        ]
+    });
+</script>
 @endsection
