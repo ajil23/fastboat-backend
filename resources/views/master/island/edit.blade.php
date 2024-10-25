@@ -76,6 +76,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
                                 <div class="card">
                                     <a href="#addproduct-img-collapse" class="text-body collbodyd" data-bs-toggle="collapse" aria-haspopup="true" aria-expanded="false" aria-haspopup="true" aria-controls="addproduct-img-collapse">
@@ -221,7 +222,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="isd_description_en">Description (en)</label>
-                                                        <textarea class="form-control" id="isd_description_en" name="isd_description_en" placeholder="Enter Description" rows="4">{{$islandEdit->isd_description_en}}</textarea>
+                                                        <textarea class="form-control" id="isd_description_en" name="isd_description_en" placeholder="Enter Description" rows="4" required>{{$islandEdit->isd_description_en}}</textarea>
                                                     </div>
 
                                                 </div>
@@ -229,7 +230,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="isd_description_idn">Description (idn)</label>
-                                                        <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4">{{$islandEdit->isd_description_idn}}</textarea>
+                                                        <textarea class="form-control" id="isd_description_idn" name="isd_description_idn" placeholder="Enter Description" rows="4" required>{{$islandEdit->isd_description_idn}}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -247,6 +248,7 @@
                             <button type="submit" class="btn btn-dark"><i class=" bx bx-file me-1"></i> Save</button>
                         </div> <!-- end col -->
                     </div> <!-- end row-->
+                
             </form>
             <!-- end row -->
 

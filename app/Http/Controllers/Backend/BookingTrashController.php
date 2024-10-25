@@ -14,12 +14,120 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class BookingTrashController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookingData = BookingData::orderBy('created_at', 'desc')
-            ->whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel'])->get();
+        // Initial query for fastboat orders
+        $query = BookingData::orderBy('created_at', 'desc')
+            ->whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel']);
+
+        // Apply filters if available
+        if ($request->filled('order_id')) {
+            $query->whereHas('contact', function ($q) use ($request) {
+                $q->where('ctc_order_id', 'like', '%' . $request->order_id . '%');
+            });
+        }
+
+        if ($request->filled('booking_id')) {
+            $query->where('fbo_booking_id', $request->booking_id);
+        }
+
+        if ($request->filled('contact_name')) {
+            $query->whereHas('contact', function ($q) use ($request) {
+                $q->where('ctc_name', 'like', '%' . $request->contact_name . '%');
+            });
+        }
+
+        if ($request->filled('contact_email')) {
+            $query->whereHas('contact', function ($q) use ($request) {
+                $q->where('ctc_email', 'like', '%' . $request->contact_email . '%');
+            });
+        }
+
+        // Search for passenger name in fbo_passenger
+        if ($request->filled('passenger_name')) {
+            $passengerNameInput = $request->passenger_name;
+            $query->where(function ($q) use ($passengerNameInput) {
+                $q->where('fbo_passenger', 'like', '%' . $passengerNameInput . '%')
+                    ->orWhereRaw("SUBSTRING_INDEX(fbo_passenger, ';', 1) LIKE ?", ["%{$passengerNameInput}%"]);
+            });
+        }
+
+        if ($request->filled('company')) {
+            $query->whereHas('company', function ($q) use ($request) {
+                $q->where('cpn_name', $request->company);
+            });
+        }
+
+        if ($request->filled('departure')) {
+            $query->whereHas('trip.departure', function ($q) use ($request) {
+                $q->where('prt_name_en', $request->departure);
+            });
+        }
+
+        if ($request->filled('arrival')) {
+            $query->whereHas('trip.arrival', function ($q) use ($request) {
+                $q->where('prt_name_en', $request->arrival);
+            });
+        }
+
+        if ($request->filled('fbo_source')) {
+            $query->where('fbo_source', $request->fbo_source);
+        }
+
+        if ($request->filled('fbo_transaction_status')) {
+            $query->where('fbo_transaction_status', $request->fbo_transaction_status);
+        }
+
+        if ($request->filled('daterange')) {
+            // Assuming daterange format is 'YYYY-MM-DD to YYYY-MM-DD'
+            $dates = explode(' to ', $request->daterange);
+            if (count($dates) == 2) {
+                $query->whereBetween('fbo_trip_date', [$dates[0], $dates[1]]);
+            }
+        }
+
+        // Fetch the filtered data
+        $bookingData = $query->get();
+
+        // Fetch the unique values for dropdowns
+        $companies = BookingData::whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel'])
+            ->with('company')
+            ->select('fbo_company')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+                return $item->company;
+            })
+            ->unique('cpn_name');
+        // Fetch the unique departure ports
+        $departurePorts = BookingData::whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel'])->with('trip.departure')
+            ->select('fbo_trip_id')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+                return $item->trip->departure;
+            })
+            ->unique('prt_name_en');
+        $arrivalPorts = BookingData::whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel'])->with('trip.arrival')
+            ->select('fbo_trip_id')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+                return $item->trip->arrival;
+            })
+            ->unique('prt_name_en');
+
+        // Filter untuk source
+        $sources = BookingData::whereIn('fbo_transaction_status', ['waiting', 'remove', 'cancel'])
+            ->select('fbo_source')
+            ->distinct()
+            ->get();
+
+        // Fetch the payment method data
         $paymentMethod = MasterPaymentMethod::all();
-        return view('booking.trash.index', compact('bookingData', 'paymentMethod'));
+
+        // Return view with data and unique dropdown options
+        return view('booking.trash.index', compact('bookingData', 'paymentMethod', 'companies', 'departurePorts', 'arrivalPorts',  'sources'));
     }
 
     // Menangani perubahan status 
