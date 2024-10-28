@@ -14,7 +14,12 @@
                         <div class="card-body">
                             <div class="position-relative text-center pb-3">
                                 <div class="mt-3">
-                                    <h5 class="mb-1">{{$bookingData->fbo_booking_id}}</h5>
+                                    <h5 class="mb-1">{{ $data['fbo_booking_id'] }}</h5>
+                                    <p>Trip in <b>{{ $data['fbo_trip_date'] }}</b> from <b>{{ $data['departure_port'] }}
+                                            ({{ $data['departure_time'] }})</b> to <b>{{ $data['arrival_port'] }}
+                                            ({{ $data['arrival_time'] }})</b> with <b>{{ $data['adult'] }} Adult,
+                                            {{ $data['child'] }} Child,
+                                            {{ $data['infant'] }} Infant</b></p>
                                 </div>
                             </div>
                             <!-- Nav tabs -->
@@ -64,29 +69,6 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="p-4">
-                                        <div class="row">
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbo_adult">Adult</label>
-                                                    <input id="fbo_adult" name="fbo_adult" type="number"
-                                                        class="form-control" value="1" min="1">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbo_child">Child</label>
-                                                    <input id="fbo_child" name="fbo_child" type="number"
-                                                        class="form-control" value="0" min="0">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="fbo_infant">Infant</label>
-                                                    <input id="fbo_infant" name="fbo_infant" type="number"
-                                                        class="form-control" value="0" min="0">
-                                                </div>
-                                            </div>
-                                        </div>
                                         <!-- Placeholder for Adult Information -->
                                         <div id="adult_info"></div>
                                         <!-- Placeholder for Child Information -->
@@ -103,6 +85,68 @@
                         <div class="tab-pane" id="shuttle" role="tabpanel">
                             <div class="card">
                                 <div class="card-body">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-6 shuttle-inputs" id="pickup-inputs">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="fbo_pickup">Pickup Area</label>
+                                                            <select style="border-color: lightgray;" class="form-control"
+                                                                id="fbo_pickup" name="fbo_pickup">
+                                                                <option value="">Select Option</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="">Phone</label>
+                                                            <input type="text" style="border-color: lightgray;"
+                                                                class="form-control" id=""
+                                                                name="fbo_contact_pickup" placeholder="62XXXXXXXXXXX">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_specific_pickup">Address
+                                                            Pickup</label>
+                                                        <textarea id="fbo_specific_pickup" name="fbo_specific_pickup" class="form-control" style="border-color: lightgray;"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 shuttle-inputs" id="dropoff-inputs">
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="fbo_dropoff">Dropoff
+                                                                Area</label>
+                                                            <select style="border-color: lightgray;" class="form-control"
+                                                                id="fbo_dropoff" name="fbo_dropoff">
+                                                                <option value="">Select Option</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="">Phone</label>
+                                                            <input type="text" style="border-color: lightgray;"
+                                                                class="form-control" id=""
+                                                                name="fbo_contact_dropoff" placeholder="62XXXXXXXXXXX">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_specific_dropoff">Address
+                                                            Dropoff</label>
+                                                        <textarea id="fbo_specific_dropoff" name="fbo_specific_dropoff" class="form-control"
+                                                            style="border-color: lightgray;"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!-- end card body -->
                             </div>
@@ -116,28 +160,29 @@
                                             <div class="mb-3">
                                                 <label class="form-label" for="ctc_name">Name</label>
                                                 <input id="ctc_name" name="ctc_name" placeholder="Enter Name"
-                                                    type="text" class="form-control">
+                                                    type="text" class="form-control" value="{{ $data['name'] }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-3">
                                                 <label class="form-label" for="ctc_email">Email</label>
                                                 <input id="ctc_email" name="ctc_email" placeholder="Enter Email"
-                                                    type="email" class="form-control">
+                                                    type="email" class="form-control" value="{{ $data['email'] }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-3">
                                                 <label class="form-label" for="ctc_phone">Phone</label>
                                                 <input id="ctc_phone" name="ctc_phone" placeholder="Enter Phone"
-                                                    type="text" class="form-control">
+                                                    type="text" class="form-control" value="{{ $data['phone'] }}">
                                             </div>
                                         </div>
                                         <div class="col-md-2">
                                             <div class="mb-3">
                                                 <label class="form-label" for="ctc_nationality">Nationality</label>
                                                 <select id="ctc_nationality" class="form-control" name="ctc_nationality">
-                                                    <option value="">Select Nationality</option>
+                                                    <option value="{{ $data['nationality_id'] }}">
+                                                        {{ $data['nationality_name'] }}</option>
                                                     @foreach ($nationality as $item)
                                                         <option value="{{ $item->nas_id }}">{{ $item->nas_country }}
                                                         </option>
@@ -149,7 +194,7 @@
                                             <div class="mb-3">
                                                 <label class="form-label" for="ctc_phone">Note</label>
                                                 <input id="ctc_phone" name="ctc_phone" placeholder="Enter Note"
-                                                    type="text" class="form-control">
+                                                    type="text" class="form-control" value="{{ $data['note'] }}">
                                             </div>
                                         </div>
                                     </div>
@@ -168,9 +213,10 @@
                                                 <label for="fbo_payment_method" class="form-label">Payment Method</label>
                                                 <select class="form-control" id="fbo_payment_method"
                                                     name="fbo_payment_method" required>
-                                                    <option value="">Select Payment Method</option>
+                                                    <option value="{{ $data['paymentMethod_value'] }}">
+                                                        {{ $data['paymentMethod_name'] }}</option>
                                                     @foreach ($payment as $item)
-                                                        <option value="{{ $item->py_value }}"> {{ $item->py_name }}
+                                                        <option value="{{ $item->py_value }}">{{ $item->py_name }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -185,7 +231,7 @@
                                                         ID</label>
                                                     <input id="paypal_transaction_id" name="fbo_transaction_id"
                                                         placeholder="Type Paypal Transaction ID" type="text"
-                                                        class="form-control">
+                                                        class="form-control" value="{{ $data['paymentMethod_value'] === 'paypal' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -197,7 +243,7 @@
                                                         ID</label>
                                                     <input id="midtrans_transaction_id" name="fbo_transaction_id"
                                                         placeholder="Type Midtrans Transaction ID" type="text"
-                                                        class="form-control">
+                                                        class="form-control" value="{{ $data['paymentMethod_value'] === 'midtrans' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -210,7 +256,7 @@
                                                         ID</label>
                                                     <input id="bank_transfer_transaction_id" name="fbo_transaction_id"
                                                         placeholder="Type Bank Transaction ID" type="text"
-                                                        class="form-control">
+                                                        class="form-control" value="{{ $data['paymentMethod_value'] === 'bank_transfer' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -220,7 +266,7 @@
                                                     <label class="form-label" for="cash_transaction_id">Transaction
                                                         ID</label>
                                                     <input id="cash_transaction_id" name="fbo_transaction_id"
-                                                        placeholder="Type Recipient" type="text" class="form-control">
+                                                        placeholder="Type Recipient" type="text" class="form-control" value="{{ $data['paymentMethod_value'] === 'cash' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -230,7 +276,7 @@
                                                     <label class="form-label" for="agent_transaction_id">Agent</label>
                                                     <select id="agent_transaction_id" name="fbo_transaction_id"
                                                         class="form-control">
-                                                        <option value="">Select Agent</option>
+                                                        <option value="{{ $data['paymentMethod_value'] === 'agent' ? $data['transaction_id'] : '' }}">{{ $data['paymentMethod_value'] === 'agent' ? $data['transaction_id'] : '' }}</option>
                                                         <option value="Agen A">Agen A</option>
                                                         <option value="Agen B">Agen B</option>
                                                         <option value="Agen C">Agen C</option>
@@ -265,13 +311,10 @@
     <script>
         // Payment
         $(document).ready(function() {
-            // Saat payment method diubah
-            $('#fbo_payment_method').on('change', function() {
+            // Fungsi untuk menampilkan Transaction ID berdasarkan pilihan
+            function showTransactionField(selectedMethod) {
                 // Sembunyikan semua Transaction ID
                 $('.transaction-id').hide();
-
-                // Dapatkan nilai yang dipilih
-                var selectedMethod = $(this).val();
 
                 // Tampilkan Transaction ID berdasarkan pilihan
                 if (selectedMethod === 'paypal') {
@@ -285,6 +328,14 @@
                 } else if (selectedMethod === 'agent') {
                     $('#agent_transaction_id').show();
                 }
+            }
+
+            // Panggil fungsi showTransactionField saat halaman dimuat berdasarkan nilai default
+            showTransactionField($('#fbo_payment_method').val());
+
+            // Saat payment method diubah
+            $('#fbo_payment_method').on('change', function() {
+                showTransactionField($(this).val());
             });
 
             // Saat form disubmit
@@ -304,9 +355,8 @@
                     }
                 });
 
-                this.submit();
+                if (isValid) this.submit(); // Submit form hanya jika ada input yang terlihat
             });
-
 
             function updateInfo() {
                 // Simpan nilai yang sudah diisi sebelumnya
@@ -332,158 +382,69 @@
                 var adultCount = parseInt($('#fbo_adult').val()) || 1;
                 var childCount = parseInt($('#fbo_child').val()) || 0;
                 var infantCount = parseInt($('#fbo_infant').val()) || 0;
+                var passengers = @json($data['passengers']);
 
-                // Create Adult Info
-                for (var i = 1; i <= adultCount; i++) {
-                    $('#adult_info').append(`
+                passengers.forEach((passenger, index) => {
+                    let passengerIndex = index + 1;
+                    let passengerType = passenger.age < 3 ? 'infant' : (passenger.age <= 12 ? 'child' :
+                        'adult');
+
+                    // Append info berdasarkan tipe penumpang
+                    $(`#${passengerType}_info`).append(`
                         <div class="row">
                             <div class="col-lg-3">
                                 <div class="mb-3">
-                                    <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
-                                    <input id="adult_name_${i}" name="adult_name_[]" type="text" placeholder="Enter Name" class="form-control">
+                                    <label class="form-label" for="${passengerType}_name_${passengerIndex}">${passengerType.charAt(0).toUpperCase() + passengerType.slice(1)} ${passengerIndex} Name</label>
+                                    <input id="${passengerType}_name_${passengerIndex}" name="${passengerType}_name_[]" type="text" value="${passenger.name}" placeholder="Enter Name" class="form-control">
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="mb-3">
-                                    <label class="form-label" for="adult_age_${i}">Adult ${i} Age</label>
-                                    <select id="adult_age_${i}" name="adult_age_[]" class="form-control">
+                                    <label class="form-label" for="${passengerType}_age_${passengerIndex}">${passengerType.charAt(0).toUpperCase() + passengerType.slice(1)} ${passengerIndex} Age</label>
+                                    <select id="${passengerType}_age_${passengerIndex}" name="${passengerType}_age_[]" class="form-control">
                                         <option value="">Select Age</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="mb-3">
-                                    <label class="form-label" for="adult_gender_${i}">Adult ${i} Gender</label>
-                                    <select id="adult_gender_${i}" name="adult_gender_[]" class="form-control">
+                                    <label class="form-label" for="${passengerType}_gender_${passengerIndex}">${passengerType.charAt(0).toUpperCase() + passengerType.slice(1)} ${passengerIndex} Gender</label>
+                                    <select id="${passengerType}_gender_${passengerIndex}" name="${passengerType}_gender_[]" class="form-control">
                                         <option value="">Select Gender</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Male">Male</option>
+                                        <option value="Female" ${passenger.gender === 'Female' ? 'selected' : ''}>Female</option>
+                                        <option value="Male" ${passenger.gender === 'Male' ? 'selected' : ''}>Male</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-3">
                                 <div class="mb-3">
-                                    <label class="form-label" for="adult_nationality_${i}">Adult ${i} Nationality</label>
-                                    <select id="adult_nationality_${i}" name="adult_nationality_[]" class="nationality-select">
+                                    <label class="form-label" for="${passengerType}_nationality_${passengerIndex}">${passengerType.charAt(0).toUpperCase() + passengerType.slice(1)} ${passengerIndex} Nationality</label>
+                                    <select id="${passengerType}_nationality_${passengerIndex}" name="${passengerType}_nationality_[]" class="nationality-select">
                                         <option value="">Select Nationality</option>
                                         @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
+                                            <option value="{{ $item->nas_country }}" ${passenger.nationality === "{{ $item->nas_country }}" ? 'selected' : ''}>{{ $item->nas_country }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
                     `);
-                    var ageSelect = $(`#adult_age_${i}`);
-                    for (var age = 13; age <= 49; age++) {
-                        ageSelect.append(`<option value="${age}">${age}</option>`);
-                    }
-                    ageSelect.append('<option value="≧50">≧50</option>');
-                }
 
-                // Create Child Info
-                for (var i = 1; i <= childCount; i++) {
-                    $('#child_info').append(`
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
-                                    <input id="child_name_${i}" name="child_name_[]" type="text" placeholder="Enter Name" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="child_age_${i}">Child ${i} Age</label>
-                                    <select id="child_age_${i}" name="child_age_[]" class="form-control">
-                                        <option value="">Select Age</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="child_gender_${i}">Child ${i} Gender</label>
-                                    <select id="child_gender_${i}" name="child_gender_[]" class="form-control">
-                                        <option value="">Select Gender</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Male">Male</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="child_nationality_${i}">Child ${i} Nationality</label>
-                                    <select id="child_nationality_${i}" name="child_nationality_[]" class="nationality-select">
-                                        <option value="">Select Nationality</option>
-                                        @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                    var ageSelect = $(`#child_age_${i}`);
-                    for (var age = 3; age <= 12; age++) {
-                        ageSelect.append(`<option value="${age}">${age}</option>`);
+                    // Populate age options based on type
+                    let ageSelect = $(`#${passengerType}_age_${passengerIndex}`);
+                    let ageRange = passengerType === 'infant' ? [0, 2] : (passengerType === 'child' ? [3,
+                        12
+                    ] : [13, 49]);
+                    for (let age = ageRange[0]; age <= ageRange[1]; age++) {
+                        ageSelect.append(
+                            `<option value="${age}" ${passenger.age == age ? 'selected' : ''}>${age}</option>`
+                        );
                     }
-                }
-
-                // Create Infant Info
-                for (var i = 1; i <= infantCount; i++) {
-                    $('#infant_info').append(`
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
-                                    <input id="infant_name_${i}" name="infant_name_[]" type="text" placeholder="Enter Name" class="form-control">
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="infant_age_${i}">Infant ${i} Age</label>
-                                    <select id="infant_age_${i}" name="infant_age_[]" class="form-control">
-                                        <option value="">Select Age</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="infant_gender_${i}">Infant ${i} Gender</label>
-                                    <select id="infant_gender_${i}" name="infant_gender_[]" class="form-control">
-                                        <option value="">Select Gender</option>
-                                        <option value="Female">Female</option>
-                                        <option value="Male">Male</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="mb-3">
-                                    <label class="form-label" for="infant_nationality_${i}">Infant ${i} Nationality</label>
-                                    <select id="infant_nationality_${i}" name="infant_nationality_[]" class="nationality-select">
-                                        <option value="">Select Nationality</option>
-                                        @foreach ($nationality as $item)
-                                        <option value="{{ $item->nas_country }}">{{ $item->nas_country }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    `);
-                    var ageSelect = $(`#infant_age_${i}`);
-                    for (var age = 0; age <= 2; age++) {
-                        ageSelect.append(`<option value="${age}">${age}</option>`);
+                    if (passengerType === 'adult') {
+                        ageSelect.append(
+                            '<option value="≧50" ${passenger.age == "≧50" ? "selected" : ""}>≧50</option>'
+                        );
                     }
-                }
-
-                // Kembalikan nilai yang disimpan ke input dan select
-                $.each(previousAdultValues, function(id, value) {
-                    $('#' + id).val(value);
-                });
-                $.each(previousChildValues, function(id, value) {
-                    $('#' + id).val(value);
-                });
-                $.each(previousInfantValues, function(id, value) {
-                    $('#' + id).val(value);
                 });
 
                 // Simpan data ke fbo_passenger

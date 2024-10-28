@@ -143,7 +143,7 @@ class AvailabilityApiController extends Controller
                         'dept_island' => $availability->trip->departure->island->isd_name ?? null,
                         'arrival_port' => $availability->trip->arrival->prt_name_en,
                         'arrival_island' => $availability->trip->arrival->island->isd_name ?? null,
-                        'cpn_logo' => url($availability->trip->fastboat->company->cpn_logo) ?? null,
+                        'cpn_logo' => url('storage/' .ltrim($availability->trip->fastboat->company->cpn_logo, '/')) ?? null,
                         'cpn_name' => $availability->trip->fastboat->company->cpn_name ?? null,
                         'fba_adult_publish' => $availability->fba_adult_publish,
                         'fba_child_publish' => $availability->fba_child_publish,
