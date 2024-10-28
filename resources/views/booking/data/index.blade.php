@@ -364,7 +364,7 @@
                                                                         style="color: rgb(255, 215, 0);">
                                                                         <i class="mdi mdi-credit-card"></i>
                                                                         Payment</a>
-                                                                    <a class="dropdown-item" href="#"
+                                                                    <a class="dropdown-item" href="{{route('data.edit', $item->fbo_id)}}"
                                                                         style="color: rgb(255, 90, 0);">
                                                                         <i class="mdi mdi-square-edit-outline"></i>
                                                                         Edit</a>

@@ -1616,4 +1616,11 @@ class BookingDataController extends Controller
             return view('ticket.agen2');
         }
     }
+
+    public function edit(Request $request, $fbo_id){
+        $bookingData = BookingData::find($fbo_id);
+        $nationality = MasterNationality::all();
+        $payment = MasterPaymentMethod::all();
+        return view('booking.data.edit', compact('bookingData', 'nationality', 'payment'));
+    }
 }
