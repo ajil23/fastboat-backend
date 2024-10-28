@@ -298,6 +298,7 @@ class BookingTrashController extends Controller
             'fbo_profit' => $bookingData->fbo_profit,
             'fbo_refund' => $bookingData->fbo_refund,
             'fbo_transaction_id' => $bookingData->fbo_transaction_id,
+            'note' => $bookingData->contact->ctc_note,
             'trip' => [
                 'fastboat' => ['fb_name' => $bookingData->trip->fastboat->fb_name],
                 'departure_port' => $bookingData->trip->departure->prt_name_en,
