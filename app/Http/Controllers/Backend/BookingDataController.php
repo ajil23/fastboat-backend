@@ -1689,6 +1689,7 @@ class BookingDataController extends Controller
 
         $data = [
             'fbo_booking_id' => $bookingData->fbo_booking_id,
+            'fbo_currency' => $bookingData->fbo_currency,
             'fbo_adult_nett' => $bookingData->fbo_adult_nett,
             'fbo_adult_publish' => $bookingData->fbo_adult_publish,
             'fbo_adult_currency' => $bookingData->fbo_adult_currency,

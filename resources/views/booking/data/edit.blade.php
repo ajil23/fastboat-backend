@@ -72,7 +72,8 @@
                                                 <td><b>Pub Adt</b></td>
                                                 <td class="currency">IDR {{ $data['fbo_adult_publish'] }}</td>
                                                 <td><b>Pub Adt Crr</b></td>
-                                                <td>{{ $data['fbo_adult_currency'] }}</td>
+                                                <td class="currency">{{ $data['fbo_currency'] }}
+                                                    {{ $data['fbo_adult_currency'] }}</td>
                                                 <td><b>Nett Adt</b></td>
                                                 <td class="currency">IDR {{ $data['fbo_adult_nett'] }}</td>
                                                 <td><b>Kurs</b></td>
@@ -84,7 +85,8 @@
                                                 <td><b>Pub Chd</b></td>
                                                 <td class="currency">IDR {{ $data['fbo_child_publish'] }}</td>
                                                 <td><b>Pub Chd Crr</b></td>
-                                                <td>{{ $data['fbo_child_currency'] }}</td>
+                                                <td class="currency">{{ $data['fbo_currency'] }}
+                                                    {{ $data['fbo_child_currency'] }}</td>
                                                 <td><b>Nett Chd</b></td>
                                                 <td class="currency">IDR {{ $data['fbo_child_nett'] }}</td>
                                                 <td><b>Disc/Pax</b></td>
@@ -96,13 +98,15 @@
                                                 <td><b>Pub Tot</b></td>
                                                 <td class="currency">IDR {{ $data['fbo_total_publish'] }}</td>
                                                 <td><b>Pub Tot Crr</b></td>
-                                                <td>{{ $data['fbo_total_currency'] }}</td>
+                                                <td class="currency">{{ $data['fbo_currency'] }}
+                                                    {{ $data['fbo_total_currency'] }}</td>
                                                 <td><b>Nett Tot</b></td>
                                                 <td class="currency">IDR {{ $data['fbo_total_nett'] }}</td>
                                                 <td><b>Price Cut</b></td>
                                                 <td class="currency">IDR {{ $data['fbo_price_cut'] }}</td>
                                                 <td><b>End Tot Crr</b></td>
-                                                <td>{{ $data['fbo_end_total_currency'] }}</td>
+                                                <td class="currency">{{ $data['fbo_currency'] }}
+                                                    {{ $data['fbo_end_total_currency'] }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -365,18 +369,30 @@
         // Payment
         $(document).ready(function() {
             // Fungsi untuk memformat angka dengan pemisah ribuan
-            function formatCurrency(value) {
-                return value.toLocaleString('id-ID'); // Menggunakan pemisah ribuan
+            function formatNumber(value) {
+                return value.toLocaleString('id-ID', {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                });
             }
 
             // Memformat semua elemen dengan kelas 'currency'
             $('.currency').each(function() {
-                // Mengambil teks dan menghapus 'IDR' jika ada
-                let text = $(this).text().replace(/IDR\s*/, '').trim();
+                // Mengambil teks asli dan memisahkan mata uang dari angka
+                let originalText = $(this).text();
+                let currencySymbol = originalText.match(/[^\d.,]+/g) || [
+                '']; // Mendapatkan simbol mata uang
+                let text = originalText.replace(/[^\d.,]/g, '').trim(); // Mengambil angka
+
                 // Mengganti titik dan koma untuk konversi
-                let value = parseFloat(text.replace(/\./g, '').replace(/\,/g, '.'));
-                // Mengubah teks dengan format yang benar dan menambahkan 'IDR' di depan
-                $(this).text('IDR ' + formatCurrency(value)); // Menambahkan 'IDR' di depan
+                let value = parseFloat(text.replace(/\./g, '').replace(/,/g, '.'));
+
+                // Mengubah teks dengan format yang benar (hanya angka dengan pemisah ribuan)
+                if (!isNaN(value)) {
+                    let formattedNumber = formatNumber(value);
+                    // Menyusun kembali teks dengan simbol mata uang dan angka yang diformat
+                    $(this).text(currencySymbol.join(' ') + ' ' + formattedNumber);
+                }
             });
 
             // Fungsi untuk menampilkan Transaction ID berdasarkan pilihan
