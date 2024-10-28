@@ -1617,10 +1617,68 @@ class BookingDataController extends Controller
         }
     }
 
-    public function edit(Request $request, $fbo_id){
-        $bookingData = BookingData::find($fbo_id);
+    public function edit(Request $request, $fbo_id)
+    {
+        $bookingData = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($fbo_id);
         $nationality = MasterNationality::all();
         $payment = MasterPaymentMethod::all();
-        return view('booking.data.edit', compact('bookingData', 'nationality', 'payment'));
+
+        // Memformat waktu departur
+        $time = $bookingData->availability->fba_dept_time ?? $bookingData->trip->fbt_dept_time;
+        $timeDateTime = new \DateTime($time);
+        $departureformattedTime = $timeDateTime->format('H:i');
+
+        // Memformat waktu arrival
+        $arrivaltime = $bookingData->fbo_arrival_time;
+        $arrivaltimeDateTime = new \DateTime($arrivaltime);
+        $arrivalformattedTime = $arrivaltimeDateTime->format('H:i');
+
+        // Memformat tanggal
+        $tripDate = new \DateTime($bookingData->fbo_trip_date);
+        $formattedTripDate = $tripDate->format('l, d M Y');
+
+        // Mengambil data passenger
+        $passengerDataString = $bookingData->fbo_passenger;
+        $passengerArray = [];
+
+        $passengers = explode(';', $passengerDataString);
+
+        // Mengurai setiap data penumpang
+        foreach ($passengers as $passenger) {
+            $details = explode(',', $passenger);
+            if (count($details) === 4) {
+                $passengerArray[] = [
+                    'name' => $details[0],
+                    'age' => $details[1],
+                    'gender' => $details[2],
+                    'nationality' => $details[3],
+                ];
+            }
+        }
+
+        $data = [
+            'fbo_booking_id' => $bookingData->fbo_booking_id,
+            'departure_port' => $bookingData->trip->departure->prt_name_en,
+            'departure_island' => $bookingData->trip->departure->island->isd_name,
+            'departure_time' => $departureformattedTime,
+            'arrival_port' => $bookingData->trip->arrival->prt_name_en,
+            'arrival_island' => $bookingData->trip->arrival->island->isd_name,
+            'arrival_time' => $arrivalformattedTime,
+            'fbo_trip_date' => $formattedTripDate,
+            'passengers' => $passengerArray,
+            'adult' => $bookingData->fbo_adult,
+            'child' => $bookingData->fbo_child,
+            'infant' => $bookingData->fbo_infant,
+            'name' => $bookingData->contact->ctc_name,
+            'email' => $bookingData->contact->ctc_email,
+            'phone' => $bookingData->contact->ctc_phone,
+            'nationality_name' => $bookingData->contact->nationality->nas_country,
+            'nationality_id' => $bookingData->contact->nationality->nas_id,
+            'note' => $bookingData->contact->ctc_note,
+            'paymentMethod_name' => $bookingData->paymentMethod->py_name,
+            'paymentMethod_value' => $bookingData->paymentMethod->py_value,
+            'transaction_id' => $bookingData->fbo_transaction_id,
+        ];
+        return view('booking.data.edit', compact('data', 'nationality', 'payment'));
     }
 }

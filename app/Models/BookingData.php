@@ -56,4 +56,8 @@ class BookingData extends Model
     {
         return $this->belongsTo(Contact::class, 'fbo_order_id', 'ctc_id');
     }
+    public function paymentMethod()
+    {
+        return $this->belongsTo(MasterPaymentMethod::class, 'fbo_payment_method', 'py_value');
+    }
 }
