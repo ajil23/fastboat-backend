@@ -161,7 +161,16 @@
                                         <div class="mb-3">
                                             <label class="form-label">Date range</label>
                                             <input name="daterange" type="text" class="form-control flatpickr-input" id="daterange" placeholder="Input date range"
-                                                value="">
+                                                value="{{ request('daterange') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label>
+                                                <input type="checkbox" id="trip-updated" name="trip_updated" value="1" {{ request('trip_updated') ? 'checked' : '' }}>
+                                                Trip Updated
+                                            </label>
                                         </div>
                                     </div>
 
@@ -235,6 +244,9 @@
                                                             <strong>{{ $item->fbo_adult + $item->fbo_child }} pax</strong>
                                                             ({{ $item->fbo_adult }} Adult, {{ $item->fbo_child }} Child,
                                                             {{ $item->fbo_infant }} Infant)
+                                                            @if ($item->isUpdated)
+                                                                <span class="badge bg-warning-subtle text-warning ms-2">Updated</span>
+                                                            @endif 
                                                         </div>
                                                     </td>
                                                     <td>
@@ -1044,6 +1056,18 @@
                 // Show an alert or message indicating the validation error
                 alert('Please select one of the ticket format options before submitting.');
             }
+        });
+    </script>
+
+    <script>
+        flatpickr("#daterange", {
+            mode: "range",
+            dateFormat: "Y-m-d",
+            disable: [
+                function(date) {
+                    return !(date.getDate() % 100); // Custom disabling logic (optional)
+                }
+            ]
         });
     </script>
 @endsection
