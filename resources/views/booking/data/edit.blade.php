@@ -60,6 +60,52 @@
                         <div class="tab-pane active" id="trip" role="tabpanel">
                             <div class="card">
                                 <div class="card-body">
+                                    <table class="table table-bordered text-center">
+                                        <thead>
+                                            <tr class="table-light">
+                                                <th colspan="10">Before <span
+                                                        class="text-danger">({{ $data['fbo_booking_id'] }})</span></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><b>Pub Adt</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_adult_publish'] }}</td>
+                                                <td><b>Pub Adt Crr</b></td>
+                                                <td>{{ $data['fbo_adult_currency'] }}</td>
+                                                <td><b>Nett Adt</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_adult_nett'] }}</td>
+                                                <td><b>Kurs</b></td>
+                                                <td class="currency">{{ $data['fbo_kurs'] }}</td>
+                                                <td><b>Disc Tot</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_discount_total'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Pub Chd</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_child_publish'] }}</td>
+                                                <td><b>Pub Chd Crr</b></td>
+                                                <td>{{ $data['fbo_child_currency'] }}</td>
+                                                <td><b>Nett Chd</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_child_nett'] }}</td>
+                                                <td><b>Disc/Pax</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_discount'] }}</td>
+                                                <td><b>End Tot</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_end_total'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Pub Tot</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_total_publish'] }}</td>
+                                                <td><b>Pub Tot Crr</b></td>
+                                                <td>{{ $data['fbo_total_currency'] }}</td>
+                                                <td><b>Nett Tot</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_total_nett'] }}</td>
+                                                <td><b>Price Cut</b></td>
+                                                <td class="currency">IDR {{ $data['fbo_price_cut'] }}</td>
+                                                <td><b>End Tot Crr</b></td>
+                                                <td>{{ $data['fbo_end_total_currency'] }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                                 <!-- end card body -->
                             </div>
@@ -231,7 +277,8 @@
                                                         ID</label>
                                                     <input id="paypal_transaction_id" name="fbo_transaction_id"
                                                         placeholder="Type Paypal Transaction ID" type="text"
-                                                        class="form-control" value="{{ $data['paymentMethod_value'] === 'paypal' ? $data['transaction_id'] : '' }}">
+                                                        class="form-control"
+                                                        value="{{ $data['paymentMethod_value'] === 'paypal' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -243,7 +290,8 @@
                                                         ID</label>
                                                     <input id="midtrans_transaction_id" name="fbo_transaction_id"
                                                         placeholder="Type Midtrans Transaction ID" type="text"
-                                                        class="form-control" value="{{ $data['paymentMethod_value'] === 'midtrans' ? $data['transaction_id'] : '' }}">
+                                                        class="form-control"
+                                                        value="{{ $data['paymentMethod_value'] === 'midtrans' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -256,7 +304,8 @@
                                                         ID</label>
                                                     <input id="bank_transfer_transaction_id" name="fbo_transaction_id"
                                                         placeholder="Type Bank Transaction ID" type="text"
-                                                        class="form-control" value="{{ $data['paymentMethod_value'] === 'bank_transfer' ? $data['transaction_id'] : '' }}">
+                                                        class="form-control"
+                                                        value="{{ $data['paymentMethod_value'] === 'bank_transfer' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -266,7 +315,8 @@
                                                     <label class="form-label" for="cash_transaction_id">Transaction
                                                         ID</label>
                                                     <input id="cash_transaction_id" name="fbo_transaction_id"
-                                                        placeholder="Type Recipient" type="text" class="form-control" value="{{ $data['paymentMethod_value'] === 'cash' ? $data['transaction_id'] : '' }}">
+                                                        placeholder="Type Recipient" type="text" class="form-control"
+                                                        value="{{ $data['paymentMethod_value'] === 'cash' ? $data['transaction_id'] : '' }}">
                                                 </div>
                                             </div>
 
@@ -276,7 +326,10 @@
                                                     <label class="form-label" for="agent_transaction_id">Agent</label>
                                                     <select id="agent_transaction_id" name="fbo_transaction_id"
                                                         class="form-control">
-                                                        <option value="{{ $data['paymentMethod_value'] === 'agent' ? $data['transaction_id'] : '' }}">{{ $data['paymentMethod_value'] === 'agent' ? $data['transaction_id'] : '' }}</option>
+                                                        <option
+                                                            value="{{ $data['paymentMethod_value'] === 'agent' ? $data['transaction_id'] : '' }}">
+                                                            {{ $data['paymentMethod_value'] === 'agent' ? $data['transaction_id'] : '' }}
+                                                        </option>
                                                         <option value="Agen A">Agen A</option>
                                                         <option value="Agen B">Agen B</option>
                                                         <option value="Agen C">Agen C</option>
@@ -311,6 +364,21 @@
     <script>
         // Payment
         $(document).ready(function() {
+            // Fungsi untuk memformat angka dengan pemisah ribuan
+            function formatCurrency(value) {
+                return value.toLocaleString('id-ID'); // Menggunakan pemisah ribuan
+            }
+
+            // Memformat semua elemen dengan kelas 'currency'
+            $('.currency').each(function() {
+                // Mengambil teks dan menghapus 'IDR' jika ada
+                let text = $(this).text().replace(/IDR\s*/, '').trim();
+                // Mengganti titik dan koma untuk konversi
+                let value = parseFloat(text.replace(/\./g, '').replace(/\,/g, '.'));
+                // Mengubah teks dengan format yang benar dan menambahkan 'IDR' di depan
+                $(this).text('IDR ' + formatCurrency(value)); // Menambahkan 'IDR' di depan
+            });
+
             // Fungsi untuk menampilkan Transaction ID berdasarkan pilihan
             function showTransactionField(selectedMethod) {
                 // Sembunyikan semua Transaction ID
@@ -359,35 +427,28 @@
             });
 
             function updateInfo() {
-                // Simpan nilai yang sudah diisi sebelumnya
-                var previousAdultValues = {};
-                $('#adult_info input, #adult_info select').each(function() {
-                    previousAdultValues[$(this).attr('id')] = $(this).val();
-                });
-
-                var previousChildValues = {};
-                $('#child_info input, #child_info select').each(function() {
-                    previousChildValues[$(this).attr('id')] = $(this).val();
-                });
-
-                var previousInfantValues = {};
-                $('#infant_info input, #infant_info select').each(function() {
-                    previousInfantValues[$(this).attr('id')] = $(this).val();
-                });
-
-                // Clear all current info
-                $('#adult_info, #child_info, #infant_info').empty();
-
                 // Get values of each count
-                var adultCount = parseInt($('#fbo_adult').val()) || 1;
-                var childCount = parseInt($('#fbo_child').val()) || 0;
-                var infantCount = parseInt($('#fbo_infant').val()) || 0;
+                let adultCount = 0;
+                let childCount = 0;
+                let infantCount = 0;
                 var passengers = @json($data['passengers']);
 
-                passengers.forEach((passenger, index) => {
-                    let passengerIndex = index + 1;
+                passengers.forEach((passenger) => {
                     let passengerType = passenger.age < 3 ? 'infant' : (passenger.age <= 12 ? 'child' :
                         'adult');
+
+                    // Penomoran berdasarkan tipe penumpang
+                    let passengerIndex;
+                    if (passengerType === 'adult') {
+                        adultCount++;
+                        passengerIndex = adultCount; // Nomor untuk adult
+                    } else if (passengerType === 'child') {
+                        childCount++;
+                        passengerIndex = childCount; // Nomor untuk child
+                    } else if (passengerType === 'infant') {
+                        infantCount++;
+                        passengerIndex = infantCount; // Nomor untuk infant
+                    }
 
                     // Append info berdasarkan tipe penumpang
                     $(`#${passengerType}_info`).append(`
