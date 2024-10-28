@@ -1016,7 +1016,7 @@
                         </tr>`
                         );
                     });
-                    $('#passenger-info').text(data.contact.ctc_info);
+                    $('#passenger-info').text(data.note);
                     $('#chekin-point').text(data.checkPoint.fcp_address);
                 }).fail(function() {
                     alert('Gagal mengambil data. Silakan coba lagi.');

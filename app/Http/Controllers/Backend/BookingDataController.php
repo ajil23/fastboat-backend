@@ -1408,6 +1408,7 @@ class BookingDataController extends Controller
         return response()->json([
             'fbo_booking_id' => $bookingData->fbo_booking_id,
             'fbo_trip_date' => $bookingData->fbo_trip_date,
+            'fbo_adult' => $bookingData->fbo_adult,
             'fbo_child' => $bookingData->fbo_child,
             'fbo_infant' => $bookingData->fbo_infant,
             'fbo_adult_publish' => $bookingData->fbo_adult_publish,
@@ -1422,6 +1423,7 @@ class BookingDataController extends Controller
             'fbo_profit' => $bookingData->fbo_profit,
             'fbo_refund' => $bookingData->fbo_refund,
             'fbo_transaction_id' => $bookingData->fbo_transaction_id,
+            'note' => $bookingData->contact->ctc_note,
             'trip' => [
                 'fastboat' => ['fb_name' => $bookingData->trip->fastboat->fb_name],
                 'departure_port' => $bookingData->trip->departure->prt_name_en,
