@@ -98,6 +98,31 @@ class BookingDataController extends Controller
             }
         }
 
+        // Cek jika range_type dan daterange ada dalam request
+        if ($request->filled('range_type') && $request->filled('daterange')) {
+            $dates = explode(' to ', $request->daterange);
+
+            // Tentukan kolom berdasarkan range_type yang dipilih
+            $column = $request->range_type === 'trip_date' ? 'fbo_trip_date' : 'created_at';
+
+            if (count($dates) === 2) {
+                // Jika dua tanggal, gunakan sebagai rentang tanggal
+                $startDate = Carbon::parse($dates[0])->format('Y-m-d');
+                $endDate = Carbon::parse($dates[1])->format('Y-m-d');
+                $query->whereDate($column, '>=', $startDate)
+                    ->whereDate($column, '<=', $endDate);
+            } else {
+                // Jika hanya satu tanggal, gunakan untuk mencari tanggal tersebut saja
+                $singleDate = Carbon::parse($dates[0])->format('Y-m-d');
+                $query->whereDate($column, $singleDate);
+            }
+        }
+
+        // Check if the "Trip Updated" checkbox is checked
+        if ($request->filled('trip_updated')) {
+            $query->whereNotNull('fbo_log'); // Ensure fbo_log has content
+        }
+
         // Fetch the filtered data
         $bookingData = $query->get();
 
@@ -137,6 +162,11 @@ class BookingDataController extends Controller
 
         // Fetch the payment method data
         $paymentMethod = MasterPaymentMethod::all();
+
+        foreach ($bookingData as $data) {
+            // Cek apakah kolom fbo_log tidak kosong
+            $data->isUpdated = !empty($data->fbo_log);
+        }
 
         // Return view with data and unique dropdown options
         return view('booking.data.index', compact('bookingData', 'paymentMethod', 'companies', 'departurePorts', 'arrivalPorts',  'sources'));
@@ -1617,7 +1647,8 @@ class BookingDataController extends Controller
         }
     }
 
-    public function edit(Request $request, $fbo_id){
+    public function edit(Request $request, $fbo_id)
+    {
         $bookingData = BookingData::find($fbo_id);
         $nationality = MasterNationality::all();
         $payment = MasterPaymentMethod::all();
