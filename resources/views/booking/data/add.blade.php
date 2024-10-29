@@ -36,19 +36,19 @@
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="ctc_name">Name</label>
-                                                    <input id="ctc_name" name="ctc_name" placeholder="Enter Name" type="text" class="form-control">
+                                                    <input id="ctc_name" name="ctc_name" placeholder="Enter Name" type="text" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="ctc_email">Email</label>
-                                                    <input id="ctc_email" name="ctc_email" placeholder="Enter Email" type="email" class="form-control">
+                                                    <input id="ctc_email" name="ctc_email" placeholder="Enter Email" type="email" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
                                                 <div class="mb-3">
                                                     <label class="form-label" for="ctc_phone">Phone</label>
-                                                    <input id="ctc_phone" name="ctc_phone" placeholder="Enter Phone" type="text" class="form-control">
+                                                    <input id="ctc_phone" name="ctc_phone" placeholder="Enter Phone" type="text" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -1715,7 +1715,7 @@
                             <div class="col-lg-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="adult_name_${i}">Adult ${i} Name</label>
-                                    <input id="adult_name_${i}" name="adult_name_[]" type="text" placeholder="Enter Name" class="form-control">
+                                    <input id="adult_name_${i}" name="adult_name_[]" type="text" placeholder="Enter Name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -1763,7 +1763,7 @@
                             <div class="col-lg-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="child_name_${i}">Child ${i} Name</label>
-                                    <input id="child_name_${i}" name="child_name_[]" type="text" placeholder="Enter Name" class="form-control">
+                                    <input id="child_name_${i}" name="child_name_[]" type="text" placeholder="Enter Name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-3">
@@ -1810,7 +1810,7 @@
                             <div class="col-lg-3">
                                 <div class="mb-3">
                                     <label class="form-label" for="infant_name_${i}">Infant ${i} Name</label>
-                                    <input id="infant_name_${i}" name="infant_name_[]" type="text" placeholder="Enter Name" class="form-control">
+                                    <input id="infant_name_${i}" name="infant_name_[]" type="text" placeholder="Enter Name" class="form-control" required>
                                 </div>
                             </div>
                             <div class="col-lg-3">
