@@ -144,8 +144,18 @@
                                                             <label class="form-label" for="fbo_pickup">Pickup Area</label>
                                                             <select style="border-color: lightgray;" class="form-control"
                                                                 id="fbo_pickup" name="fbo_pickup">
-                                                                <option value="">Select Option</option>
+                                                                @if (empty($data['fbo_pickup']))
+                                                                    <option value="">Select Option</option>
+                                                                @endif
+                                                                @foreach ($data['pickupAreas'] as $area)
+                                                                    <option value="{{ $area['id'] }}"
+                                                                        data-pickup-meeting-point="{{ $area['pickup_meeting_point'] ?? '' }}"
+                                                                        {{ isset($data['fbo_pickup']) && $data['fbo_pickup'] == $area['id'] ? 'selected' : '' }}>
+                                                                        {{ $area['name'] }}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6">
@@ -153,7 +163,8 @@
                                                             <label class="form-label" for="">Phone</label>
                                                             <input type="text" style="border-color: lightgray;"
                                                                 class="form-control" id=""
-                                                                name="fbo_contact_pickup" placeholder="62XXXXXXXXXXX">
+                                                                name="fbo_contact_pickup" placeholder="62XXXXXXXXXXX"
+                                                                value="{{ $data['fbo_contact_pickup'] ?? '' }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -173,7 +184,16 @@
                                                                 Area</label>
                                                             <select style="border-color: lightgray;" class="form-control"
                                                                 id="fbo_dropoff" name="fbo_dropoff">
-                                                                <option value="">Select Option</option>
+                                                                @if (empty($data['fbo_dropoff']))
+                                                                    <option value="">Select Option</option>
+                                                                @endif
+                                                                @foreach ($data['dropoffAreas'] as $area)
+                                                                    <option value="{{ $area['id'] }}"
+                                                                        data-dropoff-meeting-point="{{ $area['dropoff_meeting_point'] ?? '' }}"
+                                                                        {{ isset($data['fbo_dropoff']) && $data['fbo_dropoff'] == $area['id'] ? 'selected' : '' }}>
+                                                                        {{ $area['name'] }}
+                                                                    </option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
@@ -182,7 +202,8 @@
                                                             <label class="form-label" for="">Phone</label>
                                                             <input type="text" style="border-color: lightgray;"
                                                                 class="form-control" id=""
-                                                                name="fbo_contact_dropoff" placeholder="62XXXXXXXXXXX">
+                                                                name="fbo_contact_dropoff" placeholder="62XXXXXXXXXXX"
+                                                                value="{{ $data['fbo_contact_dropoff'] ?? '' }}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -191,7 +212,7 @@
                                                         <label class="form-label" for="fbo_specific_dropoff">Address
                                                             Dropoff</label>
                                                         <textarea id="fbo_specific_dropoff" name="fbo_specific_dropoff" class="form-control"
-                                                            style="border-color: lightgray;"></textarea>
+                                                            style="border-color: lightgray;">{{ $data['fbo_specific_dropoff'] ?? '' }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -381,7 +402,8 @@
                 // Mengambil teks asli dan memisahkan mata uang dari angka
                 let originalText = $(this).text();
                 let currencySymbol = originalText.match(/[^\d.,]+/g) || [
-                '']; // Mendapatkan simbol mata uang
+                    ''
+                ]; // Mendapatkan simbol mata uang
                 let text = originalText.replace(/[^\d.,]/g, '').trim(); // Mengambil angka
 
                 // Mengganti titik dan koma untuk konversi
@@ -596,6 +618,72 @@
             // Trigger updateInfo when the adult, child, or infant count changes
             $('#fbo_adult, #fbo_child, #fbo_infant').on('change', function() {
                 updateInfo();
+            });
+        });
+
+        // shuttle pickup
+        document.addEventListener('DOMContentLoaded', function() {
+            const pickupSelect = document.getElementById('fbo_pickup');
+            const specificPickupTextarea = document.getElementById('fbo_specific_pickup');
+
+            // Mengisi textarea jika ada value default
+            const defaultPickupId = "{{ $data['fbo_pickup'] }}";
+            const defaultPickupMeetingPoint = "{{ $data['fbo_specific_pickup'] }}";
+
+            if (defaultPickupId) {
+                // Mengisi textarea dengan value default jika ada
+                specificPickupTextarea.value = defaultPickupMeetingPoint;
+                // Memilih opsi yang sesuai
+                for (let option of pickupSelect.options) {
+                    if (option.value === defaultPickupId) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
+
+            pickupSelect.addEventListener('change', function() {
+                const selectedOption = pickupSelect.options[pickupSelect.selectedIndex];
+                const pickupMeetingPoint = selectedOption.getAttribute('data-pickup-meeting-point');
+
+                if (pickupMeetingPoint) {
+                    specificPickupTextarea.value = pickupMeetingPoint;
+                } else {
+                    specificPickupTextarea.value = '';
+                }
+            });
+        });
+
+        // shuttle dropoff
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropoffSelect = document.getElementById('fbo_dropoff');
+            const specificDropoffTextarea = document.getElementById('fbo_specific_dropoff');
+
+            // Mengisi textarea jika ada value default
+            const defaultDropoffId = "{{ $data['fbo_dropoff'] }}";
+            const defaultDropoffMeetingPoint = "{{ $data['fbo_specific_dropoff'] }}";
+
+            if (defaultDropoffId) {
+                // Mengisi textarea dengan value default jika ada
+                specificDropoffTextarea.value = defaultDropoffMeetingPoint;
+                // Memilih opsi yang sesuai
+                for (let option of dropoffSelect.options) {
+                    if (option.value === defaultDropoffId) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
+
+            dropoffSelect.addEventListener('change', function() {
+                const selectedOption = dropoffSelect.options[dropoffSelect.selectedIndex];
+                const dropoffMeetingPoint = selectedOption.getAttribute('data-dropoff-meeting-point');
+
+                if (dropoffMeetingPoint) {
+                    specificDropoffTextarea.value = dropoffMeetingPoint;
+                } else {
+                    specificDropoffTextarea.value = '';
+                }
             });
         });
     </script>

@@ -1649,35 +1649,193 @@ class BookingDataController extends Controller
         }
     }
 
+    // public function edit(Request $request, $fbo_id)
+    // {
+    //     $bookingData = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($fbo_id);
+
+    //     $nationality = MasterNationality::all();
+    //     $payment = MasterPaymentMethod::all();
+
+    //     // Memformat waktu departur
+    //     $time = $bookingData->availability->fba_dept_time ?? $bookingData->trip->fbt_dept_time;
+    //     $timeDateTime = new \DateTime($time);
+    //     $departureformattedTime = $timeDateTime->format('H:i');
+
+    //     // Memformat waktu arrival
+    //     $arrivaltime = $bookingData->fbo_arrival_time;
+    //     $arrivaltimeDateTime = new \DateTime($arrivaltime);
+    //     $arrivalformattedTime = $arrivaltimeDateTime->format('H:i');
+
+    //     // Memformat tanggal
+    //     $tripDate = new \DateTime($bookingData->fbo_trip_date);
+    //     $formattedTripDate = $tripDate->format('l, d M Y');
+
+    //     // Mengambil data passenger
+    //     $passengerDataString = $bookingData->fbo_passenger;
+    //     $passengerArray = [];
+
+    //     $passengers = explode(';', $passengerDataString);
+
+    //     // Mengurai setiap data penumpang
+    //     foreach ($passengers as $passenger) {
+    //         $details = explode(',', $passenger);
+    //         if (count($details) === 4) {
+    //             $passengerArray[] = [
+    //                 'name' => $details[0],
+    //                 'age' => $details[1],
+    //                 'gender' => $details[2],
+    //                 'nationality' => $details[3],
+    //             ];
+    //         }
+    //     }
+
+    //     $data = [
+    //         'fbo_booking_id' => $bookingData->fbo_booking_id,
+    //         'fbo_currency' => $bookingData->fbo_currency,
+    //         'fbo_adult_nett' => $bookingData->fbo_adult_nett,
+    //         'fbo_adult_publish' => $bookingData->fbo_adult_publish,
+    //         'fbo_adult_currency' => $bookingData->fbo_adult_currency,
+    //         'fbo_child_nett' => $bookingData->fbo_child_nett,
+    //         'fbo_child_publish' => $bookingData->fbo_child_publish,
+    //         'fbo_child_currency' => $bookingData->fbo_child_currency,
+    //         'fbo_total_publish' => $bookingData->fbo_total_publish,
+    //         'fbo_total_currency' => $bookingData->fbo_total_currency,
+    //         'fbo_total_nett' => $bookingData->fbo_total_nett,
+    //         'fbo_kurs' => $bookingData->fbo_kurs,
+    //         'fbo_discount' => $bookingData->fbo_discount,
+    //         'fbo_discount_total' => $bookingData->fbo_discount_total,
+    //         'fbo_price_cut' => $bookingData->fbo_price_cut,
+    //         'fbo_end_total' => $bookingData->fbo_end_total,
+    //         'fbo_end_total_currency' => $bookingData->fbo_end_total_currency,
+    //         'departure_port' => $bookingData->trip->departure->prt_name_en,
+    //         'departure_island' => $bookingData->trip->departure->island->isd_name,
+    //         'departure_time' => $departureformattedTime,
+    //         'arrival_port' => $bookingData->trip->arrival->prt_name_en,
+    //         'arrival_island' => $bookingData->trip->arrival->island->isd_name,
+    //         'arrival_time' => $arrivalformattedTime,
+    //         'fbo_trip_date' => $formattedTripDate,
+    //         'passengers' => $passengerArray,
+    //         'adult' => $bookingData->fbo_adult,
+    //         'child' => $bookingData->fbo_child,
+    //         'infant' => $bookingData->fbo_infant,
+    //         'name' => $bookingData->contact->ctc_name,
+    //         'email' => $bookingData->contact->ctc_email,
+    //         'phone' => $bookingData->contact->ctc_phone,
+    //         'nationality_name' => $bookingData->contact->nationality->nas_country,
+    //         'nationality_id' => $bookingData->contact->nationality->nas_id,
+    //         'note' => $bookingData->contact->ctc_note,
+    //         'paymentMethod_name' => $bookingData->paymentMethod->py_name,
+    //         'paymentMethod_value' => $bookingData->paymentMethod->py_value,
+    //         'transaction_id' => $bookingData->fbo_transaction_id,
+    //     ];
+    //     return view('booking.data.edit', compact('data', 'nationality', 'payment'));
+    // }
+
     public function edit(Request $request, $fbo_id)
     {
+        // Mengambil data booking
         $bookingData = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($fbo_id);
 
-        $nationality = MasterNationality::all();
-        $payment = MasterPaymentMethod::all();
+        // Mengambil data ketersediaan fastboat
+        $availabilityQuery = FastboatAvailability::whereHas('trip', function ($query) use ($bookingData) {
+            $query->whereHas('departure', function ($q) use ($bookingData) {
+                $q->where('prt_name_en', $bookingData->trip->departure->prt_name_en);
+            })
+                ->whereHas('arrival', function ($q) use ($bookingData) {
+                    $q->where('prt_name_en', $bookingData->trip->arrival->prt_name_en);
+                })
+                ->whereHas('fastboat', function ($q) use ($bookingData) {
+                    $q->where('fb_name', $bookingData->trip->fastboat->fb_name);
+                })
+                ->where('fba_date', $bookingData->fbo_trip_date)
+                ->where('fba_stock', '>', $bookingData->fbo_adult + $bookingData->fbo_child);
+        });
 
-        // Memformat waktu departur
+        $availability = $availabilityQuery->get();
+        $shuttleType = null;
+        $shuttleOption = null;
+        $pickupAreas = [];
+        $dropoffAreas = [];
+
+        if (!$availability->isEmpty()) {
+            $trip = $availability->first()->trip;
+            $shuttleTypeReturn = $trip->fbt_shuttle_type;
+            $shuttleOptionReturn = $trip->fbt_shuttle_option;
+
+            foreach ($availability as $avail) {
+                if ($shuttleTypeReturn && in_array($shuttleTypeReturn, ['Private', 'Sharing'])) {
+                    $trip_id = $avail->trip->fbt_id;
+                    $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
+
+                    if ($shuttleOptionReturn === 'pickup') {
+                        // Untuk opsi pickup
+                        $pickupAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
+                            return [
+                                'id' => $value->area->sa_id,
+                                'name' => $value->area->sa_name,
+                                'pickup_meeting_point' => $value->s_meeting_point ?? '',
+                            ];
+                        })->toArray() : [];
+
+                        $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
+                            return [
+                                'id' => $area->sa_id,
+                                'name' => $area->sa_name,
+                            ];
+                        })->toArray();
+                    } elseif ($shuttleOptionReturn === 'drop') {
+                        // Untuk opsi drop
+                        $dropoffAreas = $Areas->isNotEmpty() ? $Areas->map(function ($value) {
+                            return [
+                                'id' => $value->area->sa_id,
+                                'name' => $value->area->sa_name,
+                                'dropoff_meeting_point' => $value->s_meeting_point ?? '',
+                            ];
+                        })->toArray() : [];
+
+                        $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
+                            return [
+                                'id' => $area->sa_id,
+                                'name' => $area->sa_name,
+                            ];
+                        })->toArray();
+                    }
+
+                    // Jika tidak ada data pickupAreas atau dropoffAreas, fallback ke FastboatShuttleArea
+                    if (empty($pickupAreas)) {
+                        $pickupAreas = FastboatShuttleArea::all()->map(function ($area) {
+                            return [
+                                'id' => $area->sa_id,
+                                'name' => $area->sa_name,
+                            ];
+                        })->toArray();
+                    }
+
+                    if (empty($dropoffAreas)) {
+                        $dropoffAreas = FastboatShuttleArea::all()->map(function ($area) {
+                            return [
+                                'id' => $area->sa_id,
+                                'name' => $area->sa_name,
+                            ];
+                        })->toArray();
+                    }
+                }
+            }
+        }
+
+        // Memformat waktu dan tanggal
         $time = $bookingData->availability->fba_dept_time ?? $bookingData->trip->fbt_dept_time;
-        $timeDateTime = new \DateTime($time);
-        $departureformattedTime = $timeDateTime->format('H:i');
+        $departureformattedTime = (new \DateTime($time))->format('H:i');
 
-        // Memformat waktu arrival
         $arrivaltime = $bookingData->fbo_arrival_time;
-        $arrivaltimeDateTime = new \DateTime($arrivaltime);
-        $arrivalformattedTime = $arrivaltimeDateTime->format('H:i');
+        $arrivalformattedTime = (new \DateTime($arrivaltime))->format('H:i');
 
-        // Memformat tanggal
         $tripDate = new \DateTime($bookingData->fbo_trip_date);
         $formattedTripDate = $tripDate->format('l, d M Y');
 
-        // Mengambil data passenger
-        $passengerDataString = $bookingData->fbo_passenger;
+        // Mengambil data penumpang
         $passengerArray = [];
-
-        $passengers = explode(';', $passengerDataString);
-
-        // Mengurai setiap data penumpang
-        foreach ($passengers as $passenger) {
+        foreach (explode(';', $bookingData->fbo_passenger) as $passenger) {
             $details = explode(',', $passenger);
             if (count($details) === 4) {
                 $passengerArray[] = [
@@ -1689,6 +1847,7 @@ class BookingDataController extends Controller
             }
         }
 
+        // Data untuk view
         $data = [
             'fbo_booking_id' => $bookingData->fbo_booking_id,
             'fbo_currency' => $bookingData->fbo_currency,
@@ -1703,7 +1862,7 @@ class BookingDataController extends Controller
             'fbo_total_nett' => $bookingData->fbo_total_nett,
             'fbo_kurs' => $bookingData->fbo_kurs,
             'fbo_discount' => $bookingData->fbo_discount,
-            'fbo_discount_total' =>$bookingData->fbo_discount_total,
+            'fbo_discount_total' => $bookingData->fbo_discount_total,
             'fbo_price_cut' => $bookingData->fbo_price_cut,
             'fbo_end_total' => $bookingData->fbo_end_total,
             'fbo_end_total_currency' => $bookingData->fbo_end_total_currency,
@@ -1727,7 +1886,20 @@ class BookingDataController extends Controller
             'paymentMethod_name' => $bookingData->paymentMethod->py_name,
             'paymentMethod_value' => $bookingData->paymentMethod->py_value,
             'transaction_id' => $bookingData->fbo_transaction_id,
+            'pickupAreas' => $pickupAreas,
+            'fbo_pickup' => $bookingData->fbo_pickup,
+            'fbo_contact_pickup' => $bookingData->fbo_contact_pickup,
+            'fbo_specific_pickup' => $bookingData->fbo_specific_pickup,
+            'dropoffAreas' => $dropoffAreas,
+            'fbo_dropoff' => $bookingData->fbo_dropoff,
+            'fbo_contact_dropoff' => $bookingData->fbo_contact_dropoff,
+            'fbo_specific_dropoff' => $bookingData->fbo_specific_dropoff,
         ];
-        return view('booking.data.edit', compact('data', 'nationality', 'payment'));
+
+        // Data tambahan untuk nationality dan payment
+        $nationality = MasterNationality::all();
+        $payment = MasterPaymentMethod::all();
+        // dd($data);
+        return view('booking.data.edit', compact('data', 'nationality', 'payment', 'availability'));
     }
 }
