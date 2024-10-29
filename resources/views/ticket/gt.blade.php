@@ -242,7 +242,9 @@
                 <td>
                     ph:{{ $fbo_dropoff }} {{ $fbo_specific_dropoff }} {{ $fbo_contact_dropoff }}
                 </td>
-                <td></td>
+                <td>
+                    {{ $note }}
+                </td>
             </tr>
         </table>
 
