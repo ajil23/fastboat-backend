@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthControllerApi;
 use App\Http\Controllers\Api\AvailabilityApiController;
 use App\Http\Controllers\Api\BookingApiController;
+use App\Http\Controllers\Api\CurrencyApiController;
 use App\Http\Controllers\Api\FastboatApiController;
 use App\Http\Controllers\Api\NationalityApiController;
 use App\Http\Controllers\Api\PortApiController;
@@ -21,17 +22,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('checkStaticToken')->group(function (){
+Route::middleware('checkStaticToken')->group(function () {
     //fastboat 
     Route::get('fast-boat', [FastboatApiController::class, 'index']);
     Route::get('fast-boat/en/{fb_slug_en}', [FastboatApiController::class, 'show_en']);
     Route::get('fast-boat/idn/{fb_slug_idn}', [FastboatApiController::class, 'show_idn']);
-    
+
     // port
     Route::get('port', [PortApiController::class, 'index']);
     Route::get('port/en/{prt_slug_en}', [PortApiController::class, 'show_en']);
     Route::get('port/idn/{prt_slug_idn}', [PortApiController::class, 'show_idn']);
-    
+
     // availability
     Route::get('availability', [AvailabilityApiController::class, 'index']);
     Route::get('availability/search', [AvailabilityApiController::class, 'search']);
@@ -41,6 +42,7 @@ Route::middleware('checkStaticToken')->group(function (){
 
     // booking
     Route::post('/booking', [BookingApiController::class, 'store']);
+
+    // currency
+    Route::get('currency', [CurrencyApiController::class, 'index']);
 });
-
-
