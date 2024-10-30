@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\BookingData;
 use App\Models\Contact;
+use App\Models\FastboatAvailability;
+use App\Models\FastboatTrip;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -49,6 +51,66 @@ class BookingApiController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        $validatedData = $request->validate([
+            'contact.ctc_name' => 'required|string',
+            'contact.ctc_email' => 'required|email',
+            'contact.ctc_phone' => 'required|string',
+            'contact.ctc_nationality' => 'required|string',
+            'trip.ids' => 'required|array',
+            'trip.ids.*' => 'required|string',
+            'passengers' => 'required|array',
+            'passengers.*.name' => 'required|string',
+            'passengers.*.age' => 'required|integer',
+            'passengers.*.gender' => 'required|string|in:male,female',
+            'passengers.*.nationality' => 'required|string',
+        ]);
+
+        // Mendapatkan IP address
+        $ipAddress = $request->ip(); // IP Publik pengguna
+
+        // Jika berada di belakang proxy, coba ambil IP dari X-Forwarded-For
+        if ($request->server('HTTP_X_FORWARDED_FOR')) {
+            $ipAddress = $request->server('HTTP_X_FORWARDED_FOR');
+        } else {
+            $ipAddress = $request->ip();
+        }
+
+        // contact
+        $contactData = new Contact();
+        $contactData->ctc_order_id = $this->generateOrderId();
+        $contactData->ctc_name = $validatedData['contact']['ctc_name'];
+        $contactData->ctc_email = $validatedData['contact']['ctc_email'];
+        $contactData->ctc_phone = $validatedData['contact']['ctc_phone'];
+        $contactData->ctc_nationality = $validatedData['contact']['ctc_nationality'];
+        $contactData->ctc_note = $request->ctc_note;
+        $contactData->ctc_order_type = 'F';
+        $contactData->ctc_booking_date = Carbon::now()->toDateString();
+        $contactData->ctc_booking_time = Carbon::now()->toTimeString();
+        $contactData->ctc_ip_address = $ipAddress;
+        $contactData->ctc_browser = $request->header('User-Agent');
+        $contactData->ctc_updated_by = Auth()->id() ?? 'api';
+        $contactData->ctc_created_by = Auth()->id() ?? 'api';
+
+        // trip
+        $tripIds = $validatedData['trip']['ids'];
+        $trips = FastboatAvailability::whereIn('fba_id', $tripIds)->get();
+
+        // passengers
+        $passengerStrings = []; // Array untuk menyimpan string penumpang
+
+        foreach ($validatedData['passengers'] as $passengerData) {
+            // Format data penumpang
+            $passengerString = implode(',', [
+                $passengerData['name'],
+                $passengerData['age'],
+                $passengerData['gender'],
+                $passengerData['nationality']
+            ]);
+
+            $passengerStrings[] = $passengerString; // Tambahkan ke array
+        }
+        // Gabungkan semua string penumpang dengan semicolon
+        $passengersFormatted = implode(';', $passengerStrings);
+        dd($passengersFormatted);
     }
 }
