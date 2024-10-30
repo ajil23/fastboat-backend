@@ -243,7 +243,7 @@ class BookingDataController extends Controller
             $contactData->ctc_email = $request->ctc_email;
             $contactData->ctc_phone = $request->ctc_phone;
             $contactData->ctc_nationality = $request->ctc_nationality;
-            $contactData->ctc_note = '';
+            $contactData->ctc_note = $request->ctc_note;
             $contactData->ctc_order_type = 'F';
             $contactData->ctc_booking_date = Carbon::now()->toDateString();  // Mengambil tanggal saat ini
             $contactData->ctc_booking_time = Carbon::now()->toTimeString();
