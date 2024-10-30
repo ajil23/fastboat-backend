@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Api\AuthControllerApi;
 use App\Http\Controllers\Api\AvailabilityApiController;
+use App\Http\Controllers\Api\BookingApiController;
 use App\Http\Controllers\Api\FastboatApiController;
+use App\Http\Controllers\Api\NationalityApiController;
 use App\Http\Controllers\Api\PortApiController;
 use App\Models\DataFastboat;
 use Illuminate\Http\Request;
@@ -33,6 +35,12 @@ Route::middleware('checkStaticToken')->group(function (){
     // availability
     Route::get('availability', [AvailabilityApiController::class, 'index']);
     Route::get('availability/search', [AvailabilityApiController::class, 'search']);
+
+    // nationality
+    Route::get('nationality', [NationalityApiController::class, 'index']);
+
+    // booking
+    Route::post('/booking', [BookingApiController::class, 'store']);
 });
 
 
