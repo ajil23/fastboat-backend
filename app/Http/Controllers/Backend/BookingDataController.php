@@ -16,6 +16,7 @@ use App\Models\MasterCurrency;
 use App\Models\MasterNationality;
 use App\Models\MasterPaymentMethod;
 use App\Models\FastboatLog;
+use App\Models\FastboatCheckinPoint;
 use Carbon\Carbon;
 use COM;
 use Illuminate\Http\Request;
@@ -389,8 +390,9 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_departure_time = $request->fbo_departure_time;
             $bookingDataDepart->fbo_arrival_island = $trip->trip->arrival->island->isd_id;
             $bookingDataDepart->fbo_arrival_port = $trip->trip->arrival->prt_id;
-            $bookingDataDepart->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
-            $bookingDataDepart->fbo_checkin_point = 1; // Harus terkoneksi ke tabel checkin point
+            $bookingDataDepart->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time; 
+            $checkin = FastboatCheckinPoint::where('fcp_company', $bookingDataDepart->fbo_company)->first();
+            $bookingDataDepart->fbo_checkin_point = $checkin->fcp_address; 
             $bookingDataDepart->fbo_mail_admin = "";
             $bookingDataDepart->fbo_mail_client = "";
             $bookingDataDepart->fbo_pickup = $request->fbo_pickup;
@@ -489,7 +491,8 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_arrival_island = $trip->trip->arrival->island->isd_id;
                 $bookingDataReturn->fbo_arrival_port = $trip->trip->arrival->prt_id;
                 $bookingDataReturn->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
-                $bookingDataReturn->fbo_checkin_point = 1;
+                $checkin = FastboatCheckinPoint::where('fcp_company', $bookingDataDepart->fbo_company)->first();
+                $bookingDataReturn->fbo_checkin_point = $checkin->fcp_address; 
                 $bookingDataReturn->fbo_mail_admin = "";
                 $bookingDataReturn->fbo_mail_client = "";
                 $bookingDataReturn->fbo_pickup = $request->fbo_pickup_return;
