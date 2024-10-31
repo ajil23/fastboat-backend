@@ -247,7 +247,7 @@
                                                         <div>
                                                             <strong>{{ $item->fbo_booking_id }}</strong> ~
                                                             <strong>{{ $item->trip->fastboat->fb_name }}</strong>
-                                                            {{ $item->trip->departure->island->isd_name }} <span class="text-danger">({{ \Carbon\Carbon::parse($item->fbo_trip_date)->format('d F Y') }}{{ \Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i') }})</span>
+                                                            {{ $item->trip->departure->island->isd_name }} (<span class="text-danger">{{ \Carbon\Carbon::parse($item->fbo_trip_date)->format('d F Y') }}</span> {{ \Carbon\Carbon::parse($item->fbo_departure_time)->format('H:i') }})
                                                             => {{ $item->trip->arrival->island->isd_name }} ~
                                                             <strong>{{ $item->fbo_adult + $item->fbo_child }} pax</strong>
                                                             ({{ $item->fbo_adult }} Adult, {{ $item->fbo_child }} Child,

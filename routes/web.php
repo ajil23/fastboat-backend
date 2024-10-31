@@ -58,11 +58,12 @@ Route::middleware([
         Route::get('/data/searchReturn', [BookingDataController::class, 'searchReturn'])->name('data.searchReturn');
         Route::get('/data/status/{id}', [BookingDataController::class, 'status'])->name('data.status');
         Route::post('/data/updatePayment', [BookingDataController::class, 'updatePayment'])->name('data.updatePayment');
-        Route::get('/data/{id}', [BookingDataController::class, 'show'])->name('data.show');
+        Route::get('/data/{id}', [BookingDataController::class, 'showDetail'])->name('data.show');
         Route::post('/data/{id}/update-status', [BookingDataController::class, 'updateStatus'])->name('data.updateStatus');
         Route::get('/data/{id}/whatsapp', [BookingDataController::class, 'whatsappReservation'])->name('data.whatsapp');
         Route::post('/data/cancel-transaction', [BookingDataController::class, 'cancelTransaction'])->name('data.cancelTransaction');
         Route::get('/data/{id}/ticket-view', [BookingDataController::class, 'viewTicket'])->name('data.viewTicket');
+        Route::get('/data/search-trip', [BookingDataController::class, 'searchTrips'])->name('data.searchTrip');
         
         //booking-trash route
         Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');
@@ -211,4 +212,6 @@ Route::middleware([
 
     Route::get('/getFilteredData', [BookingDataController::class, 'getFilteredData']);
     Route::get('/getFilteredDataReturn', [BookingDataController::class, 'getFilteredDataReturn']);
+    Route::get('/get-filtered', [BookingDataController::class, 'getFiltered']);
+
 });
