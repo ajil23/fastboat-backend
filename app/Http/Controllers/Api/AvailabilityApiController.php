@@ -86,13 +86,13 @@ class AvailabilityApiController extends Controller
                     $dropoffAreas = [];
 
                     if ($availability) {
-                        $trip = $availability->first()->trip;
-                        $shuttleType = $trip->fbt_shuttle_type;
-                        $shuttleOption = $trip->fbt_shuttle_option;
+                        $trip = $availability->trip->fbt_id;
+                        $shuttleType = $availability->trip->fbt_shuttle_type;
+                        $shuttleOption = $availability->trip->fbt_shuttle_option;
 
                         foreach ($availability as $avail) {
                             if ($shuttleType && in_array($shuttleType, ['Private', 'Sharing'])) {
-                                $trip_id = $trip->fbt_id;
+                                $trip_id = $trip;
                                 $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
                                 
                                 if ($shuttleOption === 'pickup') {
@@ -200,13 +200,13 @@ class AvailabilityApiController extends Controller
                     $dropoffAreas = [];
 
                     if ($availability) {
-                        $trip = $availability->first()->trip;
-                        $shuttleType = $trip->fbt_shuttle_type;
-                        $shuttleOption = $trip->fbt_shuttle_option;
+                        $trip = $availability->trip->fbt_id;
+                        $shuttleType = $availability->trip->fbt_shuttle_type;
+                        $shuttleOption = $availability->trip->fbt_shuttle_option;
 
                         foreach ($availability as $avail) {
                             if ($shuttleType && in_array($shuttleType, ['Private', 'Sharing'])) {
-                                $trip_id = $trip->fbt_id;
+                                $trip_id = $trip;
                                 $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
                                 
                                 if ($shuttleOption === 'pickup') {
@@ -264,7 +264,6 @@ class AvailabilityApiController extends Controller
                             }
                         }
                     }
-
                     return [
                         'fbt_recom' => $availability->trip->fbt_recom,
                         'fb_image1' => url('storage/' . ltrim($availability->trip->fastboat->fb_image1, '/')) ?? null,
@@ -311,13 +310,13 @@ class AvailabilityApiController extends Controller
                     $dropoffAreas = [];
 
                     if ($availability) {
-                        $trip = $availability->first()->trip;
-                        $shuttleType = $trip->fbt_shuttle_type;
-                        $shuttleOption = $trip->fbt_shuttle_option;
+                        $trip = $availability->trip->fbt_id;
+                        $shuttleType = $availability->trip->fbt_shuttle_type;
+                        $shuttleOption = $availability->trip->fbt_shuttle_option;
 
                         foreach ($availability as $avail) {
                             if ($shuttleType && in_array($shuttleType, ['Private', 'Sharing'])) {
-                                $trip_id = $trip->fbt_id;
+                                $trip_id = $trip;
                                 $Areas = FastboatShuttle::where('s_trip', $trip_id)->get();
                                 
                                 if ($shuttleOption === 'pickup') {
