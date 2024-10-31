@@ -409,4 +409,48 @@
         document.getElementById('isd_slug_idn').value = isd_slug_idn;
     });
 </script>
+
+<script>
+    $(document).ready(function() {
+        // Membatasi karakter input hanya untuk angka, -, ., dan ,
+        $('#isd_map').on('input', function() {
+            const value = $(this).val();
+
+            // Regex hanya mengizinkan angka, minus (-), titik (.), spasi, dan koma (,)
+            const validChars = /^[0-9.,\-\s]*$/;
+
+            if (!validChars.test(value)) {
+                $(this).val(value.replace(/[^0-9.,\-\s]/g, '')); // Menghapus karakter tidak valid
+            }
+        });
+
+        // Validasi ketika form disubmit
+        $('form').on('submit', function(event) {
+            event.preventDefault(); // Mencegah form terkirim sebelum validasi
+
+            const input = $('#isd_map').val();
+
+            // Memisahkan latitude dan longitude dengan koma
+            const coords = input.split(",");
+
+            if (coords.length !== 2) {
+                return false;
+            }
+
+            const lat = parseFloat($.trim(coords[0]));
+            const long = parseFloat($.trim(coords[1]));
+
+            // Validasi latitude
+            if (isNaN(lat) || lat < -90 || lat > 90) {
+                return false;
+            }
+
+            // Validasi longitude
+            if (isNaN(long) || long < -180 || long > 180) {
+                return false;
+            }
+            this.submit();
+        });
+    });
+</script>
 @endsection
