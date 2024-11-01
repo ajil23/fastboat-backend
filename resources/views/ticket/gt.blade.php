@@ -144,14 +144,19 @@
         <div class="paid-stamp">PAID</div>
 
         <div class="header">
-            <div class="header-logo">
-                <img src="data:image/png;base64,{{ $logo_ticket }}" alt="GiliTransfers Logo">
-            </div>
-            <div class="header-info">
-                <h2>E-TICKETS</h2>
-                <p>Fast Boat • Tours • Car Transfer</p>
-                <p>Phone: +62 81353304990 | Email: reservation@gilitransfers.com</p>
-            </div>
+            <table style="width: 100%; border-collapse: collapse; border: none;">
+                <tr>
+                    <td class="header-logo" style="width: 100px; border: none;">
+                        <img src="data:image/png;base64,{{ $logo_ticket }}" alt="GiliTransfers Logo"
+                            style="max-width: 100%; height: auto;">
+                    </td>
+                    <td class="header-info" style="text-align: right; border: none;">
+                        <h2>E-TICKETS</h2>
+                        <p>Fast Boat • Tours • Car Transfer</p>
+                        <p>Phone: +62 81353304990 | Email: reservation@gilitransfers.com</p>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <h3>Booking Details</h3>
@@ -207,7 +212,8 @@
             </tr>
             <tr>
                 <td>
-                    <img src="data:image/png;base64,{{ $cpn_logo }}" alt="logo company" style="height: 50px; width:50px;">
+                    <img src="data:image/png;base64,{{ $cpn_logo }}" alt="logo company"
+                        style="height: 50px; width:50px;">
                     <br>
                     <strong>{{ $cpn_name }}</strong><br>
                     Phone: {{ $cpn_phone }}<br>
@@ -253,7 +259,8 @@
             <ul>
                 <li>Please bring your e-ticket and identity card for check-in at the port.</li>
                 <li>Please kindly check-in at least 1 hour before departure time.</li>
-                <li>The duration of time we inform is only the estimated time and can change depending on sea conditions.</li>
+                <li>The duration of time we inform is only the estimated time and can change depending on sea
+                    conditions.</li>
             </ul>
         </div>
     </div>
@@ -262,21 +269,27 @@
 
     <div class="container">
         <div class="header">
-            <div class="header-logo">
-                <img src="data:image/png;base64,{{ $logo_ticket }}" alt="GiliTransfers Logo">
-            </div>
-            <div class="header-info">
-                <h2>E-TICKETS</h2>
-                <p>Fast Boat • Tours • Car Transfer</p>
-                <p>Phone: +62 81353304990 | Email: reservation@gilitransfers.com</p>
-            </div>
+            <table style="width: 100%; border-collapse: collapse; border: none;">
+                <tr>
+                    <td class="header-logo" style="width: 100px; border: none;">
+                        <img src="data:image/png;base64,{{ $logo_ticket }}" alt="GiliTransfers Logo"
+                            style="max-width: 100%; height: auto;">
+                    </td>
+                    <td class="header-info" style="text-align: right; border: none;">
+                        <h2>E-TICKETS</h2>
+                        <p>Fast Boat • Tours • Car Transfer</p>
+                        <p>Phone: +62 81353304990 | Email: reservation@gilitransfers.com</p>
+                    </td>
+                </tr>
+            </table>
         </div>
-        
+
         <h3>Checkin Point</h3>
         <table class="checkin">
             <tr>
                 <th>Trip</th>
-                <td><b>{{ $fbo_booking_id }}</b> - {{ $cpn_name }} - {{ $departure_port }} to {{ $arrival_port }}</td>
+                <td><b>{{ $fbo_booking_id }}</b> - {{ $cpn_name }} - {{ $departure_port }} to
+                    {{ $arrival_port }}</td>
             </tr>
             <tr>
                 <th>Departure Time</th>
@@ -292,7 +305,9 @@
             </tr>
         </table>
         <div class="contact-info">
-            <a href="https://gilitransfers.com" target="_blank">Gilitransfers.Com</a> ~ Phone: <a href="tel:+6281533304990">+62-81353304990</a> ~ Email: <a href="mailto:reservation@gilitransfers.com">reservation@gilitransfers.com</a>
+            <a href="https://gilitransfers.com" target="_blank">Gilitransfers.Com</a> ~ Phone: <a
+                href="tel:+6281533304990">+62-81353304990</a> ~ Email: <a
+                href="mailto:reservation@gilitransfers.com">reservation@gilitransfers.com</a>
         </div>
     </div>
 </body>
