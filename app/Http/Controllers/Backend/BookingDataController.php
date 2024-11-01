@@ -1368,7 +1368,7 @@ class BookingDataController extends Controller
             ->find($fbo_id);
 
         if (!$bookingData) {
-            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+            return response()->json(['message' => 'Data tidak ada'], 404);
         }
 
 
@@ -1657,7 +1657,7 @@ class BookingDataController extends Controller
     public function edit(Request $request, $fbo_id)
     {
         // Mengambil data booking
-        $bookingData = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($fbo_id);
+        $bookingDataEdit = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($fbo_id);
 
         // Mengambil seluruh departure port unik yang digunakan di trip
         $departure = MasterPort::whereIn('prt_id', function ($query) {
@@ -1682,18 +1682,18 @@ class BookingDataController extends Controller
         }
 
         // Mengambil data ketersediaan fastboat
-        $availabilityQuery = FastboatAvailability::whereHas('trip', function ($query) use ($bookingData) {
-            $query->whereHas('departure', function ($q) use ($bookingData) {
-                $q->where('prt_name_en', $bookingData->trip->departure->prt_name_en);
+        $availabilityQuery = FastboatAvailability::whereHas('trip', function ($query) use ($bookingDataEdit) {
+            $query->whereHas('departure', function ($q) use ($bookingDataEdit) {
+                $q->where('prt_name_en', $bookingDataEdit->trip->departure->prt_name_en);
             })
-                ->whereHas('arrival', function ($q) use ($bookingData) {
-                    $q->where('prt_name_en', $bookingData->trip->arrival->prt_name_en);
+                ->whereHas('arrival', function ($q) use ($bookingDataEdit) {
+                    $q->where('prt_name_en', $bookingDataEdit->trip->arrival->prt_name_en);
                 })
-                ->whereHas('fastboat', function ($q) use ($bookingData) {
-                    $q->where('fb_name', $bookingData->trip->fastboat->fb_name);
+                ->whereHas('fastboat', function ($q) use ($bookingDataEdit) {
+                    $q->where('fb_name', $bookingDataEdit->trip->fastboat->fb_name);
                 })
-                ->where('fba_date', $bookingData->fbo_trip_date)
-                ->where('fba_stock', '>', $bookingData->fbo_adult + $bookingData->fbo_child);
+                ->where('fba_date', $bookingDataEdit->fbo_trip_date)
+                ->where('fba_stock', '>', $bookingDataEdit->fbo_adult + $bookingDataEdit->fbo_child);
         });
 
         $availability = $availabilityQuery->get();
@@ -1769,18 +1769,18 @@ class BookingDataController extends Controller
         }
 
         // Memformat waktu dan tanggal
-        $time = $bookingData->availability->fba_dept_time ?? $bookingData->trip->fbt_dept_time;
+        $time = $bookingDataEdit->availability->fba_dept_time ?? $bookingDataEdit->trip->fbt_dept_time;
         $departureformattedTime = (new \DateTime($time))->format('H:i');
 
-        $arrivaltime = $bookingData->fbo_arrival_time;
+        $arrivaltime = $bookingDataEdit->fbo_arrival_time;
         $arrivalformattedTime = (new \DateTime($arrivaltime))->format('H:i');
 
-        $tripDate = new \DateTime($bookingData->fbo_trip_date);
+        $tripDate = new \DateTime($bookingDataEdit->fbo_trip_date);
         $formattedTripDate = $tripDate->format('l, d M Y');
 
         // Mengambil data penumpang
         $passengerArray = [];
-        foreach (explode(';', $bookingData->fbo_passenger) as $passenger) {
+        foreach (explode(';', $bookingDataEdit->fbo_passenger) as $passenger) {
             $details = explode(',', $passenger);
             if (count($details) === 4) {
                 $passengerArray[] = [
@@ -1794,52 +1794,52 @@ class BookingDataController extends Controller
 
         // Data untuk view
         $data = [
-            'fbo_booking_id' => $bookingData->fbo_booking_id,
-            'fbo_currency' => $bookingData->fbo_currency,
-            'fbo_adult_nett' => $bookingData->fbo_adult_nett,
-            'fbo_adult_publish' => $bookingData->fbo_adult_publish,
-            'fbo_adult_currency' => $bookingData->fbo_adult_currency,
-            'fbo_child_nett' => $bookingData->fbo_child_nett,
-            'fbo_child_publish' => $bookingData->fbo_child_publish,
-            'fbo_child_currency' => $bookingData->fbo_child_currency,
-            'fbo_total_publish' => $bookingData->fbo_total_publish,
-            'fbo_total_currency' => $bookingData->fbo_total_currency,
-            'fbo_total_nett' => $bookingData->fbo_total_nett,
-            'fbo_kurs' => $bookingData->fbo_kurs,
-            'fbo_discount' => $bookingData->fbo_discount,
-            'fbo_discount_total' => $bookingData->fbo_discount_total,
-            'fbo_price_cut' => $bookingData->fbo_price_cut,
-            'fbo_end_total' => $bookingData->fbo_end_total,
-            'fbo_end_total_currency' => $bookingData->fbo_end_total_currency,
-            'departure_port' => $bookingData->trip->departure->prt_name_en,
-            'departure_island' => $bookingData->trip->departure->island->isd_name,
+            'fbo_booking_id' => $bookingDataEdit->fbo_booking_id,
+            'fbo_currency' => $bookingDataEdit->fbo_currency,
+            'fbo_adult_nett' => $bookingDataEdit->fbo_adult_nett,
+            'fbo_adult_publish' => $bookingDataEdit->fbo_adult_publish,
+            'fbo_adult_currency' => $bookingDataEdit->fbo_adult_currency,
+            'fbo_child_nett' => $bookingDataEdit->fbo_child_nett,
+            'fbo_child_publish' => $bookingDataEdit->fbo_child_publish,
+            'fbo_child_currency' => $bookingDataEdit->fbo_child_currency,
+            'fbo_total_publish' => $bookingDataEdit->fbo_total_publish,
+            'fbo_total_currency' => $bookingDataEdit->fbo_total_currency,
+            'fbo_total_nett' => $bookingDataEdit->fbo_total_nett,
+            'fbo_kurs' => $bookingDataEdit->fbo_kurs,
+            'fbo_discount' => $bookingDataEdit->fbo_discount,
+            'fbo_discount_total' => $bookingDataEdit->fbo_discount_total,
+            'fbo_price_cut' => $bookingDataEdit->fbo_price_cut,
+            'fbo_end_total' => $bookingDataEdit->fbo_end_total,
+            'fbo_end_total_currency' => $bookingDataEdit->fbo_end_total_currency,
+            'departure_port' => $bookingDataEdit->trip->departure->prt_name_en,
+            'departure_island' => $bookingDataEdit->trip->departure->island->isd_name,
             'departure_time' => $departureformattedTime,
-            'arrival_port' => $bookingData->trip->arrival->prt_name_en,
-            'arrival_island' => $bookingData->trip->arrival->island->isd_name,
+            'arrival_port' => $bookingDataEdit->trip->arrival->prt_name_en,
+            'arrival_island' => $bookingDataEdit->trip->arrival->island->isd_name,
             'arrival_time' => $arrivalformattedTime,
             'fbo_trip_date' => $formattedTripDate,
             'passengers' => $passengerArray,
-            'adult' => $bookingData->fbo_adult,
-            'child' => $bookingData->fbo_child,
-            'infant' => $bookingData->fbo_infant,
-            'name' => $bookingData->contact->ctc_name,
-            'email' => $bookingData->contact->ctc_email,
-            'phone' => $bookingData->contact->ctc_phone,
-            'nationality_name' => $bookingData->contact->nationality->nas_country,
-            'nationality_id' => $bookingData->contact->nationality->nas_id,
-            'note' => $bookingData->contact->ctc_note,
-            'paymentMethod_name' => $bookingData->paymentMethod->py_name ?? $bookingData->fbo_payment_method,
-            'paymentMethod_value' => $bookingData->paymentMethod->py_value ?? '',
-            'transaction_id' => $bookingData->fbo_transaction_id,
+            'adult' => $bookingDataEdit->fbo_adult,
+            'child' => $bookingDataEdit->fbo_child,
+            'infant' => $bookingDataEdit->fbo_infant,
+            'name' => $bookingDataEdit->contact->ctc_name,
+            'email' => $bookingDataEdit->contact->ctc_email,
+            'phone' => $bookingDataEdit->contact->ctc_phone,
+            'nationality_name' => $bookingDataEdit->contact->nationality->nas_country,
+            'nationality_id' => $bookingDataEdit->contact->nationality->nas_id,
+            'note' => $bookingDataEdit->contact->ctc_note,
+            'paymentMethod_name' => $bookingDataEdit->paymentMethod->py_name ?? $bookingDataEdit->fbo_payment_method,
+            'paymentMethod_value' => $bookingDataEdit->paymentMethod->py_value ?? '',
+            'transaction_id' => $bookingDataEdit->fbo_transaction_id,
             'pickupAreas' => $pickupAreas,
-            'fbo_pickup' => $bookingData->fbo_pickup,
-            'fbo_contact_pickup' => $bookingData->fbo_contact_pickup,
-            'fbo_specific_pickup' => $bookingData->fbo_specific_pickup,
+            'fbo_pickup' => $bookingDataEdit->fbo_pickup,
+            'fbo_contact_pickup' => $bookingDataEdit->fbo_contact_pickup,
+            'fbo_specific_pickup' => $bookingDataEdit->fbo_specific_pickup,
             'dropoffAreas' => $dropoffAreas,
-            'fbo_dropoff' => $bookingData->fbo_dropoff,
-            'fbo_contact_dropoff' => $bookingData->fbo_contact_dropoff,
-            'fbo_specific_dropoff' => $bookingData->fbo_specific_dropoff,
-            'fb_name' => $bookingData->trip->fastboat->fb_name,
+            'fbo_dropoff' => $bookingDataEdit->fbo_dropoff,
+            'fbo_contact_dropoff' => $bookingDataEdit->fbo_contact_dropoff,
+            'fbo_specific_dropoff' => $bookingDataEdit->fbo_specific_dropoff,
+            'fb_name' => $bookingDataEdit->trip->fastboat->fb_name,
             'departure' => $departure,
             'arrival' => $arrival,
             'departureTimes' => $departureTimes,
@@ -1855,20 +1855,11 @@ class BookingDataController extends Controller
     public function searchTrip(Request $request)
     {
         try {
-            // Ambil data dari request
             $tripDate = $request->input('fbo_trip_date');
             $departurePort = $request->input('fbo_departure_port');
             $arrivalPort = $request->input('fbo_arrival_port');
             $timeDept = $request->input('fbo_departure_time');
-    
-            // Log input untuk debugging
-            \Log::info("Input Search: ", [
-                'tripDate' => $tripDate,
-                'departurePort' => $departurePort,
-                'arrivalPort' => $arrivalPort,
-                'timeDept' => $timeDept,
-            ]);
-    
+            
             // Query FastboatAvailability dengan pengecekan stok
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePort) {
                 $query->where('prt_name_en', $departurePort);
@@ -1877,25 +1868,22 @@ class BookingDataController extends Controller
                 $query->where('prt_name_en', $arrivalPort);
             })
             ->where('fba_date', $tripDate);
-    
+            
             // Tambahkan filter waktu keberangkatan jika ada
             if ($timeDept) {
                 $availabilityQuery->where(function ($query) use ($timeDept, $arrivalPort) {
-                    $query->where('fba_time_dept', $timeDept)
-                        ->orWhereHas('trip', function ($query) use ($timeDept, $arrivalPort) {
-                            $query->where('fbt_dept_time', $timeDept)
-                                ->whereHas('arrival', function ($query) use ($arrivalPort) {
-                                    $query->where('prt_name_en', $arrivalPort);
-                                });
+                    $query->where('fba_dept_time', $timeDept)
+                    ->orWhereHas('trip', function ($query) use ($timeDept, $arrivalPort) {
+                        $query->where('fbt_dept_time', $timeDept)
+                        ->whereHas('arrival', function ($query) use ($arrivalPort) {
+                            $query->where('prt_name_en', $arrivalPort);
                         });
+                    });
                 });
             }
-    
+            
             // Dapatkan data hasil pencarian
             $availability = $availabilityQuery->get();
-    
-            // Log hasil query untuk debugging
-            \Log::info("Query Results: ", ['results' => $availability]);
     
             // Jika tidak ada data, kembalikan pesan error
             if ($availability->isEmpty()) {
@@ -1905,18 +1893,18 @@ class BookingDataController extends Controller
             // Mapping hasil pencarian ke format yang sesuai
             $results = $availability->map(function ($item) {
                 return [
-                    'fastboat_name' => $item->trip->fastboat_name,
+                    'fastboat_name' => $item->trip->fastboat->fb_name,
                     'departure_port' => $item->trip->departure->prt_name_en,
                     'arrival_port' => $item->trip->arrival->prt_name_en,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
-                    'price' => $item->fba_adult_publish ?? 0,
+                    'price' => number_format($item->fba_adult_publish ?? 0, 0, ',', '.'),
                 ];
             });
     
             return response()->json(['data' => $results]);
+            // Ambil data dari request
         } catch (\Exception $e) {
-            \Log::error("Error searching trip: " . $e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
@@ -1977,7 +1965,6 @@ class BookingDataController extends Controller
                 'fbo_departure_times' => $timeDepts,
             ]);
         } catch (\Exception $e) {
-            \Log::error('Error in searchTrip: ' . $e->getMessage());
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }

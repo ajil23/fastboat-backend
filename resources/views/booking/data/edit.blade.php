@@ -168,10 +168,10 @@
                         <!-- Hasil Pencarian -->
                         <div id="search-results-return" style="display: none;">
                             <div class="table-responsive">
+                                <h5 class="card-title-return"><center>Trip Results</center></h5>
                                 <span class="form-check-label">
                                     <center id="result-date">Date of Trip</center>
                                 </span>
-                                <h5 class="card-title-return" id="result-title">Trip Results</h5>
                                 <div class="container">
                                     <div class="row" id="result-container"></div>
                                 </div>
@@ -799,7 +799,7 @@
                     success: function(response) {
                         console.log('Response:', response);
                         $('#result-container').empty();
-                        $('#result-title').text('Trip Results for ' + tripDate);
+                        $('#result-title').text(tripDate);
                         $('#result-date').text(tripDate);
                         $('#search-results-return').show();
 
@@ -815,7 +815,7 @@
                                     <div class="mt-3 pt-1">
                                         <div class="d-flex justify-content-between">
                                             <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
-                                            <p class="text-danger fw-bold currency">IDR ${item.price}</p>
+                                            <p class="text-danger fw-bold">IDR ${item.price}</p>
                                         </div>
                                     </div>
                                 </div>
