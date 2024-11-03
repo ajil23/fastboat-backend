@@ -59,6 +59,7 @@ Route::middleware([
         Route::get('/data/status/{id}', [BookingDataController::class, 'status'])->name('data.status');
         Route::post('/data/updatePayment', [BookingDataController::class, 'updatePayment'])->name('data.updatePayment');
         Route::get('/data/search-trip', [BookingDataController::class, 'searchTrip'])->name('data.searchTrip');
+        Route::get('/data/search-trip-return', [BookingDataController::class, 'searchTripReturn'])->name('data.searchTripReturn');
         Route::get('/data/{id}', [BookingDataController::class, 'showDetail'])->name('data.show');
         Route::post('/data/{id}/update-status', [BookingDataController::class, 'updateStatus'])->name('data.updateStatus');
         Route::get('/data/{id}/whatsapp', [BookingDataController::class, 'whatsappReservation'])->name('data.whatsapp');
@@ -213,5 +214,6 @@ Route::middleware([
     Route::get('/getFilteredData', [BookingDataController::class, 'getFilteredData']);
     Route::get('/getFilteredDataReturn', [BookingDataController::class, 'getFilteredDataReturn']);
     Route::get('/get-filtered', [BookingDataController::class, 'getFiltered']);
+    Route::get('/get-filtered-return', [BookingDataController::class, 'getFilteredReturn']);
 
 });
