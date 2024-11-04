@@ -1864,7 +1864,7 @@ class BookingDataController extends Controller
             $currency = MasterCurrency::where('cy_code', $bookingData->fbo_currency)->first();
             $kurs = $currency->cy_rate;
     
-            $results = $availability->map(function ($item) use ($adultCount, $childCount, $kurs) {
+            $results = $availability->map(function ($item) use ($adultCount, $childCount, $kurs, $currency) {
                 $priceAdult = (float) $item->fba_adult_publish ?? 0;
                 $priceChild = (float) $item->fba_child_publish ?? 0;
     
@@ -1884,12 +1884,12 @@ class BookingDataController extends Controller
                     'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
                     'total_price' => number_format($totalPrice, 0, ',', '.'),
                     'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
+                    'currency_code' => $currency->cy_code,
                 ];
             });
             if ($availability->isEmpty()) {
                 return response()->json(['message' => 'Data tidak ditemukan'], 404);
             }
-    
             return response()->json([
                 'data' => $results,
             ]);
@@ -2000,7 +2000,7 @@ class BookingDataController extends Controller
             $kurs = $currency->cy_rate;
     
             // Map results with FastboatAvailability data and BookingData details
-            $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn, $kurs) {
+            $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn, $kurs, $currency) {
                 $priceAdultReturn = (float) $item->fba_adult_publish ?? 0;
                 $priceChildReturn = (float) $item->fba_child_publish ?? 0;
                 $totalPrice = ($priceAdultReturn * $adultCountReturn) + ($priceChildReturn * $childCountReturn);
@@ -2019,6 +2019,7 @@ class BookingDataController extends Controller
                     'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
                     'total_price' => number_format($totalPrice, 0, ',', '.'),
                     'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
+                    'currency_code' => $currency->cy_code,
                 ];
             });
             
