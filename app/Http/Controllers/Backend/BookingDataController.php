@@ -1646,7 +1646,7 @@ class BookingDataController extends Controller
 
         if ($ticketType == "gt") {
             $pdf = Pdf::loadView('ticket.gt', $data);
-            return $pdf->stream('ticket.pdf');
+            return $pdf->stream('Ticket_'. $dataTicket->fbo_booking_id .'.pdf');
         } elseif ($ticketType == "agen1") {
             return view('ticket.agen1');
         } else {
@@ -1824,7 +1824,6 @@ class BookingDataController extends Controller
         // Data tambahan untuk nationality dan payment
         $nationality = MasterNationality::all();
         $payment = MasterPaymentMethod::all();
-        // dd($data);
         return view('booking.data.edit', compact('data', 'nationality', 'payment', 'availability'));
     }
 
@@ -1836,8 +1835,7 @@ class BookingDataController extends Controller
             $arrivalPort = $request->input('fbo_arrival_port');
             $timeDept = $request->input('fbo_departure_time');
             $fbo_id = $request->input('fbo_id');
-
-            // Query FastboatAvailability with trip data filters
+    
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePort) {
                 $query->where('prt_name_en', $departurePort);
             })
@@ -1845,8 +1843,7 @@ class BookingDataController extends Controller
                     $query->where('prt_name_en', $arrivalPort);
                 })
                 ->where('fba_date', $tripDate);
-
-            // Add filter for departure time if provided
+    
             if ($timeDept) {
                 $availabilityQuery->where(function ($query) use ($timeDept, $arrivalPort) {
                     $query->where('fba_dept_time', $timeDept)
@@ -1858,25 +1855,22 @@ class BookingDataController extends Controller
                         });
                 });
             }
-
-            // Get availability data
+    
             $availability = $availabilityQuery->get();
-
-            // Retrieve booking data for adult and child counts
-            $bookingData = BookingData::where('fbo_id', $fbo_id)->first(); // Assume single booking data for simplicity
-            // Set default values if booking data is not found
+    
+            $bookingData = BookingData::where('fbo_id', $fbo_id)->first(); 
             $adultCount = $bookingData->fbo_adult ?? 1;
             $childCount = $bookingData->fbo_child ?? 0;
-
-            // Map results with FastboatAvailability data and BookingData details
-            $results = $availability->map(function ($item) use ($adultCount, $childCount) {
-                // Retrieve pricing from availability data
+            $currency = MasterCurrency::where('cy_code', $bookingData->fbo_currency)->first();
+            $kurs = $currency->cy_rate;
+    
+            $results = $availability->map(function ($item) use ($adultCount, $childCount, $kurs) {
                 $priceAdult = (float) $item->fba_adult_publish ?? 0;
                 $priceChild = (float) $item->fba_child_publish ?? 0;
-
-                // Calculate total price
+    
                 $totalPrice = ($priceAdult * $adultCount) + ($priceChild * $childCount);
-
+                $totalPriceCurrency = $totalPrice / $kurs;
+    
                 return [
                     'fastboat_name' => $item->trip->fastboat->fb_name,
                     'departure_port' => $item->trip->departure->prt_name_en,
@@ -1889,14 +1883,13 @@ class BookingDataController extends Controller
                     'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
                     'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
                     'total_price' => number_format($totalPrice, 0, ',', '.'),
+                    'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
                 ];
             });
-
-            // Return error message if no data is found
             if ($availability->isEmpty()) {
                 return response()->json(['message' => 'Data tidak ditemukan'], 404);
             }
-
+    
             return response()->json([
                 'data' => $results,
             ]);
@@ -1973,7 +1966,7 @@ class BookingDataController extends Controller
             $arrivalPortReturn = $request->input('fbo_arrival_port_return');
             $timeDeptReturn = $request->input('fbo_departure_time_return');
             $fbo_id = $request->input('fbo_id_return');
-
+    
             // Query FastboatAvailability with trip data filters
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePortReturn) {
                 $query->where('prt_name_en', $departurePortReturn);
@@ -1982,7 +1975,7 @@ class BookingDataController extends Controller
                     $query->where('prt_name_en', $arrivalPortReturn);
                 })
                 ->where('fba_date', $tripDateReturn);
-
+    
             // Add filter for departure time if provided
             if ($timeDeptReturn) {
                 $availabilityQuery->where(function ($query) use ($timeDeptReturn, $arrivalPortReturn) {
@@ -1995,21 +1988,24 @@ class BookingDataController extends Controller
                         });
                 });
             }
-
+    
             // Get availability data
             $availability = $availabilityQuery->get();
-
+    
             // Retrieve booking data for adult and child counts
             $bookingData = BookingData::where('fbo_id', $fbo_id)->first();
             $adultCountReturn = $bookingData->fbo_adult ?? 1;
             $childCountReturn = $bookingData->fbo_child ?? 0;
-
+            $currency = MasterCurrency::where('cy_code', $bookingData->fbo_currency)->first();
+            $kurs = $currency->cy_rate;
+    
             // Map results with FastboatAvailability data and BookingData details
-            $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn) {
+            $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn, $kurs) {
                 $priceAdultReturn = (float) $item->fba_adult_publish ?? 0;
                 $priceChildReturn = (float) $item->fba_child_publish ?? 0;
                 $totalPrice = ($priceAdultReturn * $adultCountReturn) + ($priceChildReturn * $childCountReturn);
-
+                $totalPriceCurrency = $totalPrice / $kurs;
+    
                 return [
                     'fastboat_name' => $item->trip->fastboat->fb_name,
                     'departure_port' => $item->trip->departure->prt_name_en,
@@ -2022,13 +2018,14 @@ class BookingDataController extends Controller
                     'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
                     'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
                     'total_price' => number_format($totalPrice, 0, ',', '.'),
+                    'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
                 ];
             });
-
+            
             if ($availability->isEmpty()) {
                 return response()->json(['message' => 'Data tidak ditemukan'], 404);
             }
-
+    
             return response()->json(['data' => $results]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
