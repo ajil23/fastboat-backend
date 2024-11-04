@@ -1007,7 +1007,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-departure_port="${item.departure_port}" data-price_child="${item.price_child}"data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-price_discount="${item.price_discount}" data-arrival_port="${item.arrival_port}" data-arrival_port="${item.arrival_port}" data-total_price="${item.total_price}" data-arrival_time="${item.arrival_time}">
+                                        <input class="form-check-input trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-departure_port="${item.departure_port}" data-price_child="${item.price_child}"data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-price_discount="${item.price_discount}" data-arrival_port="${item.arrival_port}" data-arrival_port="${item.arrival_port}" data-total_price="${item.total_price}" data-arrival_time="${item.arrival_time}" data-total_price_currency="${item.total_price_currency}">
                                         <label class="form-check-label">${item.fastboat_name}</label>
                                     </div>
                                     <div class="mt-3 pt-1">
@@ -1058,7 +1058,7 @@
             $('#price_adult').val(data.price_adult);
             $('#price_child').val(data.price_child);
             $('#fbo_end_total').val(data.total_price);
-            $('#fbo_end_total_currency').val(data.fbo_end_total_currency);
+            $('#fbo_end_total_currency').val(data.total_price_currency);
 
             $('.detail-trip').show(); // Tampilkan detail
         }
@@ -1220,7 +1220,7 @@
                                         data-departure_port="${item.departure_port}" 
                                         data-arrival_port="${item.arrival_port}" 
                                         data-departure_time="${item.departure_time}" 
-                                        data-arrival_time="${item.arrival_time}">
+                                        data-arrival_time="${item.arrival_time}" data-total_price_currency ="${item.total_price_currency}">
                                     <label class="form-check-label">${item.fastboat_name}</label>
                                 </div>
                                 <div class="mt-3 pt-1">
@@ -1258,7 +1258,7 @@
             $('#return_price_adult').val(data.price_adult);
             $('#return_price_child').val(data.price_child);
             $('#return_fbo_end_total').val(data.total_price);
-            $('#fbo_end_total_currency').val(data.fbo_end_total_currency);
+            $('#return_fbo_end_total_currency').val(data.total_price_currency);
 
             $('.return-detail-trip').show();
         }
