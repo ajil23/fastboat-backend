@@ -160,6 +160,11 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="col-sm-3">
+                                                <div class="mb-3">
+                                                    <input type="hidden" value="{{$data['fbo_id']}}" id="fbo_id" name="fbo_id">
+                                                </div>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>
@@ -245,7 +250,6 @@
                         </div>
 
                         <!-- search trip return -->
-                        <!-- search trip return -->
                         <div class="card custom-border-color">
                             <div class="p-1">
                                 <h5 class="font-size-16 mb-1 d-flex align-items-center justify-content-center" style="font-size: 14.8px; font-family: 'IBM Plex Sans', sans-serif;">
@@ -286,6 +290,11 @@
                                                     <select class="form-control" id="fbo_departure_time_return" name="fbo_departure_time_return" disabled>
                                                         <option value="">Select Time Return</option>
                                                     </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <div class="mb-3">
+                                                    <input type="hidden" value="{{$data['fbo_id']}}" id="fbo_id_return" name="fbo_id_return">
                                                 </div>
                                             </div>
                                         </div>
@@ -973,8 +982,9 @@
             const departurePort = $('#fbo_departure_port').val();
             const arrivalPort = $('#fbo_arrival_port').val();
             const timeDept = $('#fbo_departure_time').val();
+            const fbo_id = $('#fbo_id').val();
 
-            if (tripDate && departurePort && arrivalPort && timeDept) {
+            if (tripDate && departurePort && arrivalPort && timeDept && fbo_id) {
                 $.ajax({
                     url: "{{ route('data.searchTrip') }}",
                     type: 'GET',
@@ -982,7 +992,8 @@
                         fbo_trip_date: tripDate,
                         fbo_departure_port: departurePort,
                         fbo_arrival_port: arrivalPort,
-                        fbo_departure_time: timeDept
+                        fbo_departure_time: timeDept,
+                        fbo_id: fbo_id
                     },
                     success: function(response) {
                         $('#result-container').empty();
@@ -996,13 +1007,13 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input trip-checkbox" type="checkbox" data-price="${item.price}" data-departure_port="${item.departure_port}" data-price_child="${item.price_child}"data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-arrival_port="${item.arrival_port}" data-departure_time="${item.departure_time}" data-arrival_time="${item.arrival_time}">
+                                        <input class="form-check-input trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-departure_port="${item.departure_port}" data-price_child="${item.price_child}"data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-price_discount="${item.price_discount}" data-arrival_port="${item.arrival_port}" data-arrival_port="${item.arrival_port}" data-total_price="${item.total_price}" data-arrival_time="${item.arrival_time}">
                                         <label class="form-check-label">${item.fastboat_name}</label>
                                     </div>
                                     <div class="mt-3 pt-1">
                                         <div class="d-flex justify-content-between">
                                             <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
-                                            <p class="text-danger fw-bold">IDR ${item.price}</p>
+                                            <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1036,17 +1047,17 @@
         function showTripDetails(data) {
             $('#booking-data-table tbody').html(`
                 <tr>
-                    <td><center>${data.price}</center></td>
+                    <td><center>${data.price_adult}</center></td>
                     <td><center>${data.price_child}</center></td>
                     <td><center>${data.price_adult_nett}</center></td>
                     <td><center>${data.price_child_nett}</center></td>
-                    <td><center>0</center></td>
+                    <td><center>${data.price_discount}</center></td>
                 </tr>
             `);
 
-            $('#price_adult').val(data.price);
+            $('#price_adult').val(data.price_adult);
             $('#price_child').val(data.price_child);
-            $('#fbo_end_total').val(data.fbo_end_total);
+            $('#fbo_end_total').val(data.total_price);
             $('#fbo_end_total_currency').val(data.fbo_end_total_currency);
 
             $('.detail-trip').show(); // Tampilkan detail
@@ -1153,16 +1164,12 @@
 <!-- script for trip return -->
 <script>
     $(document).ready(function() {
-        // Checkbox untuk mengaktifkan trip return
+        // Initialize search results display and checkbox toggle for return trip form
         $('#tripReturnCheckbox').change(function() {
-            if ($(this).is(':checked')) {
-                $('#tripReturnForm').show();
-            } else {
-                $('#tripReturnForm').hide();
-            }
+            $('#tripReturnForm').toggle($(this).is(':checked'));
         });
 
-        // Trigger pencarian trip return berdasarkan parameter yang diubah
+        // Trigger search on return trip parameter changes
         $('#fbo_trip_date_return, #fbo_departure_port_return, #fbo_arrival_port_return, #fbo_departure_time_return').on('change', triggerReturnSearch);
 
         function triggerReturnSearch() {
@@ -1170,8 +1177,9 @@
             const departurePortReturn = $('#fbo_departure_port_return').val();
             const arrivalPortReturn = $('#fbo_arrival_port_return').val();
             const timeDeptReturn = $('#fbo_departure_time_return').val();
+            const fbo_id_return = $('#fbo_id_return').val();
 
-            if (tripDateReturn && departurePortReturn && arrivalPortReturn) {
+            if (tripDateReturn && departurePortReturn && arrivalPortReturn && timeDeptReturn && fbo_id_return) {
                 $.ajax({
                     url: "{{ route('data.searchTripReturn') }}",
                     type: 'GET',
@@ -1179,43 +1187,11 @@
                         fbo_trip_date_return: tripDateReturn,
                         fbo_departure_port_return: departurePortReturn,
                         fbo_arrival_port_return: arrivalPortReturn,
-                        fbo_departure_time_return: timeDeptReturn
+                        fbo_departure_time_return: timeDeptReturn,
+                        fbo_id_return: fbo_id_return
                     },
                     success: function(response) {
-                        $('#return-result-container').empty();
-                        $('#return-result-date').text(tripDateReturn);
-                        $('#return-search-results').show();
-
-                        $.each(response.data, function(index, item) {
-                            $('#return-result-container').append(`
-                                <div class="col-md-6 col-sm-12 card-item">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-check mb-3">
-                                                <input class="form-check-input return-trip-checkbox" type="checkbox" data-price="${item.price}" data-price_child="${item.price_child}" data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-departure_port="${item.departure_port}" data-arrival_port="${item.arrival_port}" data-departure_time="${item.departure_time}" data-arrival_time="${item.arrival_time}">
-                                                <label class="form-check-label">${item.fastboat_name}</label>
-                                            </div>
-                                            <div class="mt-3 pt-1">
-                                                <div class="d-flex justify-content-between">
-                                                    <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
-                                                    <p class="text-danger fw-bold">IDR ${item.price}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `);
-                        });
-
-                        $('.return-trip-checkbox').on('change', function() {
-                            $('.return-trip-checkbox').not(this).prop('checked', false);
-                            if ($(this).is(':checked')) {
-                                const data = $(this).data();
-                                showReturnTripDetails(data);
-                            } else {
-                                hideReturnTripDetails();
-                            }
-                        });
+                        displayReturnResults(response.data, tripDateReturn);
                     },
                     error: function() {
                         alert('Data tidak ditemukan');
@@ -1224,19 +1200,66 @@
             }
         }
 
+        function displayReturnResults(data, tripDate) {
+            $('#return-result-container').empty();
+            $('#return-result-date').text(tripDate);
+            $('#return-search-results').show();
+
+            $.each(data, function(index, item) {
+                $('#return-result-container').append(`
+                    <div class="col-md-6 col-sm-12 card-item">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input return-trip-checkbox" type="checkbox" 
+                                        data-price_adult="${item.price_adult}" 
+                                        data-price_child="${item.price_child}" 
+                                        data-price_child_nett="${item.price_child_nett}" 
+                                        data-price_adult_nett="${item.price_adult_nett}" 
+                                        data-total_price="${item.total_price}" 
+                                        data-departure_port="${item.departure_port}" 
+                                        data-arrival_port="${item.arrival_port}" 
+                                        data-departure_time="${item.departure_time}" 
+                                        data-arrival_time="${item.arrival_time}">
+                                    <label class="form-check-label">${item.fastboat_name}</label>
+                                </div>
+                                <div class="mt-3 pt-1">
+                                    <div class="d-flex justify-content-between">
+                                        <p>${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
+                                        <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            $('.return-trip-checkbox').on('change', function() {
+                $('.return-trip-checkbox').not(this).prop('checked', false);
+                if ($(this).is(':checked')) {
+                    showReturnTripDetails($(this).data());
+                } else {
+                    hideReturnTripDetails();
+                }
+            });
+        }
+
         function showReturnTripDetails(data) {
             $('#return-booking-data-table tbody').html(`
                 <tr>
-                    <td><center>${data.price}</center></td>
+                    <td><center>${data.price_adult}</center></td>
                     <td><center>${data.price_child}</center></td>
                     <td><center>${data.price_adult_nett}</center></td>
                     <td><center>${data.price_child_nett}</center></td>
                     <td><center>0</center></td>
                 </tr>
             `);
-
-            $('#return_price_adult').val(data.price);
+            $('#return_price_adult').val(data.price_adult);
             $('#return_price_child').val(data.price_child);
+            $('#return_fbo_end_total').val(data.total_price);
+            $('#fbo_end_total_currency').val(data.fbo_end_total_currency);
+
             $('.return-detail-trip').show();
         }
 
@@ -1249,7 +1272,7 @@
             $('#return-result-container').empty();
         }
 
-        // Update Departure Port berdasarkan trip date
+        // Fetch dropdown data based on trip date for departure ports
         $('#fbo_trip_date_return').change(function() {
             resetReturnSearchResults();
             var tripDateReturn = $(this).val();
@@ -1261,11 +1284,7 @@
                     fbo_trip_date_return: tripDateReturn
                 },
                 success: function(response) {
-                    $('#fbo_departure_port_return').empty().append('<option value="">Select Departure Port</option>');
-                    $.each(response.fbo_departure_ports_return, function(index, port) {
-                        $('#fbo_departure_port_return').append('<option value="' + port + '">' + port + '</option>');
-                    });
-                    $('#fbo_departure_port_return').prop('disabled', false);
+                    populateDropdown('#fbo_departure_port_return', response.fbo_departure_ports_return, 'Select Departure Port');
                 },
                 error: function() {
                     console.error('Error fetching departure ports for return');
@@ -1273,11 +1292,9 @@
             });
         });
 
-        // Update Arrival Port berdasarkan Departure Port
+        // Fetch arrival ports based on selected departure port
         $('#fbo_departure_port_return').change(function() {
-            $('#fbo_arrival_port_return').empty().append('<option value="">Select Arrival Port</option>');
-            $('#fbo_departure_time_return').empty().append('<option value="">Select Time Return</option>');
-
+            resetArrivalAndTimeDropdowns();
             var tripDateReturn = $('#fbo_trip_date_return').val();
             var departurePortReturn = $(this).val();
 
@@ -1289,11 +1306,7 @@
                     fbo_departure_port_return: departurePortReturn
                 },
                 success: function(response) {
-                    $('#fbo_arrival_port_return').empty().append('<option value="">Select Arrival Port</option>');
-                    $.each(response.fbo_arrival_ports_return, function(index, port) {
-                        $('#fbo_arrival_port_return').append('<option value="' + port + '">' + port + '</option>');
-                    });
-                    $('#fbo_arrival_port_return').prop('disabled', false);
+                    populateDropdown('#fbo_arrival_port_return', response.fbo_arrival_ports_return, 'Select Arrival Port');
                 },
                 error: function() {
                     console.error('Error fetching arrival ports for return');
@@ -1301,10 +1314,8 @@
             });
         });
 
-        // Update Departure Time berdasarkan Arrival Port
+        // Fetch return times based on selected arrival port
         $('#fbo_arrival_port_return').change(function() {
-            $('#fbo_departure_time_return').empty().append('<option value="">Select Time Return</option>');
-
             var tripDateReturn = $('#fbo_trip_date_return').val();
             var departurePortReturn = $('#fbo_departure_port_return').val();
             var arrivalPortReturn = $(this).val();
@@ -1318,17 +1329,27 @@
                     fbo_arrival_port_return: arrivalPortReturn
                 },
                 success: function(response) {
-                    $('#fbo_departure_time_return').empty().append('<option value="">Select Time Return</option>');
-                    $.each(response.fbo_departure_times_return, function(index, time) {
-                        $('#fbo_departure_time_return').append('<option value="' + time + '">' + time + '</option>');
-                    });
-                    $('#fbo_departure_time_return').prop('disabled', false);
+                    populateDropdown('#fbo_departure_time_return', response.fbo_departure_times_return, 'Select Time Return');
                 },
                 error: function() {
                     console.error('Error fetching departure times for return');
                 }
             });
         });
+
+        function populateDropdown(selector, options, defaultText) {
+            $(selector).empty().append(`<option value="">${defaultText}</option>`);
+            $.each(options, function(index, option) {
+                $(selector).append(`<option value="${option}">${option}</option>`);
+            });
+            $(selector).prop('disabled', false);
+        }
+
+        function resetArrivalAndTimeDropdowns() {
+            $('#fbo_arrival_port_return').empty().append('<option value="">Select Arrival Port</option>');
+            $('#fbo_departure_time_return').empty().append('<option value="">Select Time Return</option>');
+        }
     });
 </script>
+
 @endsection
