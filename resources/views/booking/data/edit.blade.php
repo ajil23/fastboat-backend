@@ -239,7 +239,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="fbo_end_total_currency">End Total Currency (IDR)</label>
+                                                    <label class="form-label" for="fbo_end_total_currency">End Total Currency (<span id="currencyCode"></span>)</label>
                                                     <input value="" class="form-control" id="fbo_end_total_currency" name="fbo_end_total_currency" style="background-color:lightgray" readonly>
                                                 </div>
                                             </div>
@@ -370,7 +370,7 @@
                                             </div>
                                             <div class="col-sm-3">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="return_fbo_end_total_currency">End Total Currency (IDR)</label>
+                                                    <label class="form-label" for="return_fbo_end_total_currency">End Total Currency (<span id="currencyCodeReturn"></span>)</label>
                                                     <input type="text" class="form-control" id="return_fbo_end_total_currency" name="return_fbo_end_total_currency" style="background-color:lightgray" readonly>
                                                 </div>
                                             </div>
@@ -1007,7 +1007,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <div class="form-check mb-3">
-                                        <input class="form-check-input trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-departure_port="${item.departure_port}" data-price_child="${item.price_child}"data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-price_discount="${item.price_discount}" data-arrival_port="${item.arrival_port}" data-arrival_port="${item.arrival_port}" data-total_price="${item.total_price}" data-arrival_time="${item.arrival_time}" data-total_price_currency="${item.total_price_currency}">
+                                        <input class="form-check-input trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-departure_port="${item.departure_port}" data-price_child="${item.price_child}"data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-price_discount="${item.price_discount}" data-arrival_port="${item.arrival_port}" data-arrival_port="${item.arrival_port}" data-total_price="${item.total_price}" data-arrival_time="${item.arrival_time}" data-total_price_currency="${item.total_price_currency}" data-currency_code="${item.currency_code}">
                                         <label class="form-check-label">${item.fastboat_name}</label>
                                     </div>
                                     <div class="mt-3 pt-1">
@@ -1059,6 +1059,7 @@
             $('#price_child').val(data.price_child);
             $('#fbo_end_total').val(data.total_price);
             $('#fbo_end_total_currency').val(data.total_price_currency);
+            $('#currencyCode').text(data.currency_code);
 
             $('.detail-trip').show(); // Tampilkan detail
         }
@@ -1220,7 +1221,7 @@
                                         data-departure_port="${item.departure_port}" 
                                         data-arrival_port="${item.arrival_port}" 
                                         data-departure_time="${item.departure_time}" 
-                                        data-arrival_time="${item.arrival_time}" data-total_price_currency ="${item.total_price_currency}">
+                                        data-arrival_time="${item.arrival_time}" data-total_price_currency ="${item.total_price_currency}" data-currency_code="${item.currency_code}">
                                     <label class="form-check-label">${item.fastboat_name}</label>
                                 </div>
                                 <div class="mt-3 pt-1">
@@ -1259,7 +1260,8 @@
             $('#return_price_child').val(data.price_child);
             $('#return_fbo_end_total').val(data.total_price);
             $('#return_fbo_end_total_currency').val(data.total_price_currency);
-
+            $('#currencyCodeReturn').text(data.currency_code);
+            console.log(data.currency_code);
             $('.return-detail-trip').show();
         }
 
