@@ -131,55 +131,52 @@
                                     <div class="collapse show" data-bs-parent="#addproduct-accordion" id="searchForm"
                                         style="display: none;">
                                         <div class="p-4 border-top">
-                                            <form id="searchForm">
-                                                @csrf
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="fbo_trip_date">Trip Date<span
-                                                                    class="text-danger">*</span></label>
-                                                            <input type="date" class="form-control" id="fbo_trip_date"
-                                                                name="fbo_trip_date">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="fbo_departure_port">Departure
-                                                                Port<span class="text-danger">*</span></label>
-                                                            <select class="form-control" id="fbo_departure_port"
-                                                                name="fbo_departure_port" disabled>
-                                                                <option value="">Select Departure Port</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="fbo_arrival_port">Arrival
-                                                                Port<span class="text-danger">*</span></label>
-                                                            <select class="form-control" id="fbo_arrival_port"
-                                                                name="fbo_arrival_port" disabled>
-                                                                <option value="">Select Arrival Port</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="fbo_departure_time">Time
-                                                                Dept<span class="text-danger">*</span></label>
-                                                            <select class="form-control" id="fbo_departure_time"
-                                                                name="fbo_departure_time" disabled>
-                                                                <option value="">Select Time Dept</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <input type="hidden" value="{{ $data['fbo_id'] }}"
-                                                                id="fbo_id" name="fbo_id">
-                                                        </div>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_trip_date">Trip Date<span
+                                                                class="text-danger">*</span></label>
+                                                        <input type="date" class="form-control" id="fbo_trip_date"
+                                                            name="fbo_trip_date">
                                                     </div>
                                                 </div>
-                                            </form>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_departure_port">Departure
+                                                            Port<span class="text-danger">*</span></label>
+                                                        <select class="form-control" id="fbo_departure_port"
+                                                            name="fbo_departure_port" disabled>
+                                                            <option value="">Select Departure Port</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_arrival_port">Arrival
+                                                            Port<span class="text-danger">*</span></label>
+                                                        <select class="form-control" id="fbo_arrival_port"
+                                                            name="fbo_arrival_port" disabled>
+                                                            <option value="">Select Arrival Port</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_departure_time">Time
+                                                            Dept<span class="text-danger">*</span></label>
+                                                        <select class="form-control" id="fbo_departure_time"
+                                                            name="fbo_departure_time" disabled>
+                                                            <option value="">Select Time Dept</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="{{ $data['fbo_id'] }}"
+                                                            id="fbo_id" name="fbo_id">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -285,59 +282,53 @@
                                     </div>
                                     <div class="collapse show" id="tripReturnForm" style="display: none;">
                                         <div class="p-4 border-top">
-                                            <form id="returnSearchForm" method="POST"
-                                                action="{{ route('data.searchTripReturn') }}">
-                                                @csrf
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="fbo_trip_date_return">Trip
-                                                                Date<span class="text-danger">*</span></label>
-                                                            <input type="date" class="form-control"
-                                                                id="fbo_trip_date_return" name="fbo_trip_date_return"
-                                                            >
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label"
-                                                                for="fbo_departure_port_return">Departure Port<span
-                                                                    class="text-danger">*</span></label>
-                                                            <select class="form-control" id="fbo_departure_port_return"
-                                                                name="fbo_departure_port_return" disabled>
-                                                                <option value="">Select Departure Port</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label"
-                                                                for="fbo_arrival_port_return">Arrival
-                                                                Port<span class="text-danger">*</span></label>
-                                                            <select class="form-control" id="fbo_arrival_port_return"
-                                                                name="fbo_arrival_port_return" disabled>
-                                                                <option value="">Select Arrival Port</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <label class="form-label" for="fbo_departure_time_return">Time
-                                                                Return<span class="text-danger">*</span></label>
-                                                            <select class="form-control" id="fbo_departure_time_return"
-                                                                name="fbo_departure_time_return" disabled>
-                                                                <option value="">Select Time Return</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <input type="hidden" value="{{ $data['fbo_id'] }}"
-                                                                id="fbo_id_return" name="fbo_id_return">
-                                                        </div>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_trip_date_return">Trip
+                                                            Date<span class="text-danger">*</span></label>
+                                                        <input type="date" class="form-control"
+                                                            id="fbo_trip_date_return" name="fbo_trip_date_return">
                                                     </div>
                                                 </div>
-                                            </form>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label"
+                                                            for="fbo_departure_port_return">Departure Port<span
+                                                                class="text-danger">*</span></label>
+                                                        <select class="form-control" id="fbo_departure_port_return"
+                                                            name="fbo_departure_port_return" disabled>
+                                                            <option value="">Select Departure Port</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_arrival_port_return">Arrival
+                                                            Port<span class="text-danger">*</span></label>
+                                                        <select class="form-control" id="fbo_arrival_port_return"
+                                                            name="fbo_arrival_port_return" disabled>
+                                                            <option value="">Select Arrival Port</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="fbo_departure_time_return">Time
+                                                            Return<span class="text-danger">*</span></label>
+                                                        <select class="form-control" id="fbo_departure_time_return"
+                                                            name="fbo_departure_time_return" disabled>
+                                                            <option value="">Select Time Return</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="{{ $data['fbo_id'] }}"
+                                                            id="fbo_id_return" name="fbo_id_return">
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
