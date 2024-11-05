@@ -1646,7 +1646,7 @@ class BookingDataController extends Controller
 
         if ($ticketType == "gt") {
             $pdf = Pdf::loadView('ticket.gt', $data);
-            return $pdf->stream('Ticket_'. $dataTicket->fbo_booking_id .'.pdf');
+            return $pdf->stream('Ticket_' . $dataTicket->fbo_booking_id . '.pdf');
         } elseif ($ticketType == "agen1") {
             return view('ticket.agen1');
         } else {
@@ -1835,7 +1835,7 @@ class BookingDataController extends Controller
             $arrivalPort = $request->input('fbo_arrival_port');
             $timeDept = $request->input('fbo_departure_time');
             $fbo_id = $request->input('fbo_id');
-    
+
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePort) {
                 $query->where('prt_name_en', $departurePort);
             })
@@ -1843,7 +1843,7 @@ class BookingDataController extends Controller
                     $query->where('prt_name_en', $arrivalPort);
                 })
                 ->where('fba_date', $tripDate);
-    
+
             if ($timeDept) {
                 $availabilityQuery->where(function ($query) use ($timeDept, $arrivalPort) {
                     $query->where('fba_dept_time', $timeDept)
@@ -1855,22 +1855,22 @@ class BookingDataController extends Controller
                         });
                 });
             }
-    
+
             $availability = $availabilityQuery->get();
-    
-            $bookingData = BookingData::where('fbo_id', $fbo_id)->first(); 
+
+            $bookingData = BookingData::where('fbo_id', $fbo_id)->first();
             $adultCount = $bookingData->fbo_adult ?? 1;
             $childCount = $bookingData->fbo_child ?? 0;
             $currency = MasterCurrency::where('cy_code', $bookingData->fbo_currency)->first();
             $kurs = $currency->cy_rate;
-    
+
             $results = $availability->map(function ($item) use ($adultCount, $childCount, $kurs, $currency) {
                 $priceAdult = (float) $item->fba_adult_publish ?? 0;
                 $priceChild = (float) $item->fba_child_publish ?? 0;
-    
+
                 $totalPrice = ($priceAdult * $adultCount) + ($priceChild * $childCount);
                 $totalPriceCurrency = $totalPrice / $kurs;
-    
+
                 return [
                     'fastboat_name' => $item->trip->fastboat->fb_name,
                     'departure_port' => $item->trip->departure->prt_name_en,
@@ -1966,7 +1966,7 @@ class BookingDataController extends Controller
             $arrivalPortReturn = $request->input('fbo_arrival_port_return');
             $timeDeptReturn = $request->input('fbo_departure_time_return');
             $fbo_id = $request->input('fbo_id_return');
-    
+
             // Query FastboatAvailability with trip data filters
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePortReturn) {
                 $query->where('prt_name_en', $departurePortReturn);
@@ -1975,7 +1975,7 @@ class BookingDataController extends Controller
                     $query->where('prt_name_en', $arrivalPortReturn);
                 })
                 ->where('fba_date', $tripDateReturn);
-    
+
             // Add filter for departure time if provided
             if ($timeDeptReturn) {
                 $availabilityQuery->where(function ($query) use ($timeDeptReturn, $arrivalPortReturn) {
@@ -1988,24 +1988,24 @@ class BookingDataController extends Controller
                         });
                 });
             }
-    
+
             // Get availability data
             $availability = $availabilityQuery->get();
-    
+
             // Retrieve booking data for adult and child counts
             $bookingData = BookingData::where('fbo_id', $fbo_id)->first();
             $adultCountReturn = $bookingData->fbo_adult ?? 1;
             $childCountReturn = $bookingData->fbo_child ?? 0;
             $currency = MasterCurrency::where('cy_code', $bookingData->fbo_currency)->first();
             $kurs = $currency->cy_rate;
-    
+
             // Map results with FastboatAvailability data and BookingData details
             $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn, $kurs, $currency) {
                 $priceAdultReturn = (float) $item->fba_adult_publish ?? 0;
                 $priceChildReturn = (float) $item->fba_child_publish ?? 0;
                 $totalPrice = ($priceAdultReturn * $adultCountReturn) + ($priceChildReturn * $childCountReturn);
                 $totalPriceCurrency = $totalPrice / $kurs;
-    
+
                 return [
                     'fastboat_name' => $item->trip->fastboat->fb_name,
                     'departure_port' => $item->trip->departure->prt_name_en,
@@ -2022,11 +2022,11 @@ class BookingDataController extends Controller
                     'currency_code' => $currency->cy_code,
                 ];
             });
-            
+
             if ($availability->isEmpty()) {
                 return response()->json(['message' => 'Data tidak ditemukan'], 404);
             }
-    
+
             return response()->json(['data' => $results]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -2093,7 +2093,46 @@ class BookingDataController extends Controller
         }
     }
 
-    public function update(Request $request, $fbo_id){
-        dd($request);
+    public function update(Request $request, $fbo_id)
+    {
+        $booking = BookingData::findOrFail($fbo_id);
+        $fieldsToUpdate = [];
+        $differences = [];
+        $updated = false;
+
+        // Ambil semua data yang dikirimkan dalam request
+        $inputData = $request->except('_token'); // Menghapus CSRF token dari data input
+
+        // Loop untuk memeriksa kesamaan data dan membandingkan data baru dengan data yang ada di database
+        foreach ($inputData as $field => $newValue) {
+            // Pastikan kolom tersebut bisa diisi (fillable) dan bandingkan dengan nilai di database
+            if ($booking->isFillable($field)) {
+                // Ambil nilai yang ada di database untuk field tersebut
+                $existingValue = $booking->{$field};
+
+
+                // Jika nilai baru berbeda dengan nilai yang ada di database, simpan perbedaannya
+                if ($newValue !== $existingValue) {
+                    $fieldsToUpdate[$field] = $newValue;
+                    $differences[$field] = [
+                        'old' => $existingValue,
+                        'new' => $newValue
+                    ];
+                    $updated = true;
+                }
+            }
+        }
+
+        // Jika ada perubahan, kirimkan perbedaan ke view atau response JSON
+        if ($updated) {
+
+            return response()->json([
+                'differences' => $differences,
+                'fieldsToUpdate' => $fieldsToUpdate,
+            ]);
+        }
+
+        // Jika tidak ada perubahan, beri status 'ga ada yang berubah'
+        return response()->json(['status' => 'ga ada yang berubah']);
     }
 }
