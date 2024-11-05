@@ -2092,4 +2092,8 @@ class BookingDataController extends Controller
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
     }
+
+    public function update(Request $request, $fbo_id){
+        dd($request);
+    }
 }
