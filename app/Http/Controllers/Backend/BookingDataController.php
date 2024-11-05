@@ -500,7 +500,7 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_specific_pickup = $request->fbo_specific_pickup_return;
                 $bookingDataReturn->fbo_specific_dropoff = $request->fbo_specific_dropoff_return;
                 $bookingDataReturn->fbo_contact_pickup = $request->fbo_contact_pickup_return;
-                $bookingDataReturn->fbo_contact_dropoff = $request->fbo_pickup;
+                $bookingDataReturn->fbo_contact_dropoff = $request->fbo_contact_dropoff_return;
                 $bookingDataReturn->fbo_log;
                 $bookingDataReturn->fbo_source = "backoffice";
                 $bookingDataReturn->fbo_updated_by = Auth()->id();
@@ -2095,44 +2095,45 @@ class BookingDataController extends Controller
 
     public function update(Request $request, $fbo_id)
     {
-        $booking = BookingData::findOrFail($fbo_id);
-        $fieldsToUpdate = [];
-        $differences = [];
-        $updated = false;
+        $bookingDataEdit = BookingData::where('fbo_id', $fbo_id)->first();
+        $activeTab = $request->input('active_tab');
 
-        // Ambil semua data yang dikirimkan dalam request
-        $inputData = $request->except('_token'); // Menghapus CSRF token dari data input
-
-        // Loop untuk memeriksa kesamaan data dan membandingkan data baru dengan data yang ada di database
-        foreach ($inputData as $field => $newValue) {
-            // Pastikan kolom tersebut bisa diisi (fillable) dan bandingkan dengan nilai di database
-            if ($booking->isFillable($field)) {
-                // Ambil nilai yang ada di database untuk field tersebut
-                $existingValue = $booking->{$field};
-
-
-                // Jika nilai baru berbeda dengan nilai yang ada di database, simpan perbedaannya
-                if ($newValue !== $existingValue) {
-                    $fieldsToUpdate[$field] = $newValue;
-                    $differences[$field] = [
-                        'old' => $existingValue,
-                        'new' => $newValue
-                    ];
-                    $updated = true;
-                }
-            }
+        switch ($activeTab) {
+            case 'trip':
+                $bookingDataEdit->fbo_trip_date = $request->fbo_trip_date;
+                $bookingDataEdit->fbo_id = $request->fbo_id;
+                $bookingDataEdit->price_adult = $request->price_adult;
+                $bookingDataEdit->price_child = $request->price_child;
+                $bookingDataEdit->fbo_end_total = $request->fbo_end_total;
+                $bookingDataEdit->fbo_end_total_currency = $request->fbo_end_total_currency;
+                $bookingDataEdit->fbo_trip_date_return = $request->fbo_trip_date_return;
+                $bookingDataEdit->fbo_id_return = $request->fbo_id_return;
+                $bookingDataEdit->return_price_adult = $request->return_price_adult;
+                $bookingDataEdit->return_price_child = $request->return_price_child;
+                $bookingDataEdit->return_fbo_end_total = $request->return_fbo_end_total;
+                $bookingDataEdit->return_fbo_end_total_currency = $request->return_fbo_end_total_currency;
+                dd($bookingDataEdit);
+                break;
+            case 'passenger':
+                dd($request);
+                break;
+            case 'shuttle':
+                $bookingDataEdit->fbo_pickup = $request->fbo_pickup;
+                $bookingDataEdit->fbo_dropoff = $request->fbo_dropoff;
+                $bookingDataEdit->fbo_specific_pickup = $request->fbo_specific_pickup;
+                $bookingDataEdit->fbo_specific_dropoff = $request->fbo_specific_dropoff;
+                $bookingDataEdit->fbo_contact_pickup = $request->fbo_contact_pickup;
+                $bookingDataEdit->fbo_contact_dropoff = $request->fbo_contact_dropoff;
+                dd($bookingDataEdit);
+                break;
+            case 'customer':
+                dd($request);
+                break;
+            case 'payment':
+                $bookingDataEdit->fbo_payment_method = $request->fbo_payment_method;
+                $bookingDataEdit->fbo_transaction_id = $request->fbo_transaction_id;
+                dd($bookingDataEdit);
+                break;
         }
-
-        // Jika ada perubahan, kirimkan perbedaan ke view atau response JSON
-        if ($updated) {
-
-            return response()->json([
-                'differences' => $differences,
-                'fieldsToUpdate' => $fieldsToUpdate,
-            ]);
-        }
-
-        // Jika tidak ada perubahan, beri status 'ga ada yang berubah'
-        return response()->json(['status' => 'ga ada yang berubah']);
     }
 }
