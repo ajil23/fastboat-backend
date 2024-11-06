@@ -944,10 +944,43 @@
         }
 
         function savePassengerInfo() {
-            var passengerInfo = [];
-            // Process adult, child, infant info
-            // ...
-            var combinedInfo = passengerInfo.join(';');
+            let passengerInfo = [];
+
+            // Loop untuk adult
+            $('#adult_info .row').each(function() {
+                let name = $(this).find('[name="adult_name_[]"]').val();
+                let age = $(this).find('[name="adult_age_[]"]').val();
+                let gender = $(this).find('[name="adult_gender_[]"]').val();
+                let nationality = $(this).find('[name="adult_nationality_[]"]').val();
+                if (name && age && gender && nationality) {
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                }
+            });
+
+            // Loop untuk child
+            $('#child_info .row').each(function() {
+                let name = $(this).find('[name="child_name_[]"]').val();
+                let age = $(this).find('[name="child_age_[]"]').val();
+                let gender = $(this).find('[name="child_gender_[]"]').val();
+                let nationality = $(this).find('[name="child_nationality_[]"]').val();
+                if (name && age && gender && nationality) {
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                }
+            });
+
+            // Loop untuk infant
+            $('#infant_info .row').each(function() {
+                let name = $(this).find('[name="infant_name_[]"]').val();
+                let age = $(this).find('[name="infant_age_[]"]').val();
+                let gender = $(this).find('[name="infant_gender_[]"]').val();
+                let nationality = $(this).find('[name="infant_nationality_[]"]').val();
+                if (name && age && gender && nationality) {
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                }
+            });
+
+            // Gabungkan semua data penumpang dengan titik koma sebagai pemisah antar penumpang
+            let combinedInfo = passengerInfo.join(';');
             $('#fbo_passenger').val(combinedInfo);
         }
 
