@@ -1993,17 +1993,18 @@ class BookingDataController extends Controller
             $arrivalPortReturn = $request->input('fbo_arrival_port_return');
             $timeDeptReturn = $request->input('fbo_departure_time_return');
             $fbo_id = $request->input('fbo_id_return');
-
-            // Query FastboatAvailability with trip data filters
+            $availability_id = $request->input('availability_id_return'); // ID untuk detail yang dipilih
+    
+            // Query FastboatAvailability berdasarkan filter trip
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePortReturn) {
                 $query->where('prt_name_en', $departurePortReturn);
             })
-                ->whereHas('trip.arrival', function ($query) use ($arrivalPortReturn) {
-                    $query->where('prt_name_en', $arrivalPortReturn);
-                })
-                ->where('fba_date', $tripDateReturn);
-
-            // Add filter for departure time if provided
+            ->whereHas('trip.arrival', function ($query) use ($arrivalPortReturn) {
+                $query->where('prt_name_en', $arrivalPortReturn);
+            })
+            ->where('fba_date', $tripDateReturn);
+    
+            // Filter waktu keberangkatan jika ada
             if ($timeDeptReturn) {
                 $availabilityQuery->where(function ($query) use ($timeDeptReturn, $arrivalPortReturn) {
                     $query->where('fba_dept_time', $timeDeptReturn)
@@ -2015,28 +2016,28 @@ class BookingDataController extends Controller
                         });
                 });
             }
-
-            // Get availability data
+    
             $availability = $availabilityQuery->get();
-
-            // Retrieve booking data for adult and child counts
+    
+            // Mendapatkan data booking untuk jumlah dewasa dan anak
             $bookingData = BookingData::where('fbo_id', $fbo_id)->first();
             $adultCountReturn = $bookingData->fbo_adult ?? 1;
             $childCountReturn = $bookingData->fbo_child ?? 0;
             $currency = MasterCurrency::where('cy_code', $bookingData->fbo_currency)->first();
             $kurs = $currency->cy_rate;
-
-            // Map results with FastboatAvailability data and BookingData details
+    
+            // Struktur hasil untuk FastboatAvailability dan detail BookingData
             $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn, $kurs, $currency) {
                 $priceAdultReturn = (float) $item->fba_adult_publish ?? 0;
                 $priceChildReturn = (float) $item->fba_child_publish ?? 0;
                 $totalPrice = ($priceAdultReturn * $adultCountReturn) + ($priceChildReturn * $childCountReturn);
                 $totalPriceCurrency = $totalPrice / $kurs;
-
+    
                 return [
+                    'availability_id' => $item->fba_id, // ID untuk detail yang dipilih
                     'fastboat_name' => $item->trip->fastboat->fb_name,
-                    'departure_port' => $item->trip->departure->prt_name_en,
-                    'arrival_port' => $item->trip->arrival->prt_name_en,
+                    'departure_port' => $item->trip->departure->prt_code,
+                    'arrival_port' => $item->trip->arrival->prt_code,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
                     'price_adult' => number_format($priceAdultReturn, 0, ',', '.'),
@@ -2049,16 +2050,34 @@ class BookingDataController extends Controller
                     'currency_code' => $currency->cy_code,
                 ];
             });
-
+    
+            // Menemukan detail yang dipilih berdasarkan availability_id
+            $selectedDetail = $availability->where('fba_id', $availability_id)->first();
+    
+            if ($selectedDetail) {
+                $selected = [
+                    'fastboat_name' => $selectedDetail->trip->fastboat->fb_name,
+                    'departure_port' => $selectedDetail->trip->departure->prt_code,
+                    'arrival_port' => $selectedDetail->trip->arrival->prt_code,
+                    'departure_time' => $selectedDetail->fba_time_dept ?? $selectedDetail->trip->fbt_dept_time,
+                    'arrival_time' => $selectedDetail->trip->fbt_arrival_time,
+                ];
+            } else {
+                $selected = null;
+            }
+    
             if ($availability->isEmpty()) {
                 return response()->json(['message' => 'Data tidak ditemukan'], 404);
             }
-
-            return response()->json(['data' => $results]);
+    
+            return response()->json([
+                'data' => $results,
+                'selected' => $selected
+            ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
         }
-    }
+    }    
 
     public function getFilteredReturn(Request $request)
     {
@@ -2129,9 +2148,7 @@ class BookingDataController extends Controller
             case 'trip':
                 dd($request);
                 $bookingDataEdit->fbo_trip_date = $request->fbo_trip_date;
-                $bookingDataEdit->fastboat_result = $request->fastboat_result;
-                $bookingDataEdit->departure_result = $request->departure_result;
-                $bookingDataEdit->arrival_result = $request->arrival_result;
+                $bookingDataEdit->availability_id = $request->availability_id;
                 $bookingDataEdit->fbo_id = $request->fbo_id;
                 $bookingDataEdit->price_adult = $request->price_adult;
                 $bookingDataEdit->price_child = $request->price_child;
@@ -2139,6 +2156,7 @@ class BookingDataController extends Controller
                 $bookingDataEdit->fbo_end_total_currency = $request->fbo_end_total_currency;
                 $bookingDataEdit->fbo_trip_date_return = $request->fbo_trip_date_return;
                 $bookingDataEdit->fbo_id_return = $request->fbo_id_return;
+                $bookingDataEdit->availability_id_return = $request->availability_id_return;
                 $bookingDataEdit->return_price_adult = $request->return_price_adult;
                 $bookingDataEdit->return_price_child = $request->return_price_child;
                 $bookingDataEdit->return_fbo_end_total = $request->return_fbo_end_total;
