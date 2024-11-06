@@ -269,17 +269,7 @@
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <div class="mb-3">
-                                                            <div id="fastboat_result" name="fastboat_result" hidden></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <div id="departure_result" name="departure_result" hidden></div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <div class="mb-3">
-                                                            <div id="arrival_result" name="arrival_result" hidden></div>
+                                                            <input type="hidden" id="availability_id" name="availability_id" value="">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1161,6 +1151,7 @@
                 $('#fastboat_result').text(data.fastboat_result);
                 $('#departure_result').text(data.departure_result);
                 $('#arrival_result').text(data.arrival_result);
+                $('#availability_id').val(data.availability_id);
 
                 // Set selectedDetail using the `selected` data only
                 const selectedDetail = `${selected.fastboat_name} (${selected.departure_port} -> ${selected.arrival_port} ${selected.departure_time})`;
