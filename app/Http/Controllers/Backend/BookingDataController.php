@@ -2161,6 +2161,7 @@ class BookingDataController extends Controller
                 $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
                 $tripDepartureBefore = $bookingDataEdit->trip->departure->prt_name_en;
                 $tripArrivalBefore = $bookingDataEdit->trip->arrival->prt_name_en;
+                $totalPriceBefore = $bookingDataEdit->fbo_end_total;
 
                 $data = [
                     'fbo_id' => $request->availability_id,
@@ -2182,8 +2183,9 @@ class BookingDataController extends Controller
                 $companyAfter = $fboId->trip->fastboat->company->cpn_name;
                 $tripDepartureAfter = $fboId->trip->departure->prt_name_en;
                 $tripArrivalAfter = $fboId->trip->arrival->prt_name_en;
+                $totalPriceAfter = $data['fbo_end_total'];
 
-                dd($logbefore . $user . ',' . 'Update trip' . ',' . $date);
+                dd('company:' . $companyAfter . '| trip:' . $tripDepartureAfter . '-' . $tripArrivalAfter . '| total_price: ' . $totalPriceAfter);
 
                 $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                     ->where('fbl_type', 'like', 'Update trip%')
@@ -2193,8 +2195,8 @@ class BookingDataController extends Controller
                 FastboatLog::create([
                     'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
                     'fbl_type' => 'Update trip ' . ($count + 1),
-                    'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $tripDepartureBefore . '-' . $tripArrivalBefore,
-                    'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $tripDepartureAfter . '-' . $tripArrivalAfter,
+                    'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $tripDepartureBefore . '-' . $tripArrivalBefore . '| total_price: ' . $totalPriceBefore,
+                    'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $tripDepartureAfter . '-' . $tripArrivalAfter . '| total_price: ' . $totalPriceAfter,
                 ]);
                 $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
                 // $bookingDataEdit->save();
@@ -2226,6 +2228,7 @@ class BookingDataController extends Controller
                     'fbo_contact_pickup' => $request->fbo_contact_pickup,
                     'fbo_contact_dropoff' => $request->fbo_contact_dropoff,
                 ];
+                dd($data);
                 $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                     ->where('fbl_type', 'like', 'Update Shuttle Data%')
                     ->count();
@@ -2234,12 +2237,11 @@ class BookingDataController extends Controller
                 FastboatLog::create([
                     'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
                     'fbl_type' => 'Update Shuttle Data ' . ($count + 1),
-                    'fbl_data_before' => 'pickup_poin:  | specific_picup:',
-                    'fbl_data_after' => 'pickup_poin:  | specific_picup:',
+                    'fbl_data_before' => 'pickup_poin:  | specific_pickup: | contact_pickup: | dropoff_poin:  | specific_dropoff: | contact_dropoff: ',
+                    'fbl_data_after' => 'pickup_poin:  | specific_pickup: | contact_pickup: | dropoff_poin:  | specific_dropoff: | contact_dropoff: ',
                 ]);
                 $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
 
-                dd($data);
                 break;
             case 'customer':
                 $data = [
@@ -2249,6 +2251,7 @@ class BookingDataController extends Controller
                     'ctc_nationality' => $request->ctc_nationality,
                     'ctc_note' => $request->ctc_note,
                 ];
+                dd($data);
                 $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                     ->where('fbl_type', 'like', 'Update Customer Data%')
                     ->count();
@@ -2261,13 +2264,13 @@ class BookingDataController extends Controller
                     'fbl_data_after' => 'customer_name: | customer_email: | customer_phone: | customer_nationality: | customer_note: ',
                 ]);
                 $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Customer Data' . ',' . $date;
-                dd($data);
                 break;
             case 'payment':
                 $data = [
                     'fbo_payment_method' => $request->fbo_payment_method,
                     'fbo_transaction_id' => $request->fbo_transaction_id,
                 ];
+                dd($data);
                 $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                     ->where('fbl_type', 'like', 'Update Payment Data%')
                     ->count();
@@ -2280,7 +2283,6 @@ class BookingDataController extends Controller
                     'fbl_data_after' => 'payment_method: | transaction_id: ',
                 ]);
                 $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Payment Data' . ',' . $date;
-                dd($data);
                 break;
         }
     }
