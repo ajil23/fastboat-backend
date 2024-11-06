@@ -203,7 +203,9 @@
                                         <!-- Hasil Pencarian -->
                                         <div id="search-results">
                                             <div class="table-responsive">
-                                                <h5 class="card-title"></h5>
+                                                <div class="selected-details">
+                                                    <p><strong><center><span id="selectedFastboat"></span></center></strong></p>
+                                                </div>
                                                 <table id="booking-data-table"
                                                     class="table table-bordered table-centered align-middle table-nowrap mb-0 table-check">
                                                     <thead>
@@ -259,12 +261,25 @@
                                                     </div>
                                                     <div class="col-sm-3">
                                                         <div class="mb-3">
-                                                            <label class="form-label" for="fbo_end_total_currency">End
-                                                                Total
-                                                                Currency (<span id="currencyCode"></span>)</label>
+                                                            <label class="form-label" for="fbo_end_total_currency">End Total Currency (<span id="currencyCode"></span>)</label>
                                                             <input value="" class="form-control"
                                                                 id="fbo_end_total_currency" name="fbo_end_total_currency"
                                                                 style="background-color:lightgray" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <div id="fastboat_result" name="fastboat_result" hidden></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <div id="departure_result" name="departure_result" hidden></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-3">
+                                                        <div class="mb-3">
+                                                            <div id="arrival_result" name="arrival_result" hidden></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1051,21 +1066,14 @@
     <script>
         $(document).ready(function() {
             $('#tripDepartCheckbox').on('change', function() {
-                console.log("Checkbox found and changed");
                 if ($(this).is(':checked')) {
                     $('#searchForm').show();
                     $('#searchForm').find('input, select').prop('disabled', false);
                 } else {
-                    // Sembunyikan form dan nonaktifkan input
                     $('#searchForm').hide();
-                    $('#searchForm').find('input, select').prop('disabled', true).val(
-                        ''); // Kosongkan isian form
-
-                    // Sembunyikan dan kosongkan hasil pencarian
+                    $('#searchForm').find('input, select').prop('disabled', true).val('');
                     $('#search-results').hide();
                     $('#result-container').empty();
-
-                    // Sembunyikan dan kosongkan detail trip
                     hideTripDetails();
                 }
             });
@@ -1090,37 +1098,37 @@
                         },
                         success: function(response) {
                             $('#result-container').empty();
-                            $('#result-title').text(tripDate);
-                            $('#result-date').text(tripDate);
                             $('#search-results').show();
 
                             $.each(response.data, function(index, item) {
                                 $('#result-container').append(`
-                                <div class="col-md-6 col-sm-12 card-item">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-check mb-3">
-                                                <input class="form-check-input trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-price_child="${item.price_child}" data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-price_discount="${item.price_discount}" data-arrival_port="${item.arrival_port}" data-total_price="${item.total_price}" data-arrival_time="${item.arrival_time}" data-total_price_currency="${item.total_price_currency}" data-currency_code="${item.currency_code}">
-                                                <label class="form-check-label">${item.fastboat_name}</label>
-                                            </div>
-                                            <div class="mt-3 pt-1">
-                                                <div class="d-flex justify-content-between">
-                                                    <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
-                                                    <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
+                                    <div class="col-md-6 col-sm-12 card-item">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="form-check mb-3">
+                                                    <input class="form-check-input trip-checkbox" type="checkbox" data-item='${JSON.stringify(item)}' data-selected='${JSON.stringify(response.selected)}'>
+                                                    <label class="form-check-label">${item.fastboat_name}</label>
+                                                </div>
+                                                <div class="mt-3 pt-1">
+                                                    <div class="d-flex justify-content-between">
+                                                        <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
+                                                        <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            `);
+                                `);
                             });
 
                             $('.trip-checkbox').on('change', function() {
                                 $('.trip-checkbox').not(this).prop('checked', false);
 
                                 if ($(this).is(':checked')) {
-                                    const data = $(this).data();
-                                    showTripDetails(data);
+                                    const data = $(this).data('item');
+                                    const selectedData = $(this).data('selected');
+                                    
+                                    showTripDetails(data, selectedData); // Pass both data and selected data
                                 } else {
                                     hideTripDetails();
                                 }
@@ -1134,24 +1142,36 @@
                 }
             }
 
-            function showTripDetails(data) {
+            function showTripDetails(data, selected) {
                 $('#booking-data-table tbody').html(`
-                <tr>
-                    <td><center>${data.price_adult}</center></td>
-                    <td><center>${data.price_child}</center></td>
-                    <td><center>${data.price_adult_nett}</center></td>
-                    <td><center>${data.price_child_nett}</center></td>
-                    <td><center>${data.price_discount}</center></td>
-                </tr>
-            `);
+                    <tr>
+                        <td><center>${data.price_adult}</center></td>
+                        <td><center>${data.price_child}</center></td>
+                        <td><center>${data.price_adult_nett}</center></td>
+                        <td><center>${data.price_child_nett}</center></td>
+                        <td><center>${data.price_discount}</center></td>
+                    </tr>
+                `);
 
                 $('#price_adult').val(data.price_adult);
                 $('#price_child').val(data.price_child);
                 $('#fbo_end_total').val(data.total_price);
                 $('#fbo_end_total_currency').val(data.total_price_currency);
                 $('#currencyCode').text(data.currency_code);
+                $('#fastboat_result').text(data.fastboat_result);
+                $('#departure_result').text(data.departure_result);
+                $('#arrival_result').text(data.arrival_result);
 
-                $('.detail-trip').show(); // Tampilkan detail
+                // Set selectedDetail using the `selected` data only
+                const selectedDetail = `${selected.fastboat_name} (${selected.departure_port} -> ${selected.arrival_port} ${selected.departure_time})`;
+
+                // Display the selected detail
+                $('#selectedFastboat').text(selectedDetail);
+                $('#selectedDeparturePort').text(selected.departure_port);
+                $('#selectedArrivalPort').text(selected.arrival_port);
+                $('#selectedDepartureTime').text(selected.departure_time);
+
+                $('.detail-trip').show();
             }
 
             function hideTripDetails() {
@@ -1161,12 +1181,14 @@
                 $('#fbo_end_total').val('');
                 $('#fbo_end_total_currency').val('');
                 $('#currencyCode').text('');
-
-                $('.detail-trip').hide(); // Sembunyikan detail
+                $('#fastboat_result').text(data.fastboat_result);
+                $('#departure_result').text(data.departure_result);
+                $('#arrival_result').text(data.arrival_result);
+                $('#selectedFastboat, #selectedDeparturePort, #selectedArrivalPort, #selectedDepartureTime').text('');
+                $('.detail-trip').hide();
             }
 
-            $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_departure_time').on('change',
-                triggerSearch);
+            $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_departure_time').on('change', triggerSearch);
 
             function resetSearchResults() {
                 $('#search-results').hide();
