@@ -944,10 +944,43 @@
         }
 
         function savePassengerInfo() {
-            var passengerInfo = [];
-            // Process adult, child, infant info
-            // ...
-            var combinedInfo = passengerInfo.join(';');
+            let passengerInfo = [];
+
+            // Loop untuk adult
+            $('#adult_info .row').each(function() {
+                let name = $(this).find('[name="adult_name_[]"]').val();
+                let age = $(this).find('[name="adult_age_[]"]').val();
+                let gender = $(this).find('[name="adult_gender_[]"]').val();
+                let nationality = $(this).find('[name="adult_nationality_[]"]').val();
+                if (name && age && gender && nationality) {
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                }
+            });
+
+            // Loop untuk child
+            $('#child_info .row').each(function() {
+                let name = $(this).find('[name="child_name_[]"]').val();
+                let age = $(this).find('[name="child_age_[]"]').val();
+                let gender = $(this).find('[name="child_gender_[]"]').val();
+                let nationality = $(this).find('[name="child_nationality_[]"]').val();
+                if (name && age && gender && nationality) {
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                }
+            });
+
+            // Loop untuk infant
+            $('#infant_info .row').each(function() {
+                let name = $(this).find('[name="infant_name_[]"]').val();
+                let age = $(this).find('[name="infant_age_[]"]').val();
+                let gender = $(this).find('[name="infant_gender_[]"]').val();
+                let nationality = $(this).find('[name="infant_nationality_[]"]').val();
+                if (name && age && gender && nationality) {
+                    passengerInfo.push(`${name},${age},${gender},${nationality}`);
+                }
+            });
+
+            // Gabungkan semua data penumpang dengan titik koma sebagai pemisah antar penumpang
+            let combinedInfo = passengerInfo.join(';');
             $('#fbo_passenger').val(combinedInfo);
         }
 
@@ -1065,8 +1098,9 @@
             } else {
                 $('#searchForm').hide();
                 $('#searchForm').find('input, select').prop('disabled', true).val('');
-                $('#search-results').hide();
-                $('#result-container').empty();
+                
+                // Sembunyikan dan kosongkan hasil pencarian dan detail
+                resetSearchResults();
                 hideTripDetails();
             }
         });
@@ -1096,23 +1130,23 @@
 
                         $.each(response.data, function(index, item) {
                             $('#result-container').append(`
-                                    <div class="col-md-6 col-sm-12 card-item">
-                                        <div class="card">
-                                            <div class="card-body">
-                                                <div class="form-check mb-3">
-                                                    <input class="form-check-input trip-checkbox" type="checkbox" data-item='${JSON.stringify(item)}' data-selected='${JSON.stringify(response.selected)}'>
-                                                    <label class="form-check-label">${item.fastboat_name}</label>
-                                                </div>
-                                                <div class="mt-3 pt-1">
-                                                    <div class="d-flex justify-content-between">
-                                                        <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
-                                                        <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
-                                                    </div>
+                                <div class="col-md-6 col-sm-12 card-item">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input trip-checkbox" type="checkbox" data-item='${JSON.stringify(item)}' data-selected='${JSON.stringify(response.selected)}'>
+                                                <label class="form-check-label">${item.fastboat_name}</label>
+                                            </div>
+                                            <div class="mt-3 pt-1">
+                                                <div class="d-flex justify-content-between">
+                                                    <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
+                                                    <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                `);
+                                </div>
+                            `);
                         });
 
                         $('.trip-checkbox').on('change', function() {
@@ -1122,7 +1156,7 @@
                                 const data = $(this).data('item');
                                 const selectedData = $(this).data('selected');
 
-                                showTripDetails(data, selectedData); // Pass both data and selected data
+                                showTripDetails(data, selectedData);
                             } else {
                                 hideTripDetails();
                             }
@@ -1138,29 +1172,23 @@
 
         function showTripDetails(data, selected) {
             $('#booking-data-table tbody').html(`
-                    <tr>
-                        <td><center>${data.price_adult}</center></td>
-                        <td><center>${data.price_child}</center></td>
-                        <td><center>${data.price_adult_nett}</center></td>
-                        <td><center>${data.price_child_nett}</center></td>
-                        <td><center>${data.price_discount}</center></td>
-                    </tr>
-                `);
+                <tr>
+                    <td><center>${data.price_adult}</center></td>
+                    <td><center>${data.price_child}</center></td>
+                    <td><center>${data.price_adult_nett}</center></td>
+                    <td><center>${data.price_child_nett}</center></td>
+                    <td><center>${data.price_discount}</center></td>
+                </tr>
+            `);
 
             $('#price_adult').val(data.price_adult);
             $('#price_child').val(data.price_child);
             $('#fbo_end_total').val(data.total_price);
             $('#fbo_end_total_currency').val(data.total_price_currency);
             $('#currencyCode').text(data.currency_code);
-            $('#fastboat_result').text(data.fastboat_result);
-            $('#departure_result').text(data.departure_result);
-            $('#arrival_result').text(data.arrival_result);
             $('#availability_id').val(data.availability_id);
 
-            // Set selectedDetail using the `selected` data only
             const selectedDetail = `${selected.fastboat_name} (${selected.departure_port} -> ${selected.arrival_port} ${selected.departure_time})`;
-
-            // Display the selected detail
             $('#selectedFastboat').text(selectedDetail);
 
             $('.detail-trip').show();
@@ -1173,9 +1201,9 @@
             $('#fbo_end_total').val('');
             $('#fbo_end_total_currency').val('');
             $('#currencyCode').text('');
-            $('#fastboat_result').text(data.fastboat_result);
-            $('#departure_result').text(data.departure_result);
-            $('#arrival_result').text(data.arrival_result);
+            $('#fastboat_result').text('');
+            $('#departure_result').text('');
+            $('#arrival_result').text('');
             $('#selectedFastboat, #selectedDeparturePort, #selectedArrivalPort, #selectedDepartureTime').text('');
             $('.detail-trip').hide();
         }
@@ -1198,11 +1226,9 @@
                     fbo_trip_date: tripDate
                 },
                 success: function(response) {
-                    $('#fbo_departure_port').empty().append(
-                        '<option value="">Select Departure Port</option>');
+                    $('#fbo_departure_port').empty().append('<option value="">Select Departure Port</option>');
                     $.each(response.fbo_departure_ports, function(index, port) {
-                        $('#fbo_departure_port').append('<option value="' + port +
-                            '">' + port + '</option>');
+                        $('#fbo_departure_port').append('<option value="' + port + '">' + port + '</option>');
                     });
                     $('#fbo_departure_port').prop('disabled', false);
                 },
@@ -1227,11 +1253,9 @@
                     fbo_departure_port: departurePort
                 },
                 success: function(response) {
-                    $('#fbo_arrival_port').empty().append(
-                        '<option value="">Select Arrival Port</option>');
+                    $('#fbo_arrival_port').empty().append('<option value="">Select Arrival Port</option>');
                     $.each(response.fbo_arrival_ports, function(index, port) {
-                        $('#fbo_arrival_port').append('<option value="' + port +
-                            '">' + port + '</option>');
+                        $('#fbo_arrival_port').append('<option value="' + port + '">' + port + '</option>');
                     });
                     $('#fbo_arrival_port').prop('disabled', false);
                 },
@@ -1257,11 +1281,9 @@
                     fbo_arrival_port: arrivalPort
                 },
                 success: function(response) {
-                    $('#fbo_departure_time').empty().append(
-                        '<option value="">Select Time Dept</option>');
+                    $('#fbo_departure_time').empty().append('<option value="">Select Time Dept</option>');
                     $.each(response.fbo_departure_times, function(index, time) {
-                        $('#fbo_departure_time').append('<option value="' + time +
-                            '">' + time + '</option>');
+                        $('#fbo_departure_time').append('<option value="' + time + '">' + time + '</option>');
                     });
                     $('#fbo_departure_time').prop('disabled', false);
                 },
