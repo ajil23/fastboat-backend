@@ -1835,7 +1835,9 @@ class BookingDataController extends Controller
             $arrivalPort = $request->input('fbo_arrival_port');
             $timeDept = $request->input('fbo_departure_time');
             $fbo_id = $request->input('fbo_id');
+            $availability_id = $request->input('availability_id'); // ID for selected detail
 
+            // Query to fetch available trips based on input criteria
             $availabilityQuery = FastboatAvailability::whereHas('trip.departure', function ($query) use ($departurePort) {
                 $query->where('prt_name_en', $departurePort);
             })
@@ -1844,6 +1846,7 @@ class BookingDataController extends Controller
                 })
                 ->where('fba_date', $tripDate);
 
+            // Filter by departure time if provided
             if ($timeDept) {
                 $availabilityQuery->where(function ($query) use ($timeDept, $arrivalPort) {
                     $query->where('fba_dept_time', $timeDept)
@@ -1858,12 +1861,14 @@ class BookingDataController extends Controller
 
             $availability = $availabilityQuery->get();
 
+            // Get booking data and currency information for pricing calculations
             $bookingData = BookingData::where('fbo_id', $fbo_id)->first();
             $adultCount = $bookingData->fbo_adult ?? 1;
             $childCount = $bookingData->fbo_child ?? 0;
             $currency = MasterCurrency::where('cy_code', $bookingData->fbo_currency)->first();
             $kurs = $currency->cy_rate;
 
+            // Map through availability to structure results
             $results = $availability->map(function ($item) use ($adultCount, $childCount, $kurs, $currency) {
                 $priceAdult = (float) $item->fba_adult_publish ?? 0;
                 $priceChild = (float) $item->fba_child_publish ?? 0;
@@ -1872,6 +1877,10 @@ class BookingDataController extends Controller
                 $totalPriceCurrency = $totalPrice / $kurs;
 
                 return [
+                    'availability_id' => $item->fba_id, // ID for selected detail
+                    'fastboat_result' => $item->trip->fastboat->fb_id,
+                    'departure_result' => $item->trip->departure->prt_id,
+                    'arrival_result' => $item->trip->arrival->prt_id,
                     'fastboat_name' => $item->trip->fastboat->fb_name,
                     'departure_port' => $item->trip->departure->prt_name_en,
                     'arrival_port' => $item->trip->arrival->prt_name_en,
@@ -1887,11 +1896,29 @@ class BookingDataController extends Controller
                     'currency_code' => $currency->cy_code,
                 ];
             });
+
+            // Find and customize the selected detail based on availability_id
+            $selectedDetail = $availability->where('id', $availability_id)->first();
+
+            if ($selectedDetail) {
+                $selected = [
+                    'fastboat_name' => $selectedDetail->trip->fastboat->fb_name,
+                    'departure_port' => $selectedDetail->trip->departure->prt_code,
+                    'arrival_port' => $selectedDetail->trip->arrival->prt_code,
+                    'departure_time' => $selectedDetail->fba_time_dept ?? $selectedDetail->trip->fbt_dept_time,
+                    'arrival_time' => $selectedDetail->trip->fbt_arrival_time,
+                ];
+            } else {
+                $selected = null;
+            }
+
             if ($availability->isEmpty()) {
                 return response()->json(['message' => 'Data tidak ditemukan'], 404);
             }
+
             return response()->json([
                 'data' => $results,
+                'selected' => $selected
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -2097,10 +2124,14 @@ class BookingDataController extends Controller
     {
         $bookingDataEdit = BookingData::where('fbo_id', $fbo_id)->first();
         $activeTab = $request->input('active_tab');
-
+        
         switch ($activeTab) {
             case 'trip':
+                dd($request);
                 $bookingDataEdit->fbo_trip_date = $request->fbo_trip_date;
+                $bookingDataEdit->fastboat_result = $request->fastboat_result;
+                $bookingDataEdit->departure_result = $request->departure_result;
+                $bookingDataEdit->arrival_result = $request->arrival_result;
                 $bookingDataEdit->fbo_id = $request->fbo_id;
                 $bookingDataEdit->price_adult = $request->price_adult;
                 $bookingDataEdit->price_child = $request->price_child;
@@ -2112,7 +2143,6 @@ class BookingDataController extends Controller
                 $bookingDataEdit->return_price_child = $request->return_price_child;
                 $bookingDataEdit->return_fbo_end_total = $request->return_fbo_end_total;
                 $bookingDataEdit->return_fbo_end_total_currency = $request->return_fbo_end_total_currency;
-                dd($bookingDataEdit);
                 break;
             case 'passenger':
                 dd($request);
