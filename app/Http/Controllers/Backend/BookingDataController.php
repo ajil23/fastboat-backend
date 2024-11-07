@@ -2157,7 +2157,7 @@ class BookingDataController extends Controller
 
         switch ($activeTab) {
             case 'trip':
-                // Mengambil data sebelum
+                // Mengambil data sebelum 
                 $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
                 $tripDepartureBefore = $bookingDataEdit->trip->departure->prt_name_en;
                 $tripArrivalBefore = $bookingDataEdit->trip->arrival->prt_name_en;
@@ -2186,6 +2186,8 @@ class BookingDataController extends Controller
                 $tripArrivalAfter = $fboId->trip->arrival->prt_name_en;
                 $totalPriceAfter = $data['fbo_end_total'];
 
+                // Update data
+                $trip = BookingData::find($bookingDataEdit->fbo_id);
 
                 $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                     ->where('fbl_type', 'like', 'Update trip%')
@@ -2202,70 +2204,99 @@ class BookingDataController extends Controller
                 // $bookingDataEdit->save();
                 break;
             case 'passenger':
-                // Mengambil data sebelum
-                $passengerBefore = $bookingDataEdit->fbo_passenger;
+                DB::beginTransaction();
+                try {
+                    // Mengambil data sebelum
+                    $passengerBefore = $bookingDataEdit->fbo_passenger;
+    
+                    // Mengambil data sesudah
+                    $passengerAfter = $request->fbo_passenger;
+    
+                    // Update data
+                    $passenger = BookingData::find($bookingDataEdit->fbo_id);
+                    $passenger->update([
+                        'fbo_passenger' => $passengerAfter,
+                    ]);
+    
+                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                        ->where('fbl_type', 'like', 'Update Passenger Data%')
+                        ->count();
+    
+                    // Buat log perubahan
+                    FastboatLog::create([
+                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                        'fbl_type' => 'Update Passenger Data ' . ($count + 1),
+                        'fbl_data_before' => $passengerBefore,
+                        'fbl_data_after' => $passengerAfter,
+                    ]);
+                    $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Passenger Data' . ',' . $date;
+                    $bookingDataEdit->save();
 
-                $data = [
-                    'fbo_passenger' => $request->fbo_passenger,
-                ];
+                    // Commit Transaksi
+                    DB::commit();
 
-                $passengerAfter = $data['fbo_passenger'];
-                dd($passengerAfter);
-
-                $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                    ->where('fbl_type', 'like', 'Update Passenger Data%')
-                    ->count();
-
-                // Buat log perubahan
-                FastboatLog::create([
-                    'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                    'fbl_type' => 'Update Passenger Data ' . ($count + 1),
-                    'fbl_data_before' => $passengerBefore,
-                    'fbl_data_after' => $passengerAfter,
-                ]);
-                $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Passenger Data' . ',' . $date;
+                    // Berikan notifikasi setelah commit
+                    toast('Data booking has been updated successfully!', 'success');
+                    return redirect()->route('data.view');
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
+                }
                 break;
             case 'shuttle':
-                // Mengambil data sebelum
-                $pickupBefore = $bookingDataEdit->fbo_pickup;
-                $specificPickupBefore = $bookingDataEdit->fbo_specific_pickup;
-                $contactPickupBefore = $bookingDataEdit->fbo_contact_pickup;
-                $dropoffBefore = $bookingDataEdit->fbo_dropoff;
-                $specificDropoffBefore = $bookingDataEdit->fbo_specific_dropoff;
-                $contactDropoffBefore = $bookingDataEdit->fbo_contact_dropoff;
+                DB::beginTransaction();
+                try {
+                    // Mengambil data sebelum
+                    $pickupBefore = $bookingDataEdit->fbo_pickup;
+                    $specificPickupBefore = $bookingDataEdit->fbo_specific_pickup;
+                    $contactPickupBefore = $bookingDataEdit->fbo_contact_pickup;
+                    $dropoffBefore = $bookingDataEdit->fbo_dropoff;
+                    $specificDropoffBefore = $bookingDataEdit->fbo_specific_dropoff;
+                    $contactDropoffBefore = $bookingDataEdit->fbo_contact_dropoff;
 
-                $data = [
-                    'fbo_pickup' => $request->fbo_pickup,
-                    'fbo_dropoff' => $request->fbo_dropoff,
-                    'fbo_specific_pickup' => $request->fbo_specific_pickup,
-                    'fbo_specific_dropoff' => $request->fbo_specific_dropoff,
-                    'fbo_contact_pickup' => $request->fbo_contact_pickup,
-                    'fbo_contact_dropoff' => $request->fbo_contact_dropoff,
-                ];
+                    // Mengambil data sesudah
+                    $pickupAfter = $request->fbo_pickup;
+                    $specificPickupAfter = $request->fbo_specific_pickup;
+                    $contactPickupAfter = $request->fbo_contact_pickup;
+                    $dropoffAfter = $request->fbo_dropoff;
+                    $specificDropoffAfter = $request->fbo_specific_dropoff;
+                    $contactDropoffAfter = $request->fbo_contact_dropoff;
 
-                // Mengambil data sesudah
-                $pickupAfter = $data['fbo_pickup'];
-                $specificPickupAfter = $data['fbo_specific_pickup'];
-                $contactPickupAfter = $data['fbo_contact_pickup'];
-                $dropoffAfter = $data['fbo_dropoff'];
-                $specificDropoffAfter = $data['fbo_specific_dropoff'];
-                $contactDropoffAfter = $data['fbo_contact_dropoff'];
+                    // Update data
+                    $shuttle = BookingData::find($bookingDataEdit->fbo_id);
+                    $shuttle->update([
+                        'fbo_pickup' => $pickupAfter,
+                        'fbo_specific_pickup' => $specificPickupAfter,
+                        'fbo_contact_pickup' => $contactPickupAfter,
+                        'fbo_dropoff' => $dropoffAfter,
+                        'fbo_specific_dropoff' => $specificDropoffAfter,
+                        'fbo_contact_dropoff' => $contactDropoffAfter,
+                    ]);
 
-                dd('pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter);
+                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                        ->where('fbl_type', 'like', 'Update Shuttle Data%')
+                        ->count();
 
-                $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                    ->where('fbl_type', 'like', 'Update Shuttle Data%')
-                    ->count();
+                    // Buat log perubahan
+                    FastboatLog::create([
+                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                        'fbl_type' => 'Update Shuttle Data ' . ($count + 1),
+                        'fbl_data_before' => 'pickup_poin: ' . $pickupBefore . '| specific_pickup: ' . $specificPickupBefore . '| contact_pickup:' . $contactPickupBefore . '| dropoff_poin: ' . $dropoffBefore . '| specific_dropoff: ' . $specificDropoffBefore . '| contact_dropoff:' . $contactDropoffBefore,
+                        'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
+                    ]);
+                    $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
+                    $bookingDataEdit->save();
 
-                // Buat log perubahan
-                FastboatLog::create([
-                    'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                    'fbl_type' => 'Update Shuttle Data ' . ($count + 1),
-                    'fbl_data_before' => 'pickup_poin: ' . $pickupBefore . '| specific_pickup: ' . $specificPickupBefore . '| contact_pickup:' . $contactPickupBefore . '| dropoff_poin: ' . $dropoffBefore . '| specific_dropoff: ' . $specificDropoffBefore . '| contact_dropoff:' . $contactDropoffBefore,
-                    'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
-                ]);
-                $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
+                    // Commit Transaksi
+                    DB::commit();
 
+                    // Berikan notifikasi setelah commit
+                    toast('Data booking has been updated successfully!', 'success');
+                    return redirect()->route('data.view');
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
+                }
                 break;
             case 'customer':
                 DB::beginTransaction();
@@ -2306,7 +2337,7 @@ class BookingDataController extends Controller
                         'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
                         'fbl_type' => 'Update Customer Data ' . ($count + 1),
                         'fbl_data_before' => 'customer_name: ' . $nameBefore . '| customer_email: ' . $emailBefore . '| customer_phone: ' . $phoneBefore . '| customer_nationality :' . $nationalityBefore . '| customer_note: ' . $noteBefore,
-                        'fbl_data_after' => 'customer_name: ' . $nameAfter . '| customer_email:' . $emailAfter . '| customer_phone:' . $phoneAfter . '| customer_nationality:' . $nationalityAfter . '| customer_note:' . $noteAfter ,
+                        'fbl_data_after' => 'customer_name: ' . $nameAfter . '| customer_email:' . $emailAfter . '| customer_phone:' . $phoneAfter . '| customer_nationality:' . $nationalityAfter . '| customer_note:' . $noteAfter,
                     ]);
 
                     // Update log di bookingDataEdit
@@ -2325,23 +2356,47 @@ class BookingDataController extends Controller
                 }
                 break;
             case 'payment':
-                $data = [
-                    'fbo_payment_method' => $request->fbo_payment_method,
-                    'fbo_transaction_id' => $request->fbo_transaction_id,
-                ];
-                dd($data);
-                $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                    ->where('fbl_type', 'like', 'Update Payment Data%')
-                    ->count();
+                DB::beginTransaction();
+                try {
+                    // Mengambil data sebelum
+                    $paymentMethodBefore = $bookingDataEdit->fbo_payment_method;
+                    $transactionIdBefore = $bookingDataEdit->fbo_transaction_id;
+                    
+                    // Mengambil data sesudah
+                    $paymentMethodAfter = $request->fbo_payment_method;
+                    $transactionIdAfter = $request->fbo_transaction_id;
+                    
+                    // Update data
+                    $payment = BookingData::find($bookingDataEdit->fbo_id);
+                    $payment->update([
+                        'fbo_payment_method' => $paymentMethodAfter,
+                        'fbo_transaction_id' => $transactionIdAfter,
+                    ]);
 
-                // Buat log perubahan
-                FastboatLog::create([
-                    'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                    'fbl_type' => 'Update Payment Data ' . ($count + 1),
-                    'fbl_data_before' => 'payment_method: | transaction_id: ',
-                    'fbl_data_after' => 'payment_method: | transaction_id: ',
-                ]);
-                $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Payment Data' . ',' . $date;
+                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                        ->where('fbl_type', 'like', 'Update Payment Data%')
+                        ->count();
+
+                    // Buat log perubahan
+                    FastboatLog::create([
+                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                        'fbl_type' => 'Update Payment Data ' . ($count + 1),
+                        'fbl_data_before' => 'payment_method :' . $paymentMethodBefore . '| transaction_id: ' . $transactionIdBefore,
+                        'fbl_data_after' => 'payment_method: ' . $paymentMethodAfter . '| transaction_id: ' . $transactionIdAfter,
+                    ]);
+                    $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Payment Data' . ',' . $date;
+                    $bookingDataEdit->save();
+
+                    // Commit Transaksi
+                    DB::commit();
+
+                    // Berikan notifikasi setelah commit
+                    toast('Data booking has been updated successfully!', 'success');
+                    return redirect()->route('data.view');
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
+                }
                 break;
         }
     }
