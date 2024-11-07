@@ -1886,12 +1886,12 @@ class BookingDataController extends Controller
                     'arrival_port' => $item->trip->arrival->prt_name_en,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
-                    'price_adult' => number_format($priceAdult, 0, ',', '.'),
-                    'price_child' => number_format($priceChild, 0, ',', '.'),
-                    'price_adult_nett' => number_format($item->fba_adult_nett ?? 0, 0, ',', '.'),
-                    'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
-                    'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
-                    'total_price' => number_format($totalPrice, 0, ',', '.'),
+                    'price_adult' => $priceAdult,
+                    'price_child' => $priceChild,
+                    'price_adult_nett' => $item->fba_adult_nett,
+                    'price_child_nett' => $item->fba_child_nett,
+                    'price_discount' => $item->fba_discount,
+                    'total_price' => $totalPrice,
                     'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
                     'currency_code' => $currency->cy_code,
                 ];
@@ -2040,12 +2040,12 @@ class BookingDataController extends Controller
                     'arrival_port' => $item->trip->arrival->prt_code,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
-                    'price_adult' => number_format($priceAdultReturn, 0, ',', '.'),
-                    'price_child' => number_format($priceChildReturn, 0, ',', '.'),
-                    'price_adult_nett' => number_format($item->fba_adult_nett ?? 0, 0, ',', '.'),
-                    'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
-                    'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
-                    'total_price' => number_format($totalPrice, 0, ',', '.'),
+                    'price_adult' => $priceAdultReturn,
+                    'price_child' => $priceChildReturn,
+                    'price_adult_nett' => $item->fba_adult_nett,
+                    'price_child_nett' => $item->fba_child_nett,
+                    'price_discount' => $item->fba_discount,
+                    'total_price' => $totalPrice,
                     'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
                     'currency_code' => $currency->cy_code,
                 ];
@@ -2177,6 +2177,7 @@ class BookingDataController extends Controller
                     'return_fbo_end_total' => $request->return_fbo_end_total,
                     'return_fbo_end_total_currency' => $request->return_fbo_end_total_currency,
                 ];
+                dd($data);
 
                 // Mengambil data sesudah
                 $fboId = FastboatAvailability::find($request->availability_id);
@@ -2187,9 +2188,6 @@ class BookingDataController extends Controller
 
                 // Update data
                 $trip = BookingData::find($bookingDataEdit->fbo_id);
-
-
-                dd('company:' . $companyAfter . '| trip:' . $tripDepartureAfter . '-' . $tripArrivalAfter . '| total_price: ' . $totalPriceAfter);
 
                 $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                     ->where('fbl_type', 'like', 'Update trip%')
