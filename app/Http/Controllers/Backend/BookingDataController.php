@@ -2164,12 +2164,14 @@ class BookingDataController extends Controller
                 $totalPriceBefore = $bookingDataEdit->fbo_end_total;
 
                 $data = [
+                    'depart' => $request->depart,
                     'fbo_id' => $request->availability_id,
                     'fbo_trip_date' => $request->fbo_trip_date,
                     'price_adult' => $request->price_adult,
                     'price_child' => $request->price_child,
                     'fbo_end_total' => $request->fbo_end_total,
                     'fbo_end_total_currency' => $request->fbo_end_total_currency,
+                    'return' => $request->return,
                     'fbo_trip_date_return' => $request->fbo_trip_date_return,
                     'fbo_id_return' => $request->availability_id_return,
                     'return_price_adult' => $request->return_price_adult,
