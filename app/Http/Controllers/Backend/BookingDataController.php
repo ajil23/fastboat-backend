@@ -1656,19 +1656,19 @@ class BookingDataController extends Controller
 
     public function edit(Request $request, $fbo_order_id)
     {
-        $orderId = BookingData::where('fbo_order_id',$fbo_order_id )->first();
+        $orderId = BookingData::where('fbo_order_id', $fbo_order_id)->first();
 
         if ($orderId) {
             // Mengecek apakah fbo_booking_id berakhiran 'X' atau 'Y'
             $lastCharacter = substr($orderId->fbo_booking_id, -1);
-    
+
             if ($lastCharacter === 'Y') {
                 $direction = 'roundtrip';
             } elseif ($lastCharacter === 'X') {
                 $direction = 'oneway';
-            } 
+            }
         }
-        
+
         // Mengambil data booking
         $bookingDataEdit = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($orderId->fbo_id);
 
@@ -2226,12 +2226,49 @@ class BookingDataController extends Controller
                     // Mengambil data sesudah
                     $passengerAfter = $request->fbo_passenger;
 
-                    // Update data
-                    $passenger = BookingData::find($bookingDataEdit->fbo_id);
-                    $passenger->update([
-                        'fbo_passenger' => $passengerAfter,
-                    ]);
+                    // Mengecek direction dan menentukan apakah akan update 1 atau 2 data
+                    $orderId = $bookingDataEdit->fbo_order_id;
+                    $orderData = BookingData::where('fbo_order_id', $orderId)->first();
+                    $lastCharacter = substr($orderData->fbo_booking_id, -1); // Mengambil karakter terakhir dari booking ID
 
+                    if ($lastCharacter === 'X') {
+                        $direction = 'oneway';
+                    } elseif ($lastCharacter === 'Y' || $lastCharacter === 'Z') {
+                        $direction = 'roundtrip';
+                    } else {
+                        // Atur default jika tidak terdeteksi
+                        $direction = 'oneway';
+                    }
+
+                    // Update data untuk passenger, menyesuaikan dengan direction
+                    if ($direction === 'oneway') {
+                        // Update hanya untuk satu data (BookingData pertama)
+                        $passenger = $bookingDataEdit;
+                        $passenger->update([
+                            'fbo_passenger' => $passengerAfter,
+                        ]);
+                    } elseif ($direction === 'roundtrip') {
+                        // Update dua data booking (untuk booking yang berakhiran Y dan Z)
+                        $passenger1 = BookingData::where('fbo_order_id', $orderId)
+                            ->where('fbo_booking_id', 'like', '%Y')->first(); // Booking ID yang berakhiran 'Y'
+
+                        $passenger2 = BookingData::where('fbo_order_id', $orderId)
+                            ->where('fbo_booking_id', 'like', '%Z')->first(); // Booking ID yang berakhiran 'Z'
+
+                        if ($passenger1) {
+                            $passenger1->update([
+                                'fbo_passenger' => $passengerAfter,
+                            ]);
+                        }
+
+                        if ($passenger2) {
+                            $passenger2->update([
+                                'fbo_passenger' => $passengerAfter,
+                            ]);
+                        }
+                    }
+
+                    // Hitung jumlah log yang sudah ada
                     $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                         ->where('fbl_type', 'like', 'Update Passenger Data%')
                         ->count();
@@ -2243,6 +2280,8 @@ class BookingDataController extends Controller
                         'fbl_data_before' => $passengerBefore,
                         'fbl_data_after' => $passengerAfter,
                     ]);
+
+                    // Update log di bookingDataEdit
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Passenger Data' . ',' . $date;
                     $bookingDataEdit->save();
 
@@ -2276,17 +2315,64 @@ class BookingDataController extends Controller
                     $specificDropoffAfter = $request->fbo_specific_dropoff;
                     $contactDropoffAfter = $request->fbo_contact_dropoff;
 
-                    // Update data
-                    $shuttle = BookingData::find($bookingDataEdit->fbo_id);
-                    $shuttle->update([
-                        'fbo_pickup' => $pickupAfter,
-                        'fbo_specific_pickup' => $specificPickupAfter,
-                        'fbo_contact_pickup' => $contactPickupAfter,
-                        'fbo_dropoff' => $dropoffAfter,
-                        'fbo_specific_dropoff' => $specificDropoffAfter,
-                        'fbo_contact_dropoff' => $contactDropoffAfter,
-                    ]);
+                    // Mengecek direction dan menentukan apakah akan update 1 atau 2 data
+                    $orderId = $bookingDataEdit->fbo_order_id;
+                    $orderData = BookingData::where('fbo_order_id', $orderId)->first();
+                    $lastCharacter = substr($orderData->fbo_booking_id, -1); // Mengambil karakter terakhir dari booking ID
 
+                    if ($lastCharacter === 'X') {
+                        $direction = 'oneway';
+                    } elseif ($lastCharacter === 'Y' || $lastCharacter === 'Z') {
+                        $direction = 'roundtrip';
+                    } else {
+                        // Atur default jika tidak terdeteksi
+                        $direction = 'oneway';
+                    }
+
+                    // Update data untuk shuttle, menyesuaikan dengan direction
+                    if ($direction === 'oneway') {
+                        // Update hanya untuk satu data (BookingData pertama)
+                        $shuttle = $bookingDataEdit;
+                        $shuttle->update([
+                            'fbo_pickup' => $pickupAfter,
+                            'fbo_specific_pickup' => $specificPickupAfter,
+                            'fbo_contact_pickup' => $contactPickupAfter,
+                            'fbo_dropoff' => $dropoffAfter,
+                            'fbo_specific_dropoff' => $specificDropoffAfter,
+                            'fbo_contact_dropoff' => $contactDropoffAfter,
+                        ]);
+                    } elseif ($direction === 'roundtrip') {
+                        // Update dua data booking (untuk booking yang berakhiran Y dan Z)
+                        $shuttle1 = BookingData::where('fbo_order_id', $orderId)
+                            ->where('fbo_booking_id', 'like', '%Y')->first(); // Booking ID yang berakhiran 'Y'
+
+                        $shuttle2 = BookingData::where('fbo_order_id', $orderId)
+                            ->where('fbo_booking_id', 'like', '%Z')->first(); // Booking ID yang berakhiran 'Z'
+
+                        if ($shuttle1) {
+                            $shuttle1->update([
+                                'fbo_pickup' => $pickupAfter,
+                                'fbo_specific_pickup' => $specificPickupAfter,
+                                'fbo_contact_pickup' => $contactPickupAfter,
+                                'fbo_dropoff' => $dropoffAfter,
+                                'fbo_specific_dropoff' => $specificDropoffAfter,
+                                'fbo_contact_dropoff' => $contactDropoffAfter,
+                            ]);
+                        }
+
+                        if ($shuttle2) {
+                            $shuttle2->update([
+                                'fbo_pickup' => $pickupAfter,
+                                'fbo_specific_pickup' => $specificPickupAfter,
+                                'fbo_contact_pickup' => $contactPickupAfter,
+                                'fbo_dropoff' => $dropoffAfter,
+                                'fbo_specific_dropoff' => $specificDropoffAfter,
+                                'fbo_contact_dropoff' => $contactDropoffAfter,
+                            ]);
+                        }
+                    }
+
+                    // Hitung jumlah log yang sudah ada
                     $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                         ->where('fbl_type', 'like', 'Update Shuttle Data%')
                         ->count();
@@ -2298,6 +2384,8 @@ class BookingDataController extends Controller
                         'fbl_data_before' => 'pickup_poin: ' . $pickupBefore . '| specific_pickup: ' . $specificPickupBefore . '| contact_pickup:' . $contactPickupBefore . '| dropoff_poin: ' . $dropoffBefore . '| specific_dropoff: ' . $specificDropoffBefore . '| contact_dropoff:' . $contactDropoffBefore,
                         'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
                     ]);
+
+                    // Update log di bookingDataEdit
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
                     $bookingDataEdit->save();
 
@@ -2315,10 +2403,11 @@ class BookingDataController extends Controller
             case 'customer':
                 DB::beginTransaction();
                 try {
+                    // Mengambil fbo_order_id untuk mendapatkan data booking
                     $orderId = $bookingDataEdit->fbo_order_id;
                     $contact = Contact::where('ctc_id', $orderId)->first();
 
-                    // Mengambil data sebelumnya
+                    // Mengambil data sebelum update
                     $nameBefore = $contact->ctc_name;
                     $emailBefore = $contact->ctc_email;
                     $phoneBefore = $contact->ctc_phone;
@@ -2332,14 +2421,59 @@ class BookingDataController extends Controller
                     $nationalityAfter = $request->ctc_nationality;
                     $noteAfter = $request->ctc_note;
 
-                    // Update data customer
-                    $contact->update([
-                        'ctc_name' => $nameAfter,
-                        'ctc_email' => $emailAfter,
-                        'ctc_phone' => $phoneAfter,
-                        'ctc_nationality' => $nationalityAfter,
-                        'ctc_note' => $noteAfter,
-                    ]);
+                    // Menentukan direction (oneway atau roundtrip) berdasarkan booking ID
+                    $idOrder = $bookingDataEdit->fbo_order_id;
+                    $orderId = BookingData::where('fbo_order_id', $idOrder)->first();
+                    if ($orderId) {
+                        $lastCharacter = substr($orderId->fbo_booking_id, -1);
+                        if ($lastCharacter === 'Y') {
+                            $direction = 'roundtrip';
+                        } elseif ($lastCharacter === 'X') {
+                            $direction = 'oneway';
+                        }
+                    }
+
+                    // Proses update sesuai dengan direction
+                    if ($direction === 'oneway') {
+                        // Update hanya 1 data customer (oneway)
+                        $contact->update([
+                            'ctc_name' => $nameAfter,
+                            'ctc_email' => $emailAfter,
+                            'ctc_phone' => $phoneAfter,
+                            'ctc_nationality' => $nationalityAfter,
+                            'ctc_note' => $noteAfter,
+                        ]);
+                    } elseif ($direction === 'roundtrip') {
+                        // Update customer pertama (berakhiran Y)
+                        $contact->update([
+                            'ctc_name' => $nameAfter,
+                            'ctc_email' => $emailAfter,
+                            'ctc_phone' => $phoneAfter,
+                            'ctc_nationality' => $nationalityAfter,
+                            'ctc_note' => $noteAfter,
+                        ]);
+
+                        // Mengambil data booking kedua (berakhiran Z)
+                        $contactSecond = Contact::whereHas('bookingData', function ($query) use ($idOrder) {
+                            // Mencari booking yang terkait dengan order id dan booking_id yang berakhiran 'Z'
+                            $query->where('fbo_order_id', $idOrder) // memastikan order ID yang cocok
+                                ->where('fbo_booking_id', 'like', '%Z'); // booking ID berakhiran 'Z'
+                        })
+                            ->where('ctc_id', '!=', $contact->ctc_id) // memastikan bukan customer pertama
+                            ->first();
+
+
+                        if ($contactSecond) {
+                            // Update customer kedua (berakhiran Z)
+                            $contactSecond->update([
+                                'ctc_name' => $nameAfter,
+                                'ctc_email' => $emailAfter,
+                                'ctc_phone' => $phoneAfter,
+                                'ctc_nationality' => $nationalityAfter,
+                                'ctc_note' => $noteAfter,
+                            ]);
+                        }
+                    }
 
                     // Hitung jumlah log yang sudah ada
                     $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
@@ -2372,13 +2506,14 @@ class BookingDataController extends Controller
             case 'payment':
                 DB::beginTransaction();
                 try {
-                    // Mengambil data sebelum
+                    // Mengambil data sebelumnya
                     $paymentMethodBefore = $bookingDataEdit->fbo_payment_method;
                     $transactionIdBefore = $bookingDataEdit->fbo_transaction_id;
 
                     // Mengambil data sesudah
                     $paymentMethodAfter = $request->fbo_payment_method;
 
+                    // Menentukan transaction_id berdasarkan payment_method
                     if ($paymentMethodAfter == 'pak_anang') {
                         $fbo_transaction_id = 'received by Mr. Anang';
                     } elseif ($paymentMethodAfter == 'pay_on_port') {
@@ -2389,29 +2524,65 @@ class BookingDataController extends Controller
                         $fbo_transaction_id = $request->fbo_transaction_id;
                     }
 
-                    $transactionIdAfter = $fbo_transaction_id; 
+                    $transactionIdAfter = $fbo_transaction_id;
 
-                    // Update data
-                    $payment = BookingData::find($bookingDataEdit->fbo_id);
-                    $payment->fbo_payment_method = $paymentMethodAfter;
-                    $payment->fbo_transaction_id = $transactionIdAfter;
-                    $payment->update();
+                    // Menentukan apakah booking tersebut roundtrip atau oneway
+                    $idOrder = $bookingDataEdit->fbo_order_id;
+                    $orderId = BookingData::where('fbo_order_id', $idOrder)->first();
+                    if ($orderId) {
+                        $lastCharacter = substr($orderId->fbo_booking_id, -1);
+                        if ($lastCharacter === 'Y') {
+                            $direction = 'roundtrip';
+                        } elseif ($lastCharacter === 'X') {
+                            $direction = 'oneway';
+                        }
+                    }
 
+                    // Proses update sesuai dengan direction
+                    if ($direction === 'oneway') {
+                        // Update hanya 1 data booking (oneway) berakhiran X
+                        $payment = BookingData::find($bookingDataEdit->fbo_id);
+                        $payment->fbo_payment_method = $paymentMethodAfter;
+                        $payment->fbo_transaction_id = $transactionIdAfter;
+                        $payment->update();
+                    } elseif ($direction === 'roundtrip') {
+                        // Update booking pertama (berakhiran Y)
+                        $bookingDataEdit->fbo_payment_method = $paymentMethodAfter;
+                        $bookingDataEdit->fbo_transaction_id = $transactionIdAfter;
+                        $bookingDataEdit->update();
+
+                        // Mengambil data booking kedua (berakhiran Z)
+                        $bookingIdSecond = BookingData::where('fbo_order_id', $idOrder)
+                            ->where('fbo_booking_id', 'like', substr($bookingDataEdit->fbo_booking_id, 0, -1) . '%')
+                            ->where('fbo_booking_id', '!=', $bookingDataEdit->fbo_booking_id)
+                            ->whereRaw('RIGHT(fbo_booking_id, 1) = ?', ['Z'])
+                            ->first();
+
+                        if ($bookingIdSecond) {
+                            // Update booking kedua (berakhiran Z)
+                            $bookingIdSecond->fbo_payment_method = $paymentMethodAfter;
+                            $bookingIdSecond->fbo_transaction_id = $transactionIdAfter;
+                            $bookingIdSecond->update();
+                        }
+                    }
+
+                    // Buat log perubahan
                     $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                         ->where('fbl_type', 'like', 'Update Payment Data%')
                         ->count();
 
-                    // Buat log perubahan
                     FastboatLog::create([
                         'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
                         'fbl_type' => 'Update Payment Data ' . ($count + 1),
                         'fbl_data_before' => 'payment_method :' . $paymentMethodBefore . '| transaction_id: ' . $transactionIdBefore,
                         'fbl_data_after' => 'payment_method: ' . $paymentMethodAfter . '| transaction_id: ' . $transactionIdAfter,
                     ]);
+
+                    // Menyimpan log booking
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Payment Data' . ',' . $date;
                     $bookingDataEdit->save();
 
-                    // Commit Transaksi
+                    // Commit transaksi
                     DB::commit();
 
                     // Berikan notifikasi setelah commit

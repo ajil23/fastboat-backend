@@ -16,4 +16,9 @@ class Contact extends Model
     {
         return $this->belongsTo(MasterNationality::class, 'ctc_nationality', 'nas_id');
     }
+
+    public function bookingData()
+    {
+        return $this->hasMany(BookingData::class, 'fbo_order_id', 'ctc_id');
+    }
 }
