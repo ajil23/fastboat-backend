@@ -126,7 +126,7 @@
                                 <div class="p-1">
                                     <h5 class="font-size-16 mb-1 d-flex align-items-center justify-content-center"
                                         style="font-size: 14.8px; font-family: 'IBM Plex Sans', sans-serif;">
-                                        <input type="checkbox" id="tripDepartCheckbox" class="me-2">
+                                        <input type="checkbox" id="tripDepartCheckbox" class="me-2" value="active" name="depart">
                                         <label for="tripDepartCheckbox" class="mb-0 text-dark">Trip Depart</label>
                                     </h5>
                                 </div>
@@ -296,7 +296,7 @@
                                 <div class="p-1">
                                     <h5 class="font-size-16 mb-1 d-flex align-items-center justify-content-center"
                                         style="font-size: 14.8px; font-family: 'IBM Plex Sans', sans-serif;">
-                                        <input type="checkbox" id="tripReturnCheckbox" class="me-2">
+                                        <input type="checkbox" id="tripReturnCheckbox" class="me-2" value="active" name="return">
                                         <label for="tripReturnCheckbox" class="mb-0 text-dark">Trip Return</label>
                                     </h5>
                                 </div>
