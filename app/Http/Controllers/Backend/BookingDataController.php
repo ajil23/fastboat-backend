@@ -1654,10 +1654,23 @@ class BookingDataController extends Controller
         }
     }
 
-    public function edit(Request $request, $fbo_id)
+    public function edit(Request $request, $fbo_order_id)
     {
+        $orderId = BookingData::where('fbo_order_id',$fbo_order_id )->first();
+
+        if ($orderId) {
+            // Mengecek apakah fbo_booking_id berakhiran 'X' atau 'Y'
+            $lastCharacter = substr($orderId->fbo_booking_id, -1);
+    
+            if ($lastCharacter === 'Y') {
+                $direction = 'roundtrip';
+            } elseif ($lastCharacter === 'X') {
+                $direction = 'oneway';
+            } 
+        }
+        
         // Mengambil data booking
-        $bookingDataEdit = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($fbo_id);
+        $bookingDataEdit = BookingData::with(['trip.fastboat', 'trip.fastboat.company', 'trip.departure', 'trip.arrival', 'contact', 'availability'])->findOrFail($orderId->fbo_id);
 
         // Mengambil data ketersediaan fastboat
         $availabilityQuery = FastboatAvailability::whereHas('trip', function ($query) use ($bookingDataEdit) {
@@ -1824,7 +1837,7 @@ class BookingDataController extends Controller
         // Data tambahan untuk nationality dan payment
         $nationality = MasterNationality::all();
         $payment = MasterPaymentMethod::all();
-        return view('booking.data.edit', compact('data', 'nationality', 'payment', 'availability'));
+        return view('booking.data.edit', compact('data', 'nationality', 'payment', 'availability', 'direction'));
     }
 
     public function searchTrip(Request $request)
