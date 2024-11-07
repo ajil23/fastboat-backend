@@ -240,25 +240,20 @@
                                                     <div class="mb-3">
                                                         <label class="form-label" for="price_adult">Adult Publish
                                                             (IDR)</label>
-                                                        <input value="" class="form-control" id="price_adult"
-                                                            name="price_adult" oninput="calculateTotal()">
+                                                        <input value="" class="form-control" id="price_adult_display" oninput="calculateTotal()">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="price_child">Child Publish
                                                             (IDR)</label>
-                                                        <input value="" class="form-control" id="price_child"
-                                                            name="price_child" oninput="calculateTotal()">
+                                                        <input value="" class="form-control" id="price_child_display" oninput="calculateTotal()">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="fbo_end_total">End Total
-                                                            (IDR)</label>
-                                                        <input value="" class="form-control" id="fbo_end_total"
-                                                            name="fbo_end_total" style="background-color:lightgray"
-                                                            readonly>
+                                                        <label class="form-label" for="fbo_end_total">End Total (IDR)</label>
+                                                        <input value="" class="form-control" id="fbo_end_total_display" style="background-color:lightgray" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
@@ -272,6 +267,22 @@
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <input type="hidden" id="availability_id" name="availability_id" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="" class="form-control" id="price_adult"
+                                                            name="price_adult">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="" class="form-control" id="price_child" name="price_child">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="" class="form-control" id="fbo_end_total" name="fbo_end_total">
                                                     </div>
                                                 </div>
                                             </div>
@@ -397,39 +408,47 @@
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="return_price_adult">Adult Publish (IDR)</label>
-                                                        <input type="text" class="form-control" id="return_price_adult" name="return_price_adult" oninput="calculateReturnTotal()">
+                                                        <input type="text" class="form-control" id="price_adult_return_display" oninput="calculateReturnTotal()">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="return_price_child">Child Publish (IDR)</label>
-                                                        <input type="text" class="form-control" id="return_price_child" name="return_price_child" oninput="calculateReturnTotal()">
+                                                        <input type="text" class="form-control" id="price_child_return_display" oninput="calculateReturnTotal()">
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="return_fbo_end_total">End Total
                                                             (IDR)</label>
-                                                        <input type="text" class="form-control"
-                                                            id="return_fbo_end_total" name="return_fbo_end_total"
-                                                            style="background-color:lightgray" readonly>
+                                                        <input type="text" class="form-control" id="fbo_end_total_return_display" style="background-color:lightgray" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
-                                                        <label class="form-label"
-                                                            for="return_fbo_end_total_currency">End
-                                                            Total Currency (<span
-                                                                id="currencyCodeReturn"></span>)</label>
-                                                        <input type="text" class="form-control"
-                                                            id="return_fbo_end_total_currency"
-                                                            name="return_fbo_end_total_currency"
-                                                            style="background-color:lightgray" readonly>
+                                                        <label class="form-label" for="return_fbo_end_total_currency">End Total Currency (<span id="currencyCodeReturn"></span>)</label>
+                                                        <input type="text" class="form-control" id="return_fbo_end_total_currency" name="return_fbo_end_total_currency" style="background-color:lightgray" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <input type="hidden" id="availability_id_return" name="availability_id_return" value="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="" class="form-control" id="return_price_adult"
+                                                            name="return_price_adult">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="" class="form-control" id="return_price_child" name="return_price_child">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="" class="form-control" id="return_fbo_end_total" name="return_fbo_end_total">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1098,7 +1117,7 @@
             } else {
                 $('#searchForm').hide();
                 $('#searchForm').find('input, select').prop('disabled', true).val('');
-                
+
                 // Sembunyikan dan kosongkan hasil pencarian dan detail
                 resetSearchResults();
                 hideTripDetails();
@@ -1140,7 +1159,7 @@
                                             <div class="mt-3 pt-1">
                                                 <div class="d-flex justify-content-between">
                                                     <p style="max-width: 70%; word-wrap: break-word;">${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
-                                                    <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
+                                                    <p class="text-danger fw-bold">IDR ${formatToThousands(item.price_adult)}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -1170,17 +1189,28 @@
             }
         }
 
+        // Fungsi untuk menambahkan format ribuan
+        function formatToThousands(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Function untuk menampilkan detail trip dan memformat harga
         function showTripDetails(data, selected) {
             $('#booking-data-table tbody').html(`
                 <tr>
-                    <td><center>${data.price_adult}</center></td>
-                    <td><center>${data.price_child}</center></td>
-                    <td><center>${data.price_adult_nett}</center></td>
-                    <td><center>${data.price_child_nett}</center></td>
-                    <td><center>${data.price_discount}</center></td>
+                    <td><center>${formatToThousands(data.price_adult)}</center></td>
+                    <td><center>${formatToThousands(data.price_child)}</center></td>
+                    <td><center>${formatToThousands(data.price_adult_nett)}</center></td>
+                    <td><center>${formatToThousands(data.price_child_nett)}</center></td>
+                    <td><center>${formatToThousands(data.price_discount)}</center></td>
                 </tr>
             `);
 
+            $('#price_adult_display').val(`${formatToThousands(data.price_adult)}`);
+            $('#price_child_display').val(`${formatToThousands(data.price_child)}`);
+            $('#fbo_end_total_display').val(`${formatToThousands(data.total_price)}`);
+
+            // Tetap menyimpan nilai asli tanpa format ribuan
             $('#price_adult').val(data.price_adult);
             $('#price_child').val(data.price_child);
             $('#fbo_end_total').val(data.total_price);
@@ -1316,6 +1346,10 @@
             }
         });
 
+        function formatToThousands(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
         // Function to display search results on parameter changes
         $('#fbo_trip_date_return, #fbo_departure_port_return, #fbo_arrival_port_return, #fbo_departure_time_return')
             .on('change', triggerReturnSearch);
@@ -1365,7 +1399,7 @@
                                 <div class="mt-3 pt-1">
                                     <div class="d-flex justify-content-between">
                                         <p>${item.departure_port} (${item.departure_time}) - ${item.arrival_port} (${item.arrival_time})</p>
-                                        <p class="text-danger fw-bold">IDR ${item.price_adult}</p>
+                                        <p class="text-danger fw-bold">IDR ${formatToThousands(item.price_adult)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -1387,13 +1421,18 @@
         function showReturnTripDetails(data) {
             $('#return-booking-data-table tbody').html(`
                 <tr>
-                    <td><center>${data.price_adult}</center></td>
-                    <td><center>${data.price_child}</center></td>
-                    <td><center>${data.price_adult_nett}</center></td>
-                    <td><center>${data.price_child_nett}</center></td>
+                    <td><center>IDR ${formatToThousands(data.price_adult)}</center></td>
+                    <td><center>IDR ${formatToThousands(data.price_child)}</center></td>
+                    <td><center>IDR ${formatToThousands(data.price_adult_nett)}</center></td>
+                    <td><center>IDR ${formatToThousands(data.price_child_nett)}</center></td>
                     <td><center>0</center></td>
                 </tr>
             `);
+
+            $('#price_adult_return_display').val(`${formatToThousands(data.price_adult)}`);
+            $('#price_child_return_display').val(`${formatToThousands(data.price_child)}`);
+            $('#fbo_end_total_return_display').val(`${formatToThousands(data.total_price)}`);
+
             $('#return_price_adult').val(data.price_adult);
             $('#return_price_child').val(data.price_child);
             $('#return_fbo_end_total').val(data.total_price);
