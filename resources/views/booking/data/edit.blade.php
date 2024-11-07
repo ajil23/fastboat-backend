@@ -291,6 +291,7 @@
                                 </div>
                             </div>
 
+                            @if(isset($direction) && $direction === 'roundtrip')
                             <!-- search trip return -->
                             <div class="card custom-border-color">
                                 <div class="p-1">
@@ -456,6 +457,8 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
+
                             <div class="row mb-4">
                                 <div class="col text-end">
                                     <button type="button" onclick="history.back()" class="btn btn-outline-dark"><i
