@@ -392,7 +392,7 @@ class BookingDataController extends Controller
             $bookingDataDepart->fbo_arrival_port = $trip->trip->arrival->prt_id;
             $bookingDataDepart->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
             $checkin = FastboatCheckinPoint::where('fcp_company', $bookingDataDepart->fbo_company)->first();
-            $bookingDataDepart->fbo_checkin_point = $checkin->fcp_address;
+            $bookingDataDepart->fbo_checkin_point = $checkin->fcp_id;
             $bookingDataDepart->fbo_mail_admin = "";
             $bookingDataDepart->fbo_mail_client = "";
             $bookingDataDepart->fbo_pickup = $request->fbo_pickup;
@@ -492,7 +492,7 @@ class BookingDataController extends Controller
                 $bookingDataReturn->fbo_arrival_port = $trip->trip->arrival->prt_id;
                 $bookingDataReturn->fbo_arrival_time = $trip->fba_arrival_time ?? $trip->trip->fbt_arrival_time;
                 $checkin = FastboatCheckinPoint::where('fcp_company', $bookingDataDepart->fbo_company)->first();
-                $bookingDataReturn->fbo_checkin_point = $checkin->fcp_address;
+                $bookingDataReturn->fbo_checkin_point = $checkin->fcp_id;
                 $bookingDataReturn->fbo_mail_admin = "";
                 $bookingDataReturn->fbo_mail_client = "";
                 $bookingDataReturn->fbo_pickup = $request->fbo_pickup_return;
@@ -1886,12 +1886,12 @@ class BookingDataController extends Controller
                     'arrival_port' => $item->trip->arrival->prt_name_en,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
-                    'price_adult' => $priceAdult,
-                    'price_child' => $priceChild,
-                    'price_adult_nett' => $item->fba_adult_nett,
-                    'price_child_nett' => $item->fba_child_nett,
-                    'price_discount' => $item->fba_discount,
-                    'total_price' => $totalPrice,
+                    'price_adult' => number_format($priceAdult, 0, ',', '.'),
+                    'price_child' => number_format($priceChild, 0, ',', '.'),
+                    'price_adult_nett' => number_format($item->fba_adult_nett ?? 0, 0, ',', '.'),
+                    'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
+                    'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
+                    'total_price' => number_format($totalPrice, 0, ',', '.'),
                     'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
                     'currency_code' => $currency->cy_code,
                 ];
@@ -2040,12 +2040,12 @@ class BookingDataController extends Controller
                     'arrival_port' => $item->trip->arrival->prt_code,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
-                    'price_adult' => $priceAdultReturn,
-                    'price_child' => $priceChildReturn,
-                    'price_adult_nett' => $item->fba_adult_nett,
-                    'price_child_nett' => $item->fba_child_nett,
-                    'price_discount' => $item->fba_discount,
-                    'total_price' => $totalPrice,
+                    'price_adult' => number_format($priceAdultReturn, 0, ',', '.'),
+                    'price_child' => number_format($priceChildReturn, 0, ',', '.'),
+                    'price_adult_nett' => number_format($item->fba_adult_nett ?? 0, 0, ',', '.'),
+                    'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
+                    'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
+                    'total_price' => number_format($totalPrice, 0, ',', '.'),
                     'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
                     'currency_code' => $currency->cy_code,
                 ];
@@ -2157,21 +2157,15 @@ class BookingDataController extends Controller
 
         switch ($activeTab) {
             case 'trip':
-                // Mengambil data sebelum 
-                $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
-                $tripDepartureBefore = $bookingDataEdit->trip->departure->prt_name_en;
-                $tripArrivalBefore = $bookingDataEdit->trip->arrival->prt_name_en;
-                $totalPriceBefore = $bookingDataEdit->fbo_end_total;
+                // dd($request);
 
                 $data = [
-                    'depart' => $request->depart,
                     'fbo_id' => $request->availability_id,
                     'fbo_trip_date' => $request->fbo_trip_date,
                     'price_adult' => $request->price_adult,
                     'price_child' => $request->price_child,
                     'fbo_end_total' => $request->fbo_end_total,
                     'fbo_end_total_currency' => $request->fbo_end_total_currency,
-                    'return' => $request->return,
                     'fbo_trip_date_return' => $request->fbo_trip_date_return,
                     'fbo_id_return' => $request->availability_id_return,
                     'return_price_adult' => $request->return_price_adult,
@@ -2179,7 +2173,12 @@ class BookingDataController extends Controller
                     'return_fbo_end_total' => $request->return_fbo_end_total,
                     'return_fbo_end_total_currency' => $request->return_fbo_end_total_currency,
                 ];
-                dd($data);
+
+                // Mengambil data sebelum 
+                $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
+                $tripDepartureBefore = $bookingDataEdit->trip->departure->prt_name_en;
+                $tripArrivalBefore = $bookingDataEdit->trip->arrival->prt_name_en;
+                $totalPriceBefore = $bookingDataEdit->fbo_end_total;
 
                 // Mengambil data sesudah
                 $fboId = FastboatAvailability::find($request->availability_id);
@@ -2210,20 +2209,20 @@ class BookingDataController extends Controller
                 try {
                     // Mengambil data sebelum
                     $passengerBefore = $bookingDataEdit->fbo_passenger;
-    
+
                     // Mengambil data sesudah
                     $passengerAfter = $request->fbo_passenger;
-    
+
                     // Update data
                     $passenger = BookingData::find($bookingDataEdit->fbo_id);
                     $passenger->update([
                         'fbo_passenger' => $passengerAfter,
                     ]);
-    
+
                     $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                         ->where('fbl_type', 'like', 'Update Passenger Data%')
                         ->count();
-    
+
                     // Buat log perubahan
                     FastboatLog::create([
                         'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
@@ -2363,17 +2362,27 @@ class BookingDataController extends Controller
                     // Mengambil data sebelum
                     $paymentMethodBefore = $bookingDataEdit->fbo_payment_method;
                     $transactionIdBefore = $bookingDataEdit->fbo_transaction_id;
-                    
+
                     // Mengambil data sesudah
                     $paymentMethodAfter = $request->fbo_payment_method;
-                    $transactionIdAfter = $request->fbo_transaction_id;
-                    
+
+                    if ($paymentMethodAfter == 'pak_anang') {
+                        $fbo_transaction_id = 'received by Mr. Anang';
+                    } elseif ($paymentMethodAfter == 'pay_on_port') {
+                        $fbo_transaction_id = 'collect';
+                    } elseif ($paymentMethodAfter == 'cash') {
+                        $fbo_transaction_id = 'received by ' . $request->fbo_transaction_id;
+                    } else {
+                        $fbo_transaction_id = $request->fbo_transaction_id;
+                    }
+
+                    $transactionIdAfter = $fbo_transaction_id; 
+
                     // Update data
                     $payment = BookingData::find($bookingDataEdit->fbo_id);
-                    $payment->update([
-                        'fbo_payment_method' => $paymentMethodAfter,
-                        'fbo_transaction_id' => $transactionIdAfter,
-                    ]);
+                    $payment->fbo_payment_method = $paymentMethodAfter;
+                    $payment->fbo_transaction_id = $transactionIdAfter;
+                    $payment->update();
 
                     $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                         ->where('fbl_type', 'like', 'Update Payment Data%')
