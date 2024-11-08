@@ -259,8 +259,7 @@
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="fbo_end_total_currency">End Total Currency (<span id="currencyCode"></span>)</label>
-                                                        <input value="" class="form-control"
-                                                            id="fbo_end_total_currency" name="fbo_end_total_currency"
+                                                        <input value="" class="form-control" id="fbo_end_total_currency_display"
                                                             style="background-color:lightgray" readonly>
                                                     </div>
                                                 </div>
@@ -283,6 +282,11 @@
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <input type="hidden" value="" class="form-control" id="fbo_end_total" name="fbo_end_total">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="hidden" value="" class="form-control" id="fbo_end_total_currency" name="fbo_end_total_currency">
                                                     </div>
                                                 </div>
                                             </div>
@@ -428,7 +432,7 @@
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <label class="form-label" for="return_fbo_end_total_currency">End Total Currency (<span id="currencyCodeReturn"></span>)</label>
-                                                        <input type="text" class="form-control" id="return_fbo_end_total_currency" name="return_fbo_end_total_currency" style="background-color:lightgray" readonly>
+                                                        <input type="text" class="form-control" id="return_fbo_end_total_currency_display" style="background-color:lightgray" readonly>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-3">
@@ -450,6 +454,11 @@
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
                                                         <input type="hidden" value="" class="form-control" id="return_fbo_end_total" name="return_fbo_end_total">
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-3">
+                                                    <div class="mb-3">
+                                                        <input type="text" class="form-control" id="return_fbo_end_total_currency" name="return_fbo_end_total_currency">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1212,6 +1221,7 @@
             $('#price_adult_display').val(`${formatToThousands(data.price_adult)}`);
             $('#price_child_display').val(`${formatToThousands(data.price_child)}`);
             $('#fbo_end_total_display').val(`${formatToThousands(data.total_price)}`);
+            $('#fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
 
             // Tetap menyimpan nilai asli tanpa format ribuan
             $('#price_adult').val(data.price_adult);
@@ -1435,6 +1445,7 @@
             $('#price_adult_return_display').val(`${formatToThousands(data.price_adult)}`);
             $('#price_child_return_display').val(`${formatToThousands(data.price_child)}`);
             $('#fbo_end_total_return_display').val(`${formatToThousands(data.total_price)}`);
+            $('#return_fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
 
             $('#return_price_adult').val(data.price_adult);
             $('#return_price_child').val(data.price_child);
