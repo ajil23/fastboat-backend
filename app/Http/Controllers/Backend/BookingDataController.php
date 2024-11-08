@@ -2162,7 +2162,7 @@ class BookingDataController extends Controller
 
     public function update(Request $request, $fbo_id)
     {
-        dd($request);
+        // dd($request);
         $bookingDataEdit = BookingData::find($fbo_id);
 
         // Pengecekan data fbo_log
@@ -2214,7 +2214,7 @@ class BookingDataController extends Controller
                 $chekinPointBefore = $bookingDataEdit->fbo_checkin_point;
                 $updatedByBefore = $bookingDataEdit->fbo_updated_by;
                 // dd($adultBefore, $childBefore);
-                
+
                 // Mengambil data sesudah
                 $availabilityId = FastboatAvailability::find($request->availability_id);
                 $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
@@ -2228,12 +2228,21 @@ class BookingDataController extends Controller
                 $adultPublishAfter = $availabilityId->fba_adult_publish;
                 $childPublishAfter = $availabilityId->fba_child_publish;
                 $totalPublishAfter = ($adultPublishAfter * $adultBefore) + ($childPublishAfter * $childBefore);
-                $adultCurrencyAfter = round($adultPublishAfter / $kursBefore);
-                $childCurrencyAfter = round($childPublishAfter / $kursBefore);
+                $adultCurrencyAfter = round($request->price_adult / $kursBefore);
+                $childCurrencyAfter = round($request->price_child / $kursBefore);
                 $totalCurrencyAfter = ($adultCurrencyAfter * $adultBefore) + ($childCurrencyAfter * $childBefore);
                 $discountAfter = $availabilityId->fba_discount;
-                // $priceCutAfter = $availabilityId->fbo_price_cut;
-                // $discountTotalAfter = $discountAfter + $priceCutAfter;
+
+                // Menentukan price cut
+                if ($adultCurrencyAfter > $adultPublishAfter) {
+                    $priceCutAfter = ((($childPublishAfter - $request->price_child) * $childBefore));
+                } elseif ($childCurrencyAfter > $childPublishAfter) {
+                    $priceCutAfter = ((($adultPublishAfter - $request->price_adult) * $adultBefore));
+                } else {
+                    $priceCutAfter = ((($adultPublishAfter - $request->price_adult) * $adultBefore) + (($adultPublishAfter - $request->price_child) * $childBefore));
+                }
+
+                $discountTotalAfter = $discountAfter + $priceCutAfter;
                 $endTotalAfter = $request->fbo_end_total;
                 $endTotalCurrencyAfter = $request->fbo_end_total_currency;
                 $profitAfter = $endTotalAfter - $totalNettAfter;
@@ -2248,7 +2257,7 @@ class BookingDataController extends Controller
                 $chekinPointAfter = $checkin->fcp_id;
                 $updatedByAfter = Auth()->id();
 
-                dd( $after = [
+                dd($after = [
                     'availabilityIdAfter' => $availabilityIdAfter,
                     'tripIdAfter' => $tripIdAfter,
                     'tripDateAfter' => $tripDateAfter,
@@ -2259,11 +2268,11 @@ class BookingDataController extends Controller
                     'childPublishAfter' => $childPublishAfter,
                     'totalPublishAfter' => $totalPublishAfter,
                     'adultCurrencyAfter' => $adultCurrencyAfter,
-                    'childCurrencyAfter' => $childCurrencyAfter ,
+                    'childCurrencyAfter' => $childCurrencyAfter,
                     'totalCurrencyAfter' => $totalCurrencyAfter,
                     'discountAfter' => $availabilityId->fba_discount,
-                    'priceCutAfter' => $availabilityId->fbo_price_cut,
-                    'discountTotalAfter' => $availabilityId->fbo_discount_total,
+                    'priceCutAfter' => $priceCutAfter,
+                    'discountTotalAfter' => $discountTotalAfter,
                     'endTotalAfter' => $endTotalAfter,
                     'endTotalCurrencyAfter' => $endTotalCurrencyAfter,
                     'profitAfter' => $profitAfter,
