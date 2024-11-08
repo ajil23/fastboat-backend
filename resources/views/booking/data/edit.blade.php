@@ -1221,7 +1221,14 @@
             $('#price_adult_display').val(`${formatToThousands(data.price_adult)}`);
             $('#price_child_display').val(`${formatToThousands(data.price_child)}`);
             $('#fbo_end_total_display').val(`${formatToThousands(data.total_price)}`);
-            $('#fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
+            if (data.currency === 'IDR') {
+                // If currency is IDR, display as is
+                $('#fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
+            } else {
+                // If currency is not IDR, round up the value
+                let roundedValue = Math.ceil(data.total_price_currency);
+                $('#fbo_end_total_currency_display').val(`${formatToThousands(roundedValue)}`);
+            }
 
             // Tetap menyimpan nilai asli tanpa format ribuan
             $('#price_adult').val(data.price_adult);
@@ -1446,6 +1453,14 @@
             $('#price_child_return_display').val(`${formatToThousands(data.price_child)}`);
             $('#fbo_end_total_return_display').val(`${formatToThousands(data.total_price)}`);
             $('#return_fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
+            if (data.currency === 'IDR') {
+                // If currency is IDR, display as is
+                $('#return_fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
+            } else {
+                // If currency is not IDR, round up the value
+                let roundedValue = Math.ceil(data.total_price_currency);
+                $('#return_fbo_end_total_currency_display').val(`${formatToThousands(roundedValue)}`);
+            }
 
             $('#return_price_adult').val(data.price_adult);
             $('#return_price_child').val(data.price_child);
