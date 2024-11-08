@@ -289,6 +289,8 @@
                                                         <input type="hidden" value="" class="form-control" id="fbo_end_total_currency" name="fbo_end_total_currency">
                                                     </div>
                                                 </div>
+                                                <input type="hidden" id="adultCount" value="1" min="1">
+                                                <input type="hidden" id="childCount" value="0" min="0">
                                             </div>
                                         </div>
                                     </div>
@@ -461,6 +463,8 @@
                                                         <input type="hidden" class="form-control" id="return_fbo_end_total_currency" name="return_fbo_end_total_currency">
                                                     </div>
                                                 </div>
+                                                <input type="hidden" id="adultCountReturn" value="1" min="1">
+                                                <input type="hidden" id="childCountReturn" value="0" min="0">
                                             </div>
                                         </div>
                                     </div>
@@ -1180,6 +1184,13 @@
                             `);
                         });
 
+                        // Update adultCount and childCount
+                        $('#adultCount').val(response.adultCount);
+                        $('#childCount').val(response.childCount);
+
+                        // Re-calculate total with updated counts
+                        calculateTotal();
+
                         $('.trip-checkbox').on('change', function() {
                             $('.trip-checkbox').not(this).prop('checked', false);
 
@@ -1228,15 +1239,12 @@
             $('#fbo_end_total_display').val(formatToThousands(data.total_price));
             
             if (data.currency === 'IDR') {
-                // If currency is IDR, display as is
                 $('#fbo_end_total_currency_display').val(formatToThousands(data.total_price_currency));
             } else {
-                // If currency is not IDR, round up the value
                 let roundedValue = Math.ceil(data.total_price_currency);
                 $('#fbo_end_total_currency_display').val(formatToThousands(roundedValue));
             }
 
-            // Tetap menyimpan nilai asli tanpa format ribuan
             $('#price_adult').val(data.price_adult);
             $('#price_child').val(data.price_child);
             $('#fbo_end_total').val(data.total_price);
@@ -1251,19 +1259,19 @@
         }
 
         // Listener for automatic thousand separator formatting on input change
-        $('#price_adult_display, #price_child_display').on('input', function() {
-            let rawValue = removeThousandsSeparator($(this).val());
-            $(this).val(formatToThousands(rawValue));
+        $('#price_adult_display, #price_child_display, #adultCount, #childCount').on('input', function() {
             calculateTotal();
         });
 
-        // Function to calculate total
+        // Function to calculate total based on customer count and price per person
         function calculateTotal() {
             const priceAdult = removeThousandsSeparator($('#price_adult_display').val());
             const priceChild = removeThousandsSeparator($('#price_child_display').val());
-            
-            // Calculate total in IDR
-            const totalIDR = priceAdult + priceChild;
+            const adultCount = parseInt($('#adultCount').val()) || 1;
+            const childCount = parseInt($('#childCount').val()) || 0;
+
+            // Calculate total based on the number of adults and children
+            const totalIDR = (priceAdult * adultCount) + (priceChild * childCount);
             $('#fbo_end_total_display').val(formatToThousands(totalIDR));
             $('#fbo_end_total').val(totalIDR);
 
@@ -1271,7 +1279,7 @@
             const exchangeRate = 0.00007; // example rate
             const currencyCode = $('#currencyCode').text();
             let totalCurrency = totalIDR * exchangeRate;
-            
+
             if (currencyCode !== 'IDR') {
                 totalCurrency = Math.ceil(totalCurrency);
             }
@@ -1431,6 +1439,15 @@
                         fbo_id_return: fbo_id_return
                     },
                     success: function(response) {
+
+                        // Menangkap nilai adultCountReturn dan childCountReturn dari respons
+                        let adultCountReturn = response.adultCountReturn;
+                        let childCountReturn = response.childCountReturn;
+
+                        // Tampilkan nilai adultCountReturn dan childCountReturn di elemen HTML yang diinginkan
+                        $('#adultCountReturn').val(adultCountReturn);
+                        $('#childCountReturn').val(childCountReturn);
+
                         displayReturnResults(response.data, tripDateReturn);
                     },
                     error: function() {
@@ -1536,8 +1553,12 @@
             const priceAdultReturn = removeThousandsSeparator($('#price_adult_return_display').val());
             const priceChildReturn = removeThousandsSeparator($('#price_child_return_display').val());
 
-            // Calculate total in IDR
-            const totalIDRReturn = priceAdultReturn + priceChildReturn;
+            // Ambil jumlah customer
+            const adultCountReturn = parseInt($('#adultCountReturn').val()) || 0;
+            const childCountReturn = parseInt($('#childCountReturn').val()) || 0;
+
+            // Menghitung total dengan memperhitungkan jumlah customer
+            const totalIDRReturn = (priceAdultReturn * adultCountReturn) + (priceChildReturn * childCountReturn);
             $('#fbo_end_total_return_display').val(formatToThousands(totalIDRReturn));
             $('#return_fbo_end_total').val(totalIDRReturn);
 

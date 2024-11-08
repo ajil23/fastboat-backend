@@ -1935,7 +1935,9 @@ class BookingDataController extends Controller
 
             return response()->json([
                 'data' => $results,
-                'selected' => $selected
+                'selected' => $selected,
+                'adultCount' => $adultCount,
+                'childCount' => $childCount
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -2093,7 +2095,9 @@ class BookingDataController extends Controller
 
             return response()->json([
                 'data' => $results,
-                'selected' => $selected
+                'selected' => $selected,
+                'adultCountReturn' => $adultCountReturn,
+                'childCountReturn' => $childCountReturn,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
