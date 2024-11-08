@@ -458,7 +458,7 @@
                                                 </div>
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" id="return_fbo_end_total_currency" name="return_fbo_end_total_currency">
+                                                        <input type="hidden" class="form-control" id="return_fbo_end_total_currency" name="return_fbo_end_total_currency">
                                                     </div>
                                                 </div>
                                             </div>
@@ -1206,6 +1206,11 @@
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
+        // Fungsi untuk menghapus format ribuan sebelum melakukan operasi matematika
+        function removeThousandsSeparator(value) {
+            return parseFloat(value.replace(/\./g, '')) || 0;
+        }
+
         // Function untuk menampilkan detail trip dan memformat harga
         function showTripDetails(data, selected) {
             $('#booking-data-table tbody').html(`
@@ -1218,16 +1223,17 @@
                 </tr>
             `);
 
-            $('#price_adult_display').val(`${formatToThousands(data.price_adult)}`);
-            $('#price_child_display').val(`${formatToThousands(data.price_child)}`);
-            $('#fbo_end_total_display').val(`${formatToThousands(data.total_price)}`);
+            $('#price_adult_display').val(formatToThousands(data.price_adult));
+            $('#price_child_display').val(formatToThousands(data.price_child));
+            $('#fbo_end_total_display').val(formatToThousands(data.total_price));
+            
             if (data.currency === 'IDR') {
                 // If currency is IDR, display as is
-                $('#fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
+                $('#fbo_end_total_currency_display').val(formatToThousands(data.total_price_currency));
             } else {
                 // If currency is not IDR, round up the value
                 let roundedValue = Math.ceil(data.total_price_currency);
-                $('#fbo_end_total_currency_display').val(`${formatToThousands(roundedValue)}`);
+                $('#fbo_end_total_currency_display').val(formatToThousands(roundedValue));
             }
 
             // Tetap menyimpan nilai asli tanpa format ribuan
@@ -1243,6 +1249,42 @@
 
             $('.detail-trip').show();
         }
+
+        // Listener for automatic thousand separator formatting on input change
+        $('#price_adult_display, #price_child_display').on('input', function() {
+            let rawValue = removeThousandsSeparator($(this).val());
+            $(this).val(formatToThousands(rawValue));
+            calculateTotal();
+        });
+
+        // Function to calculate total
+        function calculateTotal() {
+            const priceAdult = removeThousandsSeparator($('#price_adult_display').val());
+            const priceChild = removeThousandsSeparator($('#price_child_display').val());
+            
+            // Calculate total in IDR
+            const totalIDR = priceAdult + priceChild;
+            $('#fbo_end_total_display').val(formatToThousands(totalIDR));
+            $('#fbo_end_total').val(totalIDR);
+
+            // Currency conversion
+            const exchangeRate = 0.00007; // example rate
+            const currencyCode = $('#currencyCode').text();
+            let totalCurrency = totalIDR * exchangeRate;
+            
+            if (currencyCode !== 'IDR') {
+                totalCurrency = Math.ceil(totalCurrency);
+            }
+
+            $('#fbo_end_total_currency_display').val(formatToThousands(totalCurrency));
+            $('#fbo_end_total_currency').val(totalCurrency);
+
+            $('#price_adult').val(priceAdult);
+            $('#price_child').val(priceChild);
+        }
+
+        // Trigger calculateTotal on input change for price fields
+        $('#price_adult_display, #price_child_display').on('input', calculateTotal);
 
         function hideTripDetails() {
             $('#booking-data-table tbody').empty();
@@ -1366,10 +1408,6 @@
             }
         });
 
-        function formatToThousands(number) {
-            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-
         // Function to display search results on parameter changes
         $('#fbo_trip_date_return, #fbo_departure_port_return, #fbo_arrival_port_return, #fbo_departure_time_return')
             .on('change', triggerReturnSearch);
@@ -1438,6 +1476,17 @@
             });
         }
 
+        // Fungsi untuk menambahkan format ribuan
+        function formatToThousands(number) {
+            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Fungsi untuk menghapus format ribuan sebelum melakukan operasi matematika
+        function removeThousandsSeparator(value) {
+            return parseFloat(value.replace(/\./g, '')) || 0;
+        }
+
+        // Function untuk menampilkan detail trip kembali dan memformat harga
         function showReturnTripDetails(data) {
             $('#return-booking-data-table tbody').html(`
                 <tr>
@@ -1449,19 +1498,18 @@
                 </tr>
             `);
 
-            $('#price_adult_return_display').val(`${formatToThousands(data.price_adult)}`);
-            $('#price_child_return_display').val(`${formatToThousands(data.price_child)}`);
-            $('#fbo_end_total_return_display').val(`${formatToThousands(data.total_price)}`);
-            $('#return_fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
+            $('#price_adult_return_display').val(formatToThousands(data.price_adult));
+            $('#price_child_return_display').val(formatToThousands(data.price_child));
+            $('#fbo_end_total_return_display').val(formatToThousands(data.total_price));
+
             if (data.currency === 'IDR') {
-                // If currency is IDR, display as is
-                $('#return_fbo_end_total_currency_display').val(`${formatToThousands(data.total_price_currency)}`);
+                $('#return_fbo_end_total_currency_display').val(formatToThousands(data.total_price_currency));
             } else {
-                // If currency is not IDR, round up the value
                 let roundedValue = Math.ceil(data.total_price_currency);
-                $('#return_fbo_end_total_currency_display').val(`${formatToThousands(roundedValue)}`);
+                $('#return_fbo_end_total_currency_display').val(formatToThousands(roundedValue));
             }
 
+            // Tetap menyimpan nilai asli tanpa format ribuan
             $('#return_price_adult').val(data.price_adult);
             $('#return_price_child').val(data.price_child);
             $('#return_fbo_end_total').val(data.total_price);
@@ -1471,11 +1519,42 @@
 
             // Set selectedDetail using data only
             const selectedDetailReturn = `${data.fastboat_name} (${data.departure_port} -> ${data.arrival_port} ${data.departure_time})`;
-
-            // Display the selected detail
             $('#selectedFastboatReturn').text(selectedDetailReturn);
 
             $('.return-detail-trip').show();
+        }
+
+        // Listener for automatic thousand separator formatting on input change
+        $('#price_adult_return_display, #price_child_return_display').on('input', function() {
+            let rawValue = removeThousandsSeparator($(this).val());
+            $(this).val(formatToThousands(rawValue));
+            calculateReturnTotal();
+        });
+
+        // Function to calculate total for return trip
+        function calculateReturnTotal() {
+            const priceAdultReturn = removeThousandsSeparator($('#price_adult_return_display').val());
+            const priceChildReturn = removeThousandsSeparator($('#price_child_return_display').val());
+
+            // Calculate total in IDR
+            const totalIDRReturn = priceAdultReturn + priceChildReturn;
+            $('#fbo_end_total_return_display').val(formatToThousands(totalIDRReturn));
+            $('#return_fbo_end_total').val(totalIDRReturn);
+
+            // Currency conversion
+            const exchangeRate = 0.00007; // example rate
+            const currencyCodeReturn = $('#currencyCodeReturn').text();
+            let totalCurrencyReturn = totalIDRReturn * exchangeRate;
+
+            if (currencyCodeReturn !== 'IDR') {
+                totalCurrencyReturn = Math.ceil(totalCurrencyReturn);
+            }
+
+            $('#return_fbo_end_total_currency_display').val(formatToThousands(totalCurrencyReturn));
+            $('#return_fbo_end_total_currency').val(totalCurrencyReturn);
+
+            $('#return_price_adult').val(priceAdultReturn);
+            $('#return_price_child').val(priceChildReturn);
         }
 
         function hideReturnTripDetails() {
