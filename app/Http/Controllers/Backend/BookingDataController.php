@@ -763,7 +763,7 @@ class BookingDataController extends Controller
             }
 
             // Tentukan apakah checkbox harus ditampilkan berdasarkan tipe shuttle
-            $showShuttleCheckbox = in_array($shuttleAvailable, ['Private', 'Sharing']);
+            $showShuttleCheckbox = in_array($shuttleType, ['Private', 'Sharing']);
             // dd($pickupAreas);
             // Kembalikan response termasuk shuttle availability
             return response()->json([
@@ -1899,13 +1899,13 @@ class BookingDataController extends Controller
                     'arrival_port' => $item->trip->arrival->prt_name_en,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
-                    'price_adult' => number_format($priceAdult, 0, ',', '.'),
-                    'price_child' => number_format($priceChild, 0, ',', '.'),
-                    'price_adult_nett' => number_format($item->fba_adult_nett ?? 0, 0, ',', '.'),
-                    'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
-                    'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
-                    'total_price' => number_format($totalPrice, 0, ',', '.'),
-                    'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
+                    'price_adult' => $priceAdult,
+                    'price_child' => $priceChild,
+                    'price_adult_nett' => $item->fba_adult_nett,
+                    'price_child_nett' => $item->fba_child_nett,
+                    'price_discount' => $item->fba_discount,
+                    'total_price' => $totalPrice,
+                    'total_price_currency' => $totalPriceCurrency,
                     'currency_code' => $currency->cy_code,
                 ];
             });
@@ -2053,13 +2053,13 @@ class BookingDataController extends Controller
                     'arrival_port' => $item->trip->arrival->prt_code,
                     'departure_time' => $item->fba_time_dept ?? $item->trip->fbt_dept_time,
                     'arrival_time' => $item->trip->fbt_arrival_time,
-                    'price_adult' => number_format($priceAdultReturn, 0, ',', '.'),
-                    'price_child' => number_format($priceChildReturn, 0, ',', '.'),
-                    'price_adult_nett' => number_format($item->fba_adult_nett ?? 0, 0, ',', '.'),
-                    'price_child_nett' => number_format($item->fba_child_nett ?? 0, 0, ',', '.'),
-                    'price_discount' => number_format($item->fba_discount ?? 0, 0, ',', '.'),
-                    'total_price' => number_format($totalPrice, 0, ',', '.'),
-                    'total_price_currency' => number_format($totalPriceCurrency, 0, ',', '.'),
+                    'price_adult' => $priceAdultReturn,
+                    'price_child' => $priceChildReturn,
+                    'price_adult_nett' => $item->fba_adult_nett,
+                    'price_child_nett' => $item->fba_child_nett,
+                    'price_discount' => $item->fba_discount,
+                    'total_price' => $totalPrice,
+                    'total_price_currency' => $totalPriceCurrency,
                     'currency_code' => $currency->cy_code,
                 ];
             });
@@ -2172,6 +2172,37 @@ class BookingDataController extends Controller
             case 'trip':
                 // dd($request);
 
+                // Mengambil data sebelum 
+                $availabilityIdBefore = $bookingDataEdit->fbo_id;
+                $tripIdBefore = $bookingDataEdit->trip->fbt_id;
+                $tripDateBefore = $bookingDataEdit->fbo_trip_date;
+                $adultNettBefore = $bookingDataEdit->fbo_adult_nett;
+                $childNettBefore = $bookingDataEdit->fbo_child_nett;
+                $totalNettBefore = $bookingDataEdit->fbo_total_nett;
+                $adultPublishBefore = $bookingDataEdit->fbo_adult_publish;
+                $childPublishBefore = $bookingDataEdit->fbo_child_publish;
+                $totalPublishBefore = $bookingDataEdit->fbo_total_publish;
+                $adultCurrencyBefore = $bookingDataEdit->fbo_adult_currency;
+                $childCurrencyBefore = $bookingDataEdit->fbo_child_currency;
+                $totalCurrencyBefore = $bookingDataEdit->fbo_total_currency;
+                $discountBefore = $bookingDataEdit->fbo_discount;
+                $priceCutBefore = $bookingDataEdit->fbo_price_cut;
+                $discountTotalBefore = $bookingDataEdit->fbo_discount_total;
+                $endTotalBefore = $bookingDataEdit->fbo_end_total;
+                $endTotalCurrencyBefore = $bookingDataEdit->fbo_end_total_currency;
+                $profitBefore = $bookingDataEdit->fbo_profit;
+                $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
+                $fastBoatBefore = $bookingDataEdit->trip->fastboat->fb_name;
+                $departureIslandBefore = $bookingDataEdit->trip->departure->island->isd_name;
+                $departurePortBefore = $bookingDataEdit->trip->departure->prt_name_en;
+                $departureTimeBefore = $bookingDataEdit->fbo_departure_time;
+                $arrivalIslandBefore = $bookingDataEdit->trip->arrival->island->isd_name;
+                $arrivalPortBefore = $bookingDataEdit->trip->arrival->prt_name_en;
+                $arrivalTimeBefore = $bookingDataEdit->fbo_arrival_time;
+                $chekinPointBefore = $bookingDataEdit->fbo_checkin_point;
+                $updatedByBefore = $bookingDataEdit->fbo_updated_by;
+                // dd();
+
                 $data = [
                     'fbo_id' => $request->availability_id,
                     'fbo_trip_date' => $request->fbo_trip_date,
@@ -2187,19 +2218,73 @@ class BookingDataController extends Controller
                     'return_fbo_end_total_currency' => $request->return_fbo_end_total_currency,
                 ];
 
-                // Mengambil data sebelum 
-                $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
-                $tripDepartureBefore = $bookingDataEdit->trip->departure->prt_name_en;
-                $tripArrivalBefore = $bookingDataEdit->trip->arrival->prt_name_en;
-                $totalPriceBefore = $bookingDataEdit->fbo_end_total;
-
                 // Mengambil data sesudah
                 $fboId = FastboatAvailability::find($request->availability_id);
                 $companyAfter = $fboId->trip->fastboat->company->cpn_name;
                 $tripDepartureAfter = $fboId->trip->departure->prt_name_en;
                 $tripArrivalAfter = $fboId->trip->arrival->prt_name_en;
-                $totalPriceAfter = $data['fbo_end_total'];
+                $totalPriceAfter = $request->fbo_end_total;
 
+                $availabilityIdAfter = FastboatAvailability::find($request->availability_id);
+                $tripIdAfter = $availabilityIdAfter->trip->fbt_id;
+                $tripDateAfter = $availabilityIdAfter->fbo_trip_date;
+                $adultNettAfter = $availabilityIdAfter->fbo_adult_nett;
+                $childNettAfter = $availabilityIdAfter->fbo_child_nett;
+                $totalNettAfter = $availabilityIdAfter->fbo_total_nett;
+                $adultPublishAfter = $availabilityIdAfter->fbo_adult_publish;
+                $childPublishAfter = $availabilityIdAfter->fbo_child_publish;
+                $totalPublishAfter = $availabilityIdAfter->fbo_total_publish;
+                $adultCurrencyAfter = $availabilityIdAfter->fbo_adult_currency;
+                $childCurrencyAfter = $availabilityIdAfter->fbo_child_currency;
+                $totalCurrencyAfter = $availabilityIdAfter->fbo_total_currency;
+                $discountAfter = $availabilityIdAfter->fbo_discount;
+                $priceCutAfter = $availabilityIdAfter->fbo_price_cut;
+                $discountTotalAfter = $availabilityIdAfter->fbo_discount_total;
+                $endTotalAfter = $availabilityIdAfter->fbo_end_total;
+                $endTotalCurrencyAfter = $availabilityIdAfter->fbo_end_total_currency;
+                $profitAfter = $availabilityIdAfter->fbo_profit;
+                $companyAfter = $availabilityIdAfter->trip->fastboat->company->cpn_name;
+                $fastBoatAfter = $availabilityIdAfter->trip->fastboat->fb_name;
+                $departureIslandAfter = $availabilityIdAfter->trip->departure->island->isd_name;
+                $departurePortAfter = $availabilityIdAfter->trip->departure->prt_name_en;
+                $departureTimeAfter = $availabilityIdAfter->fbo_departure_time;
+                $arrivalIslandAfter = $availabilityIdAfter->trip->arrival->island->isd_name;
+                $arrivalPortAfter = $availabilityIdAfter->trip->arrival->prt_name_en;
+                $arrivalTimeAfter = $availabilityIdAfter->fbo_arrival_time;
+                $chekinPointAfter = $availabilityIdAfter->fbo_checkin_point;
+                $updatedByAfter = $availabilityIdAfter->fbo_updated_by;
+
+                dd( $after = [
+                    'availabilityIdAfter' => FastboatAvailability::find($request->availability_id),
+                    'tripIdAfter' => $availabilityIdAfter->trip->fbt_id,
+                    'tripDateAfter' => $availabilityIdAfter->fbo_trip_date,
+                    'adultNettAfter' => $availabilityIdAfter->fbo_adult_nett,
+                    'childNettAfter' => $availabilityIdAfter->fbo_child_nett,
+                    'totalNettAfter' => $availabilityIdAfter->fbo_total_nett,
+                    'adultPublishAfter' => $availabilityIdAfter->fbo_adult_publish,
+                    'childPublishAfter' => $availabilityIdAfter->fbo_child_publish,
+                    'totalPublishAfter' => $availabilityIdAfter->fbo_total_publish,
+                    'adultCurrencyAfter' => $availabilityIdAfter->fbo_adult_currency,
+                    'childCurrencyAfter' => $availabilityIdAfter->fbo_child_currency,
+                    'totalCurrencyAfter' => $availabilityIdAfter->fbo_total_currency,
+                    'discountAfter' => $availabilityIdAfter->fbo_discount,
+                    'priceCutAfter' => $availabilityIdAfter->fbo_price_cut,
+                    'discountTotalAfter' => $availabilityIdAfter->fbo_discount_total,
+                    'endTotalAfter' => $availabilityIdAfter->fbo_end_total,
+                    'endTotalCurrencyAfter' => $availabilityIdAfter->fbo_end_total_currency,
+                    'profitAfter' => $availabilityIdAfter->fbo_profit,
+                    'companyAfter' => $availabilityIdAfter->trip->fastboat->company->cpn_name,
+                    'fastBoatAfter' => $availabilityIdAfter->trip->fastboat->fb_name,
+                    'departureIslandAfter' => $availabilityIdAfter->trip->departure->island->isd_name,
+                    'departurePortAfter' => $availabilityIdAfter->trip->departure->prt_name_en,
+                    'departureTimeAfter' => $availabilityIdAfter->fbo_departure_time,
+                    'arrivalIslandAfter' => $availabilityIdAfter->trip->arrival->island->isd_name,
+                    'arrivalPortAfter' => $availabilityIdAfter->trip->arrival->prt_name_en,
+                    'arrivalTimeAfter' => $availabilityIdAfter->fbo_arrival_time,
+                    'chekinPointAfter' => $availabilityIdAfter->fbo_checkin_point,
+                    'updatedByAfter' => $availabilityIdAfter->fbo_updated_by,
+
+                ]);
                 // Update data
                 $trip = BookingData::find($bookingDataEdit->fbo_id);
 
