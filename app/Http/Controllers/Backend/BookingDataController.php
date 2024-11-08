@@ -1888,6 +1888,10 @@ class BookingDataController extends Controller
 
                 $totalPrice = ($priceAdult * $adultCount) + ($priceChild * $childCount);
                 $totalPriceCurrency = $totalPrice / $kurs;
+                if ($currency !== 'IDR') {
+                    // Round up if the currency is not IDR
+                    $totalPriceCurrency = ceil($totalPriceCurrency);
+                }
 
                 return [
                     'availability_id' => $item->fba_id, // ID for selected detail
@@ -2045,6 +2049,10 @@ class BookingDataController extends Controller
                 $priceChildReturn = (float) $item->fba_child_publish ?? 0;
                 $totalPrice = ($priceAdultReturn * $adultCountReturn) + ($priceChildReturn * $childCountReturn);
                 $totalPriceCurrency = $totalPrice / $kurs;
+                if ($currency !== 'IDR') {
+                    // Round up if the currency is not IDR
+                    $totalPriceCurrency = ceil($totalPriceCurrency);
+                }
 
                 return [
                     'availability_id' => $item->fba_id, // ID untuk detail yang dipilih
@@ -2170,7 +2178,7 @@ class BookingDataController extends Controller
 
         switch ($activeTab) {
             case 'trip':
-                // dd($request);
+                dd($request);
 
                 // Mengambil data sebelum 
                 $availabilityIdBefore = $bookingDataEdit->fbo_id;
