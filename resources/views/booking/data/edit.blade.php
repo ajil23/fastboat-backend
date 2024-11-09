@@ -291,6 +291,7 @@
                                                 </div>
                                                 <input type="hidden" id="adultCount" value="1" min="1">
                                                 <input type="hidden" id="childCount" value="0" min="0">
+                                                <input type="hidden" id="kurs" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -465,6 +466,7 @@
                                                 </div>
                                                 <input type="hidden" id="adultCountReturn" value="1" min="1">
                                                 <input type="hidden" id="childCountReturn" value="0" min="0">
+                                                <input type="hidden" id="kursReturn" value="">
                                             </div>
                                         </div>
                                     </div>
@@ -1134,7 +1136,6 @@
                 $('#searchForm').hide();
                 $('#searchForm').find('input, select').prop('disabled', true).val('');
 
-                // Sembunyikan dan kosongkan hasil pencarian dan detail
                 resetSearchResults();
                 hideTripDetails();
             }
@@ -1146,6 +1147,7 @@
             const arrivalPort = $('#fbo_arrival_port').val();
             const timeDept = $('#fbo_departure_time').val();
             const fbo_id = $('#fbo_id').val();
+            const currencyCode = $('#currencyCode').text();
 
             if (tripDate && departurePort && arrivalPort && timeDept && fbo_id) {
                 $.ajax({
@@ -1156,7 +1158,8 @@
                         fbo_departure_port: departurePort,
                         fbo_arrival_port: arrivalPort,
                         fbo_departure_time: timeDept,
-                        fbo_id: fbo_id
+                        fbo_id: fbo_id,
+                        currency_code: currencyCode
                     },
                     success: function(response) {
                         $('#result-container').empty();
@@ -1184,12 +1187,13 @@
                             `);
                         });
 
-                        // Update adultCount and childCount
                         $('#adultCount').val(response.adultCount);
                         $('#childCount').val(response.childCount);
+                        $('#kurs').val(response.kurs);
 
-                        // Re-calculate total with updated counts
-                        calculateTotal();
+                        // Ambil nilai kurs dan gunakan dalam calculateTotal
+                        const exchangeRate = parseFloat($('#kurs').val()) || 1;
+                        calculateTotal(exchangeRate);
 
                         $('.trip-checkbox').on('change', function() {
                             $('.trip-checkbox').not(this).prop('checked', false);
@@ -1197,7 +1201,6 @@
                             if ($(this).is(':checked')) {
                                 const data = $(this).data('item');
                                 const selectedData = $(this).data('selected');
-
                                 showTripDetails(data, selectedData);
                             } else {
                                 hideTripDetails();
@@ -1212,17 +1215,14 @@
             }
         }
 
-        // Fungsi untuk menambahkan format ribuan
         function formatToThousands(number) {
             return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
         }
 
-        // Fungsi untuk menghapus format ribuan sebelum melakukan operasi matematika
         function removeThousandsSeparator(value) {
             return parseFloat(value.replace(/\./g, '')) || 0;
         }
 
-        // Function untuk menampilkan detail trip dan memformat harga
         function showTripDetails(data, selected) {
             $('#booking-data-table tbody').html(`
                 <tr>
@@ -1237,7 +1237,7 @@
             $('#price_adult_display').val(formatToThousands(data.price_adult));
             $('#price_child_display').val(formatToThousands(data.price_child));
             $('#fbo_end_total_display').val(formatToThousands(data.total_price));
-            
+
             if (data.currency === 'IDR') {
                 $('#fbo_end_total_currency_display').val(formatToThousands(data.total_price_currency));
             } else {
@@ -1258,27 +1258,24 @@
             $('.detail-trip').show();
         }
 
-        // Listener for automatic thousand separator formatting on input change
         $('#price_adult_display, #price_child_display, #adultCount, #childCount').on('input', function() {
-            calculateTotal();
+            const exchangeRate = parseFloat($('#kurs').val()) || 1;
+            calculateTotal(exchangeRate);
         });
 
-        // Function to calculate total based on customer count and price per person
-        function calculateTotal() {
+        function calculateTotal(exchangeRate = 1) {
             const priceAdult = removeThousandsSeparator($('#price_adult_display').val());
             const priceChild = removeThousandsSeparator($('#price_child_display').val());
             const adultCount = parseInt($('#adultCount').val()) || 1;
             const childCount = parseInt($('#childCount').val()) || 0;
+            const currencyCode = $('#currencyCode').text() || 'IDR';
 
-            // Calculate total based on the number of adults and children
             const totalIDR = (priceAdult * adultCount) + (priceChild * childCount);
             $('#fbo_end_total_display').val(formatToThousands(totalIDR));
             $('#fbo_end_total').val(totalIDR);
 
-            // Currency conversion
-            const exchangeRate = 0.00007; // example rate
-            const currencyCode = $('#currencyCode').text();
-            let totalCurrency = totalIDR * exchangeRate;
+            let totalCurrency = totalIDR / exchangeRate;
+            console.log(totalCurrency);
 
             if (currencyCode !== 'IDR') {
                 totalCurrency = Math.ceil(totalCurrency);
@@ -1291,8 +1288,12 @@
             $('#price_child').val(priceChild);
         }
 
-        // Trigger calculateTotal on input change for price fields
-        $('#price_adult_display, #price_child_display').on('input', calculateTotal);
+        $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_departure_time').on('change', triggerSearch);
+
+        function resetSearchResults() {
+            $('#search-results').hide();
+            $('#result-container').empty();
+        }
 
         function hideTripDetails() {
             $('#booking-data-table tbody').empty();
@@ -1306,13 +1307,6 @@
             $('#arrival_result').text('');
             $('#selectedFastboat, #selectedDeparturePort, #selectedArrivalPort, #selectedDepartureTime').text('');
             $('.detail-trip').hide();
-        }
-
-        $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_departure_time').on('change', triggerSearch);
-
-        function resetSearchResults() {
-            $('#search-results').hide();
-            $('#result-container').empty();
         }
 
         $('#fbo_trip_date').change(function() {
@@ -1447,6 +1441,8 @@
                         // Tampilkan nilai adultCountReturn dan childCountReturn di elemen HTML yang diinginkan
                         $('#adultCountReturn').val(adultCountReturn);
                         $('#childCountReturn').val(childCountReturn);
+                        $('#kursReturn').val(response.kursReturn);
+
 
                         displayReturnResults(response.data, tripDateReturn);
                     },
@@ -1562,10 +1558,10 @@
             $('#fbo_end_total_return_display').val(formatToThousands(totalIDRReturn));
             $('#return_fbo_end_total').val(totalIDRReturn);
 
-            // Currency conversion
-            const exchangeRate = 0.00007; // example rate
+            // Ambil nilai kursReturn sebagai exchangeRate untuk konversi mata uang
+            const exchangeRate = parseFloat($('#kursReturn').val()) || 1; // Default to 1 if kursReturn is not set
             const currencyCodeReturn = $('#currencyCodeReturn').text();
-            let totalCurrencyReturn = totalIDRReturn * exchangeRate;
+            let totalCurrencyReturn = totalIDRReturn / exchangeRate;
 
             if (currencyCodeReturn !== 'IDR') {
                 totalCurrencyReturn = Math.ceil(totalCurrencyReturn);
