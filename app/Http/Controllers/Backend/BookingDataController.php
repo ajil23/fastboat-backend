@@ -1882,7 +1882,7 @@ class BookingDataController extends Controller
             $kurs = $currency->cy_rate;
 
             // Map through availability to structure results
-            $results = $availability->map(function ($item) use ($adultCount, $childCount, $kurs, $currency) {
+            $results = $availability->map(function ($item) use ($adultCount, $childCount, $kurs, $currency, $bookingData) {
                 $priceAdult = (float) $item->fba_adult_publish ?? 0;
                 $priceChild = (float) $item->fba_child_publish ?? 0;
 
@@ -1892,6 +1892,11 @@ class BookingDataController extends Controller
                     // Round up if the currency is not IDR
                     $totalPriceCurrency = ceil($totalPriceCurrency);
                 }
+
+                $total_end_before = $bookingData->fbo_end_total;
+
+                // Calculate price cut
+                $priceCut = $total_end_before - $totalPrice;
 
                 return [
                     'availability_id' => $item->fba_id, // ID for selected detail
@@ -1911,6 +1916,8 @@ class BookingDataController extends Controller
                     'total_price' => $totalPrice,
                     'total_price_currency' => $totalPriceCurrency,
                     'currency_code' => $currency->cy_code,
+                    'total_end_before' => $total_end_before,
+                    'price_cut' => $priceCut,
                 ];
             });
 
@@ -1938,7 +1945,7 @@ class BookingDataController extends Controller
                 'selected' => $selected,
                 'adultCount' => $adultCount,
                 'childCount' => $childCount,
-                'kurs' => $kurs
+                'kurs' => $kurs,
             ]);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Internal Server Error'], 500);
@@ -2047,7 +2054,7 @@ class BookingDataController extends Controller
             $kurs = $currency->cy_rate;
 
             // Struktur hasil untuk FastboatAvailability dan detail BookingData
-            $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn, $kurs, $currency) {
+            $results = $availability->map(function ($item) use ($adultCountReturn, $childCountReturn, $kurs, $currency, $bookingData) {
                 $priceAdultReturn = (float) $item->fba_adult_publish ?? 0;
                 $priceChildReturn = (float) $item->fba_child_publish ?? 0;
                 $totalPrice = ($priceAdultReturn * $adultCountReturn) + ($priceChildReturn * $childCountReturn);
@@ -2056,6 +2063,10 @@ class BookingDataController extends Controller
                     // Round up if the currency is not IDR
                     $totalPriceCurrency = ceil($totalPriceCurrency);
                 }
+
+                $total_end_before = $bookingData->fbo_end_total;
+
+                $priceCut = $total_end_before - $totalPrice;
 
                 return [
                     'availability_id' => $item->fba_id, // ID untuk detail yang dipilih
@@ -2072,6 +2083,8 @@ class BookingDataController extends Controller
                     'total_price' => $totalPrice,
                     'total_price_currency' => $totalPriceCurrency,
                     'currency_code' => $currency->cy_code,
+                    'total_end_before' => $total_end_before,
+                    'price_cut' => $priceCut,
                 ];
             });
 

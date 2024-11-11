@@ -238,8 +238,7 @@
                                             <div class="row">
                                                 <div class="col-sm-3">
                                                     <div class="mb-3">
-                                                        <label class="form-label" for="price_adult">Adult Publish
-                                                            (IDR)</label>
+                                                        <label class="form-label" for="price_adult">Adult Publish (IDR)</label>
                                                         <input value="" class="form-control" id="price_adult_display" oninput="calculateTotal()">
                                                     </div>
                                                 </div>
@@ -292,6 +291,14 @@
                                                 <input type="hidden" id="adultCount" value="1" min="1">
                                                 <input type="hidden" id="childCount" value="0" min="0">
                                                 <input type="hidden" id="kurs" value="">
+                                                <div class="card detail-trip" >
+                                                    <div class="p-1">
+                                                        <h5 class="font-size-16 mb-1 d-flex align-items-center justify-content-center"
+                                                            style="font-size: 14.8px; font-family: 'IBM Plex Sans', sans-serif;">
+                                                            <label type="text" id="price_cut" value=""></label>
+                                                        </h5>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -467,6 +474,14 @@
                                                 <input type="hidden" id="adultCountReturn" value="1" min="1">
                                                 <input type="hidden" id="childCountReturn" value="0" min="0">
                                                 <input type="hidden" id="kursReturn" value="">
+                                                <div class="card return-detail-trip" >
+                                                    <div class="p-1">
+                                                        <h5 class="font-size-16 mb-1 d-flex align-items-center justify-content-center"
+                                                            style="font-size: 14.8px; font-family: 'IBM Plex Sans', sans-serif;">
+                                                            <label type="text" id="return_price_cut" value=""></label>
+                                                        </h5>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1251,6 +1266,7 @@
             $('#fbo_end_total_currency').val(data.total_price_currency);
             $('#currencyCode').text(data.currency_code);
             $('#availability_id').val(data.availability_id);
+            $('#price_cut').html(`${formatToThousands(data.total_end_before)} - ${formatToThousands(data.total_price)} = ${formatToThousands(data.price_cut)}`);
 
             const selectedDetail = `${selected.fastboat_name} (${selected.departure_port} -> ${selected.arrival_port} ${selected.departure_time})`;
             $('#selectedFastboat').text(selectedDetail);
@@ -1464,7 +1480,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-check mb-3">
-                                    <input class="form-check-input return-trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-price_child="${item.price_child}" data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-total_price="${item.total_price}" data-departure_port="${item.departure_port}" data-arrival_port="${item.arrival_port}" data-departure_time="${item.departure_time}" data-arrival_time="${item.arrival_time}" data-total_price_currency="${item.total_price_currency}" data-currency_code="${item.currency_code}" data-availability_id="${item.availability_id}" data-fastboat_name="${item.fastboat_name}">
+                                    <input class="form-check-input return-trip-checkbox" type="checkbox" data-price_adult="${item.price_adult}" data-price_child="${item.price_child}" data-price_child_nett="${item.price_child_nett}" data-price_adult_nett="${item.price_adult_nett}" data-total_price="${item.total_price}" data-departure_port="${item.departure_port}" data-arrival_port="${item.arrival_port}" data-departure_time="${item.departure_time}" data-arrival_time="${item.arrival_time}" data-total_price_currency="${item.total_price_currency}" data-currency_code="${item.currency_code}" data-availability_id="${item.availability_id}" data-fastboat_name="${item.fastboat_name}" data-total_end_before="${item.total_end_before}" data-price_cut="${item.price_cut}">
                                     <label class="form-check-label">${item.fastboat_name}</label>
                                 </div>
                                 <div class="mt-3 pt-1">
@@ -1529,6 +1545,8 @@
             $('#return_fbo_end_total_currency').val(data.total_price_currency);
             $('#currencyCodeReturn').text(data.currency_code);
             $('#availability_id_return').val(data.availability_id);
+
+            $('#return_price_cut').text(`${formatToThousands(data.total_end_before)} - ${formatToThousands(data.total_price)} = ${formatToThousands(data.price_cut)}`);
 
             // Set selectedDetail using data only
             const selectedDetailReturn = `${data.fastboat_name} (${data.departure_port} -> ${data.arrival_port} ${data.departure_time})`;
