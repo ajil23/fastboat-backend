@@ -1140,6 +1140,7 @@
         });
     });
 </script>
+
 <!-- script for trip depart -->
 <script>
     $(document).ready(function() {
@@ -1206,7 +1207,6 @@
                         $('#childCount').val(response.childCount);
                         $('#kurs').val(response.kurs);
 
-                        // Ambil nilai kurs dan gunakan dalam calculateTotal
                         const exchangeRate = parseFloat($('#kurs').val()) || 1;
                         calculateTotal(exchangeRate);
 
@@ -1224,7 +1224,6 @@
                     },
                     error: function(error) {
                         console.log(error);
-                        alert('Data tidak ditemukan');
                     }
                 });
             }
@@ -1291,8 +1290,6 @@
             $('#fbo_end_total').val(totalIDR);
 
             let totalCurrency = totalIDR / exchangeRate;
-            console.log(totalCurrency);
-
             if (currencyCode !== 'IDR') {
                 totalCurrency = Math.ceil(totalCurrency);
             }
@@ -1304,7 +1301,11 @@
             $('#price_child').val(priceChild);
         }
 
-        $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_departure_time').on('change', triggerSearch);
+        $('#fbo_trip_date, #fbo_departure_port, #fbo_arrival_port, #fbo_departure_time').on('change', function() {
+            resetSearchResults();
+            hideTripDetails();
+            triggerSearch();
+        });
 
         function resetSearchResults() {
             $('#search-results').hide();
@@ -1349,6 +1350,8 @@
         });
 
         $('#fbo_departure_port').change(function() {
+            resetSearchResults();
+            hideTripDetails();
             $('#fbo_arrival_port').empty().append('<option value="">Select Arrival Port</option>');
             $('#fbo_departure_time').empty().append('<option value="">Select Time Dept</option>');
 
@@ -1367,7 +1370,6 @@
                     $.each(response.fbo_arrival_ports, function(index, port) {
                         $('#fbo_arrival_port').append('<option value="' + port + '">' + port + '</option>');
                     });
-                    $('#fbo_arrival_port').prop('disabled', false);
                 },
                 error: function() {
                     console.error('Error fetching arrival ports');
@@ -1461,9 +1463,6 @@
 
 
                         displayReturnResults(response.data, tripDateReturn);
-                    },
-                    error: function() {
-                        alert('Data tidak ditemukan');
                     }
                 });
             }
@@ -1608,6 +1607,30 @@
             $('#return-result-container').empty();
         }
 
+        // Fungsi untuk mereset hasil pencarian dan detail hasil pencarian
+        function resetSearchResultsAndDetails() {
+            // Kosongkan dan sembunyikan elemen hasil pencarian
+            resetReturnSearchResults();
+            // Kosongkan dan sembunyikan detail hasil pencarian
+            hideReturnTripDetails();
+        }
+
+        // Trigger reset pada perubahan salah satu dropdown pencarian
+        $('#fbo_trip_date_return, #fbo_departure_port_return, #fbo_arrival_port_return, #fbo_departure_time_return').change(function() {
+            resetSearchResultsAndDetails();  // Reset hasil dan detail pencarian
+
+            // Periksa apakah semua field telah terisi untuk menghindari alert saat pencarian belum lengkap
+            const tripDateReturn = $('#fbo_trip_date_return').val();
+            const departurePortReturn = $('#fbo_departure_port_return').val();
+            const arrivalPortReturn = $('#fbo_arrival_port_return').val();
+            const timeDeptReturn = $('#fbo_departure_time_return').val();
+            const fbo_id_return = $('#fbo_id_return').val();
+
+            if (tripDateReturn && departurePortReturn && arrivalPortReturn && timeDeptReturn && fbo_id_return) {
+                triggerReturnSearch();  // Lakukan pencarian hanya jika semua field telah terisi
+            }
+        });
+
         // Fetch dropdown data based on trip date for departure ports
         $('#fbo_trip_date_return').change(function() {
             resetReturnSearchResults();
@@ -1621,9 +1644,6 @@
                 },
                 success: function(response) {
                     populateDropdown('#fbo_departure_port_return', response.fbo_departure_ports_return, 'Select Departure Port');
-                },
-                error: function() {
-                    console.error('Error fetching departure ports for return');
                 }
             });
         });
@@ -1643,9 +1663,6 @@
                 },
                 success: function(response) {
                     populateDropdown('#fbo_arrival_port_return', response.fbo_arrival_ports_return, 'Select Arrival Port');
-                },
-                error: function() {
-                    console.error('Error fetching arrival ports for return');
                 }
             });
         });
@@ -1666,9 +1683,6 @@
                 },
                 success: function(response) {
                     populateDropdown('#fbo_departure_time_return', response.fbo_departure_times_return, 'Select Time Return');
-                },
-                error: function() {
-                    console.error('Error fetching departure times for return');
                 }
             });
         });
