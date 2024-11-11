@@ -2200,39 +2200,18 @@ class BookingDataController extends Controller
             case 'trip':
                 DB::beginTransaction();
                 try {
-                    // Mengambil data sebelum perubahan
-                    $availabilityIdBefore = $bookingDataEdit->fbo_availability_id;
-                    $tripIdBefore = $bookingDataEdit->trip->fbt_id;
-                    $tripDateBefore = $bookingDataEdit->fbo_trip_date;
+                    // Mengambil data sebelum perubahan untuk log
+                    $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
+                    $departureIslandBefore = $bookingDataEdit->trip->departure->island->isd_name;
+                    $departurePortBefore = $bookingDataEdit->trip->departure->prt_name_en;
+                    $arrivalIslandBefore = $bookingDataEdit->trip->arrival->island->isd_name;
+                    $arrivalPortBefore = $bookingDataEdit->trip->arrival->prt_name_en;
                     $kursBefore = $bookingDataEdit->fbo_kurs;
                     $adultBefore = $bookingDataEdit->fbo_adult;
                     $childBefore = $bookingDataEdit->fbo_child;
-                    $adultNettBefore = $bookingDataEdit->fbo_adult_nett;
-                    $childNettBefore = $bookingDataEdit->fbo_child_nett;
                     $totalNettBefore = $bookingDataEdit->fbo_total_nett;
-                    $adultPublishBefore = $bookingDataEdit->fbo_adult_publish;
-                    $childPublishBefore = $bookingDataEdit->fbo_child_publish;
-                    $totalPublishBefore = $bookingDataEdit->fbo_total_publish;
-                    $adultCurrencyBefore = $bookingDataEdit->fbo_adult_currency;
-                    $childCurrencyBefore = $bookingDataEdit->fbo_child_currency;
-                    $totalCurrencyBefore = $bookingDataEdit->fbo_total_currency;
-                    $discountBefore = $bookingDataEdit->fbo_discount;
-                    $priceCutBefore = $bookingDataEdit->fbo_price_cut;
-                    $discountTotalBefore = $bookingDataEdit->fbo_discount_total;
-                    $endTotalBefore = $bookingDataEdit->fbo_end_total;
-                    $endTotalCurrencyBefore = $bookingDataEdit->fbo_end_total_currency;
-                    $profitBefore = $bookingDataEdit->fbo_profit;
-                    $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
-                    $fastBoatBefore = $bookingDataEdit->trip->fastboat->fb_name;
-                    $departureIslandBefore = $bookingDataEdit->trip->departure->island->isd_name;
-                    $departurePortBefore = $bookingDataEdit->trip->departure->prt_name_en;
-                    $departureTimeBefore = $bookingDataEdit->fbo_departure_time;
-                    $arrivalIslandBefore = $bookingDataEdit->trip->arrival->island->isd_name;
-                    $arrivalPortBefore = $bookingDataEdit->trip->arrival->prt_name_en;
-                    $arrivalTimeBefore = $bookingDataEdit->fbo_arrival_time;
-                    $chekinPointBefore = $bookingDataEdit->fbo_checkin_point;
 
-                    // Mengambil data sesudah perubahan
+                    // Mengambil data setelah perubahan
                     $availabilityId = FastboatAvailability::find($request->availability_id);
                     $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
 
@@ -2264,7 +2243,6 @@ class BookingDataController extends Controller
                     $endTotalCurrencyAfter = $request->fbo_end_total_currency;
                     $profitAfter = $endTotalAfter - $totalNettAfter;
                     $companyAfter = $availabilityId->trip->fastboat->company->cpn_name;
-                    $fastBoatAfter = $availabilityId->trip->fastboat->fb_name;
                     $departureIslandAfter = $availabilityId->trip->departure->island->isd_name;
                     $departurePortAfter = $availabilityId->trip->departure->prt_name_en;
                     $departureTimeAfter = $availabilityId->fba_dept_time ?? $availabilityId->trip->fbt_dept_time;
@@ -2274,20 +2252,22 @@ class BookingDataController extends Controller
                     $chekinPointAfter = $checkin->fcp_id;
                     $updatedByAfter = Auth()->id();
 
-                    // Menentukan direction (oneway)
+                    // Tentukan direction (oneway atau roundtrip)
                     $orderId = $bookingDataEdit->fbo_order_id;
                     $orderData = BookingData::where('fbo_order_id', $orderId)->first();
                     $lastCharacter = substr($orderData->fbo_booking_id, -1); // Mengambil karakter terakhir dari booking ID
 
                     if ($lastCharacter === 'X') {
                         $direction = 'oneway';
+                    } elseif ($lastCharacter === 'Y' || $lastCharacter === 'Z') {
+                        $direction = 'roundtrip';
                     } else {
-                        $direction = 'oneway'; // Default jika tidak terdeteksi, tetap one way
+                        $direction = 'oneway'; // Default jika tidak terdeteksi
                     }
 
-                    // Update data trip untuk oneway
+                    // Update data untuk oneway
                     if ($direction === 'oneway') {
-                        // Update hanya untuk satu data booking
+                        // Update hanya untuk satu data booking (BookingData pertama)
                         $trip = $bookingDataEdit;
                         $trip->update([
                             'fbo_availability_id' => $availabilityIdAfter,
@@ -2312,24 +2292,81 @@ class BookingDataController extends Controller
                             'fbo_checkin_point' => $chekinPointAfter,
                             'fbo_updated_by' => $updatedByAfter,
                         ]);
+                    } elseif ($direction === 'roundtrip') {
+                        // Update dua data booking untuk roundtrip (ID berakhiran 'Y' dan 'Z')
+                        $departureBookingData = BookingData::where('fbo_order_id', $orderId)
+                            ->where('fbo_booking_id', 'like', '%Y')->first(); // Untuk data departure
+
+                        $returnBookingData = BookingData::where('fbo_order_id', $orderId)
+                            ->where('fbo_booking_id', 'like', '%Z')->first(); // Untuk data return
+
+                        // Update departure data (booking yang berakhiran Y)
+                        if ($departureBookingData) {
+                            $departureBookingData->update([
+                                'fbo_availability_id' => $availabilityIdAfter,
+                                'fbo_trip_date' => $tripDateAfter,
+                                'fbo_adult_nett' => $adultNettAfter,
+                                'fbo_child_nett' => $childNettAfter,
+                                'fbo_total_nett' => $totalNettAfter,
+                                'fbo_adult_publish' => $adultPublishAfter,
+                                'fbo_child_publish' => $childPublishAfter,
+                                'fbo_total_publish' => $totalPublishAfter,
+                                'fbo_adult_currency' => $adultCurrencyAfter,
+                                'fbo_child_currency' => $childCurrencyAfter,
+                                'fbo_total_currency' => $totalCurrencyAfter,
+                                'fbo_discount' => $discountAfter,
+                                'fbo_price_cut' => $priceCutAfter,
+                                'fbo_discount_total' => $discountTotalAfter,
+                                'fbo_end_total' => $endTotalAfter,
+                                'fbo_end_total_currency' => $endTotalCurrencyAfter,
+                                'fbo_profit' => $profitAfter,
+                                'fbo_departure_time' => $departureTimeAfter,
+                                'fbo_arrival_time' => $arrivalTimeAfter,
+                                'fbo_checkin_point' => $chekinPointAfter,
+                                'fbo_updated_by' => $updatedByAfter,
+                            ]);
+                        }
+
+                        // Update return data (booking yang berakhiran Z)
+                        if ($returnBookingData) {
+                            $returnBookingData->update([
+                                'fbo_availability_id' => $availabilityIdAfter,
+                                'fbo_trip_date' => $tripDateAfter,
+                                'fbo_adult_nett' => $adultNettAfter,
+                                'fbo_child_nett' => $childNettAfter,
+                                'fbo_total_nett' => $totalNettAfter,
+                                'fbo_adult_publish' => $adultPublishAfter,
+                                'fbo_child_publish' => $childPublishAfter,
+                                'fbo_total_publish' => $totalPublishAfter,
+                                'fbo_adult_currency' => $adultCurrencyAfter,
+                                'fbo_child_currency' => $childCurrencyAfter,
+                                'fbo_total_currency' => $totalCurrencyAfter,
+                                'fbo_discount' => $discountAfter,
+                                'fbo_price_cut' => $priceCutAfter,
+                                'fbo_discount_total' => $discountTotalAfter,
+                                'fbo_end_total' => $endTotalAfter,
+                                'fbo_end_total_currency' => $endTotalCurrencyAfter,
+                                'fbo_profit' => $profitAfter,
+                                'fbo_departure_time' => $departureTimeAfter,
+                                'fbo_arrival_time' => $arrivalTimeAfter,
+                                'fbo_checkin_point' => $chekinPointAfter,
+                                'fbo_updated_by' => $updatedByAfter,
+                            ]);
+                        }
                     }
 
-                    // Hitung jumlah log yang sudah ada
+                    // Buat log perubahan setelah update
                     $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                         ->where('fbl_type', 'like', 'Update trip%')
                         ->count();
 
-                    // Buat log perubahan
+                    // Create log for changes
                     FastboatLog::create([
                         'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
                         'fbl_type' => 'Update trip ' . ($count + 1),
                         'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore,
                         'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter,
                     ]);
-
-                    // Update log di bookingDataEdit
-                    $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
-                    $bookingDataEdit->save();
 
                     // Commit transaksi
                     DB::commit();
@@ -2342,6 +2379,7 @@ class BookingDataController extends Controller
                     return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
                 }
                 break;
+
 
             case 'passenger':
                 DB::beginTransaction();
@@ -2373,11 +2411,24 @@ class BookingDataController extends Controller
                         $passenger->update([
                             'fbo_passenger' => $passengerAfter,
                         ]);
+
+                        // Buat log perubahan untuk passenger
+                        $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                            ->where('fbl_type', 'like', 'Update Passenger Data%')
+                            ->count();
+
+                        FastboatLog::create([
+                            'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                            'fbl_type' => 'Update Passenger Data ' . ($count + 1),
+                            'fbl_data_before' => $passengerBefore,
+                            'fbl_data_after' => $passengerAfter,
+                        ]);
                     } elseif ($direction === 'roundtrip') {
-                        // Update dua data booking (untuk booking yang berakhiran Y dan Z)
+                        // Update booking pertama (berakhiran Y)
                         $passenger1 = BookingData::where('fbo_order_id', $orderId)
                             ->where('fbo_booking_id', 'like', '%Y')->first(); // Booking ID yang berakhiran 'Y'
 
+                        // Update booking kedua (berakhiran Z)
                         $passenger2 = BookingData::where('fbo_order_id', $orderId)
                             ->where('fbo_booking_id', 'like', '%Z')->first(); // Booking ID yang berakhiran 'Z'
 
@@ -2385,29 +2436,48 @@ class BookingDataController extends Controller
                             $passenger1->update([
                                 'fbo_passenger' => $passengerAfter,
                             ]);
+
+                            // Log perubahan untuk passenger pertama (Y)
+                            $countFirst = FastboatLog::where('fbl_booking_id', $passenger1->fbo_booking_id)
+                                ->where('fbl_type', 'like', 'Update Passenger Data%')
+                                ->count();
+
+                            FastboatLog::create([
+                                'fbl_booking_id' => $passenger1->fbo_booking_id,
+                                'fbl_type' => 'Update Passenger Data ' . ($countFirst + 1),
+                                'fbl_data_before' => $passengerBefore,
+                                'fbl_data_after' => $passengerAfter,
+                            ]);
+
+                            // Update log untuk passenger pertama (Y)
+                            $passenger1->fbo_log = $logbefore . $user . ',' . 'Update Passenger Data' . ',' . $date;
+                            $passenger1->save();
                         }
 
                         if ($passenger2) {
                             $passenger2->update([
                                 'fbo_passenger' => $passengerAfter,
                             ]);
+
+                            // Log perubahan untuk passenger kedua (Z) - Return
+                            $countSecond = FastboatLog::where('fbl_booking_id', $passenger2->fbo_booking_id)
+                                ->where('fbl_type', 'like', 'Update Passenger Data%')
+                                ->count();
+
+                            FastboatLog::create([
+                                'fbl_booking_id' => $passenger2->fbo_booking_id,
+                                'fbl_type' => 'Update Passenger Data ' . ($countSecond + 1),
+                                'fbl_data_before' => $passengerBefore,
+                                'fbl_data_after' => $passengerAfter,
+                            ]);
+
+                            // Update log untuk passenger kedua (Z) (Return)
+                            $passenger2->fbo_log = $logbefore . $user . ',' . 'Update Passenger Data' . ',' . $date;
+                            $passenger2->save();
                         }
                     }
 
-                    // Hitung jumlah log yang sudah ada
-                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                        ->where('fbl_type', 'like', 'Update Passenger Data%')
-                        ->count();
-
-                    // Buat log perubahan
-                    FastboatLog::create([
-                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                        'fbl_type' => 'Update Passenger Data ' . ($count + 1),
-                        'fbl_data_before' => $passengerBefore,
-                        'fbl_data_after' => $passengerAfter,
-                    ]);
-
-                    // Update log di bookingDataEdit
+                    // Update log di bookingDataEdit untuk passenger pertama (Y)
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Passenger Data' . ',' . $date;
                     $bookingDataEdit->save();
 
@@ -2422,6 +2492,7 @@ class BookingDataController extends Controller
                     return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
                 }
                 break;
+
             case 'shuttle':
                 DB::beginTransaction();
                 try {
@@ -2468,10 +2539,11 @@ class BookingDataController extends Controller
                             'fbo_contact_dropoff' => $contactDropoffAfter,
                         ]);
                     } elseif ($direction === 'roundtrip') {
-                        // Update dua data booking (untuk booking yang berakhiran Y dan Z)
+                        // Update booking pertama (berakhiran Y)
                         $shuttle1 = BookingData::where('fbo_order_id', $orderId)
                             ->where('fbo_booking_id', 'like', '%Y')->first(); // Booking ID yang berakhiran 'Y'
 
+                        // Update booking kedua (berakhiran Z)
                         $shuttle2 = BookingData::where('fbo_order_id', $orderId)
                             ->where('fbo_booking_id', 'like', '%Z')->first(); // Booking ID yang berakhiran 'Z'
 
@@ -2484,9 +2556,22 @@ class BookingDataController extends Controller
                                 'fbo_specific_dropoff' => $specificDropoffAfter,
                                 'fbo_contact_dropoff' => $contactDropoffAfter,
                             ]);
+
+                            // Log perubahan untuk shuttle pertama (Y)
+                            $count = FastboatLog::where('fbl_booking_id', $shuttle1->fbo_booking_id)
+                                ->where('fbl_type', 'like', 'Update Shuttle Data%')
+                                ->count();
+
+                            FastboatLog::create([
+                                'fbl_booking_id' => $shuttle1->fbo_booking_id,
+                                'fbl_type' => 'Update Shuttle Data ' . ($count + 1),
+                                'fbl_data_before' => 'pickup_poin: ' . $pickupBefore . '| specific_pickup: ' . $specificPickupBefore . '| contact_pickup:' . $contactPickupBefore . '| dropoff_poin: ' . $dropoffBefore . '| specific_dropoff: ' . $specificDropoffBefore . '| contact_dropoff:' . $contactDropoffBefore,
+                                'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
+                            ]);
                         }
 
                         if ($shuttle2) {
+                            // Update booking kedua (berakhiran Z)
                             $shuttle2->update([
                                 'fbo_pickup' => $pickupAfter,
                                 'fbo_specific_pickup' => $specificPickupAfter,
@@ -2495,27 +2580,30 @@ class BookingDataController extends Controller
                                 'fbo_specific_dropoff' => $specificDropoffAfter,
                                 'fbo_contact_dropoff' => $contactDropoffAfter,
                             ]);
+
+                            // Log perubahan untuk shuttle kedua (Z) - Return
+                            $countSecond = FastboatLog::where('fbl_booking_id', $shuttle2->fbo_booking_id)
+                                ->where('fbl_type', 'like', 'Update Shuttle Data%')
+                                ->count();
+
+                            FastboatLog::create([
+                                'fbl_booking_id' => $shuttle2->fbo_booking_id,
+                                'fbl_type' => 'Update Shuttle Data ' . ($countSecond + 1),
+                                'fbl_data_before' => 'pickup_poin: ' . $pickupBefore . '| specific_pickup: ' . $specificPickupBefore . '| contact_pickup:' . $contactPickupBefore . '| dropoff_poin: ' . $dropoffBefore . '| specific_dropoff: ' . $specificDropoffBefore . '| contact_dropoff:' . $contactDropoffBefore,
+                                'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
+                            ]);
+
+                            // Update log untuk shuttle kedua (Z) (Return)
+                            $shuttle2->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
+                            $shuttle2->save();
                         }
                     }
 
-                    // Hitung jumlah log yang sudah ada
-                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                        ->where('fbl_type', 'like', 'Update Shuttle Data%')
-                        ->count();
-
-                    // Buat log perubahan
-                    FastboatLog::create([
-                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                        'fbl_type' => 'Update Shuttle Data ' . ($count + 1),
-                        'fbl_data_before' => 'pickup_poin: ' . $pickupBefore . '| specific_pickup: ' . $specificPickupBefore . '| contact_pickup:' . $contactPickupBefore . '| dropoff_poin: ' . $dropoffBefore . '| specific_dropoff: ' . $specificDropoffBefore . '| contact_dropoff:' . $contactDropoffBefore,
-                        'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
-                    ]);
-
-                    // Update log di bookingDataEdit
+                    // Update log di bookingDataEdit untuk shuttle pertama (Y)
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
                     $bookingDataEdit->save();
 
-                    // Commit Transaksi
+                    // Commit transaksi
                     DB::commit();
 
                     // Berikan notifikasi setelah commit
@@ -2526,6 +2614,7 @@ class BookingDataController extends Controller
                     return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
                 }
                 break;
+
             case 'customer':
                 DB::beginTransaction();
                 try {
@@ -2533,7 +2622,7 @@ class BookingDataController extends Controller
                     $orderId = $bookingDataEdit->fbo_order_id;
                     $contact = Contact::where('ctc_id', $orderId)->first();
 
-                    // Mengambil data sebelum update
+                    // Mengambil data sebelumnya
                     $nameBefore = $contact->ctc_name;
                     $emailBefore = $contact->ctc_email;
                     $phoneBefore = $contact->ctc_phone;
@@ -2550,6 +2639,7 @@ class BookingDataController extends Controller
                     // Menentukan direction (oneway atau roundtrip) berdasarkan booking ID
                     $idOrder = $bookingDataEdit->fbo_order_id;
                     $orderId = BookingData::where('fbo_order_id', $idOrder)->first();
+                    $direction = ''; // Default direction
                     if ($orderId) {
                         $lastCharacter = substr($orderId->fbo_booking_id, -1);
                         if ($lastCharacter === 'Y') {
@@ -2579,40 +2669,54 @@ class BookingDataController extends Controller
                             'ctc_note' => $noteAfter,
                         ]);
 
-                        // Mengambil data booking kedua (berakhiran Z)
-                        $contactSecond = Contact::whereHas('bookingData', function ($query) use ($idOrder) {
-                            // Mencari booking yang terkait dengan order id dan booking_id yang berakhiran 'Z'
-                            $query->where('fbo_order_id', $idOrder) // memastikan order ID yang cocok
-                                ->where('fbo_booking_id', 'like', '%Z'); // booking ID berakhiran 'Z'
-                        })
-                            ->where('ctc_id', '!=', $contact->ctc_id) // memastikan bukan customer pertama
+                        // Log perubahan untuk customer pertama
+                        $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                            ->where('fbl_type', 'like', 'Update Customer Data%')
+                            ->count();
+
+                        FastboatLog::create([
+                            'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                            'fbl_type' => 'Update Customer Data ' . ($count + 1),
+                            'fbl_data_before' => 'customer_name: ' . $nameBefore . '| customer_email: ' . $emailBefore . '| customer_phone: ' . $phoneBefore . '| customer_nationality :' . $nationalityBefore . '| customer_note: ' . $noteBefore,
+                            'fbl_data_after' => 'customer_name: ' . $nameAfter . '| customer_email:' . $emailAfter . '| customer_phone:' . $phoneAfter . '| customer_nationality:' . $nationalityAfter . '| customer_note:' . $noteAfter,
+                        ]);
+
+                        // Update customer kedua (berakhiran Z)
+                        $bookingDataSecond = BookingData::where('fbo_order_id', $idOrder)
+                            ->where('fbo_booking_id', 'like', substr($bookingDataEdit->fbo_booking_id, 0, -1) . '%')
+                            ->whereRaw('RIGHT(fbo_booking_id, 1) = ?', ['Z'])
                             ->first();
 
+                        if ($bookingDataSecond) {
+                            // Mengambil contact yang terkait dengan booking kedua (berakhiran Z)
+                            $contactSecond = $bookingDataSecond->contact;
 
-                        if ($contactSecond) {
-                            // Update customer kedua (berakhiran Z)
-                            $contactSecond->update([
-                                'ctc_name' => $nameAfter,
-                                'ctc_email' => $emailAfter,
-                                'ctc_phone' => $phoneAfter,
-                                'ctc_nationality' => $nationalityAfter,
-                                'ctc_note' => $noteAfter,
-                            ]);
+                            if ($contactSecond && $contactSecond->ctc_id != $contact->ctc_id) {
+                                // Melakukan update data untuk contact kedua
+                                $contactSecond->update([
+                                    'ctc_name' => $nameAfter,
+                                    'ctc_email' => $emailAfter,
+                                    'ctc_phone' => $phoneAfter,
+                                    'ctc_nationality' => $nationalityAfter,
+                                    'ctc_note' => $noteAfter,
+                                ]);
+                                // Log perubahan untuk customer kedua (Return / Z)
+                                $countSecond = FastboatLog::where('fbl_booking_id', $bookingDataSecond->fbo_booking_id)
+                                    ->where('fbl_type', 'like', 'Update Customer Data%')
+                                    ->count();
+
+                                FastboatLog::create([
+                                    'fbl_booking_id' => $bookingDataSecond->fbo_booking_id,
+                                    'fbl_type' => 'Update Customer Data ' . ($countSecond + 1),
+                                    'fbl_data_before' => 'customer_name: ' . $nameBefore . '| customer_email: ' . $emailBefore . '| customer_phone: ' . $phoneBefore . '| customer_nationality :' . $nationalityBefore . '| customer_note: ' . $noteBefore,
+                                    'fbl_data_after' => 'customer_name: ' . $nameAfter . '| customer_email:' . $emailAfter . '| customer_phone:' . $phoneAfter . '| customer_nationality:' . $nationalityAfter . '| customer_note:' . $noteAfter,
+                                ]);
+                            }
+                            // Menyimpan log untuk booking kedua (Z)
+                            $bookingDataSecond->fbo_log = $logbefore . $user . ',' . 'Update Customer Data' . ',' . $date;
+                            $bookingDataSecond->save();
                         }
                     }
-
-                    // Hitung jumlah log yang sudah ada
-                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                        ->where('fbl_type', 'like', 'Update Customer Data%')
-                        ->count();
-
-                    // Buat log perubahan ke FastboatLog (log aplikasi)
-                    FastboatLog::create([
-                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                        'fbl_type' => 'Update Customer Data ' . ($count + 1),
-                        'fbl_data_before' => 'customer_name: ' . $nameBefore . '| customer_email: ' . $emailBefore . '| customer_phone: ' . $phoneBefore . '| customer_nationality :' . $nationalityBefore . '| customer_note: ' . $noteBefore,
-                        'fbl_data_after' => 'customer_name: ' . $nameAfter . '| customer_email:' . $emailAfter . '| customer_phone:' . $phoneAfter . '| customer_nationality:' . $nationalityAfter . '| customer_note:' . $noteAfter,
-                    ]);
 
                     // Update log di bookingDataEdit
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Customer Data' . ',' . $date;
@@ -2629,6 +2733,8 @@ class BookingDataController extends Controller
                     return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
                 }
                 break;
+
+
             case 'payment':
                 DB::beginTransaction();
                 try {
@@ -2654,9 +2760,11 @@ class BookingDataController extends Controller
 
                     // Menentukan apakah booking tersebut roundtrip atau oneway
                     $idOrder = $bookingDataEdit->fbo_order_id;
-                    $orderId = BookingData::where('fbo_order_id', $idOrder)->first();
-                    if ($orderId) {
-                        $lastCharacter = substr($orderId->fbo_booking_id, -1);
+                    $orderData = BookingData::where('fbo_order_id', $idOrder)->first();
+                    $direction = '';
+
+                    if ($orderData) {
+                        $lastCharacter = substr($orderData->fbo_booking_id, -1);
                         if ($lastCharacter === 'Y') {
                             $direction = 'roundtrip';
                         } elseif ($lastCharacter === 'X') {
@@ -2671,13 +2779,25 @@ class BookingDataController extends Controller
                         $payment->fbo_payment_method = $paymentMethodAfter;
                         $payment->fbo_transaction_id = $transactionIdAfter;
                         $payment->update();
+
+                        // Buat log perubahan untuk oneway
+                        $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                            ->where('fbl_type', 'like', 'Update Payment Data%')
+                            ->count();
+
+                        FastboatLog::create([
+                            'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                            'fbl_type' => 'Update Payment Data ' . ($count + 1),
+                            'fbl_data_before' => 'payment_method :' . $paymentMethodBefore . '| transaction_id: ' . $transactionIdBefore,
+                            'fbl_data_after' => 'payment_method: ' . $paymentMethodAfter . '| transaction_id: ' . $transactionIdAfter,
+                        ]);
                     } elseif ($direction === 'roundtrip') {
                         // Update booking pertama (berakhiran Y)
                         $bookingDataEdit->fbo_payment_method = $paymentMethodAfter;
                         $bookingDataEdit->fbo_transaction_id = $transactionIdAfter;
                         $bookingDataEdit->update();
 
-                        // Mengambil data booking kedua (berakhiran Z)
+                        // Update booking kedua (berakhiran Z)
                         $bookingIdSecond = BookingData::where('fbo_order_id', $idOrder)
                             ->where('fbo_booking_id', 'like', substr($bookingDataEdit->fbo_booking_id, 0, -1) . '%')
                             ->where('fbo_booking_id', '!=', $bookingDataEdit->fbo_booking_id)
@@ -2690,20 +2810,43 @@ class BookingDataController extends Controller
                             $bookingIdSecond->fbo_transaction_id = $transactionIdAfter;
                             $bookingIdSecond->update();
                         }
+
+                        // Buat log perubahan untuk kedua booking (Y dan Z)
+                        $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                            ->where('fbl_type', 'like', 'Update Payment Data%')
+                            ->count();
+
+                        FastboatLog::create([
+                            'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                            'fbl_type' => 'Update Payment Data ' . ($count + 1),
+                            'fbl_data_before' => 'payment_method :' . $paymentMethodBefore . '| transaction_id: ' . $transactionIdBefore,
+                            'fbl_data_after' => 'payment_method: ' . $paymentMethodAfter . '| transaction_id: ' . $transactionIdAfter,
+                        ]);
+
+                        // Buat log perubahan untuk booking kedua (Z)
+                        if ($bookingIdSecond) {
+                            // Update booking kedua (berakhiran Z)
+                            $bookingIdSecond->fbo_payment_method = $paymentMethodAfter;
+                            $bookingIdSecond->fbo_transaction_id = $transactionIdAfter;
+                            $bookingIdSecond->update();
+
+                            // Simpan log perubahan untuk booking kedua (Z)
+                            $countSecond = FastboatLog::where('fbl_booking_id', $bookingIdSecond->fbo_booking_id)
+                                ->where('fbl_type', 'like', 'Update Payment Data%')
+                                ->count();
+
+                            FastboatLog::create([
+                                'fbl_booking_id' => $bookingIdSecond->fbo_booking_id,
+                                'fbl_type' => 'Update Payment Data ' . ($countSecond + 1),
+                                'fbl_data_before' => 'payment_method :' . $paymentMethodBefore . '| transaction_id: ' . $transactionIdBefore,
+                                'fbl_data_after' => 'payment_method: ' . $paymentMethodAfter . '| transaction_id: ' . $transactionIdAfter,
+                            ]);
+
+                            // Menyimpan log untuk booking kedua
+                            $bookingIdSecond->fbo_log = $logbefore . $user . ',' . 'Update Payment Data' . ',' . $date;
+                            $bookingIdSecond->save();
+                        }
                     }
-
-                    // Buat log perubahan
-                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                        ->where('fbl_type', 'like', 'Update Payment Data%')
-                        ->count();
-
-                    FastboatLog::create([
-                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                        'fbl_type' => 'Update Payment Data ' . ($count + 1),
-                        'fbl_data_before' => 'payment_method :' . $paymentMethodBefore . '| transaction_id: ' . $transactionIdBefore,
-                        'fbl_data_after' => 'payment_method: ' . $paymentMethodAfter . '| transaction_id: ' . $transactionIdAfter,
-                    ]);
-
                     // Menyimpan log booking
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Payment Data' . ',' . $date;
                     $bookingDataEdit->save();
