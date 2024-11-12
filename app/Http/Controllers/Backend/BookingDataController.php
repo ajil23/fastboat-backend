@@ -121,8 +121,8 @@ class BookingDataController extends Controller
 
         // Check if the "Trip Updated" checkbox is checked
         if ($request->filled('trip_updated')) {
-            $query->whereNotNull('fbo_log'); // Ensure fbo_log has content
-        }
+            $query->where('fbo_log', 'like', '%Update%'); // Mencari entri yang mengandung kata "Update"
+        }        
 
         // Fetch the filtered data
         $bookingData = $query->get();
@@ -165,8 +165,8 @@ class BookingDataController extends Controller
         $paymentMethod = MasterPaymentMethod::all();
 
         foreach ($bookingData as $data) {
-            // Cek apakah kolom fbo_log tidak kosong
-            $data->isUpdated = !empty($data->fbo_log);
+            // Cek apakah kolom fbo_log mengandung kata 'update'
+            $data->isUpdated = !empty($data->fbo_log) && strpos($data->fbo_log, 'Update') !== false;
         }
 
         // Return view with data and unique dropdown options
