@@ -579,40 +579,7 @@
                                         </thead>
                                         <tbody id="logList">
                                         </tbody>
-                                        <tbody>
-                                            <tr>
-                                                <td style="background-color: lightskyblue;" colspan="2">
-                                                    <center>Before</center>
-                                                </td>
-                                                <td style="background-color: lightskyblue;" colspan="2">
-                                                    <center>After</center>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Company </td>
-                                                <td>: Idola Express</td>
-                                                <td>Company </td>
-                                                <td>: Idola Express</td>
-                                            </tr>
-                                            <tr>
-                                                <td> Trip </td>
-                                                <td> : Nusa Penida-Bali</td>
-                                                <td> Trip </td>
-                                                <td> : Nusa Penida-Bali</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total_price </td>
-                                                <td>: 220.000</td>
-                                                <td>Total_price </td>
-                                                <td>: 220.000</td>
-                                            </tr>
-                                            <tr>
-                                                <td> Trip_date </td>
-                                                <td>: 24-10-2024</td>
-                                                <td> Trip_date </td>
-                                                <td>: 24-10-2024</td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody id="fastboat-log-list"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -924,35 +891,24 @@
             });
         });
     </script>
+    <!-- modal view -->
     <script>
         $(document).ready(function() {
             $('body').on('click', '#showDetail', function() {
                 var detailURL = $(this).data('url');
                 $.get(detailURL, function(data) {
 
+                    // Formatting functions
                     function formatNumber(number) {
-                        return Number(number).toLocaleString(
-                            'id-ID'
-                        ); // 'id-ID' for Indonesian locale, use 'en-US' for English locale
+                        return Number(number).toLocaleString('id-ID');
                     }
-
-                    // Fungsi untuk memformat tanggal menjadi tanggal-bulan-tahun
                     function formatTanggal(tanggalString) {
-                        const bulanNama = [
-                            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-                            "Jul", "Augt", "Sept", "Oct", "Nov", "Dec"
-                        ];
-
-                        const tanggal = new Date(
-                            tanggalString); // Konversi string menjadi Date object
-                        const hari = tanggal.getDate(); // Ambil hari
-                        const bulan = bulanNama[tanggal.getMonth()]; // Ambil nama bulan
-                        const tahun = tanggal.getFullYear(); // Ambil tahun
-
-                        return `${hari} ${bulan} ${tahun}`; // Format tanggal-bulan-tahun
+                        const bulanNama = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
+                        const tanggal = new Date(tanggalString);
+                        return `${tanggal.getDate()} ${bulanNama[tanggal.getMonth()]} ${tanggal.getFullYear()}`;
                     }
 
-                    // Isi data ke dalam modal
+                    // Populate booking and trip information
                     $('#booking-id').text(data.fbo_booking_id);
                     $('#booking-fastboat').text(data.trip.fastboat.fb_name);
                     $('#trip-date').text(formatTanggal(data.fbo_trip_date));
@@ -969,61 +925,81 @@
                     $('#total-nett').text(formatNumber(data.fbo_total_nett));
                     $('#end-total').text(formatNumber(data.fbo_end_total));
                     $('#profit').text(formatNumber(data.fbo_profit));
-                    $('#note').text(formatNumber(data.fbo_refund));
+                    $('#note').text(data.fbo_refund);
                     $('#transaction-id').text(data.fbo_transaction_id);
 
-                    // Logika untuk menghitung subtotal (count-adult * adult-publish)
-                    let adultCount = parseInt(data.fbo_adult) || 0;
-                    let adultPublish = parseFloat(data.fbo_adult_publish) || 0;
-                    let subtotalAdult = adultCount * adultPublish;
-                    // Tampilkan subtotal di modal
-                    $('#subtotal-adult').text(formatNumber(subtotalAdult));
+                    // Calculate subtotal for adults and children
+                    $('#subtotal-adult').text(formatNumber(parseInt(data.fbo_adult) * parseFloat(data.fbo_adult_publish)));
+                    $('#subtotal-child').text(formatNumber(parseInt(data.fbo_child) * parseFloat(data.fbo_child_publish)));
 
-                    // Logika untuk menghitung subtotal (count-adult * adult-publish)
-                    let childCount = parseInt(data.fbo_child) || 0;
-                    let childPublish = parseFloat(data.fbo_child_publish) || 0;
-                    let subtotalChild = childCount * childPublish;
-                    // Tampilkan subtotal di modal
-                    $('#subtotal-child').text(formatNumber(subtotalChild));
+                    // Populate route information
+                    $('#route-info').html(`
+                        ${data.trip.departure_port} (${data.trip.departure_island}, ${data.trip.departure_time}) 
+                        To ${data.trip.arrival_port} (${data.trip.arrival_island}, ${data.trip.arrival_time})
+                    `);
 
-                    // Tampilkan informasi rute
-                    let routeInfo = `
-                    ${data.trip.departure_port} (${data.trip.departure_island}, ${data.trip.departure_time}) 
-                    To ${data.trip.arrival_port} (${data.trip.arrival_island}, ${data.trip.arrival_time})
-                `;
-                    $('#route-info').html(routeInfo);
-
+                    // Passenger List
                     $('#passenger-list').empty();
-                    // Loop untuk menambahkan data penumpang ke dalam tabel
                     data.trip.passengers.forEach(function(passenger, index) {
                         $('#passenger-list').append(`
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td>${passenger.name}</td>
-                            <td>${passenger.gender}</td>
-                            <td>${passenger.age}</td>
-                            <td>${passenger.nationality}</td>
-                        </tr>
-                    `);
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${passenger.name}</td>
+                                <td>${passenger.gender}</td>
+                                <td>${passenger.age}</td>
+                                <td>${passenger.nationality}</td>
+                            </tr>
+                        `);
                     });
+
+                    // Logs List
                     $('#logList').empty();
                     data.logs.forEach(function(log) {
-                        $('#logList').append(
-                            `<tr>
-                        <td><center>${log.user}</center></td>
-                            <td><center>${log.activity}</center></td>
-                            <td colspan="2"><center>${log.date}</center></td>
-                        </tr>`
-                        );
+                        $('#logList').append(`
+                            <tr>
+                                <td><center>${log.user}</center></td>
+                                <td><center>${log.activity}</center></td>
+                                <td colspan="2"><center>${log.date}</center></td>
+                            </tr>
+                        `);
                     });
-                    $('#passenger-info').text(data.note);
-                    $('#chekin-point').text(data.checkPoint.fcp_address);
-                }).fail(function() {
-                    alert('Gagal mengambil data. Silakan coba lagi.');
+
+                    // Fastboat Logs
+                    $('#fastboat-log-list').empty();
+                    if (data.fastboatLogs && data.fastboatLogs.length) {
+                        $('#fastboat-log-list').append(`
+                            <tr>
+                                <td style="background-color: lightskyblue;" colspan="2"><center>Before</center></td>
+                                <td style="background-color: lightskyblue;" colspan="2"><center>After</center></td>
+                            </tr>
+                        `);
+
+                        data.fastboatLogs.forEach(function(logEntry) {
+                            $('#fastboat-log-list').append(`
+                                <tr><td>Company</td><td>${logEntry.data_before.company || ''}</td>
+                                    <td>Company</td><td>${logEntry.data_after.company || ''}</td></tr>
+                                <tr><td>Trip</td><td>${logEntry.data_before.trip || ''}</td>
+                                    <td>Trip</td><td>${logEntry.data_after.trip || ''}</td></tr>
+                                <tr><td>Total Price</td><td>${formatNumber(logEntry.data_before.total_price || 0)}</td>
+                                    <td>Total Price</td><td>${formatNumber(logEntry.data_after.total_price || 0)}</td></tr>
+                            `);
+                        });
+                    }
+
+                    // Helper function to parse log data
+                    function parseLogData(logString) {
+                        const logData = {};
+                        logString.split('|').forEach(item => {
+                            const [key, value] = item.split(':');
+                            logData[key.trim()] = value ? value.trim() : '';
+                        });
+                        return logData;
+                    }
                 });
             });
         });
     </script>
+
     <script>
         $(document).ready(function() {
             $('#removeStatus').on('click', function(e) {

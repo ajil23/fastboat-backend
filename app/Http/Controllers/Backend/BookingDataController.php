@@ -1366,20 +1366,51 @@ class BookingDataController extends Controller
     {
         $bookingData = BookingData::with(['trip.fastboat', 'trip.departure.island', 'trip.arrival.island', 'contact', 'checkPoint'])
             ->find($fbo_id);
-
+    
         if (!$bookingData) {
             return response()->json(['message' => 'Data tidak ada'], 404);
         }
-
-
-        $passengerDataString = $bookingData->fbo_passenger; // Mengambil data dari database
+    
+        // Fetch logs from fastboatlog table for matching booking_id
+        $fastboatLogs = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
+        ->get(['fbl_data_before', 'fbl_data_after']);
+        
+        // Convert logs to array for JSON response with filtering condition
+        $fastboatLogArray = $fastboatLogs->map(function ($log) {
+            $beforeDetails = explode('|', $log->fbl_data_before);
+            $afterDetails = explode('|', $log->fbl_data_after);
+    
+            $parseDetails = function($details) {
+                $parsedData = [];
+                foreach ($details as $detail) {
+                    $pair = explode(':', $detail);
+                    if (count($pair) === 2) {
+                        $parsedData[trim($pair[0])] = trim($pair[1]);
+                    }
+                }
+                return $parsedData;
+            };
+    
+            $dataBefore = $parseDetails($beforeDetails);
+            $dataAfter = $parseDetails($afterDetails);
+    
+            // Filter logs that contain company, trip, and total_price
+            if (isset($dataBefore['company'], $dataBefore['trip'], $dataBefore['total_price']) ||
+                isset($dataAfter['company'], $dataAfter['trip'], $dataAfter['total_price'])) {
+                return [
+                    'data_before' => $dataBefore,
+                    'data_after' => $dataAfter,
+                ];
+            }
+            
+            return null;
+        })->filter()->values(); // Filter out null values
+    
+        // Parse passenger data
+        $passengerDataString = $bookingData->fbo_passenger;
         $passengerArray = [];
-
-
-        // Memisahkan data berdasarkan ';' untuk setiap penumpang
+    
         $passengers = explode(';', $passengerDataString);
-
-        // Mengurai setiap data penumpang
         foreach ($passengers as $passenger) {
             $details = explode(',', $passenger);
             if (count($details) === 4) {
@@ -1391,24 +1422,22 @@ class BookingDataController extends Controller
                 ];
             }
         }
-
-        // Mengambil dan memformat data log
+    
+        // Parse log data
         $logDataString = $bookingData->fbo_log;
         $logArray = [];
-
         $logs = explode(';', $logDataString);
-
         foreach ($logs as $log) {
             $logDetails = explode(',', $log);
             if (count($logDetails) === 3) {
-                $logArray[] = array(
+                $logArray[] = [
                     'user' => trim($logDetails[0]),
                     'activity' => trim($logDetails[1]),
                     'date' => trim($logDetails[2])
-                );
+                ];
             }
         }
-
+    
         return response()->json([
             'fbo_booking_id' => $bookingData->fbo_booking_id,
             'fbo_trip_date' => $bookingData->fbo_trip_date,
@@ -1442,8 +1471,9 @@ class BookingDataController extends Controller
                 'fcp_address' => $bookingData->checkPoint->fcp_address,
             ],
             'logs' => $logArray,
+            'fastboatLogs' => $fastboatLogArray, // Updated key to fastboatLogs
         ]);
-    }
+    }    
 
     public function updateStatus(Request $request, $fbo_id)
     {
