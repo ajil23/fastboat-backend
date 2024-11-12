@@ -2181,7 +2181,6 @@ class BookingDataController extends Controller
 
     public function update(Request $request, $fbo_id)
     {
-        // dd($request);
         $bookingDataEdit = BookingData::find($fbo_id);
 
         // Pengecekan data fbo_log
@@ -2210,6 +2209,7 @@ class BookingDataController extends Controller
                     $adultBefore = $bookingDataEdit->fbo_adult;
                     $childBefore = $bookingDataEdit->fbo_child;
                     $totalNettBefore = $bookingDataEdit->fbo_total_nett;
+                    $endTotalBefore = $bookingDataEdit->fbo_end_total;
 
                     // Mengambil data untuk departure
                     $availabilityId = FastboatAvailability::find($request->availability_id);
@@ -2242,6 +2242,7 @@ class BookingDataController extends Controller
                     $endTotalAfter = $request->fbo_end_total;
                     $endTotalCurrencyAfter = $request->fbo_end_total_currency;
                     $profitAfter = $endTotalAfter - $totalNettAfter;
+                    $refundAfter = $endTotalBefore - $endTotalAfter;
                     $companyAfter = $availabilityId->trip->fastboat->company->cpn_name;
                     $departureIslandAfter = $availabilityId->trip->departure->island->isd_name;
                     $departurePortAfter = $availabilityId->trip->departure->prt_name_en;
@@ -2286,6 +2287,7 @@ class BookingDataController extends Controller
                             'fbo_end_total' => $endTotalAfter,
                             'fbo_end_total_currency' => $endTotalCurrencyAfter,
                             'fbo_profit' => $profitAfter,
+                            'fbo_refund' => $refundAfter,
                             'fbo_departure_time' => $departureTimeAfter,
                             'fbo_arrival_time' => $arrivalTimeAfter,
                             'fbo_checkin_point' => $chekinPointAfter,
@@ -2329,6 +2331,7 @@ class BookingDataController extends Controller
                                 'fbo_end_total' => $endTotalAfter,
                                 'fbo_end_total_currency' => $endTotalCurrencyAfter,
                                 'fbo_profit' => $profitAfter,
+                                'fbo_refund' => $refundAfter,
                                 'fbo_departure_time' => $departureTimeAfter,
                                 'fbo_arrival_time' => $arrivalTimeAfter,
                                 'fbo_checkin_point' => $chekinPointAfter,
@@ -2362,6 +2365,26 @@ class BookingDataController extends Controller
                                 ->where('fbo_booking_id', 'like', '%Z')->first();
 
                             if ($returnBookingData) {
+                                // Mengambil data sebelumnya (return)
+                                $companyBefore = $returnBookingData->trip->fastboat->company->cpn_name;
+                                $departureIslandBefore = $returnBookingData->trip->departure->island->isd_name;
+                                $departurePortBefore = $returnBookingData->trip->departure->prt_name_en;
+                                $arrivalIslandBefore = $returnBookingData->trip->arrival->island->isd_name;
+                                $arrivalPortBefore = $returnBookingData->trip->arrival->prt_name_en;
+                                $kursBefore = $returnBookingData->fbo_kurs;
+                                $adultBefore = $returnBookingData->fbo_adult;
+                                $childBefore = $returnBookingData->fbo_child;
+                                $endTotalBefore = $returnBookingData->fbo_end_total;
+
+                                // Mengambil data sesudah (return)
+                                $companyAfter = $availabilityIdReturn->trip->fastboat->company->cpn_name;
+                                $departureIslandAfter = $availabilityIdReturn->trip->departure->island->isd_name;
+                                $departurePortAfter = $availabilityIdReturn->trip->departure->prt_name_en;
+                                $arrivalIslandAfter = $availabilityIdReturn->trip->arrival->island->isd_name;
+                                $arrivalPortAfter = $availabilityIdReturn->trip->arrival->prt_name_en;
+                                $endTotalAfter = $request->return_fbo_end_total;
+                                $refundAfter = $endTotalBefore - $endTotalAfter;
+
                                 $returnBookingData->update([
                                     'fbo_availability_id' => $request->availability_id_return,
                                     'fbo_trip_date' => $request->fbo_trip_date_return,
@@ -2380,29 +2403,13 @@ class BookingDataController extends Controller
                                     'fbo_end_total' => $request->return_fbo_end_total,
                                     'fbo_end_total_currency' => $request->return_fbo_end_total_currency,
                                     'fbo_profit' => $request->return_fbo_end_total - (($availabilityIdReturn->fba_adult_nett * $adultBefore) + ($availabilityIdReturn->fba_child_nett * $childBefore)),
+                                    'fbo_refund' => $refundAfter,
                                     'fbo_departure_time' => $returnDepartureTime,
                                     'fbo_arrival_time' => $returnArrivalTime,
                                     'fbo_checkin_point' => $returnCheckin->fcp_id,
                                     'fbo_updated_by' => $updatedByAfter,
                                 ]);
 
-                                // Mengambil data sebelumnya (return)
-                                $companyBefore = $returnBookingData->trip->fastboat->company->cpn_name;
-                                $departureIslandBefore = $returnBookingData->trip->departure->island->isd_name;
-                                $departurePortBefore = $returnBookingData->trip->departure->prt_name_en;
-                                $arrivalIslandBefore = $returnBookingData->trip->arrival->island->isd_name;
-                                $arrivalPortBefore = $returnBookingData->trip->arrival->prt_name_en;
-                                $kursBefore = $returnBookingData->fbo_kurs;
-                                $adultBefore = $returnBookingData->fbo_adult;
-                                $childBefore = $returnBookingData->fbo_child;
-                                $totalNettBefore = $returnBookingData->fbo_total_nett;
-
-                                // Mengambil data sesudah (return)
-                                $companyAfter = $availabilityIdReturn->trip->fastboat->company->cpn_name;
-                                $departureIslandAfter = $availabilityIdReturn->trip->departure->island->isd_name;
-                                $departurePortAfter = $availabilityIdReturn->trip->departure->prt_name_en;
-                                $arrivalIslandAfter = $availabilityIdReturn->trip->arrival->island->isd_name;
-                                $arrivalPortAfter = $availabilityIdReturn->trip->arrival->prt_name_en;
 
                                 $count = FastboatLog::where('fbl_booking_id', $returnBookingData->fbo_booking_id)
                                     ->where('fbl_type', 'like', 'Update Trip Data%')
