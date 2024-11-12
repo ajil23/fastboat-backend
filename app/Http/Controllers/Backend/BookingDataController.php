@@ -2503,7 +2503,7 @@ class BookingDataController extends Controller
                     $dropoffBefore = $bookingDataEdit->fbo_dropoff;
                     $specificDropoffBefore = $bookingDataEdit->fbo_specific_dropoff;
                     $contactDropoffBefore = $bookingDataEdit->fbo_contact_dropoff;
-
+    
                     // Mengambil data sesudah
                     $pickupAfter = $request->fbo_pickup;
                     $specificPickupAfter = $request->fbo_specific_pickup;
@@ -2511,12 +2511,13 @@ class BookingDataController extends Controller
                     $dropoffAfter = $request->fbo_dropoff;
                     $specificDropoffAfter = $request->fbo_specific_dropoff;
                     $contactDropoffAfter = $request->fbo_contact_dropoff;
-
+    
                     // Mengecek direction dan menentukan apakah akan update 1 atau 2 data
                     $orderId = $bookingDataEdit->fbo_order_id;
                     $orderData = BookingData::where('fbo_order_id', $orderId)->first();
                     $lastCharacter = substr($orderData->fbo_booking_id, -1); // Mengambil karakter terakhir dari booking ID
-
+    
+                    $direction = '';
                     if ($lastCharacter === 'X') {
                         $direction = 'oneway';
                     } elseif ($lastCharacter === 'Y' || $lastCharacter === 'Z') {
@@ -2525,43 +2526,55 @@ class BookingDataController extends Controller
                         // Atur default jika tidak terdeteksi
                         $direction = 'oneway';
                     }
-
-                    // Update data untuk shuttle, menyesuaikan dengan direction
+    
+                    // Proses update sesuai dengan direction
                     if ($direction === 'oneway') {
                         // Update hanya untuk satu data (BookingData pertama)
-                        $shuttle = $bookingDataEdit;
-                        $shuttle->update([
-                            'fbo_pickup' => $pickupAfter,
-                            'fbo_specific_pickup' => $specificPickupAfter,
-                            'fbo_contact_pickup' => $contactPickupAfter,
-                            'fbo_dropoff' => $dropoffAfter,
-                            'fbo_specific_dropoff' => $specificDropoffAfter,
-                            'fbo_contact_dropoff' => $contactDropoffAfter,
+                        $shuttle = BookingData::find($bookingDataEdit->fbo_id);
+                        $shuttle->fbo_pickup = $pickupAfter;
+                        $shuttle->fbo_specific_pickup = $specificPickupAfter;
+                        $shuttle->fbo_contact_pickup = $contactPickupAfter;
+                        $shuttle->fbo_dropoff = $dropoffAfter;
+                        $shuttle->fbo_specific_dropoff = $specificDropoffAfter;
+                        $shuttle->fbo_contact_dropoff = $contactDropoffAfter;
+                        $shuttle->update();
+    
+                        // Log perubahan untuk shuttle pertama (X)
+                        $count = FastboatLog::where('fbl_booking_id', $shuttle->fbo_booking_id)
+                            ->where('fbl_type', 'like', 'Update Shuttle Data%')
+                            ->count();
+    
+                        FastboatLog::create([
+                            'fbl_booking_id' => $shuttle->fbo_booking_id,
+                            'fbl_type' => 'Update Shuttle Data ' . ($count + 1),
+                            'fbl_data_before' => 'pickup_poin: ' . $pickupBefore . '| specific_pickup: ' . $specificPickupBefore . '| contact_pickup:' . $contactPickupBefore . '| dropoff_poin: ' . $dropoffBefore . '| specific_dropoff: ' . $specificDropoffBefore . '| contact_dropoff:' . $contactDropoffBefore,
+                            'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
                         ]);
                     } elseif ($direction === 'roundtrip') {
                         // Update booking pertama (berakhiran Y)
                         $shuttle1 = BookingData::where('fbo_order_id', $orderId)
                             ->where('fbo_booking_id', 'like', '%Y')->first(); // Booking ID yang berakhiran 'Y'
-
+    
                         // Update booking kedua (berakhiran Z)
                         $shuttle2 = BookingData::where('fbo_order_id', $orderId)
                             ->where('fbo_booking_id', 'like', '%Z')->first(); // Booking ID yang berakhiran 'Z'
-
+    
+                        // Pastikan kedua shuttle ada dan update keduanya
                         if ($shuttle1) {
-                            $shuttle1->update([
-                                'fbo_pickup' => $pickupAfter,
-                                'fbo_specific_pickup' => $specificPickupAfter,
-                                'fbo_contact_pickup' => $contactPickupAfter,
-                                'fbo_dropoff' => $dropoffAfter,
-                                'fbo_specific_dropoff' => $specificDropoffAfter,
-                                'fbo_contact_dropoff' => $contactDropoffAfter,
-                            ]);
-
+                            $shuttle1 = BookingData::find($shuttle1->fbo_id);
+                            $shuttle1->fbo_pickup = $pickupAfter;
+                            $shuttle1->fbo_specific_pickup = $specificPickupAfter;
+                            $shuttle1->fbo_contact_pickup = $contactPickupAfter;
+                            $shuttle1->fbo_dropoff = $dropoffAfter;
+                            $shuttle1->fbo_specific_dropoff = $specificDropoffAfter;
+                            $shuttle1->fbo_contact_dropoff = $contactDropoffAfter;
+                            $shuttle1->update();
+    
                             // Log perubahan untuk shuttle pertama (Y)
                             $count = FastboatLog::where('fbl_booking_id', $shuttle1->fbo_booking_id)
                                 ->where('fbl_type', 'like', 'Update Shuttle Data%')
                                 ->count();
-
+    
                             FastboatLog::create([
                                 'fbl_booking_id' => $shuttle1->fbo_booking_id,
                                 'fbl_type' => 'Update Shuttle Data ' . ($count + 1),
@@ -2569,23 +2582,22 @@ class BookingDataController extends Controller
                                 'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
                             ]);
                         }
-
+    
                         if ($shuttle2) {
-                            // Update booking kedua (berakhiran Z)
-                            $shuttle2->update([
-                                'fbo_pickup' => $pickupAfter,
-                                'fbo_specific_pickup' => $specificPickupAfter,
-                                'fbo_contact_pickup' => $contactPickupAfter,
-                                'fbo_dropoff' => $dropoffAfter,
-                                'fbo_specific_dropoff' => $specificDropoffAfter,
-                                'fbo_contact_dropoff' => $contactDropoffAfter,
-                            ]);
-
-                            // Log perubahan untuk shuttle kedua (Z) - Return
+                            $shuttle2 = BookingData::find($shuttle2->fbo_id);
+                            $shuttle2->fbo_pickup = $pickupAfter;
+                            $shuttle2->fbo_specific_pickup = $specificPickupAfter;
+                            $shuttle2->fbo_contact_pickup = $contactPickupAfter;
+                            $shuttle2->fbo_dropoff = $dropoffAfter;
+                            $shuttle2->fbo_specific_dropoff = $specificDropoffAfter;
+                            $shuttle2->fbo_contact_dropoff = $contactDropoffAfter;
+                            $shuttle2->update();
+    
+                            // Log perubahan untuk shuttle kedua (Z)
                             $countSecond = FastboatLog::where('fbl_booking_id', $shuttle2->fbo_booking_id)
                                 ->where('fbl_type', 'like', 'Update Shuttle Data%')
                                 ->count();
-
+    
                             FastboatLog::create([
                                 'fbl_booking_id' => $shuttle2->fbo_booking_id,
                                 'fbl_type' => 'Update Shuttle Data ' . ($countSecond + 1),
@@ -2593,13 +2605,13 @@ class BookingDataController extends Controller
                                 'fbl_data_after' => 'pickup_poin: ' . $pickupAfter . '| specific_pickup: ' . $specificPickupAfter . '| contact_pickup:' . $contactPickupAfter . '| dropoff_poin: ' . $dropoffAfter . '| specific_dropoff: ' . $specificDropoffAfter . '| contact_dropoff:' . $contactDropoffAfter,
                             ]);
 
-                            // Update log untuk shuttle kedua (Z) (Return)
-                            $shuttle2->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
+                            // Menyimpan log untuk booking kedua
+                            $shuttle2->fbo_log = $logbefore . $user . ',' . 'Update Payment Data' . ',' . $date;
                             $shuttle2->save();
                         }
                     }
-
-                    // Update log di bookingDataEdit untuk shuttle pertama (Y)
+    
+                    // Menyimpan log untuk booking utama (untuk shuttle pertama/roundtrip)
                     $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update Shuttle Data' . ',' . $date;
                     $bookingDataEdit->save();
 
@@ -2614,6 +2626,7 @@ class BookingDataController extends Controller
                     return back()->withErrors(['error' => 'Failed to update data: ' . $e->getMessage()]);
                 }
                 break;
+
 
             case 'customer':
                 DB::beginTransaction();
