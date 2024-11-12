@@ -122,7 +122,7 @@ class BookingDataController extends Controller
         // Check if the "Trip Updated" checkbox is checked
         if ($request->filled('trip_updated')) {
             $query->where('fbo_log', 'like', '%Update%'); // Mencari entri yang mengandung kata "Update"
-        }        
+        }
 
         // Fetch the filtered data
         $bookingData = $query->get();
@@ -2201,6 +2201,7 @@ class BookingDataController extends Controller
                 try {
                     // Mengambil data sebelum perubahan untuk log
                     $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
+                    $tripDateBefore = $bookingDataEdit->fbo_trip_date;
                     $departureIslandBefore = $bookingDataEdit->trip->departure->island->isd_name;
                     $departurePortBefore = $bookingDataEdit->trip->departure->prt_name_en;
                     $arrivalIslandBefore = $bookingDataEdit->trip->arrival->island->isd_name;
@@ -2301,8 +2302,8 @@ class BookingDataController extends Controller
                         FastboatLog::create([
                             'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
                             'fbl_type' => 'Update trip',
-                            'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore,
-                            'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter,
+                            'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore . '| trip_date:' . $tripDateBefore,
+                            'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter . '| trip_date:' . $tripDateAfter,
                         ]);
                     }
 
@@ -2345,8 +2346,8 @@ class BookingDataController extends Controller
                             FastboatLog::create([
                                 'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
                                 'fbl_type' => 'Update trip',
-                                'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore,
-                                'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter,
+                                'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore . '| trip_date:' . $tripDateBefore,
+                                'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter . '| trip_date:' . $tripDateAfter,
                             ]);
 
                             $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
@@ -2367,6 +2368,7 @@ class BookingDataController extends Controller
                             if ($returnBookingData) {
                                 // Mengambil data sebelumnya (return)
                                 $companyBefore = $returnBookingData->trip->fastboat->company->cpn_name;
+                                $tripDateBefore = $returnBookingData->fbo_trip_date;
                                 $departureIslandBefore = $returnBookingData->trip->departure->island->isd_name;
                                 $departurePortBefore = $returnBookingData->trip->departure->prt_name_en;
                                 $arrivalIslandBefore = $returnBookingData->trip->arrival->island->isd_name;
@@ -2378,6 +2380,7 @@ class BookingDataController extends Controller
 
                                 // Mengambil data sesudah (return)
                                 $companyAfter = $availabilityIdReturn->trip->fastboat->company->cpn_name;
+                                $tripDateAfter = $availabilityIdReturn->fba_date;
                                 $departureIslandAfter = $availabilityIdReturn->trip->departure->island->isd_name;
                                 $departurePortAfter = $availabilityIdReturn->trip->departure->prt_name_en;
                                 $arrivalIslandAfter = $availabilityIdReturn->trip->arrival->island->isd_name;
@@ -2418,8 +2421,8 @@ class BookingDataController extends Controller
                                 FastboatLog::create([
                                     'fbl_booking_id' => $returnBookingData->fbo_booking_id,
                                     'fbl_type' => 'Update trip',
-                                    'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore,
-                                    'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter,
+                                    'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore . '| trip_date:' . $tripDateBefore,
+                                    'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter . '| trip_date:' . $tripDateAfter,
                                 ]);
 
                                 $returnBookingData->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
