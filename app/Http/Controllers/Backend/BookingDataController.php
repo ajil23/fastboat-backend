@@ -2231,117 +2231,35 @@ class BookingDataController extends Controller
             case 'trip':
                 DB::beginTransaction();
                 try {
-                // Mengambil data sebelum perubahan untuk log
-                $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
-                $tripDateBefore = $bookingDataEdit->fbo_trip_date;
-                $departureIslandBefore = $bookingDataEdit->trip->departure->island->isd_name;
-                $departurePortBefore = $bookingDataEdit->trip->departure->prt_name_en;
-                $arrivalIslandBefore = $bookingDataEdit->trip->arrival->island->isd_name;
-                $arrivalPortBefore = $bookingDataEdit->trip->arrival->prt_name_en;
-                $kursBefore = $bookingDataEdit->fbo_kurs;
-                $adultBefore = $bookingDataEdit->fbo_adult;
-                $childBefore = $bookingDataEdit->fbo_child;
-                $totalNettBefore = $bookingDataEdit->fbo_total_nett;
-                $endTotalBefore = $bookingDataEdit->fbo_end_total;
+                    // Mengambil data sebelum perubahan untuk log
+                    $companyBefore = $bookingDataEdit->trip->fastboat->company->cpn_name;
+                    $tripDateBefore = $bookingDataEdit->fbo_trip_date;
+                    $departureIslandBefore = $bookingDataEdit->trip->departure->island->isd_name;
+                    $departurePortBefore = $bookingDataEdit->trip->departure->prt_name_en;
+                    $arrivalIslandBefore = $bookingDataEdit->trip->arrival->island->isd_name;
+                    $arrivalPortBefore = $bookingDataEdit->trip->arrival->prt_name_en;
+                    $kursBefore = $bookingDataEdit->fbo_kurs;
+                    $adultBefore = $bookingDataEdit->fbo_adult;
+                    $childBefore = $bookingDataEdit->fbo_child;
+                    $totalNettBefore = $bookingDataEdit->fbo_total_nett;
+                    $endTotalBefore = $bookingDataEdit->fbo_end_total;
 
 
-                // Update departure data untuk oneway atau roundtrip
-                $orderId = $bookingDataEdit->fbo_order_id;
-                $orderData = BookingData::where('fbo_order_id', $orderId)->first();
-                $lastCharacter = substr($orderData->fbo_booking_id, -1);
+                    // Update departure data untuk oneway atau roundtrip
+                    $orderId = $bookingDataEdit->fbo_order_id;
+                    $orderData = BookingData::where('fbo_order_id', $orderId)->first();
+                    $lastCharacter = substr($orderData->fbo_booking_id, -1);
 
-                if ($lastCharacter === 'X') {
-                    $direction = 'oneway';
-                } elseif ($lastCharacter === 'Y' || $lastCharacter === 'Z') {
-                    $direction = 'roundtrip';
-                } else {
-                    $direction = 'oneway';
-                }
-
-                if ($direction === 'oneway') {
-                    // Mengambil data untuk departure
-                    $availabilityId = FastboatAvailability::find($request->availability_id);
-                    $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
-
-                    $availabilityIdAfter = $request->availability_id;
-                    $tripIdAfter = $availabilityId->trip->fbt_id;
-                    $tripDateAfter = $availabilityId->fba_date;
-                    $adultNettAfter = $availabilityId->fba_adult_nett;
-                    $childNettAfter = $availabilityId->fba_child_nett;
-                    $totalNettAfter = ($adultNettAfter * $adultBefore) + ($childNettAfter * $childBefore);
-                    $adultPublishAfter = $availabilityId->fba_adult_publish;
-                    $childPublishAfter = $availabilityId->fba_child_publish;
-                    $totalPublishAfter = ($adultPublishAfter * $adultBefore) + ($childPublishAfter * $childBefore);
-                    $adultCurrencyAfter = round($request->price_adult / $kursBefore);
-                    $childCurrencyAfter = round($request->price_child / $kursBefore);
-                    $totalCurrencyAfter = ($adultCurrencyAfter * $adultBefore) + ($childCurrencyAfter * $childBefore);
-                    $discountAfter = $availabilityId->fba_discount;
-
-                    // Tentukan price cut untuk departure
-                    if ($adultCurrencyAfter > $adultPublishAfter) {
-                        $priceCutAfter = (($childPublishAfter - $request->price_child) * $childBefore);
-                    } elseif ($childCurrencyAfter > $childPublishAfter) {
-                        $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore);
+                    if ($lastCharacter === 'X') {
+                        $direction = 'oneway';
+                    } elseif ($lastCharacter === 'Y' || $lastCharacter === 'Z') {
+                        $direction = 'roundtrip';
                     } else {
-                        $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore) + (($childPublishAfter - $request->price_child) * $childBefore);
+                        $direction = 'oneway';
                     }
 
-                    $discountTotalAfter = $discountAfter + $priceCutAfter;
-                    $endTotalAfter = $request->fbo_end_total;
-                    $endTotalCurrencyAfter = $request->fbo_end_total_currency;
-                    $profitAfter = $endTotalAfter - $totalNettAfter;
-                    $refundAfter = $endTotalBefore - $endTotalAfter;
-                    $companyAfter = $availabilityId->trip->fastboat->company->cpn_name;
-                    $departureIslandAfter = $availabilityId->trip->departure->island->isd_name;
-                    $departurePortAfter = $availabilityId->trip->departure->prt_name_en;
-                    $departureTimeAfter = $availabilityId->fba_dept_time ?? $availabilityId->trip->fbt_dept_time;
-                    $arrivalIslandAfter = $availabilityId->trip->arrival->island->isd_name;
-                    $arrivalPortAfter = $availabilityId->trip->arrival->prt_name_en;
-                    $arrivalTimeAfter = $availabilityId->fba_arrival_time ?? $availabilityId->trip->fbt_arrival_time;
-                    $chekinPointAfter = $checkin->fcp_id;
-                    $updatedByAfter = $user;
-
-                    $trip = $bookingDataEdit;
-                    $trip->update([
-                        'fbo_availability_id' => $availabilityIdAfter,
-                        'fbo_trip_date' => $tripDateAfter,
-                        'fbo_adult_nett' => $adultNettAfter,
-                        'fbo_child_nett' => $childNettAfter,
-                        'fbo_total_nett' => $totalNettAfter,
-                        'fbo_adult_publish' => $adultPublishAfter,
-                        'fbo_child_publish' => $childPublishAfter,
-                        'fbo_total_publish' => $totalPublishAfter,
-                        'fbo_adult_currency' => $adultCurrencyAfter,
-                        'fbo_child_currency' => $childCurrencyAfter,
-                        'fbo_total_currency' => $totalCurrencyAfter,
-                        'fbo_discount' => $discountAfter,
-                        'fbo_price_cut' => $priceCutAfter,
-                        'fbo_discount_total' => $discountTotalAfter,
-                        'fbo_end_total' => $endTotalAfter,
-                        'fbo_end_total_currency' => $endTotalCurrencyAfter,
-                        'fbo_profit' => $profitAfter,
-                        'fbo_refund' => $refundAfter,
-                        'fbo_departure_time' => $departureTimeAfter,
-                        'fbo_arrival_time' => $arrivalTimeAfter,
-                        'fbo_checkin_point' => $chekinPointAfter,
-                        'fbo_updated_by' => $updatedByAfter,
-                    ]);
-
-                    $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
-                        ->where('fbl_type', 'like', 'Update Trip Data%')
-                        ->count();
-
-                    FastboatLog::create([
-                        'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
-                        'fbl_type' => 'Update trip',
-                        'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore . '| trip_date:' . $tripDateBefore,
-                        'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter . '| trip_date:' . $tripDateAfter,
-                    ]);
-                }
-
-                if ($direction === 'roundtrip') {
-                    // Kondisi jika hanya mengupdate departure
-                    if ($request->has('availability_id') && $request->input('availability_id') !== null && $request->input('availability_id_return') === null) {
+                    if ($direction === 'oneway') {
+                        // Mengambil data untuk departure
                         $availabilityId = FastboatAvailability::find($request->availability_id);
                         $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
 
@@ -2419,167 +2337,57 @@ class BookingDataController extends Controller
                             'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore . '| trip_date:' . $tripDateBefore,
                             'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter . '| trip_date:' . $tripDateAfter,
                         ]);
+
                         $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
                         $bookingDataEdit->save();
                     }
 
+                    if ($direction === 'roundtrip') {
+                        // Kondisi jika hanya mengupdate departure
+                        if ($request->has('availability_id') && $request->input('availability_id') !== null && $request->input('availability_id_return') === null) {
+                            $availabilityId = FastboatAvailability::find($request->availability_id);
+                            $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
 
-                    // Kondisi jika hanya mengupdate return
-                    if ($request->has('availability_id_return') && $request->input('availability_id_return') !== null && $request->input('availability_id') === null) {
-                        $availabilityIdReturn = FastboatAvailability::find($request->availability_id_return);
-                        $returnDepartureTime = $availabilityIdReturn->fba_dept_time ?? $availabilityIdReturn->trip->fbt_dept_time;
-                        $returnArrivalTime = $availabilityIdReturn->fba_arrival_time ?? $availabilityIdReturn->trip->fbt_arrival_time;
-                        $returnCheckin = FastboatCheckinPoint::where('fcp_company', $availabilityIdReturn->trip->fastboat->company->cpn_id)->first();
+                            $availabilityIdAfter = $request->availability_id;
+                            $tripIdAfter = $availabilityId->trip->fbt_id;
+                            $tripDateAfter = $availabilityId->fba_date;
+                            $adultNettAfter = $availabilityId->fba_adult_nett;
+                            $childNettAfter = $availabilityId->fba_child_nett;
+                            $totalNettAfter = ($adultNettAfter * $adultBefore) + ($childNettAfter * $childBefore);
+                            $adultPublishAfter = $availabilityId->fba_adult_publish;
+                            $childPublishAfter = $availabilityId->fba_child_publish;
+                            $totalPublishAfter = ($adultPublishAfter * $adultBefore) + ($childPublishAfter * $childBefore);
+                            $adultCurrencyAfter = round($request->price_adult / $kursBefore);
+                            $childCurrencyAfter = round($request->price_child / $kursBefore);
+                            $totalCurrencyAfter = ($adultCurrencyAfter * $adultBefore) + ($childCurrencyAfter * $childBefore);
+                            $discountAfter = $availabilityId->fba_discount;
 
-                        // Update return booking (Z)
-                        $returnBookingData = BookingData::where('fbo_order_id', $orderId)
-                            ->where('fbo_booking_id', 'like', '%Z')->first();
-
-                        if ($returnBookingData) {
-                            // Mengambil data sebelumnya (return)
-                            $companyReturnBefore = $returnBookingData->trip->fastboat->company->cpn_name;
-                            $tripDateReturnBefore = $returnBookingData->fbo_trip_date;
-                            $departureIslandReturnBefore = $returnBookingData->trip->departure->island->isd_name;
-                            $departurePortReturnBefore = $returnBookingData->trip->departure->prt_name_en;
-                            $arrivalIslandReturnBefore = $returnBookingData->trip->arrival->island->isd_name;
-                            $arrivalPortReturnBefore = $returnBookingData->trip->arrival->prt_name_en;
-                            $kursReturnBefore = $returnBookingData->fbo_kurs;
-                            $adultReturnBefore = $returnBookingData->fbo_adult;
-                            $childReturnBefore = $returnBookingData->fbo_child;
-                            $totalNettReturnBefore = $returnBookingData->fbo_total_nett;
-                            $endTotalReturnBefore = $returnBookingData->fbo_end_total;
-
-                            // Mengambil data sesudah (return)
-                            $availabilityIdReturn = FastboatAvailability::find($request->availability_id_return);
-                            $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityIdReturn->trip->fastboat->company->cpn_id)->first();
-
-                            $availabilityIdReturnAfter = $request->availability_id_return;
-                            $tripIdReturnAfter = $availabilityIdReturn->trip->fbt_id;
-                            $tripDateReturnAfter = $availabilityIdReturn->fba_date;
-                            $adultNettReturnAfter = $availabilityIdReturn->fba_adult_nett;
-                            $childNettReturnAfter = $availabilityIdReturn->fba_child_nett;
-                            $totalNettReturnAfter = ($adultNettReturnAfter * $adultBefore) + ($childNettReturnAfter * $childBefore);
-                            $adultPublishReturnAfter = $availabilityIdReturn->fba_adult_publish;
-                            $childPublishReturnAfter = $availabilityIdReturn->fba_child_publish;
-                            $totalPublishReturnAfter = ($adultPublishReturnAfter * $adultBefore) + ($childPublishReturnAfter * $childBefore);
-                            $adultCurrencyReturnAfter = round($request->return_price_adult / $kursBefore);
-                            $childCurrencyReturnAfter = round($request->return_price_child / $kursBefore);
-                            $totalCurrencyReturnAfter = (round($request->return_price_adult / $kursBefore) * $adultBefore) + (round($request->return_price_child / $kursBefore) * $childBefore);
-                            $discountReturnAfter = $availabilityIdReturn->fba_discount;
-
-                            // Tentukan price cut
-                            if ($adultCurrencyReturnAfter > $adultPublishReturnAfter) {
-                                $priceCutReturnAfter = (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
-                            } elseif ($childCurrencyReturnAfter > $childPublishReturnAfter) {
-                                $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore);
+                            // Tentukan price cut untuk departure
+                            if ($adultCurrencyAfter > $adultPublishAfter) {
+                                $priceCutAfter = (($childPublishAfter - $request->price_child) * $childBefore);
+                            } elseif ($childCurrencyAfter > $childPublishAfter) {
+                                $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore);
                             } else {
-                                $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore) + (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
+                                $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore) + (($childPublishAfter - $request->price_child) * $childBefore);
                             }
 
-                            $discountTotalReturnAfter = $discountReturnAfter + $priceCutReturnAfter;
-                            $endTotalReturnAfter = $request->return_fbo_end_total;
-                            $endTotalCurrencyReturnAfter = $request->return_fbo_end_total_currency;
-                            $profitReturnAfter = $endTotalReturnAfter - $totalNettReturnAfter;
-                            $refundReturnAfter = $endTotalBefore - $endTotalReturnAfter;
-                            $companyReturnAfter = $availabilityIdReturn->trip->fastboat->company->cpn_name;
-                            $departureIslandReturnAfter = $availabilityIdReturn->trip->departure->island->isd_name;
-                            $departurePortReturnAfter = $availabilityIdReturn->trip->departure->prt_name_en;
-                            $departureTimeReturnAfter = $availabilityIdReturn->fba_dept_time ?? $availabilityIdReturn->trip->fbt_dept_time;
-                            $arrivalIslandReturnAfter = $availabilityIdReturn->trip->arrival->island->isd_name;
-                            $arrivalPortReturnAfter = $availabilityIdReturn->trip->arrival->prt_name_en;
-                            $arrivalTimeReturnAfter = $availabilityIdReturn->fba_arrival_time ?? $availabilityIdReturn->trip->fbt_arrival_time;
-                            $chekinPointReturnAfter = $checkin->fcp_id;
-                            $updatedByReturnAfter = $user;
+                            $discountTotalAfter = $discountAfter + $priceCutAfter;
+                            $endTotalAfter = $request->fbo_end_total;
+                            $endTotalCurrencyAfter = $request->fbo_end_total_currency;
+                            $profitAfter = $endTotalAfter - $totalNettAfter;
+                            $refundAfter = $endTotalBefore - $endTotalAfter;
+                            $companyAfter = $availabilityId->trip->fastboat->company->cpn_name;
+                            $departureIslandAfter = $availabilityId->trip->departure->island->isd_name;
+                            $departurePortAfter = $availabilityId->trip->departure->prt_name_en;
+                            $departureTimeAfter = $availabilityId->fba_dept_time ?? $availabilityId->trip->fbt_dept_time;
+                            $arrivalIslandAfter = $availabilityId->trip->arrival->island->isd_name;
+                            $arrivalPortAfter = $availabilityId->trip->arrival->prt_name_en;
+                            $arrivalTimeAfter = $availabilityId->fba_arrival_time ?? $availabilityId->trip->fbt_arrival_time;
+                            $chekinPointAfter = $checkin->fcp_id;
+                            $updatedByAfter = $user;
 
-                            $returnBookingData->update([
-                                'fbo_availability_id' => $availabilityIdReturnAfter,
-                                'fbo_trip_date' => $tripDateReturnAfter,
-                                'fbo_adult_nett' => $adultNettReturnAfter,
-                                'fbo_child_nett' => $childNettReturnAfter,
-                                'fbo_total_nett' => $totalNettReturnAfter,
-                                'fbo_adult_publish' => $adultPublishReturnAfter,
-                                'fbo_child_publish' => $childPublishReturnAfter,
-                                'fbo_total_publish' => $totalPublishReturnAfter,
-                                'fbo_adult_currency' => $adultCurrencyReturnAfter,
-                                'fbo_child_currency' => $childCurrencyReturnAfter,
-                                'fbo_total_currency' => $totalCurrencyReturnAfter,
-                                'fbo_discount' => $discountReturnAfter,
-                                'fbo_price_cut' => $priceCutReturnAfter,
-                                'fbo_discount_total' => $discountTotalReturnAfter,
-                                'fbo_end_total' => $endTotalReturnAfter,
-                                'fbo_end_total_currency' => $endTotalCurrencyReturnAfter,
-                                'fbo_profit' => $profitReturnAfter,
-                                'fbo_refund' => $refundReturnAfter,
-                                'fbo_departure_time' => $departureTimeReturnAfter,
-                                'fbo_arrival_time' => $arrivalTimeReturnAfter,
-                                'fbo_checkin_point' => $chekinPointReturnAfter,
-                                'fbo_updated_by' => $updatedByReturnAfter,
-                            ]);
-
-                            $count = FastboatLog::where('fbl_booking_id', $returnBookingData->fbo_booking_id)
-                                ->where('fbl_type', 'like', 'Update Trip Data%')
-                                ->count();
-
-                            FastboatLog::create([
-                                'fbl_booking_id' => $returnBookingData->fbo_booking_id,
-                                'fbl_type' => 'Update trip',
-                                'fbl_data_before' => 'company:' . $companyReturnBefore . '| trip:' . $departureIslandReturnBefore . ' -> ' . $arrivalIslandReturnBefore . '| total_price:' . $totalNettReturnBefore . '| trip_date:' . $tripDateReturnBefore,
-                                'fbl_data_after' => 'company:' . $companyReturnAfter . '| trip:' . $departureIslandReturnAfter . ' -> ' . $arrivalIslandReturnAfter . '| total_price:' . $totalNettReturnAfter . '| trip_date:' . $tripDateReturnAfter,
-                            ]);
-
-                            $returnBookingData->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
-                            $returnBookingData->save();
-                        }
-                    }
-
-
-                    // Jika keduanya ada, lakukan update roundtrip
-                    if ($request->has('availability_id') && $request->input('availability_id') !== null && $request->has('availability_id_return') && $request->input('availability_id_return') !== null) {
-                        $departureBookingData = BookingData::where('fbo_order_id', $orderId)
-                            ->where('fbo_booking_id', 'like', '%Y')->first();
-                        $availabilityId = FastboatAvailability::find($request->availability_id);
-                        $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
-
-                        $availabilityIdAfter = $request->availability_id;
-                        $tripIdAfter = $availabilityId->trip->fbt_id;
-                        $tripDateAfter = $availabilityId->fba_date;
-                        $adultNettAfter = $availabilityId->fba_adult_nett;
-                        $childNettAfter = $availabilityId->fba_child_nett;
-                        $totalNettAfter = ($adultNettAfter * $adultBefore) + ($childNettAfter * $childBefore);
-                        $adultPublishAfter = $availabilityId->fba_adult_publish;
-                        $childPublishAfter = $availabilityId->fba_child_publish;
-                        $totalPublishAfter = ($adultPublishAfter * $adultBefore) + ($childPublishAfter * $childBefore);
-                        $adultCurrencyAfter = round($request->price_adult / $kursBefore);
-                        $childCurrencyAfter = round($request->price_child / $kursBefore);
-                        $totalCurrencyAfter = ($adultCurrencyAfter * $adultBefore) + ($childCurrencyAfter * $childBefore);
-                        $discountAfter = $availabilityId->fba_discount;
-
-                        // Tentukan price cut untuk departure
-                        if ($adultCurrencyAfter > $adultPublishAfter) {
-                            $priceCutAfter = (($childPublishAfter - $request->price_child) * $childBefore);
-                        } elseif ($childCurrencyAfter > $childPublishAfter) {
-                            $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore);
-                        } else {
-                            $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore) + (($childPublishAfter - $request->price_child) * $childBefore);
-                        }
-
-                        $discountTotalAfter = $discountAfter + $priceCutAfter;
-                        $endTotalAfter = $request->fbo_end_total;
-                        $endTotalCurrencyAfter = $request->fbo_end_total_currency;
-                        $profitAfter = $endTotalAfter - $totalNettAfter;
-                        $refundAfter = $endTotalBefore - $endTotalAfter;
-                        $companyAfter = $availabilityId->trip->fastboat->company->cpn_name;
-                        $departureIslandAfter = $availabilityId->trip->departure->island->isd_name;
-                        $departurePortAfter = $availabilityId->trip->departure->prt_name_en;
-                        $departureTimeAfter = $availabilityId->fba_dept_time ?? $availabilityId->trip->fbt_dept_time;
-                        $arrivalIslandAfter = $availabilityId->trip->arrival->island->isd_name;
-                        $arrivalPortAfter = $availabilityId->trip->arrival->prt_name_en;
-                        $arrivalTimeAfter = $availabilityId->fba_arrival_time ?? $availabilityId->trip->fbt_arrival_time;
-                        $chekinPointAfter = $checkin->fcp_id;
-                        $updatedByAfter = $user;
-
-                        if ($departureBookingData) {
-                            $departureBookingData->update([
+                            $trip = $bookingDataEdit;
+                            $trip->update([
                                 'fbo_availability_id' => $availabilityIdAfter,
                                 'fbo_trip_date' => $tripDateAfter,
                                 'fbo_adult_nett' => $adultNettAfter,
@@ -2614,13 +2422,13 @@ class BookingDataController extends Controller
                                 'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore . '| trip_date:' . $tripDateBefore,
                                 'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter . '| trip_date:' . $tripDateAfter,
                             ]);
-
                             $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
                             $bookingDataEdit->save();
                         }
 
-                        // Update return trip (Z)
-                        if ($request->availability_id_return) {
+
+                        // Kondisi jika hanya mengupdate return
+                        if ($request->has('availability_id_return') && $request->input('availability_id_return') !== null && $request->input('availability_id') === null) {
                             $availabilityIdReturn = FastboatAvailability::find($request->availability_id_return);
                             $returnDepartureTime = $availabilityIdReturn->fba_dept_time ?? $availabilityIdReturn->trip->fbt_dept_time;
                             $returnArrivalTime = $availabilityIdReturn->fba_arrival_time ?? $availabilityIdReturn->trip->fbt_arrival_time;
@@ -2726,11 +2534,205 @@ class BookingDataController extends Controller
                                 $returnBookingData->save();
                             }
                         }
-                    }
-                }
 
-                $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
-                $bookingDataEdit->save();
+
+                        // Jika keduanya ada, lakukan update roundtrip
+                        if ($request->has('availability_id') && $request->input('availability_id') !== null && $request->has('availability_id_return') && $request->input('availability_id_return') !== null) {
+                            $departureBookingData = BookingData::where('fbo_order_id', $orderId)
+                                ->where('fbo_booking_id', 'like', '%Y')->first();
+                            $availabilityId = FastboatAvailability::find($request->availability_id);
+                            $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
+
+                            $availabilityIdAfter = $request->availability_id;
+                            $tripIdAfter = $availabilityId->trip->fbt_id;
+                            $tripDateAfter = $availabilityId->fba_date;
+                            $adultNettAfter = $availabilityId->fba_adult_nett;
+                            $childNettAfter = $availabilityId->fba_child_nett;
+                            $totalNettAfter = ($adultNettAfter * $adultBefore) + ($childNettAfter * $childBefore);
+                            $adultPublishAfter = $availabilityId->fba_adult_publish;
+                            $childPublishAfter = $availabilityId->fba_child_publish;
+                            $totalPublishAfter = ($adultPublishAfter * $adultBefore) + ($childPublishAfter * $childBefore);
+                            $adultCurrencyAfter = round($request->price_adult / $kursBefore);
+                            $childCurrencyAfter = round($request->price_child / $kursBefore);
+                            $totalCurrencyAfter = ($adultCurrencyAfter * $adultBefore) + ($childCurrencyAfter * $childBefore);
+                            $discountAfter = $availabilityId->fba_discount;
+
+                            // Tentukan price cut untuk departure
+                            if ($adultCurrencyAfter > $adultPublishAfter) {
+                                $priceCutAfter = (($childPublishAfter - $request->price_child) * $childBefore);
+                            } elseif ($childCurrencyAfter > $childPublishAfter) {
+                                $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore);
+                            } else {
+                                $priceCutAfter = (($adultPublishAfter - $request->price_adult) * $adultBefore) + (($childPublishAfter - $request->price_child) * $childBefore);
+                            }
+
+                            $discountTotalAfter = $discountAfter + $priceCutAfter;
+                            $endTotalAfter = $request->fbo_end_total;
+                            $endTotalCurrencyAfter = $request->fbo_end_total_currency;
+                            $profitAfter = $endTotalAfter - $totalNettAfter;
+                            $refundAfter = $endTotalBefore - $endTotalAfter;
+                            $companyAfter = $availabilityId->trip->fastboat->company->cpn_name;
+                            $departureIslandAfter = $availabilityId->trip->departure->island->isd_name;
+                            $departurePortAfter = $availabilityId->trip->departure->prt_name_en;
+                            $departureTimeAfter = $availabilityId->fba_dept_time ?? $availabilityId->trip->fbt_dept_time;
+                            $arrivalIslandAfter = $availabilityId->trip->arrival->island->isd_name;
+                            $arrivalPortAfter = $availabilityId->trip->arrival->prt_name_en;
+                            $arrivalTimeAfter = $availabilityId->fba_arrival_time ?? $availabilityId->trip->fbt_arrival_time;
+                            $chekinPointAfter = $checkin->fcp_id;
+                            $updatedByAfter = $user;
+
+                            if ($departureBookingData) {
+                                $departureBookingData->update([
+                                    'fbo_availability_id' => $availabilityIdAfter,
+                                    'fbo_trip_date' => $tripDateAfter,
+                                    'fbo_adult_nett' => $adultNettAfter,
+                                    'fbo_child_nett' => $childNettAfter,
+                                    'fbo_total_nett' => $totalNettAfter,
+                                    'fbo_adult_publish' => $adultPublishAfter,
+                                    'fbo_child_publish' => $childPublishAfter,
+                                    'fbo_total_publish' => $totalPublishAfter,
+                                    'fbo_adult_currency' => $adultCurrencyAfter,
+                                    'fbo_child_currency' => $childCurrencyAfter,
+                                    'fbo_total_currency' => $totalCurrencyAfter,
+                                    'fbo_discount' => $discountAfter,
+                                    'fbo_price_cut' => $priceCutAfter,
+                                    'fbo_discount_total' => $discountTotalAfter,
+                                    'fbo_end_total' => $endTotalAfter,
+                                    'fbo_end_total_currency' => $endTotalCurrencyAfter,
+                                    'fbo_profit' => $profitAfter,
+                                    'fbo_refund' => $refundAfter,
+                                    'fbo_departure_time' => $departureTimeAfter,
+                                    'fbo_arrival_time' => $arrivalTimeAfter,
+                                    'fbo_checkin_point' => $chekinPointAfter,
+                                    'fbo_updated_by' => $updatedByAfter,
+                                ]);
+
+                                $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
+                                    ->where('fbl_type', 'like', 'Update Trip Data%')
+                                    ->count();
+
+                                FastboatLog::create([
+                                    'fbl_booking_id' => $bookingDataEdit->fbo_booking_id,
+                                    'fbl_type' => 'Update trip',
+                                    'fbl_data_before' => 'company:' . $companyBefore . '| trip:' . $departureIslandBefore . ' -> ' . $arrivalIslandBefore . '| total_price:' . $totalNettBefore . '| trip_date:' . $tripDateBefore,
+                                    'fbl_data_after' => 'company:' . $companyAfter . '| trip:' . $departureIslandAfter . ' -> ' . $arrivalIslandAfter . '| total_price:' . $totalNettAfter . '| trip_date:' . $tripDateAfter,
+                                ]);
+
+                                $bookingDataEdit->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
+                                $bookingDataEdit->save();
+                            }
+
+                            // Update return trip (Z)
+                            if ($request->availability_id_return) {
+                                $availabilityIdReturn = FastboatAvailability::find($request->availability_id_return);
+                                $returnDepartureTime = $availabilityIdReturn->fba_dept_time ?? $availabilityIdReturn->trip->fbt_dept_time;
+                                $returnArrivalTime = $availabilityIdReturn->fba_arrival_time ?? $availabilityIdReturn->trip->fbt_arrival_time;
+                                $returnCheckin = FastboatCheckinPoint::where('fcp_company', $availabilityIdReturn->trip->fastboat->company->cpn_id)->first();
+
+                                // Update return booking (Z)
+                                $returnBookingData = BookingData::where('fbo_order_id', $orderId)
+                                    ->where('fbo_booking_id', 'like', '%Z')->first();
+
+                                if ($returnBookingData) {
+                                    // Mengambil data sebelumnya (return)
+                                    $companyReturnBefore = $returnBookingData->trip->fastboat->company->cpn_name;
+                                    $tripDateReturnBefore = $returnBookingData->fbo_trip_date;
+                                    $departureIslandReturnBefore = $returnBookingData->trip->departure->island->isd_name;
+                                    $departurePortReturnBefore = $returnBookingData->trip->departure->prt_name_en;
+                                    $arrivalIslandReturnBefore = $returnBookingData->trip->arrival->island->isd_name;
+                                    $arrivalPortReturnBefore = $returnBookingData->trip->arrival->prt_name_en;
+                                    $kursReturnBefore = $returnBookingData->fbo_kurs;
+                                    $adultReturnBefore = $returnBookingData->fbo_adult;
+                                    $childReturnBefore = $returnBookingData->fbo_child;
+                                    $totalNettReturnBefore = $returnBookingData->fbo_total_nett;
+                                    $endTotalReturnBefore = $returnBookingData->fbo_end_total;
+
+                                    // Mengambil data sesudah (return)
+                                    $availabilityIdReturn = FastboatAvailability::find($request->availability_id_return);
+                                    $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityIdReturn->trip->fastboat->company->cpn_id)->first();
+
+                                    $availabilityIdReturnAfter = $request->availability_id_return;
+                                    $tripIdReturnAfter = $availabilityIdReturn->trip->fbt_id;
+                                    $tripDateReturnAfter = $availabilityIdReturn->fba_date;
+                                    $adultNettReturnAfter = $availabilityIdReturn->fba_adult_nett;
+                                    $childNettReturnAfter = $availabilityIdReturn->fba_child_nett;
+                                    $totalNettReturnAfter = ($adultNettReturnAfter * $adultBefore) + ($childNettReturnAfter * $childBefore);
+                                    $adultPublishReturnAfter = $availabilityIdReturn->fba_adult_publish;
+                                    $childPublishReturnAfter = $availabilityIdReturn->fba_child_publish;
+                                    $totalPublishReturnAfter = ($adultPublishReturnAfter * $adultBefore) + ($childPublishReturnAfter * $childBefore);
+                                    $adultCurrencyReturnAfter = round($request->return_price_adult / $kursBefore);
+                                    $childCurrencyReturnAfter = round($request->return_price_child / $kursBefore);
+                                    $totalCurrencyReturnAfter = (round($request->return_price_adult / $kursBefore) * $adultBefore) + (round($request->return_price_child / $kursBefore) * $childBefore);
+                                    $discountReturnAfter = $availabilityIdReturn->fba_discount;
+
+                                    // Tentukan price cut
+                                    if ($adultCurrencyReturnAfter > $adultPublishReturnAfter) {
+                                        $priceCutReturnAfter = (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
+                                    } elseif ($childCurrencyReturnAfter > $childPublishReturnAfter) {
+                                        $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore);
+                                    } else {
+                                        $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore) + (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
+                                    }
+
+                                    $discountTotalReturnAfter = $discountReturnAfter + $priceCutReturnAfter;
+                                    $endTotalReturnAfter = $request->return_fbo_end_total;
+                                    $endTotalCurrencyReturnAfter = $request->return_fbo_end_total_currency;
+                                    $profitReturnAfter = $endTotalReturnAfter - $totalNettReturnAfter;
+                                    $refundReturnAfter = $endTotalBefore - $endTotalReturnAfter;
+                                    $companyReturnAfter = $availabilityIdReturn->trip->fastboat->company->cpn_name;
+                                    $departureIslandReturnAfter = $availabilityIdReturn->trip->departure->island->isd_name;
+                                    $departurePortReturnAfter = $availabilityIdReturn->trip->departure->prt_name_en;
+                                    $departureTimeReturnAfter = $availabilityIdReturn->fba_dept_time ?? $availabilityIdReturn->trip->fbt_dept_time;
+                                    $arrivalIslandReturnAfter = $availabilityIdReturn->trip->arrival->island->isd_name;
+                                    $arrivalPortReturnAfter = $availabilityIdReturn->trip->arrival->prt_name_en;
+                                    $arrivalTimeReturnAfter = $availabilityIdReturn->fba_arrival_time ?? $availabilityIdReturn->trip->fbt_arrival_time;
+                                    $chekinPointReturnAfter = $checkin->fcp_id;
+                                    $updatedByReturnAfter = $user;
+
+                                    $returnBookingData->update([
+                                        'fbo_availability_id' => $availabilityIdReturnAfter,
+                                        'fbo_trip_date' => $tripDateReturnAfter,
+                                        'fbo_adult_nett' => $adultNettReturnAfter,
+                                        'fbo_child_nett' => $childNettReturnAfter,
+                                        'fbo_total_nett' => $totalNettReturnAfter,
+                                        'fbo_adult_publish' => $adultPublishReturnAfter,
+                                        'fbo_child_publish' => $childPublishReturnAfter,
+                                        'fbo_total_publish' => $totalPublishReturnAfter,
+                                        'fbo_adult_currency' => $adultCurrencyReturnAfter,
+                                        'fbo_child_currency' => $childCurrencyReturnAfter,
+                                        'fbo_total_currency' => $totalCurrencyReturnAfter,
+                                        'fbo_discount' => $discountReturnAfter,
+                                        'fbo_price_cut' => $priceCutReturnAfter,
+                                        'fbo_discount_total' => $discountTotalReturnAfter,
+                                        'fbo_end_total' => $endTotalReturnAfter,
+                                        'fbo_end_total_currency' => $endTotalCurrencyReturnAfter,
+                                        'fbo_profit' => $profitReturnAfter,
+                                        'fbo_refund' => $refundReturnAfter,
+                                        'fbo_departure_time' => $departureTimeReturnAfter,
+                                        'fbo_arrival_time' => $arrivalTimeReturnAfter,
+                                        'fbo_checkin_point' => $chekinPointReturnAfter,
+                                        'fbo_updated_by' => $updatedByReturnAfter,
+                                    ]);
+
+                                    $count = FastboatLog::where('fbl_booking_id', $returnBookingData->fbo_booking_id)
+                                        ->where('fbl_type', 'like', 'Update Trip Data%')
+                                        ->count();
+
+                                    FastboatLog::create([
+                                        'fbl_booking_id' => $returnBookingData->fbo_booking_id,
+                                        'fbl_type' => 'Update trip',
+                                        'fbl_data_before' => 'company:' . $companyReturnBefore . '| trip:' . $departureIslandReturnBefore . ' -> ' . $arrivalIslandReturnBefore . '| total_price:' . $totalNettReturnBefore . '| trip_date:' . $tripDateReturnBefore,
+                                        'fbl_data_after' => 'company:' . $companyReturnAfter . '| trip:' . $departureIslandReturnAfter . ' -> ' . $arrivalIslandReturnAfter . '| total_price:' . $totalNettReturnAfter . '| trip_date:' . $tripDateReturnAfter,
+                                    ]);
+
+                                    $returnBookingData->fbo_log = $logbefore . $user . ',' . 'Update trip' . ',' . $date;
+                                    $returnBookingData->save();
+                                }
+                            }
+                        }
+                    }
+
+
 
                     // Commit transaksi
                     DB::commit();
