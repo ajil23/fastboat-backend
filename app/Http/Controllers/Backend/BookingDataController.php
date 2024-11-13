@@ -2450,10 +2450,10 @@ class BookingDataController extends Controller
                             $endTotalReturnBefore = $returnBookingData->fbo_end_total;
 
                             // Mengambil data sesudah (return)
-                            $availabilityIdReturn = FastboatAvailability::find($request->availability_id);
-                            $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
+                            $availabilityIdReturn = FastboatAvailability::find($request->availability_id_return);
+                            $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityIdReturn->trip->fastboat->company->cpn_id)->first();
 
-                            $availabilityIdReturnAfter = $request->availability_id;
+                            $availabilityIdReturnAfter = $request->availability_id_return;
                             $tripIdReturnAfter = $availabilityIdReturn->trip->fbt_id;
                             $tripDateReturnAfter = $availabilityIdReturn->fba_date;
                             $adultNettReturnAfter = $availabilityIdReturn->fba_adult_nett;
@@ -2462,23 +2462,23 @@ class BookingDataController extends Controller
                             $adultPublishReturnAfter = $availabilityIdReturn->fba_adult_publish;
                             $childPublishReturnAfter = $availabilityIdReturn->fba_child_publish;
                             $totalPublishReturnAfter = ($adultPublishReturnAfter * $adultBefore) + ($childPublishReturnAfter * $childBefore);
-                            $adultCurrencyReturnAfter = round($request->price_adult / $kursBefore);
-                            $childCurrencyReturnAfter = round($request->price_child / $kursBefore);
-                            $totalCurrencyReturnAfter = ($adultCurrencyReturnAfter * $adultBefore) + ($childCurrencyReturnAfter * $childBefore);
+                            $adultCurrencyReturnAfter = round($request->return_price_adult / $kursBefore);
+                            $childCurrencyReturnAfter = round($request->return_price_child / $kursBefore);
+                            $totalCurrencyReturnAfter = (round($request->return_price_adult / $kursBefore) * $adultBefore) + (round($request->return_price_child / $kursBefore) * $childBefore);
                             $discountReturnAfter = $availabilityIdReturn->fba_discount;
 
-                            // Tentukan price cut untuk departure
+                            // Tentukan price cut
                             if ($adultCurrencyReturnAfter > $adultPublishReturnAfter) {
-                                $priceCutReturnAfter = (($childPublishReturnAfter - $request->price_child) * $childBefore);
+                                $priceCutReturnAfter = (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
                             } elseif ($childCurrencyReturnAfter > $childPublishReturnAfter) {
-                                $priceCutReturnAfter = (($adultPublishReturnAfter - $request->price_adult) * $adultBefore);
+                                $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore);
                             } else {
-                                $priceCutReturnAfter = (($adultPublishReturnAfter - $request->price_adult) * $adultBefore) + (($childPublishReturnAfter - $request->price_child) * $childBefore);
+                                $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore) + (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
                             }
 
                             $discountTotalReturnAfter = $discountReturnAfter + $priceCutReturnAfter;
-                            $endTotalReturnAfter = $request->fbo_end_total;
-                            $endTotalCurrencyReturnAfter = $request->fbo_end_total_currency;
+                            $endTotalReturnAfter = $request->return_fbo_end_total;
+                            $endTotalCurrencyReturnAfter = $request->return_fbo_end_total_currency;
                             $profitReturnAfter = $endTotalReturnAfter - $totalNettReturnAfter;
                             $refundReturnAfter = $endTotalBefore - $endTotalReturnAfter;
                             $companyReturnAfter = $availabilityIdReturn->trip->fastboat->company->cpn_name;
@@ -2645,10 +2645,10 @@ class BookingDataController extends Controller
                                 $endTotalReturnBefore = $returnBookingData->fbo_end_total;
 
                                 // Mengambil data sesudah (return)
-                                $availabilityIdReturn = FastboatAvailability::find($request->availability_id);
-                                $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityId->trip->fastboat->company->cpn_id)->first();
+                                $availabilityIdReturn = FastboatAvailability::find($request->availability_id_return);
+                                $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityIdReturn->trip->fastboat->company->cpn_id)->first();
 
-                                $availabilityIdReturnAfter = $request->availability_id;
+                                $availabilityIdReturnAfter = $request->availability_id_return;
                                 $tripIdReturnAfter = $availabilityIdReturn->trip->fbt_id;
                                 $tripDateReturnAfter = $availabilityIdReturn->fba_date;
                                 $adultNettReturnAfter = $availabilityIdReturn->fba_adult_nett;
@@ -2657,23 +2657,23 @@ class BookingDataController extends Controller
                                 $adultPublishReturnAfter = $availabilityIdReturn->fba_adult_publish;
                                 $childPublishReturnAfter = $availabilityIdReturn->fba_child_publish;
                                 $totalPublishReturnAfter = ($adultPublishReturnAfter * $adultBefore) + ($childPublishReturnAfter * $childBefore);
-                                $adultCurrencyReturnAfter = round($request->price_adult / $kursBefore);
-                                $childCurrencyReturnAfter = round($request->price_child / $kursBefore);
-                                $totalCurrencyReturnAfter = ($adultCurrencyReturnAfter * $adultBefore) + ($childCurrencyReturnAfter * $childBefore);
+                                $adultCurrencyReturnAfter = round($request->return_price_adult / $kursBefore);
+                                $childCurrencyReturnAfter = round($request->return_price_child / $kursBefore);
+                                $totalCurrencyReturnAfter = (round($request->return_price_adult / $kursBefore) * $adultBefore) + (round($request->return_price_child / $kursBefore) * $childBefore);
                                 $discountReturnAfter = $availabilityIdReturn->fba_discount;
 
-                                // Tentukan price cut untuk departure
+                                // Tentukan price cut
                                 if ($adultCurrencyReturnAfter > $adultPublishReturnAfter) {
-                                    $priceCutReturnAfter = (($childPublishReturnAfter - $request->price_child) * $childBefore);
+                                    $priceCutReturnAfter = (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
                                 } elseif ($childCurrencyReturnAfter > $childPublishReturnAfter) {
-                                    $priceCutReturnAfter = (($adultPublishReturnAfter - $request->price_adult) * $adultBefore);
+                                    $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore);
                                 } else {
-                                    $priceCutReturnAfter = (($adultPublishReturnAfter - $request->price_adult) * $adultBefore) + (($childPublishReturnAfter - $request->price_child) * $childBefore);
+                                    $priceCutReturnAfter = (($adultPublishReturnAfter - $request->return_price_adult) * $adultBefore) + (($childPublishReturnAfter - $request->return_price_child) * $childBefore);
                                 }
 
                                 $discountTotalReturnAfter = $discountReturnAfter + $priceCutReturnAfter;
-                                $endTotalReturnAfter = $request->fbo_end_total;
-                                $endTotalCurrencyReturnAfter = $request->fbo_end_total_currency;
+                                $endTotalReturnAfter = $request->return_fbo_end_total;
+                                $endTotalCurrencyReturnAfter = $request->return_fbo_end_total_currency;
                                 $profitReturnAfter = $endTotalReturnAfter - $totalNettReturnAfter;
                                 $refundReturnAfter = $endTotalBefore - $endTotalReturnAfter;
                                 $companyReturnAfter = $availabilityIdReturn->trip->fastboat->company->cpn_name;
