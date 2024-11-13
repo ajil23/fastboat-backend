@@ -151,6 +151,7 @@ class AvailabilityApiController extends Controller
                         }
                     }
                     return [
+                        'fba_id' => $availability->fba_id,
                         'fbt_recom' => $availability->trip->fbt_recom,
                         'fb_image1' => url('storage/' . ltrim($availability->trip->fastboat->fb_image1, '/')) ?? null,
                         'fba_dept_time' => $availability->fba_dept_time,
@@ -265,6 +266,7 @@ class AvailabilityApiController extends Controller
                         }
                     }
                     return [
+                        'fba_id' => $availability->fba_id,
                         'fbt_recom' => $availability->trip->fbt_recom,
                         'fb_image1' => url('storage/' . ltrim($availability->trip->fastboat->fb_image1, '/')) ?? null,
                         'fba_dept_time' => $availability->fba_dept_time,
@@ -375,6 +377,7 @@ class AvailabilityApiController extends Controller
                         }
                     }
                     return [
+                        'fba_id' => $availability->fba_id,
                         'fbt_recom' => $availability->trip->fbt_recom,
                         'fb_image1' => url('storage/' . ltrim($availability->trip->fastboat->fb_image1, '/')) ?? null,
                         'fba_dept_time' => $availability->fba_dept_time,
