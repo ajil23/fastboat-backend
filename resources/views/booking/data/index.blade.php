@@ -982,6 +982,8 @@
                                     <td>Trip</td><td>${logEntry.data_after.trip || ''}</td></tr>
                                 <tr><td>Total Price</td><td>${formatNumber(logEntry.data_before.total_price || 0)}</td>
                                     <td>Total Price</td><td>${formatNumber(logEntry.data_after.total_price || 0)}</td></tr>
+                                <tr><td>Trip Date</td><td>${logEntry.data_before.trip_date}</td>
+                                    <td>Trip Date</td><td>${logEntry.data_after.trip_date}</td></tr>
                             `);
                         });
                     }
