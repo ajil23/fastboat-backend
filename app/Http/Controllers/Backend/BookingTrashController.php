@@ -186,53 +186,58 @@ class BookingTrashController extends Controller
             'fbo_id' => 'required',
             'fbo_payment_method' => 'required|string',
         ]);
-
+    
         DB::beginTransaction();
         try {
+            // Cari bookingData berdasarkan fbo_id
             $bookingData = BookingData::find($request->fbo_id);
-
-            // Pengecekan data fbo_log
-            $before = $bookingData->fbo_log;
-            if ($before != NULL) {
-                $logbefore = $before . ';';
-            } else {
-                $logbefore = '';
+    
+            if (!$bookingData) {
+                return back()->withErrors(['error' => 'Booking data not found.']);
             }
+    
+            $orderId = $bookingData->fbo_order_id;
+    
+            // Ambil semua data yang memiliki fbo_order_id yang sama
+            $allBookingData = BookingData::where('fbo_order_id', $orderId)->get();
+    
+            // Pengecekan data fbo_log
             $user = Auth::user()->name; // Pengecekan user
             $date = now()->format('d-M-Y H:i:s'); // Tanggal
-
-            if ($bookingData) {
-                $bookingData->fbo_payment_status = 'paid';
-                $bookingData->fbo_payment_method = $request->fbo_payment_method;
-                $bookingData->fbo_transaction_id = $request->fbo_transaction_id;
-                $bookingData->fbo_transaction_status = 'accepted';
-                $bookingData->save();
-
-                $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
-                    ->where('fbl_type', 'like', 'Update transaction status%')
-                    ->count();
-
-                FastboatLog::create([
-                    'fbl_booking_id' => $bookingData->fbo_booking_id,
-                    'fbl_type' => 'Update transaction status ' . ($count + 1),
-                    'fbl_data_before' => 'transaction_status:waiting',
-                    'fbl_data_after' => 'transaction_status:accepted',
-                ]);
-
-                // Simpan log ke kolom `fbo_log` pada tabel booking_data
-                $bookingData->fbo_log = $logbefore . $user . ',' . 'Mark as accept'  . ',' . $date;
-                toast('Status Payment as been updated!', 'success');
-                $bookingData->save();
+            $logbefore = $bookingData->fbo_log ? $bookingData->fbo_log . ';' : '';
+    
+            foreach ($allBookingData as $data) {
+                $data->fbo_payment_status = 'paid';
+                $data->fbo_payment_method = $request->fbo_payment_method;
+                $data->fbo_transaction_id = $request->fbo_transaction_id;
+                $data->fbo_transaction_status = 'accepted';
+                $data->fbo_log = $logbefore . $user . ', Mark as accept, ' . $date;
+                $data->save();
             }
-
+    
+            // Catat log untuk perubahan
+            $count = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
+                ->where('fbl_type', 'like', 'Update transaction status%')
+                ->count();
+    
+            FastboatLog::create([
+                'fbl_booking_id' => $bookingData->fbo_booking_id,
+                'fbl_type' => 'Update transaction status ' . ($count + 1),
+                'fbl_data_before' => 'transaction_status:waiting',
+                'fbl_data_after' => 'transaction_status:accepted',
+            ]);
+    
+            toast('Status Payment has been updated for all matching orders!', 'success');
+    
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->withErrors(['error' => 'Gagal mengubah status: ' . $e->getMessage()]);
         }
-
+    
         return redirect()->back();
     }
+    
 
     // Menampilkan modal detail data fast-boat
     public function show($fbo_id)
