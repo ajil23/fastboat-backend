@@ -201,6 +201,19 @@ class BookingTrashController extends Controller
             // Ambil semua data yang memiliki fbo_order_id yang sama
             $allBookingData = BookingData::where('fbo_order_id', $orderId)->get();
     
+            // Tentukan fbo_transaction_id berdasarkan fbo_payment_method
+            $fbo_transaction_id = '';
+            if ($request->fbo_payment_method == 'pak_anang') {
+                $fbo_transaction_id = 'received by Mr. Anang';
+            } elseif ($request->fbo_payment_method == 'pay_on_port') {
+                $fbo_transaction_id = 'collect';
+            } elseif ($request->fbo_payment_method == 'cash') {
+                $fbo_transaction_id = 'received by ' . $request->input('fbo_transaction_id');
+            } else {
+                // Gunakan nilai dari input pengguna untuk metode lain
+                $fbo_transaction_id = $request->input('fbo_transaction_id');
+            }
+    
             // Pengecekan data fbo_log
             $user = Auth::user()->name; // Pengecekan user
             $date = now()->format('d-M-Y H:i:s'); // Tanggal
@@ -209,7 +222,7 @@ class BookingTrashController extends Controller
             foreach ($allBookingData as $data) {
                 $data->fbo_payment_status = 'paid';
                 $data->fbo_payment_method = $request->fbo_payment_method;
-                $data->fbo_transaction_id = $request->fbo_transaction_id;
+                $data->fbo_transaction_id = $fbo_transaction_id; // Menggunakan logika baru
                 $data->fbo_transaction_status = 'accepted';
                 $data->fbo_log = $logbefore . $user . ', Mark as accept, ' . $date;
                 $data->save();
@@ -236,8 +249,7 @@ class BookingTrashController extends Controller
         }
     
         return redirect()->back();
-    }
-    
+    }        
 
     // Menampilkan modal detail data fast-boat
     public function show($fbo_id)
