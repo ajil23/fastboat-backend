@@ -827,6 +827,7 @@
             });
         });
     </script>
+    <!-- change payment -->
     <script>
         $(document).ready(function() {
             $('.btn-set-paid').on('click', function(e) {
@@ -885,6 +886,7 @@
             });
         });
     </script>
+    
     <script>
         $(document).ready(function() {
             $('body').on('click', '#showDetail', function() {

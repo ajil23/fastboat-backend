@@ -833,6 +833,7 @@
             });
         });
     </script>
+    <!-- change paid -->
     <script>
         $(document).ready(function() {
             $('.btn-set-paid').on('click', function(e) {
@@ -900,21 +901,22 @@
 
                     // Formatting functions
                     function formatNumber(number) {
-                        return Number(number).toLocaleString('id-ID');
+                        return Number(number || 0).toLocaleString('id-ID');
                     }
+
                     function formatTanggal(tanggalString) {
                         const bulanNama = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"];
                         const tanggal = new Date(tanggalString);
-                        return `${tanggal.getDate()} ${bulanNama[tanggal.getMonth()]} ${tanggal.getFullYear()}`;
+                        return isNaN(tanggal) ? '-' : `${tanggal.getDate()} ${bulanNama[tanggal.getMonth()]} ${tanggal.getFullYear()}`;
                     }
 
                     // Populate booking and trip information
-                    $('#booking-id').text(data.fbo_booking_id);
-                    $('#booking-fastboat').text(data.trip.fastboat.fb_name);
+                    $('#booking-id').text(data.fbo_booking_id || '-');
+                    $('#booking-fastboat').text(data.trip?.fastboat?.fb_name || '-');
                     $('#trip-date').text(formatTanggal(data.fbo_trip_date));
-                    $('#count-adult').text(data.fbo_adult);
-                    $('#count-child').text(data.fbo_child);
-                    $('#count-infant').text(data.fbo_infant);
+                    $('#count-adult').text(data.fbo_adult || '0');
+                    $('#count-child').text(data.fbo_child || '0');
+                    $('#count-infant').text(data.fbo_infant || '0');
                     $('#adult-publish').text(formatNumber(data.fbo_adult_publish));
                     $('#child-publish').text(formatNumber(data.fbo_child_publish));
                     $('#infant-publish').text(formatNumber(data.fbo_infant_publish));
@@ -925,78 +927,97 @@
                     $('#total-nett').text(formatNumber(data.fbo_total_nett));
                     $('#end-total').text(formatNumber(data.fbo_end_total));
                     $('#profit').text(formatNumber(data.fbo_profit));
-                    $('#note').text(data.fbo_refund);
-                    $('#transaction-id').text(data.fbo_transaction_id);
+                    $('#note').text(data.fbo_refund || '-');
+                    $('#transaction-id').text(data.fbo_transaction_id || '-');
 
                     // Calculate subtotal for adults and children
-                    $('#subtotal-adult').text(formatNumber(parseInt(data.fbo_adult) * parseFloat(data.fbo_adult_publish)));
-                    $('#subtotal-child').text(formatNumber(parseInt(data.fbo_child) * parseFloat(data.fbo_child_publish)));
+                    $('#subtotal-adult').text(formatNumber(parseInt(data.fbo_adult || 0) * parseFloat(data.fbo_adult_publish || 0)));
+                    $('#subtotal-child').text(formatNumber(parseInt(data.fbo_child || 0) * parseFloat(data.fbo_child_publish || 0)));
 
                     // Populate route information
                     $('#route-info').html(`
-                        ${data.trip.departure_port} (${data.trip.departure_island}, ${data.trip.departure_time}) 
-                        To ${data.trip.arrival_port} (${data.trip.arrival_island}, ${data.trip.arrival_time})
+                        ${data.trip?.departure_port || '-'} (${data.trip?.departure_island || '-'}, ${data.trip?.departure_time || '-'}) 
+                        To ${data.trip?.arrival_port || '-'} (${data.trip?.arrival_island || '-'}, ${data.trip?.arrival_time || '-'})
                     `);
 
                     // Passenger List
                     $('#passenger-list').empty();
-                    data.trip.passengers.forEach(function(passenger, index) {
+                    (data.trip?.passengers || []).forEach(function(passenger, index) {
                         $('#passenger-list').append(`
                             <tr>
                                 <td>${index + 1}</td>
-                                <td>${passenger.name}</td>
-                                <td>${passenger.gender}</td>
-                                <td>${passenger.age}</td>
-                                <td>${passenger.nationality}</td>
+                                <td>${passenger.name || '-'}</td>
+                                <td>${passenger.gender || '-'}</td>
+                                <td>${passenger.age || '-'}</td>
+                                <td>${passenger.nationality || '-'}</td>
                             </tr>
                         `);
                     });
 
-                    // Logs List
+                    // Combine logList and fastboatLogs
+                    const combinedLogs = [];
+
+                    // Add each log from logList with type 'log'
+                    (data.logs || []).forEach(function(log) {
+                        combinedLogs.push({
+                            type: 'log',
+                            user: log.user || '-',
+                            activity: log.activity || '-',
+                            date: new Date(log.date) // Convert date to Date object for sorting
+                        });
+                    });
+
+                    // Add each log from fastboatLogs with type 'fastboatLog'
+                    (data.fastboatLogs || []).forEach(function(logEntry) {
+                        combinedLogs.push({
+                            type: 'fastboatLog',
+                            data_before: logEntry.data_before || {},
+                            data_after: logEntry.data_after || {},
+                            date: new Date(logEntry.created_at) // Assuming 'created_at' is the date field
+                        });
+                    });
+
+                    // Sort combinedLogs by date in descending order (newest first)
+                    combinedLogs.sort((a, b) => b.date - a.date);
+
+                    // Clear existing log list
                     $('#logList').empty();
-                    data.logs.forEach(function(log) {
-                        $('#logList').append(`
-                            <tr>
-                                <td><center>${log.user}</center></td>
-                                <td><center>${log.activity}</center></td>
-                                <td colspan="2"><center>${log.date}</center></td>
-                            </tr>
-                        `);
-                    });
 
-                    // Fastboat Logs
-                    $('#fastboat-log-list').empty();
-                    if (data.fastboatLogs && data.fastboatLogs.length) {
-                        $('#fastboat-log-list').append(`
-                            <tr>
-                                <td style="background-color: lightskyblue;" colspan="2"><center>Before</center></td>
-                                <td style="background-color: lightskyblue;" colspan="2"><center>After</center></td>
-                            </tr>
-                        `);
-
-                        data.fastboatLogs.forEach(function(logEntry) {
-                            $('#fastboat-log-list').append(`
-                                <tr><td>Company</td><td>${logEntry.data_before.company || ''}</td>
-                                    <td>Company</td><td>${logEntry.data_after.company || ''}</td></tr>
-                                <tr><td>Trip</td><td>${logEntry.data_before.trip || ''}</td>
-                                    <td>Trip</td><td>${logEntry.data_after.trip || ''}</td></tr>
-                                <tr><td>Total Price</td><td>${formatNumber(logEntry.data_before.total_price || 0)}</td>
-                                    <td>Total Price</td><td>${formatNumber(logEntry.data_after.total_price || 0)}</td></tr>
-                                <tr><td>Trip Date</td><td>${logEntry.data_before.trip_date}</td>
-                                    <td>Trip Date</td><td>${logEntry.data_after.trip_date}</td></tr>
+                    // Append logs in the sorted order
+                    combinedLogs.forEach(function(entry) {
+                        if (entry.type === 'log') {
+                            $('#logList').append(`
+                                <tr>
+                                    <td><center>${entry.user}</center></td>
+                                    <td><center>${entry.activity}</center></td>
+                                    <td colspan="2"><center>${formatTanggal(entry.date)}</center></td>
+                                </tr>
                             `);
-                        });
-                    }
-
-                    // Helper function to parse log data
-                    function parseLogData(logString) {
-                        const logData = {};
-                        logString.split('|').forEach(item => {
-                            const [key, value] = item.split(':');
-                            logData[key.trim()] = value ? value.trim() : '';
-                        });
-                        return logData;
-                    }
+                        } else if (entry.type === 'fastboatLog') {
+                            $('#logList').append(`
+                                <tr>
+                                    <td style="background-color: lightskyblue;" colspan="2"><center>Before</center></td>
+                                    <td style="background-color: lightskyblue;" colspan="2"><center>After</center></td>
+                                </tr>
+                                <tr>
+                                    <td>Company</td><td>${entry.data_before.company || '-'}</td>
+                                    <td>Company</td><td>${entry.data_after.company || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td>Trip</td><td>${entry.data_before.trip || '-'}</td>
+                                    <td>Trip</td><td>${entry.data_after.trip || '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Price</td><td>${formatNumber(entry.data_before.total_price || 0)}</td>
+                                    <td>Total Price</td><td>${formatNumber(entry.data_after.total_price || 0)}</td>
+                                </tr>
+                                <tr>
+                                    <td>Trip Date</td><td>${formatTanggal(entry.data_before.trip_date)}</td>
+                                    <td>Trip Date</td><td>${formatTanggal(entry.data_after.trip_date)}</td>
+                                </tr>
+                            `);
+                        }
+                    });
                 });
             });
         });
