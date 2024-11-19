@@ -2245,7 +2245,7 @@ class BookingDataController extends Controller
                     $childBefore = $bookingDataEdit->fbo_child;
                     $totalNettBefore = $bookingDataEdit->fbo_total_nett;
                     $endTotalBefore = $bookingDataEdit->fbo_end_total;
-                    $passenger = $bookingDataEdit->fbo_passenger;
+                    $passenger = $bookingDataEdit->fbo_adult + $bookingDataEdit->fbo_child;
 
                     // Update departure data untuk oneway atau roundtrip
                     $orderId = $bookingDataEdit->fbo_order_id;
@@ -2448,7 +2448,6 @@ class BookingDataController extends Controller
                             // Mengurangi stok
                             $stokAfterDepart->fba_stock -= $passenger;
                             $stokAfterDepart->save();
-                            echo($stokAfterDepart);
 
                             $count = FastboatLog::where('fbl_booking_id', $bookingDataEdit->fbo_booking_id)
                                 ->where('fbl_type', 'like', 'Update Trip Data%')
