@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Mail\CustomerMail;
+use Illuminate\Support\Facades\Mail;
 
 class BookingDataController extends Controller
 {
@@ -3225,5 +3227,21 @@ class BookingDataController extends Controller
                 }
                 break;
         }
+    }
+
+    public function emailCustomer($ctc_id)
+    {
+        // Cari data customer berdasarkan ctc_id
+        $contact = Contact::find($ctc_id);
+
+        if ($contact) {
+            // Kirim email ke alamat customer
+            Mail::to($contact->ctc_email)->send(new CustomerMail($contact));
+            toast('Email as been deliveried!', 'success');
+            return redirect()->route('data.view');
+        }
+
+        toast('Failed deliery email!', 'error');
+        return redirect()->route('data.view');
     }
 }
