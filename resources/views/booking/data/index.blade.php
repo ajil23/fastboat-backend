@@ -334,10 +334,10 @@
                                                                 <a class="text-muted dropdown-toggle font-size-18" role="button" data-bs-toggle="dropdown" aria-haspopup="true"><i class="mdi mdi-dots-horizontal"></i></a>
                                                                 <div class="dropdown-menu dropdown-menu-end">
                                                                     <a class="dropdown-item showDownloadTicket" href="#" data-id="{{ $item->fbo_id }}" id="showDownloadTicket" style="color: rgb(23, 162, 184);"><i class="mdi mdi-ticket"></i>Download Ticket</a>
-                                                                    <a class="dropdown-item" href="#" id="=" style="color: rgb(66, 133, 244);"><i class="mdi mdi-email-send"></i>Cust. Email</a>
+                                                                    <a class="dropdown-item" href="{{ route('data.customerEmail', $item->order->ctc_id) }}" id="=" style="color: rgb(66, 133, 244);"><i class="mdi mdi-email-send"></i>Cust. Email</a>
                                                                     <a class="dropdown-item" href="#" id="=" style="color: rgb(66, 133, 244);"><i class="mdi mdi-email-send"></i>Comp. Email</a>
                                                                     <a class="dropdown-item" href="javascript:void(0)" id="showWhatsapp" data-url="{{ route('data.whatsapp', $item->fbo_id) }}" style="color: rgb(37, 211, 102);"><i class="mdi mdi-whatsapp"></i>WhatsApp</a>
-                                                                    <a class="dropdown-item text-secondary" href="javascript:void(0);" id="removeStatus" data-url="{{ route('data.updateStatus', $item->fbo_id) }}"><i class="mdi mdi-inbox-remove"></i>Remove</a>
+                                                                    <a class="dropdown-item text-secondary removeStatus" href="javascript:void(0);" id="removeStatus" data-url="{{ route('data.updateStatus', $item->fbo_id) }}"><i class="mdi mdi-inbox-remove"></i>Remove</a>
                                                                     <a class="dropdown-item btn-cancel-transaction" data-id="{{ $item->fbo_id }}" href="#"  style="color: rgb(234, 67, 53);"><i class="mdi mdi-cancel"></i>Cancel</a>
                                                                     <a class="dropdown-item btn-set-paid" data-id="{{ $item->fbo_id }}" href="#" style="color: rgb(255, 215, 0);"><i class="mdi mdi-credit-card"></i>Payment</a>
                                                                     <a class="dropdown-item" href="{{route('data.edit', $item->fbo_order_id)}}" style="color: rgb(255, 90, 0);"><i class="mdi mdi-square-edit-outline"></i>Edit</a>
@@ -1004,7 +1004,7 @@
 
     <script>
         $(document).ready(function() {
-            $('#removeStatus').on('click', function(e) {
+            $('.removeStatus').on('click', function(e) {
                 e.preventDefault(); // Mencegah aksi default link
                 let url = $(this).data('url'); // Ambil URL dari atribut data-url
 
