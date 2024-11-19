@@ -243,7 +243,7 @@ class BookingApiController extends Controller
         $bookingDataDepart->fbo_arrival_island = $availabilityData->trip->arrival->island->isd_id;
         $bookingDataDepart->fbo_arrival_port = $availabilityData->trip->arrival->prt_id;
         $bookingDataDepart->fbo_arrival_time = $availabilityData->fba_arrival_time ?? $availabilityData->trip->fbt_arrival_time;
-        $bookingDataDepart->fbo_checkin_point = FastboatCheckinPoint::where('fcp_company', $bookingDataDepart->fbo_company)->value('fcp_address');
+        $bookingDataDepart->fbo_checkin_point = FastboatCheckinPoint::where('fcp_company', $bookingDataDepart->fbo_company)->value('fcp_id');
         $bookingDataDepart->fbo_pickup = $request->fbo_pickup;
         $bookingDataDepart->fbo_dropoff = $request->fbo_dropoff;
         $bookingDataDepart->fbo_specific_pickup = $request->fbo_specific_pickup;
@@ -334,7 +334,7 @@ class BookingApiController extends Controller
             $bookingDataReturn->fbo_arrival_island = $availabilityDataReturn->trip->arrival->island->isd_id;
             $bookingDataReturn->fbo_arrival_port = $availabilityDataReturn->trip->arrival->prt_id;
             $bookingDataReturn->fbo_arrival_time = $availabilityDataReturn->fba_arrival_time ?? $availabilityDataReturn->trip->fbt_arrival_time;
-            $bookingDataReturn->fbo_checkin_point = FastboatCheckinPoint::where('fcp_company', $bookingDataReturn->fbo_company)->value('fcp_address');
+            $bookingDataReturn->fbo_checkin_point = FastboatCheckinPoint::where('fcp_company', $bookingDataReturn->fbo_company)->value('fcp_id');
             $bookingDataReturn->fbo_pickup = $request->fbo_pickup;
             $bookingDataReturn->fbo_dropoff = $request->fbo_dropoff;
             $bookingDataReturn->fbo_specific_pickup = $request->fbo_specific_pickup;
