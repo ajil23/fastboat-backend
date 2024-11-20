@@ -25,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Mail\CustomerMail;
+use App\Mail\CompanyMail;
 use Illuminate\Support\Facades\Mail;
 
 class BookingDataController extends Controller
@@ -3314,6 +3315,25 @@ class BookingDataController extends Controller
         }
 
         toast('Failed deliery email!', 'error');
+        return redirect()->route('data.view');
+    }
+
+    public function emailCompany($fbo_id)
+    {
+        $fbo_id = BookingData::find($fbo_id);
+        $companyEmail = $fbo_id->availability->trip->fastboat->company->cpn_email;
+        $companyEmailStatus = $fbo_id->availability->trip->fastboat->company->cpn_email_status;
+        $companyId = $fbo_id->availability->trip->fastboat->company->cpn_id;
+
+        if ($companyEmailStatus == 0) {
+            toast('Email cannot be sent, company email status is inactive', 'error');
+        } elseif ($companyId) {
+            Mail::to($companyEmail)->send(new CompanyMail($fbo_id, $companyId));
+            toast('Email has been delivered!', 'success');
+        } else {
+            toast('Failed to send email, company ID not found', 'error');
+        }
+
         return redirect()->route('data.view');
     }
 }
