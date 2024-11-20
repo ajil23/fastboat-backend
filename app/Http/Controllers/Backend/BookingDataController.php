@@ -2487,7 +2487,7 @@ class BookingDataController extends Controller
                                 $childReturnBefore = $returnBookingData->fbo_child;
                                 $totalNettReturnBefore = $returnBookingData->fbo_total_nett;
                                 $endTotalReturnBefore = $returnBookingData->fbo_end_total;
-                                $availabilityBefore = $returnBookingData->fbo_availability_id;
+                                $availabilityReturnBefore = $returnBookingData->fbo_availability_id;
 
                                 // Mengambil data sesudah (return)
                                 $checkin = FastboatCheckinPoint::where('fcp_company', $availabilityIdReturn->trip->fastboat->company->cpn_id)->first();
@@ -2556,12 +2556,12 @@ class BookingDataController extends Controller
                                 ]);
 
                                 // Mengembalikan stok pada availability sebelumnya
-                                $stokBeforeReturn = FastboatAvailability::where('fba_id', $availabilityBefore)->lockForUpdate()->first();
+                                $stokBeforeReturn = FastboatAvailability::where('fba_id', $availabilityReturnBefore)->lockForUpdate()->first();
                                 $stokBeforeReturn->fba_stock += $passenger;
                                 $stokBeforeReturn->save();
 
                                 // Pengecekan ketersediaan stok sekaligus penanganan race condition
-                                $stokAfterReturn = FastboatAvailability::where('fba_id', $availabilityIdAfter)->lockForUpdate()->first();
+                                $stokAfterReturn = FastboatAvailability::where('fba_id', $availabilityIdReturnAfter)->lockForUpdate()->first();
                                 if ($stokAfterReturn->fba_stock < $passenger  + 1) {
                                     return response()->json(['message' => 'Ticket stock is low'], 400);
                                 }
