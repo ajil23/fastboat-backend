@@ -8,19 +8,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Queue\SerializesModels;
 
 class CustomerMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $contact; 
+    protected $pdfData;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Contact $contact)
+    public function __construct(Contact $contact, ?array $pdfData = null)
     {
         $this->contact = $contact; 
+        $this->pdfData = $pdfData;
     }
 
     /**
@@ -53,6 +56,20 @@ class CustomerMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        if (!$this->pdfData) {
+            return [];
+        }
+
+        $attachments = [];
+        
+        // Iterasi untuk menambahkan semua lampiran PDF
+        foreach ($this->pdfData['pdf_contents'] as $index => $pdfContent) {
+            $attachments[] = Attachment::fromData(
+                fn () => $pdfContent,
+                $this->pdfData['filenames'][$index]
+            )->withMime('application/pdf');
+        }
+
+        return $attachments;
     }
 }

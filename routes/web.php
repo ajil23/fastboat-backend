@@ -65,7 +65,7 @@ Route::middleware([
         Route::get('/data/{id}/whatsapp', [BookingDataController::class, 'whatsappReservation'])->name('data.whatsapp');
         Route::post('/data/cancel-transaction', [BookingDataController::class, 'cancelTransaction'])->name('data.cancelTransaction');
         Route::get('/data/{id}/ticket-view', [BookingDataController::class, 'viewTicket'])->name('data.viewTicket');
-        Route::get('/data/send-customer-email/{ctc_id}', [BookingDataController::class, 'emailCustomer'])->name('data.customerEmail');
+        Route::get('/data/send-customer-email/{id}', [BookingDataController::class, 'emailCustomer'])->name('data.customerEmail');
         Route::get('/data/send-company-email/{id}', [BookingDataController::class, 'emailCompany'])->name('data.companyEmail');
         
         //booking-trash route
