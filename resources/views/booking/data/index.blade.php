@@ -892,6 +892,7 @@
             });
         });
     </script>
+
     <!-- modal view -->
     <script>
         $(document).ready(function() {
@@ -954,38 +955,39 @@
                         `);
                     });
 
-                    // Combine logList and fastboatLogs
+                    // Gabungkan logList dan fastboatLogs
                     const combinedLogs = [];
 
-                    // Add each log from logList with type 'log'
+                    // Tambahkan log dari logList dengan tipe 'log'
                     (data.logs || []).forEach(function(log) {
                         combinedLogs.push({
                             type: 'log',
                             user: log.user || '-',
                             activity: log.activity || '-',
-                            date: new Date(log.date) // Convert date to Date object for sorting
+                            date: new Date(log.date) // Konversi tanggal ke objek Date untuk sorting
                         });
                     });
 
-                    // Add each log from fastboatLogs with type 'fastboatLog'
+                    // Tambahkan log dari fastboatLogs dengan tipe 'fastboatLog'
                     (data.fastboatLogs || []).forEach(function(logEntry) {
                         combinedLogs.push({
                             type: 'fastboatLog',
                             data_before: logEntry.data_before || {},
                             data_after: logEntry.data_after || {},
-                            date: new Date(logEntry.created_at) // Assuming 'created_at' is the date field
+                            date: new Date(logEntry.created_at) // Asumsikan 'created_at' adalah field tanggal
                         });
                     });
 
-                    // Sort combinedLogs by date in descending order (newest first)
-                    combinedLogs.sort((a, b) => b.date - a.date);
+                    // Urutkan combinedLogs berdasarkan tanggal secara ascending (terlama ke terbaru)
+                    combinedLogs.sort((a, b) => a.date - b.date);
 
-                    // Clear existing log list
+                    // Kosongkan elemen logList sebelum menambahkan log baru
                     $('#logList').empty();
 
-                    // Append logs in the sorted order
+                    // Render log ke dalam tabel
                     combinedLogs.forEach(function(entry) {
                         if (entry.type === 'log') {
+                            // Render logList entry
                             $('#logList').append(`
                                 <tr>
                                     <td><center>${entry.user}</center></td>
@@ -994,6 +996,7 @@
                                 </tr>
                             `);
                         } else if (entry.type === 'fastboatLog') {
+                            // Render fastboatLog entry
                             $('#logList').append(`
                                 <tr>
                                     <td style="background-color: lightskyblue;" colspan="2"><center>Before</center></td>
