@@ -1376,7 +1376,7 @@ class BookingDataController extends Controller
 
         // Fetch logs from fastboatlog table for matching booking_id
         $fastboatLogs = FastboatLog::where('fbl_booking_id', $bookingData->fbo_booking_id)
-            ->get(['fbl_data_before', 'fbl_data_after']);
+            ->get(['fbl_data_before', 'fbl_data_after', 'created_at']); // Include created_at
 
         // Convert logs to array for JSON response with filtering condition
         $fastboatLogArray = $fastboatLogs->map(function ($log) {
@@ -1405,6 +1405,7 @@ class BookingDataController extends Controller
                 return [
                     'data_before' => $dataBefore,
                     'data_after' => $dataAfter,
+                    'created_at' => $log->created_at, // Include created_at in the response
                 ];
             }
 
