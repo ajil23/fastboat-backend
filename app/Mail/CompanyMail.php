@@ -5,6 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -12,16 +13,18 @@ use Illuminate\Queue\SerializesModels;
 class CompanyMail extends Mailable
 {
     use Queueable, SerializesModels;
+    public $booking;
     public $companyId;
-    public $fboId;
+    public $pdfDetails;
     
     /**
      * Create a new message instance.
      */
-    public function __construct($fboId, $companyId)
+    public function __construct($booking, $companyId, $pdfDetails = null)
     {
-        $this->fboId = $fboId;
+        $this->booking = $booking;
         $this->companyId = $companyId;
+        $this->pdfDetails = $pdfDetails;
     }
 
     /**
@@ -42,7 +45,7 @@ class CompanyMail extends Mailable
         return new Content(
             view: 'mail.company',
             with: [
-                'fboId' => $this->fboId,
+                'booking' => $this->booking,
                 'companyId' => $this->companyId,
             ],
         );
@@ -55,6 +58,15 @@ class CompanyMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        if ($this->pdfDetails && isset($this->pdfDetails['pdf_contents']) && isset($this->pdfDetails['filenames'])) {
+            foreach ($this->pdfDetails['pdf_contents'] as $index => $pdfContent) {
+                $attachments[] = Attachment::fromData(fn() => $pdfContent, $this->pdfDetails['filenames'][$index])
+                    ->withMime('application/pdf');
+            }
+        }
+
+        return $attachments;
     }
 }

@@ -3434,10 +3434,10 @@ class BookingDataController extends Controller
             }
 
             Mail::to($contact->ctc_email)
-            ->send(new CustomerMail($contact, [
-                'pdf_contents' => $pdfContents,
-                'filenames' => $filenames,
-            ]));
+                ->send(new CustomerMail($contact, [
+                    'pdf_contents' => $pdfContents,
+                    'filenames' => $filenames,
+                ]));
 
             toast('Email has been delivered successfully!', 'success');
             return redirect()->route('data.view');
@@ -3447,22 +3447,73 @@ class BookingDataController extends Controller
         }
     }
 
-    // public function emailCompany($fbo_id)
-    // {
-    //     $fbo_id = BookingData::find($fbo_id);
-    //     $companyEmail = $fbo_id->availability->trip->fastboat->company->cpn_email;
-    //     $companyEmailStatus = $fbo_id->availability->trip->fastboat->company->cpn_email_status;
-    //     $companyId = $fbo_id->availability->trip->fastboat->company->cpn_id;
+    public function emailCompany($fbo_id)
+    {
+        try {
+            // Cari data booking
+            $booking = BookingData::findOrFail($fbo_id);
+            $contact = $booking->contact;
 
-    //     if ($companyEmailStatus == 0) {
-    //         toast('Email cannot be sent, company email status is inactive', 'error');
-    //     } elseif ($companyId) {
-    //         Mail::to($companyEmail)->send(new CompanyMail($fbo_id, $companyId));
-    //         toast('Email has been delivered!', 'success');
-    //     } else {
-    //         toast('Failed to send email, company ID not found', 'error');
-    //     }
+            if (!$contact) {
+                throw new \Exception('Contact not found');
+            }
 
-    //     return redirect()->route('data.view');
-    // }
+            $fboBookingId = $booking->fbo_booking_id;
+            $bookingType = substr($fboBookingId, -1);
+
+            // Persiapkan variabel untuk konten PDF dan filename
+            $pdfContents = [];
+            $filenames = [];
+
+            // Pengecekan tipe perjalanan berdasarkan akhiran fbo_booking_id
+            if ($bookingType === 'X') {
+                // One way trip, hanya kirim satu tiket
+                $pdfContent = $this->generateTicketPdf($fbo_id);
+                $filename = 'Ticket_' . $fboBookingId . '.pdf';
+                $pdfContents[] = $pdfContent;
+                $filenames[] = $filename;
+            } elseif ($bookingType === 'Y') {
+                // Round trip, kirim dua tiket (departure dan return)
+                // Tiket departure (Y)
+                $pdfContentDeparture = $this->generateTicketPdf($fbo_id);
+                $filenameDeparture = 'Ticket_' . $fboBookingId . '.pdf';
+                $pdfContents[] = $pdfContentDeparture;
+                $filenames[] = $filenameDeparture;
+
+                // Cari tiket return berdasarkan fbo_booking_id yang berakhiran 'Z'
+                $returnBooking = BookingData::where('fbo_booking_id', substr($fboBookingId, 0, -1) . 'Z')->first();
+                if ($returnBooking) {
+                    // Tiket return (Z)
+                    $pdfContentReturn = $this->generateTicketPdf($returnBooking->fbo_id);
+                    $filenameReturn = 'Ticket_' . $returnBooking->fbo_booking_id . '.pdf';
+                    $pdfContents[] = $pdfContentReturn;
+                    $filenames[] = $filenameReturn;
+                }
+            }
+
+            // Dapatkan email company
+            $companyEmail = $booking->availability->trip->fastboat->company->cpn_email;
+            $companyEmailStatus = $booking->availability->trip->fastboat->company->cpn_email_status;
+            $companyId = $booking->availability->trip->fastboat->company->cpn_id;
+
+            // Cek status email company
+            if ($companyEmailStatus == 0) {
+                toast('Email cannot be sent, company email status is inactive', 'error');
+                return redirect()->route('data.view');
+            }
+
+            // Kirim email ke company
+            Mail::to($companyEmail)
+                ->send(new CompanyMail($booking, $companyId, [
+                    'pdf_contents' => $pdfContents,
+                    'filenames' => $filenames,
+                ]));
+
+            toast('Email has been delivered successfully!', 'success');
+            return redirect()->route('data.view');
+        } catch (\Exception $e) {
+            toast('Failed to deliver email: ' . $e->getMessage(), 'error');
+            return redirect()->route('data.view');
+        }
+    }
 }
