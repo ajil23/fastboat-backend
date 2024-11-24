@@ -67,6 +67,7 @@ Route::middleware([
         Route::get('/data/{id}/ticket-view', [BookingDataController::class, 'viewTicket'])->name('data.viewTicket');
         Route::get('/data/send-customer-email/{id}', [BookingDataController::class, 'emailCustomer'])->name('data.customerEmail');
         Route::get('/data/send-company-email/{id}', [BookingDataController::class, 'emailCompany'])->name('data.companyEmail');
+        Route::get('/data/send-customer-email-view/{id}', [BookingDataController::class, 'viewemailCustomer'])->name('data.customerEmailView');
         
         //booking-trash route
         Route::get('/trash', [BookingTrashController::class, 'index'])->name('trash.view');

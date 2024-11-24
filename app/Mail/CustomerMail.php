@@ -14,16 +14,17 @@ use Illuminate\Queue\SerializesModels;
 class CustomerMail extends Mailable
 {
     use Queueable, SerializesModels;
-    public $contact; 
-    protected $pdfData;
+
+    public $contact;
+    protected $emailData;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(Contact $contact, ?array $pdfData = null)
+    public function __construct(Contact $contact, array $emailData)
     {
-        $this->contact = $contact; 
-        $this->pdfData = $pdfData;
+        $this->contact = $contact;
+        $this->emailData = $emailData;
     }
 
     /**
@@ -32,7 +33,7 @@ class CustomerMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Customer Mail',
+            subject: 'Your Booking Confirmation', // Lebih deskriptif untuk customer
         );
     }
 
@@ -44,7 +45,8 @@ class CustomerMail extends Mailable
         return new Content(
             view: 'mail.customer',
             with: [
-                'contact' => $this->contact,  // Kirim data contact ke view
+                'contact' => $this->contact,
+                'ticket_data' => $this->emailData['ticket_data'] ?? [], // Meneruskan data tiket ke view
             ]
         );
     }
@@ -56,17 +58,17 @@ class CustomerMail extends Mailable
      */
     public function attachments(): array
     {
-        if (!$this->pdfData) {
+        if (empty($this->emailData['pdf_contents'])) {
             return [];
         }
 
         $attachments = [];
         
         // Iterasi untuk menambahkan semua lampiran PDF
-        foreach ($this->pdfData['pdf_contents'] as $index => $pdfContent) {
+        foreach ($this->emailData['pdf_contents'] as $index => $pdfContent) {
             $attachments[] = Attachment::fromData(
                 fn () => $pdfContent,
-                $this->pdfData['filenames'][$index]
+                $this->emailData['filenames'][$index]
             )->withMime('application/pdf');
         }
 
