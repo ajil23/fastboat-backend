@@ -147,7 +147,11 @@
                     <div class="info">
                         <table>
                             <tr>
-                                <th colspan="2">{{ $ticket['fbo_booking_id'] }}</th>
+                                <th colspan="2">{{ $ticket['fbt_name'] }}</th>
+                            </tr>
+                            <tr>
+                                <td>Booking ID</td>
+                                <td>: {{ $ticket['fbo_booking_id'] }}</td>
                             </tr>
                             <tr>
                                 <td>Date</td>
@@ -162,8 +166,8 @@
                                 <td>: {{ $ticket['arrival_port'] }}, {{ $ticket['arrival_time'] }}</td>
                             </tr>
                             <tr>
-                                <td>Company</td>
-                                <td>: {{ $ticket['company_name'] }}</td>
+                                <td>Boat Name</td>
+                                <td>: {{ $ticket['fastboat_name'] }}</td>
                             </tr>
                         </table>
                     </div>

@@ -3630,6 +3630,7 @@ class BookingDataController extends Controller
                     'phone' => $dataTicket->contact->ctc_phone,
                     'note' => $dataTicket->contact->ctc_note,
                     'fbo_booking_id' => $dataTicket->fbo_booking_id,
+                    'fbt_name' => $dataTicket->trip->fbt_name,
                     'fbo_trip_date' => $tripDate->format('l, d M Y'),
                     'departure_port' => $dataTicket->trip->departure->prt_name_en,
                     'arrival_port' => $dataTicket->trip->arrival->prt_name_en,
@@ -3638,6 +3639,7 @@ class BookingDataController extends Controller
                     'passengers' => $passengerArray,
                     'company_name' => $dataTicket->trip->fastboat->company->cpn_name,
                     'company_email' => $dataTicket->trip->fastboat->company->cpn_email,
+                    'fastboat_name' => $dataTicket->trip->fastboat->fb_name,
                     'company_logo' => url('storage/' . $dataTicket->trip->fastboat->company->cpn_logo),
                 ];
             };
