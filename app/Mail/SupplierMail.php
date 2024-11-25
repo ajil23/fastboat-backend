@@ -14,14 +14,16 @@ class SupplierMail extends Mailable
     use Queueable, SerializesModels;
     public $booking;
     public $companyId;
+    public $ticketData;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($booking, $companyId)
+    public function __construct($booking, $companyId, $ticketData)
     {
         $this->booking = $booking;
         $this->companyId = $companyId;
+        $this->ticketData = $ticketData;
     }
 
     /**
@@ -44,6 +46,7 @@ class SupplierMail extends Mailable
             with: [
                 'booking' => $this->booking,
                 'companyId' => $this->companyId,
+                'ticketData' => $this->ticketData,
             ],
         );
     }

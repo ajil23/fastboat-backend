@@ -120,11 +120,6 @@
             background-color: #fff;
         }
 
-        table td:nth-child(3) {
-            text-align: right;
-            /* Menempatkan 'Kebangsaan' di ujung kanan */
-        }
-
         /* Footer Section */
         .footer {
             text-align: center;
@@ -205,7 +200,7 @@
             @foreach ($ticket_data as $trip)
                 <div class="trip {{ $trip['is_return'] ? 'return-ticket' : 'departure-ticket' }}">
                     <div class="trip-logo">
-                        <img src="data:image/png;base64,{{ $trip['cpn_logo'] }}" alt="{{ $trip['cpn_name'] }} Logo">
+                        <img src="{{ $trip['cpn_logo'] }}" alt="{{ $trip['cpn_name'] }} Logo">
                     </div>
                     <div class="info">
                         <table>

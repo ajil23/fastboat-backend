@@ -3475,7 +3475,7 @@ class BookingDataController extends Controller
                     'cpn_name' => $dataTicket->trip->fastboat->company->cpn_name,
                     'cpn_email' => $dataTicket->trip->fastboat->company->cpn_email,
                     'cpn_phone' => $dataTicket->trip->fastboat->company->cpn_phone,
-                    'cpn_logo' => base64_encode(file_get_contents(Helpers\imagePath($dataTicket->trip->fastboat->company->cpn_logo))),
+                    'cpn_logo' =>  url('storage/' . $dataTicket->trip->fastboat->company->cpn_logo),
                     'fb_name' => $dataTicket->trip->fastboat->fb_name,
                     'fbt_name' => $dataTicket->trip->fbt_name,
                     'fbo_currency' => $dataTicket->fbo_currency,
@@ -3576,171 +3576,150 @@ class BookingDataController extends Controller
         }
     }
 
-    // public function viewemailCustomer($fbo_id)
-    // {
-    //     try {
-    //         // Cari data booking
-    //         $booking = BookingData::findOrFail($fbo_id);
-    //         $contact = $booking->contact;
+    public function emailCompany($fbo_id)
+    {
+        try {
+            // Cari data booking
+            $booking = BookingData::with([
+                'trip.fastboat',
+                'trip.fastboat.company',
+                'trip.departure',
+                'trip.arrival',
+                'contact',
+                'availability'
+            ])->findOrFail($fbo_id);
 
-    //         if (!$contact) {
-    //             throw new \Exception('Contact not found');
-    //         }
+            // Pastikan data perusahaan tersedia
+            if (!$booking->availability?->trip?->fastboat?->company) {
+                throw new \Exception('Company data not found');
+            }
 
-    //         $fboBookingId = $booking->fbo_booking_id;
-    //         $bookingType = substr($fboBookingId, -1);
+            $fboBookingId = $booking->fbo_booking_id;
+            $bookingType = substr($fboBookingId, -1); // Y = single trip, Z = return trip
+            $departCompany = $booking->availability->trip->fastboat->company;
 
-    //         // Persiapkan variabel untuk konten PDF dan filename
-    //         $pdfContents = [];
-    //         $filenames = [];
-    //         $paths = []; // Untuk menyimpan path file sementara yang dibuat
-    //         $ticketData = []; // Array untuk menyimpan data tiket (bisa 1 atau 2 tiket)
-    //         $totalPrice = 0; // Variable untuk menyimpan total harga keseluruhan
+            // Function untuk memformat data tiket
+            $formatTicketData = function ($dataTicket) {
+                $passengers = explode(';', $dataTicket->fbo_passenger);
+                $passengerArray = [];
 
-    //         // Function untuk memformat data tiket
-    //         $formatTicketData = function ($dataTicket) {
-    //             $passengers = explode(';', $dataTicket->fbo_passenger);
-    //             $passengerArray = [];
+                foreach ($passengers as $passenger) {
+                    $details = explode(',', $passenger);
+                    if (count($details) === 4) {
+                        $age = (int) $details[1];
+                        $ageGroup = $age > 13 ? 'Adult' : ($age >= 3 && $age <= 12 ? 'Child' : ($age >= 0 ? 'Infant' : 'Unknown'));
 
-    //             foreach ($passengers as $passenger) {
-    //                 $details = explode(',', $passenger);
-    //                 if (count($details) === 4) {
-    //                     $age = (int) $details[1];
-    //                     if ($age > 13) {
-    //                         $ageGroup = 'ADULT';
-    //                     } elseif ($age >= 3 && $age <= 12) {
-    //                         $ageGroup = 'CHILD';
-    //                     } elseif ($age >= 0 && $age <= 2) {
-    //                         $ageGroup = 'INFANT';
-    //                     } else {
-    //                         $ageGroup = 'UNKNOWN';
-    //                     }
+                        $passengerArray[] = [
+                            'name' => $details[0],
+                            'age' => $ageGroup,
+                            'gender' => $details[2],
+                            'nationality' => $details[3],
+                        ];
+                    }
+                }
 
-    //                     $passengerArray[] = [
-    //                         'name' => $details[0],
-    //                         'age' => $ageGroup,
-    //                         'gender' => $details[2],
-    //                         'nationality' => $details[3],
-    //                     ];
-    //                 }
-    //             }
+                $tripDate = new \DateTime($dataTicket->fbo_trip_date);
+                $time = $dataTicket->availability->fba_dept_time ?? $dataTicket->trip->fbt_dept_time;
+                $timeDateTime = new \DateTime($time);
+                $arrivaltime = new \DateTime($dataTicket->fbo_arrival_time);
+                $bookingDate = new \DateTime($dataTicket->created_at);
 
-    //             $tripDate = new \DateTime($dataTicket->fbo_trip_date);
-    //             $time = $dataTicket->availability->fba_dept_time ?? $dataTicket->trip->fbt_dept_time;
-    //             $timeDateTime = new \DateTime($time);
-    //             $arrivaltime = new \DateTime($dataTicket->fbo_arrival_time);
-    //             $bookingDate = new \DateTime($dataTicket->created_at);
+                return [
+                    'name' => $dataTicket->contact->ctc_name,
+                    'email' => $dataTicket->contact->ctc_email,
+                    'phone' => $dataTicket->contact->ctc_phone,
+                    'note' => $dataTicket->contact->ctc_note,
+                    'fbo_booking_id' => $dataTicket->fbo_booking_id,
+                    'fbt_name' => $dataTicket->trip->fbt_name,
+                    'fbo_trip_date' => $tripDate->format('l, d M Y'),
+                    'departure_port' => $dataTicket->trip->departure->prt_name_en,
+                    'arrival_port' => $dataTicket->trip->arrival->prt_name_en,
+                    'departure_time' => $timeDateTime->format('H:i'),
+                    'arrival_time' => $arrivaltime->format('H:i'),
+                    'passengers' => $passengerArray,
+                    'company_name' => $dataTicket->trip->fastboat->company->cpn_name,
+                    'company_email' => $dataTicket->trip->fastboat->company->cpn_email,
+                    'fastboat_name' => $dataTicket->trip->fastboat->fb_name,
+                    'company_logo' => url('storage/' . $dataTicket->trip->fastboat->company->cpn_logo),
+                ];
+            };
 
-    //             $adult_currency = $dataTicket->fbo_adult_currency * $dataTicket->fbo_adult;
-    //             $child_currency = $dataTicket->fbo_child_currency * $dataTicket->fbo_child;
+            // Format data tiket keberangkatan
+            $departTicketData = $formatTicketData($booking);
+            $emailsSent = false;
 
-    //             return [
-    //                 'name' => $dataTicket->contact->ctc_name,
-    //                 'email' => $dataTicket->contact->ctc_email,
-    //                 'phone' => $dataTicket->contact->ctc_phone,
-    //                 'note' => $dataTicket->contact->ctc_note,
-    //                 'fbo_booking_id' => $dataTicket->fbo_booking_id,
-    //                 'fbo_payment_status' => $dataTicket->fbo_payment_status,
-    //                 'fbo_trip_date' => $tripDate->format('l, d M Y'),
-    //                 'fbo_checkin_point_address' => $dataTicket->checkPoint->fcp_address,
-    //                 'fbo_checkin_point_maps' => $dataTicket->checkPoint->fcp_maps,
-    //                 'fbo_pickup' => $dataTicket->fbo_pickup,
-    //                 'fbo_specific_pickup' => $dataTicket->fbo_specific_pickup,
-    //                 'fbo_contact_pickup' => $dataTicket->fbo_contact_pickup,
-    //                 'fbo_dropoff' => $dataTicket->fbo_dropoff,
-    //                 'fbo_specific_dropoff' => $dataTicket->fbo_specific_dropoff,
-    //                 'fbo_contact_dropoff' => $dataTicket->fbo_contact_dropoff,
-    //                 'cpn_name' => $dataTicket->trip->fastboat->company->cpn_name,
-    //                 'cpn_email' => $dataTicket->trip->fastboat->company->cpn_email,
-    //                 'cpn_phone' => $dataTicket->trip->fastboat->company->cpn_phone,
-    //                 'cpn_logo' => base64_encode(file_get_contents(Helpers\imagePath($dataTicket->trip->fastboat->company->cpn_logo))),
-    //                 'fb_name' => $dataTicket->trip->fastboat->fb_name,
-    //                 'fbt_name' => $dataTicket->trip->fbt_name,
-    //                 'fbo_currency' => $dataTicket->fbo_currency,
-    //                 'fbo_adult_currency' => $adult_currency,
-    //                 'fbo_child_currency' => $child_currency,
-    //                 'fbo_end_total_currency' => $dataTicket->fbo_end_total_currency,
-    //                 'fbo_adult' => $dataTicket->fbo_adult,
-    //                 'fbo_child' => $dataTicket->fbo_child,
-    //                 'fbo_infant' => $dataTicket->fbo_infant,
-    //                 'departure_port' => $dataTicket->trip->departure->prt_name_en,
-    //                 'departure_island' => $dataTicket->trip->departure->island->isd_name,
-    //                 'departure_time' => $timeDateTime->format('H:i'),
-    //                 'arrival_port' => $dataTicket->trip->arrival->prt_name_en,
-    //                 'arrival_island' => $dataTicket->trip->arrival->island->isd_name,
-    //                 'arrival_time' => $arrivaltime->format('H:i'),
-    //                 'passengers' => $passengerArray,
-    //                 'logo_ticket' => base64_encode(file_get_contents(public_path('assets/images/logo-ticket.png'))),
-    //                 'created_at' => $bookingDate->format('l, d M Y'),
-    //                 'is_return' => substr($dataTicket->fbo_booking_id, -1) === 'Z', // Menandai apakah ini tiket return
-    //             ];
-    //         };
+            if ($bookingType === 'Y') {
+                // Handle round trip
+                $returnBooking = BookingData::where('fbo_booking_id', substr($fboBookingId, 0, -1) . 'Z')
+                    ->with([
+                        'trip.fastboat',
+                        'trip.fastboat.company',
+                        'trip.departure',
+                        'trip.arrival',
+                        'contact',
+                        'availability'
+                    ])
+                    ->first();
 
-    //         // Load data untuk tiket pertama (X atau Y)
-    //         $dataTicket = BookingData::with([
-    //             'trip.fastboat',
-    //             'trip.fastboat.company',
-    //             'trip.departure',
-    //             'trip.arrival',
-    //             'contact',
-    //             'availability'
-    //         ])->findOrFail($fbo_id);
+                if ($returnBooking) {
+                    $returnCompany = $returnBooking->availability->trip->fastboat->company;
+                    $returnTicketData = $formatTicketData($returnBooking);
 
-    //         $ticketData[] = $formatTicketData($dataTicket);
-    //         $totalPrice = $dataTicket->fbo_end_total_currency;
+                    if ($departCompany->cpn_id === $returnCompany->cpn_id) {
+                        // Same company - send one email
+                        if ($departCompany->cpn_email_status == 1) {
+                            Mail::to($departCompany->cpn_email)
+                                ->send(new SupplierMail($booking, $departCompany->cpn_id, [$departTicketData, $returnTicketData]));
+                            $emailsSent = true;
+                            toast('Round trip email has been delivered to ' . $departCompany->cpn_name . '!', 'success');
+                        } else {
+                            toast('Email cannot be sent, company email status is inactive for ' . $departCompany->cpn_name, 'error');
+                        }
+                    } else {
+                        // Different companies - send separate emails
+                        $messages = [];
 
-    //         // Jika round trip (Y), tambahkan tiket return (Z)
-    //         if ($bookingType === 'Y') {
-    //             $returnBooking = BookingData::where('fbo_booking_id', substr($fboBookingId, 0, -1) . 'Z')
-    //                 ->with([
-    //                     'trip.fastboat',
-    //                     'trip.fastboat.company',
-    //                     'trip.departure',
-    //                     'trip.arrival',
-    //                     'contact',
-    //                     'availability'
-    //                 ])
-    //                 ->first();
+                        if ($departCompany->cpn_email_status == 1) {
+                            Mail::to($departCompany->cpn_email)
+                                ->send(new SupplierMail($booking, $departCompany->cpn_id, [$departTicketData]));
+                            $emailsSent = true;
+                            $messages[] = 'Departure email sent to ' . $departCompany->cpn_name;
+                        } else {
+                            $messages[] = 'Departure email could not be sent to ' . $departCompany->cpn_name . ' (inactive email status)';
+                        }
 
-    //             if ($returnBooking) {
-    //                 // Tambahkan data tiket return
-    //                 $ticketData[] = $formatTicketData($returnBooking);
-    //                 // Tambahkan total harga return ke total keseluruhan
-    //                 $totalPrice += $returnBooking->fbo_end_total_currency;
-    //             }
-    //         }
+                        if ($returnCompany->cpn_email_status == 1) {
+                            Mail::to($returnCompany->cpn_email)
+                                ->send(new SupplierMail($returnBooking, $returnCompany->cpn_id, [$returnTicketData]));
+                            $emailsSent = true;
+                            $messages[] = 'Return email sent to ' . $returnCompany->cpn_name;
+                        } else {
+                            $messages[] = 'Return email could not be sent to ' . $returnCompany->cpn_name . ' (inactive email status)';
+                        }
 
-    //         $ticket_data = $ticketData;
+                        toast(implode("\n", $messages), $emailsSent ? 'success' : 'error');
+                    }
+                }
+            } else {
+                // Single trip - send email
+                if ($departCompany->cpn_email_status == 1) {
+                    Mail::to($departCompany->cpn_email)
+                        ->send(new SupplierMail($booking, $departCompany->cpn_id, [$departTicketData]));
+                    $emailsSent = true;
+                    toast('Email has been delivered to ' . $departCompany->cpn_name . '!', 'success');
+                } else {
+                    toast('Email cannot be sent, company email status is inactive for ' . $departCompany->cpn_name, 'error');
+                }
+            }
 
-    //         // Kirim total harga ke view
-    //         return view('mail.customer', compact('contact', 'ticket_data', 'totalPrice'));
-    //     } catch (\Exception $e) {
-    //         // Hapus file PDF yang telah disimpan sementara meskipun terjadi error
-    //         foreach ($paths as $path) {
-    //             if (file_exists($path)) {
-    //                 unlink($path);
-    //             }
-    //         }
-    //         toast('Failed to deliver email: ' . $e->getMessage(), 'error');
-    //         return redirect()->route('data.view');
-    //     }
-    // }
+            if (!$emailsSent) {
+                toast('No emails were sent due to inactive email status.', 'warning');
+            }
 
-
-    // public function emailCompany($fbo_id)
-    // {
-    //     $fbo_id = BookingData::find($fbo_id);
-    //     $companyEmail = $fbo_id->availability->trip->fastboat->company->cpn_email;
-    //     $companyEmailStatus = $fbo_id->availability->trip->fastboat->company->cpn_email_status;
-    //     $companyId = $fbo_id->availability->trip->fastboat->company->cpn_id;
-    //     if ($companyEmailStatus == 0) {
-    //         toast('Email cannot be sent, company email status is inactive', 'error');
-    //     } elseif ($companyId) {
-    //         Mail::to($companyEmail)->send(new SupplierMail($fbo_id, $companyId));
-    //         toast('Email has been delivered!', 'success');
-    //     } else {
-    //         toast('Failed to send email, company ID not found', 'error');
-    //     }
-    //     return redirect()->route('data.view');
-    // }
+            return redirect()->route('data.view');
+        } catch (\Exception $e) {
+            toast('Failed to deliver email: ' . $e->getMessage(), 'error');
+            return redirect()->route('data.view');
+        }
+    }
 }
