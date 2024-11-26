@@ -5,8 +5,10 @@ use App\Http\Controllers\Api\AvailabilityApiController;
 use App\Http\Controllers\Api\BookingApiController;
 use App\Http\Controllers\Api\CurrencyApiController;
 use App\Http\Controllers\Api\FastboatApiController;
+use App\Http\Controllers\Api\IslandApiController;
 use App\Http\Controllers\Api\NationalityApiController;
 use App\Http\Controllers\Api\PortApiController;
+use App\Http\Controllers\Api\RouteApiController;
 use App\Models\DataFastboat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,4 +47,10 @@ Route::middleware('checkStaticToken')->group(function () {
 
     // currency
     Route::get('currency', [CurrencyApiController::class, 'index']);
+
+    // island
+    Route::get('island', [IslandApiController::class, 'index']);
+    
+    // route
+    Route::get('route', [RouteApiController::class, 'index']);
 });

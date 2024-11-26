@@ -11,6 +11,7 @@ use App\Models\FastboatTrip;
 use App\Models\MasterCurrency;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BookingApiController extends Controller
 {
@@ -93,7 +94,7 @@ class BookingApiController extends Controller
         $contactData->ctc_browser = $request->header('User-Agent');
         $contactData->ctc_updated_by = Auth()->id() ?? 'api';
         $contactData->ctc_created_by = Auth()->id() ?? 'api';
-        // $contactData->save();
+        $contactData->save();
 
         // Ambil ctc_id kontak yang baru dibuat
         $contactId = $contactData->ctc_id;
@@ -254,7 +255,7 @@ class BookingApiController extends Controller
         $bookingDataDepart->fbo_mail_client = "";
         $bookingDataDepart->fbo_log = "";
         $bookingDataDepart->fbo_source = "website";
-        // $bookingDataDepart->save();
+        $bookingDataDepart->save();
 
         // Pengecekan ketersediaan stok sekaligus penanganan race condition
         $stokDataDepart = FastboatAvailability::where('fba_id', $availabilityId)->lockForUpdate()->first();
@@ -264,7 +265,7 @@ class BookingApiController extends Controller
 
         // Pengurangan stok di availability
         $stokDataDepart->fba_stock -= $totalPassenger;
-        // $stokDataDepart->save();
+        $stokDataDepart->save();
 
         // return
         if (count($tripIds) > 1) {
@@ -345,6 +346,7 @@ class BookingApiController extends Controller
             $bookingDataReturn->fbo_mail_client = "";
             $bookingDataReturn->fbo_log = "";
             $bookingDataReturn->fbo_source = "website";
+            $bookingDataReturn->save();
 
             // Pengecekan ketersediaan stok sekaligus penanganan race condition
             $stokDatareturn = FastboatAvailability::where('fba_id', $availabilityReturnId)->lockForUpdate()->first();
@@ -354,13 +356,122 @@ class BookingApiController extends Controller
 
             // Pengurangan stok di availability
             $stokDatareturn->fba_stock -= $totalPassenger;
-            // $stokDatareturn->save();
+            $stokDatareturn->save();
         } else {
             unset($availabilityReturnId);
         }
+
+
+        $invoiceResponse = $this->createXenditInvoice($contactId);
+
         return response()->json([
-            "depart"=> $bookingDataDepart,
-            "return"=>isset($bookingDataReturn) ? $bookingDataReturn : null
+            "depart" => $bookingDataDepart,
+            "return" => isset($bookingDataReturn) ? $bookingDataReturn : null,
+            "invoice" => $invoiceResponse->getData()
         ]);
+    }
+
+    public function createXenditInvoice($contactId)
+    {
+        try {
+            // Fetch the contact and booking data
+            $contact = Contact::findOrFail($contactId);
+
+            // Fetch booking data for depart, return, and one-way (if exists)
+            $bookingDepart = BookingData::where('fbo_order_id', $contactId)
+                ->where('fbo_booking_id', 'like', '%Y')
+                ->first();
+
+            $bookingReturn = BookingData::where('fbo_order_id', $contactId)
+                ->where('fbo_booking_id', 'like', '%Z')
+                ->first();
+
+            $bookingOneWay = BookingData::where('fbo_order_id', $contactId)
+                ->where('fbo_booking_id', 'like', '%X')
+                ->first();
+
+            // Calculate total amount based on booking types
+            $totalAmount = 0;
+
+            if ($bookingDepart) {
+                $totalAmount += $bookingDepart->fbo_end_total;
+            }
+
+            if ($bookingReturn) {
+                $totalAmount += $bookingReturn->fbo_end_total;
+            }
+
+            if ($bookingOneWay) {
+                $totalAmount += $bookingOneWay->fbo_end_total;
+            }
+
+            if ($totalAmount <= 0) {
+                return response()->json([
+                    'error' => 'No valid bookings found or total amount is zero'
+                ], 400);
+            }
+
+            // Prepare invoice data
+            $invoiceData = [
+                'external_id' => $contact->ctc_order_id,
+                'amount' => $totalAmount,
+                'payer_email' => $contact->ctc_email,
+                'description' => $contact->ctc_note ?? 'Fastboat Booking',
+                'payment_methods' => ['BNI'],
+            ];
+
+            // URL Endpoint Xendit
+            $url = 'https://api.xendit.co/v2/invoices';
+
+            // Send HTTP Request to Xendit API
+            $response = Http::withBasicAuth(env('XENDIT_SECRET_KEY'), '')
+                ->post($url, [
+                    'external_id' => $invoiceData['external_id'],
+                    'amount' => $invoiceData['amount'],
+                    'payer_email' => $invoiceData['payer_email'],
+                    'description' => $invoiceData['description'],
+                    'payment_methods' => $invoiceData['payment_methods'],
+                    'success_redirect_url' => url('/payment-success'),
+                    'failure_redirect_url' => url('/payment-failure'),
+                ]);
+
+            if ($response->successful()) {
+                $invoice = $response->json();
+
+                // Update booking data with invoice information
+                if ($bookingDepart) {
+                    $bookingDepart->fbo_transaction_id = $invoice['id'] ?? null;
+                    $bookingDepart->fbo_payment_method = 'Xendit';
+                    $bookingDepart->save();
+                }
+
+                if ($bookingReturn) {
+                    $bookingReturn->fbo_transaction_id = $invoice['id'] ?? null;
+                    $bookingReturn->fbo_payment_method = 'Xendit';
+                    $bookingReturn->save();
+                }
+
+                if ($bookingOneWay) {
+                    $bookingOneWay->fbo_transaction_id = $invoice['id'] ?? null;
+                    $bookingOneWay->fbo_payment_method = 'Xendit';
+                    $bookingOneWay->save();
+                }
+
+                return response()->json([
+                    'invoice_url' => $invoice['invoice_url'],
+                    'invoice_id' => $invoice['id']
+                ]);
+            } else {
+                return response()->json([
+                    'error' => 'Failed to create Xendit invoice',
+                    'details' => $response->json()
+                ], $response->status());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Exception in creating Xendit invoice',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
