@@ -12,6 +12,9 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
+        'stripe/*',
+        'http://example.com/foo/bar',
+        'http://example.com/foo/*',
+        '/api/payment/xendit/callback'
     ];
 }

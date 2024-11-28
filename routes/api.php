@@ -47,10 +47,9 @@ Route::middleware('checkStaticToken')->group(function () {
     Route::post('/booking', [BookingApiController::class, 'store']);
     
     // Payment
-    Route::get('/payment', [XenditApiController::class, 'index']);
-    Route::post('/payment/xendit', [XenditApiController::class, 'makeInvoice']);
-    Route::get('/payment/xendit/callback', [XenditApiController::class, 'getCallback']);
-
+    Route::get('payment', [XenditApiController::class, 'index']);
+    Route::post('payment/xendit', [XenditApiController::class, 'makeInvoice']);
+    
     // currency
     Route::get('currency', [CurrencyApiController::class, 'index']);
 
@@ -60,3 +59,4 @@ Route::middleware('checkStaticToken')->group(function () {
     // route
     Route::get('route', [RouteApiController::class, 'index']);
 });
+Route::post('payment/xendit/callback', [XenditApiController::class, 'getCallback'])->name('getCallbackXendit');

@@ -7,6 +7,7 @@ use App\Models\BookingData;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Response;
 
 class XenditApiController extends Controller
 {
@@ -119,32 +120,34 @@ class XenditApiController extends Controller
             $payment_method = $request->payment_method;
             $contact = Contact::findOrFail($contactId);
 
-            // Fetch booking data for depart, return, and one-way (if exists)
-            $bookingDepart = BookingData::where('fbo_order_id', $contactId)
-                ->where('fbo_booking_id', 'like', '%Y')
-                ->first();
-
-            $bookingReturn = BookingData::where('fbo_order_id', $contactId)
-                ->where('fbo_booking_id', 'like', '%Z')
-                ->first();
-
-            $bookingOneWay = BookingData::where('fbo_order_id', $contactId)
-                ->where('fbo_booking_id', 'like', '%X')
-                ->first();
-
-            // Calculate total amount based on booking types
+            $booking = BookingData::where('fbo_order_id', $contactId)->first();
+            $bookingId = $booking->fbo_booking_id;
             $totalAmount = 0;
 
-            if ($bookingDepart) {
-                $totalAmount += $bookingDepart->fbo_end_total;
-            }
+            if ($bookingId && (str_ends_with($bookingId, 'X'))) {
+                $bookingOneWay = BookingData::where('fbo_order_id', $contactId)
+                    ->where('fbo_booking_id', 'like', '%X')
+                    ->first();
 
-            if ($bookingReturn) {
-                $totalAmount += $bookingReturn->fbo_end_total;
-            }
+                if ($bookingOneWay) {
+                    $totalAmount += $bookingOneWay->fbo_end_total;
+                }
+            } else {
+                $bookingDepart = BookingData::where('fbo_order_id', $contactId)
+                    ->where('fbo_booking_id', 'like', '%Y')
+                    ->first();
 
-            if ($bookingOneWay) {
-                $totalAmount += $bookingOneWay->fbo_end_total;
+                $bookingReturn = BookingData::where('fbo_order_id', $contactId)
+                    ->where('fbo_booking_id', 'like', '%Z')
+                    ->first();
+
+                if ($bookingDepart) {
+                    $totalAmount += $bookingDepart->fbo_end_total;
+                }
+
+                if ($bookingReturn) {
+                    $totalAmount += $bookingReturn->fbo_end_total;
+                }
             }
 
             if ($totalAmount <= 0) {
@@ -181,22 +184,24 @@ class XenditApiController extends Controller
                 $invoice = $response->json();
 
                 // Update booking data with invoice information
-                if ($bookingDepart) {
-                    $bookingDepart->fbo_transaction_id = $invoice['id'] ?? null;
-                    $bookingDepart->fbo_payment_method = 'Bank Transfer';
-                    $bookingDepart->save();
-                }
+                if ($bookingId && (str_ends_with($bookingId, 'X'))) {
+                    if ($bookingOneWay) {
+                        $bookingOneWay->fbo_transaction_id = $invoice['id'] ?? null;
+                        $bookingOneWay->fbo_payment_method = 'Bank Transfer';
+                        $bookingOneWay->save();
+                    }
+                } else {
+                    if ($bookingDepart) {
+                        $bookingDepart->fbo_transaction_id = $invoice['id'] ?? null;
+                        $bookingDepart->fbo_payment_method = 'Bank Transfer';
+                        $bookingDepart->save();
+                    }
 
-                if ($bookingReturn) {
-                    $bookingReturn->fbo_transaction_id = $invoice['id'] ?? null;
-                    $bookingReturn->fbo_payment_method = 'Bank Transfer';
-                    $bookingReturn->save();
-                }
-
-                if ($bookingOneWay) {
-                    $bookingOneWay->fbo_transaction_id = $invoice['id'] ?? null;
-                    $bookingOneWay->fbo_payment_method = 'Bank Transfer';
-                    $bookingOneWay->save();
+                    if ($bookingReturn) {
+                        $bookingReturn->fbo_transaction_id = $invoice['id'] ?? null;
+                        $bookingReturn->fbo_payment_method = 'Bank Transfer';
+                        $bookingReturn->save();
+                    }
                 }
 
                 return response()->json([
@@ -214,6 +219,49 @@ class XenditApiController extends Controller
                 'error' => 'Exception in creating Xendit invoice',
                 'message' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function getCallback(Request $request)
+    {
+        $getToken = $request->headers->get('x-callback-token');
+        $callbackToken = env('XENDIT_CALLBACK_TOKEN');
+
+        try {
+            $contact = Contact::where('ctc_order_id', $request->external_id)->first();
+            $orderId = $contact->ctc_id;
+            $booking = BookingData::where('fbo_order_id', $orderId)->first();
+
+            if (!$callbackToken) {
+                return response()->json([
+                    'status' => 'Error',
+                    'message' => 'Callback token Xendit not exist'
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            if ($getToken !== $callbackToken) {
+                return response()->json([
+                    'status' => 'Error',
+                    'message' => 'Invalid token callback'
+                ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            if ($booking) {
+                if ($request->status === 'PAID') {
+                    $booking->fbo_payment_status = 'paid';
+                    $booking->update();
+                } else {
+                    $booking->fbo_payment_status = 'failed';
+                    $booking->update();
+                }
+            }
+
+            return response()->json([
+                'status' => Response::HTTP_OK,
+                'message' => 'callback sent'
+            ]);
+        } catch (\Throwable $th) {
+            throw $th;
         }
     }
 }
