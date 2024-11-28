@@ -82,6 +82,12 @@ Route::middleware([
         Route::post('/trash/{id}/update-status', [BookingTrashController::class, 'updateStatus'])->name('trash.updateStatus');
         Route::post('/trash/cancel-transaction', [BookingTrashController::class, 'cancelTransaction'])->name('trash.cancelTransaction');
         Route::get('/trash/{id}/ticket-view', [BookingTrashController::class, 'viewTicket'])->name('trash.viewTicket');
+        Route::get('/trash/{id}/whatsapp', [BookingTrashController::class, 'whatsappReservation'])->name('trash.whatsapp');
+        Route::post('/trash/cancel-transaction', [BookingTrashController::class, 'cancelTransaction'])->name('trash.cancelTransaction');
+        Route::get('/trash/send-customer-email/{id}', [BookingTrashController::class, 'emailCustomer'])->name('trash.customerEmail');
+        Route::get('/trash/send-company-email/{id}', [BookingTrashController::class, 'emailCompany'])->name('trash.companyEmail');
+        Route::get('/trash/search-trip', [BookingTrashController::class, 'searchTrip'])->name('trash.searchTrip');
+        Route::get('/trash/search-trip-return', [BookingTrashController::class, 'searchTripReturn'])->name('trash.searchTripReturn');
     });
 
     Route::prefix('data')->group(function () {
