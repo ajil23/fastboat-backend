@@ -296,16 +296,27 @@
                                                             @if ($item->fbo_transaction_status != 'remove' && $item->fbo_payment_status == 'paid')
                                                                 <a href="#" class="btn-change-status"
                                                                     data-url="{{ route('data.status', $item->fbo_id) }}">
-                                                                    <i
-                                                                        class="fas {{ $item->fbo_transaction_status == 'confirmed' ? 'fa-sync-alt' : 'fa-check-circle' }}"></i>
-                                                                    {{ $item->fbo_transaction_status == 'confirmed' ? 'Unconfirm' : 'Confirm' }}
+                                                                    <i class="fas 
+                                                                        @if ($item->fbo_transaction_status == 'confirmed') 
+                                                                            fa-sync-alt 
+                                                                        @elseif ($item->fbo_transaction_status == 'accepted') 
+                                                                            fa-check-circle 
+                                                                        @else 
+                                                                            fa-clock 
+                                                                        @endif"></i>
+                                                                    @if ($item->fbo_transaction_status == 'confirmed')
+                                                                        Unconfirm
+                                                                    @elseif ($item->fbo_transaction_status == 'accepted')
+                                                                        Confirm
+                                                                    @else
+                                                                        Mark as Accepted
+                                                                    @endif
                                                                 </a><br>
                                                             @else
                                                                 <span class="text-muted">
                                                                     <i class="fas fa-check-circle"></i> Confirm
                                                                 </span><br>
                                                             @endif
-
                                                             <!-- Status display dengan tambahan kondisi 'remove' dan 'cancel' -->
                                                             <span
                                                                 class="text-{{ $item->fbo_transaction_status == 'confirmed'
@@ -1026,6 +1037,7 @@
         });
     </script>
 
+    <!-- remove -->
     <script>
         $(document).ready(function() {
             $('.removeStatus').on('click', function(e) {
@@ -1065,6 +1077,8 @@
             });
         });
     </script>
+
+    <!-- WhatsApp -->
     <script>
         $(document).ready(function() {
             $('body').on('click', '#showWhatsapp', function() {
@@ -1151,6 +1165,7 @@
         });
     </script>
 
+    <!-- cancel trip -->
     <script>
         $(document).ready(function() {
             $('.btn-cancel-transaction').on('click', function(e) {
