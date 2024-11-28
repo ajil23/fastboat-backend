@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\IslandApiController;
 use App\Http\Controllers\Api\NationalityApiController;
 use App\Http\Controllers\Api\PortApiController;
 use App\Http\Controllers\Api\RouteApiController;
+use App\Http\Controllers\Api\XenditApiController;
 use App\Models\DataFastboat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -41,9 +42,14 @@ Route::middleware('checkStaticToken')->group(function () {
 
     // nationality
     Route::get('nationality', [NationalityApiController::class, 'index']);
-
+    
     // booking
     Route::post('/booking', [BookingApiController::class, 'store']);
+    
+    // Payment
+    Route::get('/payment', [XenditApiController::class, 'index']);
+    Route::post('/payment/xendit', [XenditApiController::class, 'makeInvoice']);
+    Route::get('/payment/xendit/callback', [XenditApiController::class, 'getCallback']);
 
     // currency
     Route::get('currency', [CurrencyApiController::class, 'index']);
