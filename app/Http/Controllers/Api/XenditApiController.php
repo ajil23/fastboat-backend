@@ -19,7 +19,10 @@ class XenditApiController extends Controller
     public function index(Request $request)
     {
         // Ambil nilai contactId dari query parameter
-        $contactId = $request->input('contactId');
+        $orderId = $request->input('orderId');
+
+        $contact = Contact::where('ctc_order_id', $orderId)->first();
+        $contactId = $contact->ctc_id;
 
         // Query untuk One Way (booking dengan fbo_booking_id yang mengandung 'X')
         $bookingOneWay = BookingData::where('fbo_order_id', $contactId)
@@ -35,6 +38,7 @@ class XenditApiController extends Controller
         $bookingReturn = BookingData::where('fbo_order_id', $contactId)
             ->where('fbo_booking_id', 'like', '%Z')
             ->first();
+
 
         // Inisialisasi data untuk One Way jika booking ditemukan
         $oneway = null;
@@ -113,6 +117,7 @@ class XenditApiController extends Controller
             'status' => true,
             'message' => 'Data retrieved successfully',
             'type' => $type,  // Mengembalikan tipe booking
+            'fbo_order_id' => $contactId,
             'data' => $data,
         ], 200);
     }

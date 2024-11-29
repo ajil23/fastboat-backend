@@ -364,6 +364,7 @@ class BookingApiController extends Controller
         return response()->json([
             "depart" => $bookingDataDepart,
             "return" => isset($bookingDataReturn) ? $bookingDataReturn : null,
+            "orderId" => $contactData->ctc_order_id,
         ]);
     }
 
