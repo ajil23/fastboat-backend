@@ -117,7 +117,8 @@ class XenditApiController extends Controller
             'status' => true,
             'message' => 'Data retrieved successfully',
             'type' => $type,  // Mengembalikan tipe booking
-            'fbo_order_id' => $contactId,
+            'fbo_order_id' => $orderId,
+            'ctc_id' => $contactId,
             'data' => $data,
         ], 200);
     }
