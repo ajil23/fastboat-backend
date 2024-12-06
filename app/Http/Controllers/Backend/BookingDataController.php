@@ -2333,7 +2333,7 @@ class BookingDataController extends Controller
                         ]);
 
                         // Mengembalikan stok pada availability sebelumnya
-                        $stokBefore = FastboatAvailability::where('fba_id', $availabilityId)->lockForUpdate()->first();
+                        $stokBefore = FastboatAvailability::where('fba_id', $availabilityId->fba_id)->lockForUpdate()->first();
                         $stokBefore->fba_stock += $passenger;
                         $stokBefore->save();
 
