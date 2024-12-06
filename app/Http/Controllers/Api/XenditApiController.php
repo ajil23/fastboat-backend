@@ -703,9 +703,11 @@ class XenditApiController extends Controller
                         $returnBooking = BookingData::where('fbo_booking_id', substr($fboBookingId, 0, -1) . 'Z')->first();
                         if ($returnBooking) {
                             $booking->fbo_payment_status = 'paid';
+                            $booking->fbo_mail_client = now();
                             $booking->save();
 
                             $returnBooking->fbo_payment_status = 'paid';
+                            $returnBooking->fbo_mail_client = now();
                             $returnBooking->save();
                         }
                     }
